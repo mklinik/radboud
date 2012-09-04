@@ -123,6 +123,68 @@ instance >< (a, b) | >< a
 instance >< (Rose a) | >< a where
   (><) (Rose x xs) (Rose y ys) = (x >< y) lexiOr (xs >< ys)
 
+// 2 Generic Representation
+//
+// 2.1 Give generic representations for the types
+//  * Color
+//  * [a]
+
+:: ColorG :== PAIR Color UNIT
+:: ListG a :== EITHER UNIT (PAIR a [a])
+
+// 2.2 Define a function listToGen that transforms lists to their generic
+// representation
+
+listToGen :: [a] -> ListG a
+listToGen [] = LEFT UNIT
+listToGen [x:xs] = RIGHT (PAIR x xs)
+
+// 2.3 The complete generic representation of [1, 2, 3] is:
+// RIGHT (PAIR 1 (RIGHT (PAIR 2 (RIGHT (PAIR 3 (LEFT UNIT))))))
+//
+// This is not the same as the result of listToGen [1,2,3] because listToGen
+// only transforms the outermost constructor to generic representation.
+
+// 2.4 In the implementation for lists and tuples, we want instances that have
+// the same type variable more than once:
+//
+//   instance toGen [a] (ListG a) where ...
+//
+// which for some reasen is not allowed.  We get the error message: "type
+// variable occurs more than once in an instance type"
+//
+// When selecting such an instance, the compiler would not only have to
+// substitute the type arguments, but also have to perform some sort of
+// constraints checking that the same type appears in the positions where the
+// same type variables were.  My guess: It should be possible to implement
+// that, but it hasn't been done.
+
+class toGen a b where
+  toGen :: a -> b
+
+instance toGen Color ColorG where
+  toGen c = PAIR c UNIT
+
+:: IntG :== PAIR Int UNIT
+
+instance toGen Int IntG where
+  toGen i = PAIR i UNIT
+
+:: CharG :== PAIR Char UNIT
+
+instance toGen Char CharG where
+  toGen c = PAIR c UNIT
+
+/*
+instance toGen ([a]) (ListG a) where
+  toGen l = listToGen l
+
+:: TupleG a b :== PAIR a b
+
+instance toGen (a, b) (TupleG a b) where
+  toGen (x, y) = PAIR x y
+*/
+
 tip :: Tree Int
 tip = Tip
 
