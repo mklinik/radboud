@@ -290,58 +290,85 @@ bin2 = Bin 2 Tip Tip
 nil :: [Int]
 nil = []
 
-Start =
+// minimal stupid test suite
+:: TestResult = Pass | Fail String
+
+(shouldBe) :: a a -> TestResult
+  | == a
+  & toString a
+(shouldBe) x y
+  | x == y    = Pass
+  | otherwise = Fail ("expected '" +++ toString y +++ "' but got '" +++ toString x +++ "'")
+
+runTests :: [TestResult] -> String
+runTests tests
+  | any failed tests = unlines (map reason (filter failed tests))
+  | otherwise        = "all ok\n"
+  where
+    failed (Fail _) = True
+    failed Pass     = False
+    reason (Fail r) = r
+    reason Pass     = "ok"
+    unlines :: [String] -> String
+    unlines xs = foldr (\x y = x +++ "\n" +++ y) "" xs
+
+instance toString Ordering where
+  toString Bigger  = "Bigger"
+  toString Smaller = "Smaller"
+  toString Equal   = "Equal"
+
+Start = runTests
   // === Color ===
-  [ (Red >< Blue) == Bigger
-  , (Red >< Red) == Equal
-  , (Red >< Yellow) == Smaller
-  , (Blue >< Yellow) == Smaller
+  [ (Red >< Blue) shouldBe Bigger
+  , (Red >< Red) shouldBe Equal
+  , (Red >< Yellow) shouldBe Smaller
+  , (Blue >< Yellow) shouldBe Smaller
 
   // === Tree Int ===
-  , (tip >< tip) == Equal
-  , (Tip >< Bin 1 Tip Tip) == Smaller
-  , (Bin 1 Tip Tip >< Tip) == Bigger
+  , (tip >< tip) shouldBe Equal
+  , (Tip >< Bin 1 Tip Tip) shouldBe Smaller
+  , (Bin 1 Tip Tip >< Tip) shouldBe Bigger
 
-  , (bin1 >< bin2) == Smaller
-  , (bin2 >< bin1) == Bigger
+  , (bin1 >< bin2) shouldBe Smaller
+  , (bin2 >< bin1) shouldBe Bigger
 
-  , (Bin 1 bin1 Tip >< Bin 1 bin1 Tip) == Equal
-  , (Bin 1 bin1 Tip >< Bin 1 bin2 Tip) == Smaller // left subtree is Smaller
-  , (Bin 1 bin2 Tip >< Bin 1 bin1 Tip) == Bigger // left subtree is Bigger
+  , (Bin 1 bin1 Tip >< Bin 1 bin1 Tip) shouldBe Equal
+  , (Bin 1 bin1 Tip >< Bin 1 bin2 Tip) shouldBe Smaller // left subtree is Smaller
+  , (Bin 1 bin2 Tip >< Bin 1 bin1 Tip) shouldBe Bigger // left subtree is Bigger
 
-  , (Bin 1 Tip bin1 >< Bin 1 Tip bin2) == Smaller // right subtree is Smaller
-  , (Bin 1 Tip bin2 >< Bin 1 Tip bin1) == Bigger // right subtree is Bigger
+  , (Bin 1 Tip bin1 >< Bin 1 Tip bin2) shouldBe Smaller // right subtree is Smaller
+  , (Bin 1 Tip bin2 >< Bin 1 Tip bin1) shouldBe Bigger // right subtree is Bigger
 
   // left subtree determines the result: Smaller
-  , (Bin 1 bin1 bin2 >< Bin 1 bin2 bin1) == Smaller
+  , (Bin 1 bin1 bin2 >< Bin 1 bin2 bin1) shouldBe Smaller
 
   // === Tree (Tree Int) ===
   // and of course this works recursively: node items are trees
-  , (Bin bin1 Tip Tip >< Bin bin2 Tip Tip) == Smaller
+  , (Bin bin1 Tip Tip >< Bin bin2 Tip Tip) shouldBe Smaller
 
   // === Lists ===
-  , ([] >< nil) == Equal
-  , ([] >< [1]) == Smaller
-  , ([1] >< []) == Bigger
+  , ([] >< nil) shouldBe Equal
+  , ([] >< [1]) shouldBe Smaller
+  , ([1] >< []) shouldBe Bigger
 
-  , ([1, 2, 3] >< [1..3]) == Equal
-  , ([1, 2, 1] >< [1..3]) == Smaller
-  , ([1, 2, 4] >< [1..3]) == Bigger
+  , ([1, 2, 3] >< [1..3]) shouldBe Equal
+  , ([1, 2, 1] >< [1..3]) shouldBe Smaller
+  , ([1, 2, 4] >< [1..3]) shouldBe Bigger
 
-  , ([1] >< [1, 1]) == Smaller
-  , ([1, 1] >< [1]) == Bigger
-  , ([1, 1] >< [5]) == Smaller
-  , ([5] >< [1, 1]) == Bigger
+  , ([1] >< [1, 1]) shouldBe Smaller
+  , ([1, 1] >< [1]) shouldBe Bigger
+  , ([1, 1] >< [5]) shouldBe Smaller
+  , ([5] >< [1, 1]) shouldBe Bigger
 
   // === Tuples ===
-  , ((1, "a") >< (1, "a")) == Equal
-  , ((1, "a") >< (1, "z")) == Smaller // second element determines result
-  , ((42, "a") >< (1, "z")) == Bigger // first element determines result
+  , ((1, "a") >< (1, "a")) shouldBe Equal
+  , ((1, "a") >< (1, "z")) shouldBe Smaller // second element determines result
+  , ((42, "a") >< (1, "z")) shouldBe Bigger // first element determines result
 
   // === Roses ===
-  , (Rose 1 [] >< Rose 1 []) == Equal
-  , (Rose 1 [] >< Rose 2 []) == Smaller
-  , (Rose 2 [] >< Rose 1 []) == Bigger
-  , (Rose 1 [Rose 1 []] >< Rose 1 [Rose 2 []]) == Smaller
-  , (Rose 1 [Rose 2 []] >< Rose 1 [Rose 1 []]) == Bigger
+  , (Rose 1 [] >< Rose 1 []) shouldBe Equal
+  , (Rose 1 [] >< Rose 2 []) shouldBe Smaller
+  , (Rose 2 [] >< Rose 1 []) shouldBe Bigger
+  , (Rose 1 [Rose 1 []] >< Rose 1 [Rose 2 []]) shouldBe Smaller
+  , (Rose 1 [Rose 2 []] >< Rose 1 [Rose 1 []]) shouldBe Bigger
   ]
