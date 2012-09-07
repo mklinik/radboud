@@ -153,7 +153,7 @@ instance >< (Rose a) | >< a where
  *   - [a]
  */
 
-:: ColorG :== PAIR String UNIT
+:: ColorG :== EITHER UNIT (EITHER UNIT UNIT)
 :: ListG a :== EITHER UNIT (PAIR a [a])
 
 /*
@@ -224,7 +224,9 @@ instance >< (EITHER a b) | >< a & >< b
 
 
 colorToGen :: Color -> ColorG
-colorToGen c = PAIR (toString c) UNIT
+colorToGen Blue   = LEFT UNIT
+colorToGen Red    = RIGHT (LEFT UNIT)
+colorToGen Yellow = RIGHT (RIGHT UNIT)
 
 instance >< Color where
   (><) x y = colorToGen x >< colorToGen y
@@ -250,9 +252,9 @@ instance >< (Tree a) | >< a where
   (><) a b = treeToGen a >< treeToGen b
 
 /*
- * 3.2 Yes, the results are equal, but only because we payed special attention
- * that the order of LEFT and RIGHT corresponds with the order of Nil and Cons,
- * Tip and Bin.
+ * 3.2 Yes, the results are the same as the non-generic ones, but only because
+ * we payed special attention that the order of LEFT and RIGHT corresponds with
+ * the order of Nil and Cons, Tip and Bin, and the constructors of Color.
  */
 
 /*
@@ -293,6 +295,7 @@ Start =
   [ (Red >< Blue) == Bigger
   , (Red >< Red) == Equal
   , (Red >< Yellow) == Smaller
+  , (Blue >< Yellow) == Smaller
 
   // === Tree Int ===
   , (tip >< tip) == Equal
