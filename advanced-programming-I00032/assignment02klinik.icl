@@ -1,4 +1,4 @@
-module skeleton2
+module assignment02klinik
 
 /*
     Skeleton for Exercise 2 of Advanced Programming.
