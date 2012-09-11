@@ -1,34 +1,34 @@
 module skeleton2
 
 /*
-	Skeleton for Exercise 2 of Advanced Programming.
-	Works fine with the environment Everything, but you can also use 
-	StdEnv and manually add StdMaybe from the directory {Application}\Libraries\StdLib.
-	
-	Pieter Koopman, 2011
-	Peter Achten,   2012 P.Achten@cs.ru.nl
+    Skeleton for Exercise 2 of Advanced Programming.
+    Works fine with the environment Everything, but you can also use 
+    StdEnv and manually add StdMaybe from the directory {Application}\Libraries\StdLib.
+    
+    Pieter Koopman, 2011
+    Peter Achten,   2012 P.Achten@cs.ru.nl
 */
 
 import StdEnv, StdMaybe
 
 /**************** Prelude *************************/
 
-//	Binary sums and products (in generic prelude)
-:: UNIT			= UNIT
-:: PAIR   a b	= PAIR a b
-:: EITHER a b	= LEFT a | RIGHT b
-:: CONS   a		= CONS String a
+//  Binary sums and products (in generic prelude)
+:: UNIT         = UNIT
+:: PAIR   a b   = PAIR a b
+:: EITHER a b   = LEFT a | RIGHT b
+:: CONS   a     = CONS String a
 
-//	Generic type representations
-:: ListG a	:== EITHER (CONS UNIT) (CONS (PAIR a [a]))
-:: TreeG a	:== EITHER (CONS UNIT) (CONS (PAIR a (PAIR (Tree a) (Tree a))))
-:: TupG a b	:== CONS (PAIR a b)
-:: TG		:== CONS UNIT
+//  Generic type representations
+:: ListG a  :== EITHER (CONS UNIT) (CONS (PAIR a [a]))
+:: TreeG a  :== EITHER (CONS UNIT) (CONS (PAIR a (PAIR (Tree a) (Tree a))))
+:: TupG a b :== CONS (PAIR a b)
+:: TG       :== CONS UNIT
 
 // Conversions
-fromList :: [a]	-> ListG a
-fromList []		= LEFT (CONS "Nil" UNIT)
-fromList [a:as]	= RIGHT (CONS "Cons" (PAIR a as))
+fromList :: [a] -> ListG a
+fromList []     = LEFT (CONS "Nil" UNIT)
+fromList [a:as] = RIGHT (CONS "Cons" (PAIR a as))
 
 toList :: (ListG a) -> [a]
 toList (LEFT (CONS "Nil" UNIT)) = []
@@ -43,16 +43,16 @@ toList (RIGHT (CONS "Cons" (PAIR a as))) = [a:as]
 
 class Container t
 where
-	Cinsert   :: a (t a) -> t a      | <        a
-	Ccontains :: a (t a) -> Bool     | <, Eq    a
-	Cshow     ::   (t a) -> [String] | toString a
-	Cnew	  :: t a
+    Cinsert   :: a (t a) -> t a      | <        a
+    Ccontains :: a (t a) -> Bool     | <, Eq    a
+    Cshow     ::   (t a) -> [String] | toString a
+    Cnew      :: t a
 
 // Possible test:
 //Start = (Ccontains 3 c,Cshow c) where c = ..
 
 /**************** Part 3 *******************************/
-//	Example types
+//  Example types
 show :: a -> [String] | show_ a
 show a = show_ a []
 
@@ -70,14 +70,14 @@ instance show_ (Tree a) | show_ a where show_ t c = ["a tree":c] // should be im
 class parse a :: [String] -> Result a
 
 instance parse Int where
-	parse ["Int",i : r]  = Match (toInt i) r
-	parse _              = Fail
+    parse ["Int",i : r]  = Match (toInt i) r
+    parse _              = Fail
 instance parse Bool where
-	parse ["Bool",b : r] = Match (b=="True") r
-	parse _              = Fail
+    parse ["Bool",b : r] = Match (b=="True") r
+    parse _              = Fail
 instance parse UNIT where
-	parse ["UNIT" : r]   = Match UNIT r
-	parse _              = Fail
+    parse ["UNIT" : r]   = Match UNIT r
+    parse _              = Fail
 
 instance parse (Tree a) | parse a where parse list = Fail // should be improved
 
@@ -86,9 +86,8 @@ instance parse (Tree a) | parse a where parse list = Fail // should be improved
 /**************** Starts *******************************/
 
 Start = runTests
-  [ Testcase "foobar" $
-	    1 shouldBe 2
-	]
+    [ Testcase "foobar" $ 1 shouldBe 2
+    ]
 
 // Possible tests:
 //Start1 :: ([String],Result T)
@@ -103,10 +102,10 @@ Start = runTests
 Start4 :: ([String],Result (Tree Int))
 Start4 = (strings,parse strings)
 where
-	strings = show t
-	
-	t :: Tree Int
-	t = Bin (Bin Tip 2 (Bin Tip 3 Tip)) 4 (Bin (Bin Tip 5 Tip) 6 Tip)
+    strings = show t
+    
+    t :: Tree Int
+    t = Bin (Bin Tip 2 (Bin Tip 3 Tip)) 4 (Bin (Bin Tip 5 Tip) 6 Tip)
 
 /**************** Test Library *******************************/
 :: Testcase = Testcase String TestResult
