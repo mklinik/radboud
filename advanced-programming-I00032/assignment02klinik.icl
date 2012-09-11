@@ -263,7 +263,7 @@ Start = runTests
     , Testcase "show a two element list" $
         assert $ (Cshow twoElementList) == ["2", "1"]
     , Testcase "show the many-element list" $
-        (foldl (+++) "" (Cshow manyElementList)) shouldBe (foldl (+++) "" $ map toString $ reverse manyIntegers)
+        (concat (Cshow manyElementList)) shouldBe (concat $ map toString $ reverse manyIntegers)
 
     // 1.2 instance Tree
     , Testcase "empty tree" $
@@ -281,11 +281,11 @@ Start = runTests
     , Testcase "all integers are in the many-element tree" $
         assert $ and $ map (\x = Ccontains x manyElementTree) manyIntegers
     , Testcase "Cshow of two different trees with the same values on-order yields the same result" $
-        foldl (+++) "" (Cshow $ Cinsert 1 $ Cinsert 2 $ Cinsert 3 emptyTree) shouldBe "123"
+        concat (Cshow $ Cinsert 1 $ Cinsert 2 $ Cinsert 3 emptyTree) shouldBe "123"
     , Testcase "Cshow of two different trees with the same values reverse-order yields the same result" $
-        foldl (+++) "" (Cshow $ Cinsert 3 $ Cinsert 2 $ Cinsert 1 emptyTree) shouldBe "123"
+        concat (Cshow $ Cinsert 3 $ Cinsert 2 $ Cinsert 1 emptyTree) shouldBe "123"
     , Testcase "show the many-element tree" $
-        (foldl (+++) "" (Cshow manyElementTree)) shouldBe (foldl (+++) "" $ map toString $ sort manyIntegers)
+        (concat (Cshow manyElementTree)) shouldBe (concat $ map toString $ sort manyIntegers)
 
     // 3 Generic Printing
     , Testcase "show the empty list" $
