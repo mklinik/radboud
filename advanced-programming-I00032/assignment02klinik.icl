@@ -184,9 +184,9 @@ instance parse (PAIR a b)
 where
   parse input = case parse input of
     Match a restA = case parse restA of
-      Match b rest = Match (PAIR a b) rest
-      _ = Fail
-    _ = Fail
+      Match b restB = Match (PAIR a b) restB
+      Fail = Fail
+    Fail = Fail
 
 instance parse (EITHER a b)
   | parse a
@@ -194,9 +194,9 @@ instance parse (EITHER a b)
 where
   parse input = case parse input of
     Match a rest = Match (LEFT a) rest
-    _  = case parse input of
+    Fail = case parse input of
       Match b rest = Match (RIGHT b) rest
-      _ = Fail
+      Fail = Fail
 
 (fmap) :: (a -> b) (Result a) -> (Result b)
 (fmap) f Fail = Fail
@@ -350,12 +350,12 @@ Start = runTests
     , Testcase "'( (' is an invalid input for lists" $
         assert $ (parse ["(","("]) == failedIntList
 
-    // The following would really be nice, but constructor names are ignored by the parser.
-    // This means that the empty list and the empty tree are the same value in
-    // the untyped, a.k.a. stringly-typed generic domain.
-    , Testcase "'(Tip UNIT)' is an invalid input for lists" $
+    // The following would really be nice, but constructor names are ignored by
+    // the parser.  This means that the empty list and the empty tree are the
+    // same value in the untyped, a.k.a. stringly-typed generic domain.
+    , Testcase "'(Tip UNIT)' does not parse as a [Int]" $
         assert $ (parse ["(", "Tip", "UNIT", ")"]) == failedIntList
-    , Testcase "'(Nil UNIT)' is an invalid input for trees" $
+    , Testcase "'(Nil UNIT)' does not parse as a Tree Int" $
         assert $ (parse ["(", "Nil", "UNIT", ")"]) == failedIntTree
 
     // Tuples
