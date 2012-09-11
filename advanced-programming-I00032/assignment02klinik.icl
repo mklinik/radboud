@@ -71,7 +71,7 @@ instance Container Tree where
     Cshow Tip = []
     Cshow (Bin left item right) = Cshow left ++ [toString item] ++ Cshow right
 
-    Cnew          = Tip
+    Cnew = Tip
 
 /**************** Part 2 *******************************/
 
@@ -152,10 +152,7 @@ where
 
 :: Result a = Fail | Match a [String]
 
-(fmap) :: (a -> b) (Result a) -> (Result b)
-(fmap) f Fail = Fail
-(fmap) f (Match a r) = Match (f a) r
-
+// for testing
 instance == (Result a) | == a where
   (==) Fail Fail = True
   (==) Fail _    = False
@@ -201,6 +198,10 @@ where
       Match b rest = Match (RIGHT b) rest
       _ = Fail
 
+(fmap) :: (a -> b) (Result a) -> (Result b)
+(fmap) f Fail = Fail
+(fmap) f (Match a r) = Match (f a) r
+
 instance parse [a] | parse a where
   parse input = toList fmap parse input
 
@@ -210,6 +211,15 @@ toTree (RIGHT (CONS "Bin" (PAIR item (PAIR left right)))) = Bin left item right
 
 instance parse (Tree a) | parse a where
   parse input = toTree fmap parse input
+
+toTuple :: (TupG a b) -> (a, b)
+toTuple (CONS "Tuple" (PAIR x y)) = (x, y)
+
+instance parse (a, b)
+  | parse a
+  & parse b
+where
+  parse input = toTuple fmap parse input
 
 /**************** Starts *******************************/
 
@@ -310,6 +320,13 @@ Start = runTests
         "( Tuple ( Cons Bool True ( Cons Bool False ( Nil UNIT ) ) ) ( Tuple Int 100 Int 42 ) )"
 
     // 4 Generic Parsing
+    // Ints and Bools
+    , Testcase "parse 'Int 1' as an integer" $
+        assert $ parse ["Int", "1"] == (Match 1 [])
+    , Testcase "parse 'Bool True' as a bool" $
+        assert $ parse ["Bool", "True"] == (Match True [])
+
+    // Lists
     , Testcase "parse (Nil UNIT) as the empty list" $
         assert $ parse ["(", "Nil", "UNIT", ")"] == (Match emptyList [])
     , Testcase "show and parse on a one-element list must give the original value" $
@@ -319,6 +336,7 @@ Start = runTests
     , Testcase "show and parse on a many-element list must give the original value" $
         assert $ (parse $ show manyElementList) == (Match manyElementList [])
 
+    // Trees
     , Testcase "parse (Tip UNIT) as the empty tree" $
         assert $ parse ["(", "Tip", "UNIT", ")"] == (Match emptyTree [])
     , Testcase "show and parse on a one-element tree must give the original value" $
@@ -331,10 +349,23 @@ Start = runTests
     // some failing parses
     , Testcase "'( (' is an invalid input for lists" $
         assert $ (parse ["(","("]) == failedIntList
-    , Testcase "'(CONS Tip UNIT)' is an invalid input for lists" $
-        assert $ (parse ["(", "CONS", "Tip", "UNIT", ")"]) == failedIntList
-    , Testcase "'(CONS Nil UNIT)' is an invalid input for trees" $
-        assert $ (parse ["(", "CONS", "Nil", "UNIT", ")"]) == failedIntTree
+
+    // The following would really be nice, but constructor names are ignored by the parser.
+    // This means that the empty list and the empty tree are the same value in
+    // the untyped, a.k.a. stringly-typed generic domain.
+    , Testcase "'(Tip UNIT)' is an invalid input for lists" $
+        assert $ (parse ["(", "Tip", "UNIT", ")"]) == failedIntList
+    , Testcase "'(Nil UNIT)' is an invalid input for trees" $
+        assert $ (parse ["(", "Nil", "UNIT", ")"]) == failedIntTree
+
+    // Tuples
+    , Testcase "'(Tuple Int 42 Bool True)' is the tuple (42, True)" $
+        assert $ (parse ["(", "Tuple", "Int", "42", "Bool", "True", ")"]) == Match (42, True) []
+    , Testcase "'(Cons (Tuple Int 1 Int 2) (Cons (Tuple Int 42 Int 1024) (Nil UNIT)))' is [(1, 2), (42, 1024)]" $
+        assert $ (parse ["(", "Cons", "(", "Tuple", "Int",  "1", "Int",    "2", ")",
+                         "(", "Cons", "(", "Tuple", "Int", "42", "Int", "1024", ")",
+                         "(", "Nil", "UNIT", ")", ")", ")"])
+          == Match [(1, 2), (42, 1024)] []
     ]
 
 failedIntList :: Result [Int]
