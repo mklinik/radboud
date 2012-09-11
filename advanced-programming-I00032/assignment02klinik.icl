@@ -85,7 +85,7 @@ instance Container Tree where
 //           T4 :: (* -> *) -> (* -> *) -> * -> *
 
 /**************** Part 3 *******************************/
-//  Example types
+
 show :: a -> [String] | show_ a
 show a = show_ a []
 
@@ -94,7 +94,10 @@ class show_ a where show_ :: a [String] -> [String]
 instance show_ Int  where show_ i c = ["Int"  : toString i : c]
 instance show_ Bool where show_ b c = ["Bool" : toString b : c]
 
-// instances for generic representation
+
+/*
+ * instances for generic representation
+ */
 
 instance show_ UNIT where show_ _ c = ["UNIT" : c]
 
@@ -114,7 +117,14 @@ where
   show_ (LEFT  a) c = show_ a c
   show_ (RIGHT b) c = show_ b c
 
-// instances for list, tree and tuple
+
+/*
+ * instances for:
+ *  - list
+ *  - tree
+ *  - tuple
+ */
+
 instance show_ [a] | show_ a where
   show_ l c = show_ (fromList l) c
 
@@ -139,6 +149,7 @@ where
 
 
 /**************** Part 4 *******************************/
+
 :: Result a = Fail | Match a [String]
 class parse a :: [String] -> Result a
 
@@ -189,14 +200,6 @@ twoElementTree =: twoElementContainer
 
 manyElementTree :: Tree Int
 manyElementTree = manyElementContainer
-
-// for testing
-instance == (Tree a) | == a where
-  (==) Tip Tip = True
-  (==) Tip _   = False
-  (==) _   Tip = False
-  (==) (Bin leftX x rightX) (Bin leftY y rightY) =
-    x == y && leftX == leftY && rightY == rightY
 
 Start = runTests
     // 1 Type Constructor Classes
@@ -263,28 +266,8 @@ Start = runTests
         "( Tuple ( Cons Bool True ( Cons Bool False ( Nil UNIT ) ) ) ( Tuple Int 100 Int 42 ) )"
     ]
 
-unwords = concat o intersperse " "
-concat = foldl (+++) ""
-
-// Possible tests:
-//Start1 :: ([String],Result T)
-//Start1 = (strings,parse strings) where strings = show C
-
-//Start2 :: ([String],Result (Int,Bool))
-//Start2 = (strings,parse strings) where strings = show (1,False)
-
-//Start3 :: ([String],Result [Int])
-//Start3 = (strings,parse strings) where strings = show l; l :: [Int]; l = [1..4]
-
-Start4 :: ([String],Result (Tree Int))
-Start4 = (strings,parse strings)
-where
-    strings = show t
-    
-    t :: Tree Int
-    t = Bin (Bin Tip 2 (Bin Tip 3 Tip)) 4 (Bin (Bin Tip 5 Tip) 6 Tip)
-
 /**************** Test Library *******************************/
+
 :: Testcase = Testcase String TestResult
 :: TestResult = Passed | Failed String
 
@@ -315,5 +298,18 @@ runTests tests
     unlines :: [String] -> String
     unlines xs = foldr (\x y = x +++ "\n" +++ y) "" xs
 
+
+/**************** Helper Functions *******************************/
+
 ($) infixr 0 :: (a -> b) a -> b
 ($) f a = f a
+
+unwords = concat o intersperse " "
+concat = foldl (+++) ""
+
+instance == (Tree a) | == a where
+  (==) Tip Tip = True
+  (==) Tip _   = False
+  (==) _   Tip = False
+  (==) (Bin leftX x rightX) (Bin leftY y rightY) =
+    x == y && leftX == leftY && rightY == rightY
