@@ -85,7 +85,10 @@ instance parse (Tree a) | parse a where parse list = Fail // should be improved
 
 /**************** Starts *******************************/
 
-Start = ("add your own Start rule!\n", Start4)
+Start = runTests
+  [ Testcase "foobar" $
+	    1 shouldBe 2
+	]
 
 // Possible tests:
 //Start1 :: ([String],Result T)
@@ -104,3 +107,29 @@ where
 	
 	t :: Tree Int
 	t = Bin (Bin Tip 2 (Bin Tip 3 Tip)) 4 (Bin (Bin Tip 5 Tip) 6 Tip)
+
+/**************** Test Library *******************************/
+:: Testcase = Testcase String TestResult
+:: TestResult = Passed | Failed String
+
+(shouldBe) :: a a -> TestResult
+  | == a
+  & toString a
+(shouldBe) x y
+  | x == y    = Passed
+  | otherwise = Failed ("expected '" +++ toString y +++ "' but got '" +++ toString x +++ "'")
+
+runTests :: [Testcase] -> String
+runTests tests
+  | any failed tests = unlines (map reason (filter failed tests))
+  | otherwise        = "all ok\n"
+  where
+    failed (Testcase _ (Failed _)) = True
+    failed (Testcase _  Passed   ) = False
+    reason (Testcase description (Failed r)) = description +++ ": " +++ r
+    reason (Testcase _            Passed   ) = "ok"
+    unlines :: [String] -> String
+    unlines xs = foldr (\x y = x +++ "\n" +++ y) "" xs
+
+($) infixr 0 :: (a -> b) a -> b
+($) f a = f a
