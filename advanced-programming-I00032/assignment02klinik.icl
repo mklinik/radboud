@@ -10,6 +10,7 @@ module assignment02klinik
 */
 
 import StdEnv, StdMaybe
+import StdListExtensions
 
 /**************** Prelude *************************/
 
@@ -93,9 +94,49 @@ class show_ a where show_ :: a [String] -> [String]
 instance show_ Int  where show_ i c = ["Int"  : toString i : c]
 instance show_ Bool where show_ b c = ["Bool" : toString b : c]
 
+// instances for generic representation
+
 instance show_ UNIT where show_ _ c = ["UNIT" : c]
 
-instance show_ (Tree a) | show_ a where show_ t c = ["a tree":c] // should be improved
+instance show_ (CONS a) | show_ a where
+  show_ (CONS name a) c = ["(" : name : show_ a [")":c]]
+
+instance show_ (PAIR a b)
+  | show_ a
+  & show_ b
+where
+  show_ (PAIR x y) c = show_ x $ show_ y c
+
+instance show_ (EITHER a b)
+  | show_ a
+  & show_ b
+where
+  show_ (LEFT  a) c = show_ a c
+  show_ (RIGHT b) c = show_ b c
+
+// instances for list, tree and tuple
+instance show_ [a] | show_ a where
+  show_ l c = show_ (fromList l) c
+
+
+fromTree :: (Tree a) -> (TreeG a)
+fromTree Tip = LEFT $ CONS "Tip" UNIT
+fromTree (Bin left item right) = RIGHT $ CONS "Bin" $ PAIR item $ PAIR left right
+
+instance show_ (Tree a) | show_ a where
+  show_ t c = show_ (fromTree t) c
+
+
+fromTuple :: (a, b) -> (TupG a b)
+fromTuple (x, y) = CONS "Tuple" $ PAIR x y
+
+instance show_ (a, b)
+  | show_ a
+  & show_ b
+where
+  show_ t c = show_ (fromTuple t) c
+
+
 
 /**************** Part 4 *******************************/
 :: Result a = Fail | Match a [String]
@@ -198,7 +239,32 @@ Start = runTests
         foldl (+++) "" (Cshow $ Cinsert 3 $ Cinsert 2 $ Cinsert 1 emptyTree) shouldBe "123"
     , Testcase "show the many-element tree" $
         (foldl (+++) "" (Cshow manyElementTree)) shouldBe (foldl (+++) "" $ map toString $ sort manyIntegers)
+
+    // 3 Generic Printing
+    , Testcase "show the empty list" $
+        unwords (show emptyList) shouldBe "( Nil UNIT )"
+    , Testcase "show a one-element list" $
+        unwords (show [1]) shouldBe "( Cons Int 1 ( Nil UNIT ) )"
+    , Testcase "show a multi-element list" $
+        unwords (show [True, False, False]) shouldBe
+        "( Cons Bool True ( Cons Bool False ( Cons Bool False ( Nil UNIT ) ) ) )"
+
+    , Testcase "show the empty tree" $
+        unwords (show emptyTree) shouldBe "( Tip UNIT )"
+    , Testcase "show a one-empty tree" $
+        unwords (show $ Bin Tip 42 Tip) shouldBe "( Bin Int 42 ( Tip UNIT ) ( Tip UNIT ) )"
+
+    , Testcase "show (100, 42)" $
+        unwords (show (100, 42)) shouldBe "( Tuple Int 100 Int 42 )"
+    , Testcase "show (42, True)" $
+        unwords (show (42, True)) shouldBe "( Tuple Int 42 Bool True )"
+    , Testcase "show ([True, False], (100, 42))" $
+        unwords (show ([True, False], (100, 42))) shouldBe
+        "( Tuple ( Cons Bool True ( Cons Bool False ( Nil UNIT ) ) ) ( Tuple Int 100 Int 42 ) )"
     ]
+
+unwords = concat o intersperse " "
+concat = foldl (+++) ""
 
 // Possible tests:
 //Start1 :: ([String],Result T)
@@ -227,7 +293,8 @@ where
   & toString a
 (shouldBe) x y
   | x == y    = Passed
-  | otherwise = Failed ("expected '" +++ toString y +++ "' but got '" +++ toString x +++ "'")
+  | otherwise = Failed ("\n expected: '" +++ toString y +++
+                       "'\n  but got: '" +++ toString x +++ "'")
 
 (shouldBe_) :: a a -> TestResult | == a
 (shouldBe_) x y = assert $ x == y
