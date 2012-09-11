@@ -151,6 +151,17 @@ where
 /**************** Part 4 *******************************/
 
 :: Result a = Fail | Match a [String]
+
+(fmap) :: (a -> b) (Result a) -> (Result b)
+(fmap) f Fail = Fail
+(fmap) f (Match a r) = Match (f a) r
+
+instance == (Result a) | == a where
+  (==) Fail Fail = True
+  (==) Fail _    = False
+  (==) _    Fail = False
+  (==) (Match x xs) (Match y ys) = x == y && xs == ys
+
 class parse a :: [String] -> Result a
 
 instance parse Int where
@@ -159,13 +170,46 @@ instance parse Int where
 instance parse Bool where
     parse ["Bool",b : r] = Match (b=="True") r
     parse _              = Fail
+
 instance parse UNIT where
     parse ["UNIT" : r]   = Match UNIT r
     parse _              = Fail
 
-instance parse (Tree a) | parse a where parse list = Fail // should be improved
+instance parse (CONS a) | parse a where
+    parse ["(" : name : a] = case parse a of
+      Match parsedA [")" : rest] = Match (CONS name parsedA) rest
+      _ = Fail
+    parse _ = Fail
 
-:: T = C
+instance parse (PAIR a b)
+  | parse a
+  & parse b
+where
+  parse input = case parse input of
+    Match a restA = case parse restA of
+      Match b rest = Match (PAIR a b) rest
+      _ = Fail
+    _ = Fail
+
+instance parse (EITHER a b)
+  | parse a
+  & parse b
+where
+  parse input = case parse input of
+    Match a rest = Match (LEFT a) rest
+    _  = case parse input of
+      Match b rest = Match (RIGHT b) rest
+      _ = Fail
+
+instance parse [a] | parse a where
+  parse input = toList fmap parse input
+
+toTree :: (TreeG a) -> (Tree a)
+toTree (LEFT  (CONS "Tip" UNIT)) = Tip
+toTree (RIGHT (CONS "Bin" (PAIR item (PAIR left right)))) = Bin left item right
+
+instance parse (Tree a) | parse a where
+  parse input = toTree fmap parse input
 
 /**************** Starts *******************************/
 
@@ -217,15 +261,15 @@ Start = runTests
     , Testcase "many-element list contains 17" $
         assert $ Ccontains 17 manyElementList
     , Testcase "show a two element list" $
-        (Cshow twoElementList) shouldBe_ ["2", "1"]
+        assert $ (Cshow twoElementList) == ["2", "1"]
     , Testcase "show the many-element list" $
         (foldl (+++) "" (Cshow manyElementList)) shouldBe (foldl (+++) "" $ map toString $ reverse manyIntegers)
 
     // 1.2 instance Tree
     , Testcase "empty tree" $
-        emptyTree shouldBe_ Tip
+        assert $ emptyTree == Tip
     , Testcase "one-element tree" $
-        (Cinsert 1 Cnew) shouldBe_ (Bin Tip 1 Tip)
+        assert $ (Cinsert 1 Cnew) == (Bin Tip 1 Tip)
     , Testcase "one-element tree contains 1" $
         assert $ Ccontains 1 oneElementTree
     , Testcase "empty tree doesn't contain 1" $
@@ -264,7 +308,40 @@ Start = runTests
     , Testcase "show ([True, False], (100, 42))" $
         unwords (show ([True, False], (100, 42))) shouldBe
         "( Tuple ( Cons Bool True ( Cons Bool False ( Nil UNIT ) ) ) ( Tuple Int 100 Int 42 ) )"
+
+    // 4 Generic Parsing
+    , Testcase "parse (Nil UNIT) as the empty list" $
+        assert $ parse ["(", "Nil", "UNIT", ")"] == (Match emptyList [])
+    , Testcase "show and parse on a one-element list must give the original value" $
+        assert $ (parse $ show oneElementList) == (Match oneElementList [])
+    , Testcase "show and parse on a two-element list must give the original value" $
+        assert $ (parse $ show twoElementList) == (Match twoElementList [])
+    , Testcase "show and parse on a many-element list must give the original value" $
+        assert $ (parse $ show manyElementList) == (Match manyElementList [])
+
+    , Testcase "parse (Tip UNIT) as the empty tree" $
+        assert $ parse ["(", "Tip", "UNIT", ")"] == (Match emptyTree [])
+    , Testcase "show and parse on a one-element tree must give the original value" $
+        assert $ (parse $ show oneElementTree) == (Match oneElementTree [])
+    , Testcase "show and parse on a two-element tree must give the original value" $
+        assert $ (parse $ show twoElementTree) == (Match twoElementTree [])
+    , Testcase "show and parse on a many-element tree must give the original value" $
+        assert $ (parse $ show manyElementTree) == (Match manyElementTree [])
+
+    // some failing parses
+    , Testcase "'( (' is an invalid input for lists" $
+        assert $ (parse ["(","("]) == failedIntList
+    , Testcase "'(CONS Tip UNIT)' is an invalid input for lists" $
+        assert $ (parse ["(", "CONS", "Tip", "UNIT", ")"]) == failedIntList
+    , Testcase "'(CONS Nil UNIT)' is an invalid input for trees" $
+        assert $ (parse ["(", "CONS", "Nil", "UNIT", ")"]) == failedIntTree
     ]
+
+failedIntList :: Result [Int]
+failedIntList = Fail
+
+failedIntTree :: Result (Tree Int)
+failedIntTree = Fail
 
 /**************** Test Library *******************************/
 
@@ -278,9 +355,6 @@ Start = runTests
   | x == y    = Passed
   | otherwise = Failed ("\n expected: '" +++ toString y +++
                        "'\n  but got: '" +++ toString x +++ "'")
-
-(shouldBe_) :: a a -> TestResult | == a
-(shouldBe_) x y = assert $ x == y
 
 assert :: Bool -> TestResult
 assert True  = Passed
