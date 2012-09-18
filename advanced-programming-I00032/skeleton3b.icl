@@ -1,13 +1,13 @@
 module skeleton3b
 
 /*
-	Advanced Programming 2012. 
-	Skeleton for exercise 3.3 and 3.4.
-	To be used in a project with the environment Everything, 
-	or StdEnv with an import of StdMaybe from StdLib
+  Advanced Programming 2012. 
+  Skeleton for exercise 3.3 and 3.4.
+  To be used in a project with the environment Everything, 
+  or StdEnv with an import of StdMaybe from StdLib
 
-	Pieter Koopman
-	Peter  Achten, P.Achten@cs.ru.nl
+  Pieter Koopman
+  Peter  Achten, P.Achten@cs.ru.nl
 */
 
 import StdEnv, StdGeneric, StdMaybe
@@ -31,9 +31,9 @@ parse{|Bool|} _ = Nothing
 
 //------------------ some data types --------------
 
-:: T		= C
-:: Color	= Red | Yellow | Blue
-:: Tree a	= Tip | Bin a (Tree a) (Tree a)
+:: T    = C
+:: Color  = Red | Yellow | Blue
+:: Tree a = Tip | Bin a (Tree a) (Tree a)
 
 //------------------ general useful --------------
 
