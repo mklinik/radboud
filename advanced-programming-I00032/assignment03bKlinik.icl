@@ -28,7 +28,10 @@ show_{|EITHER|} showL _     (LEFT  l) c = showL l c
 show_{|EITHER|} _     showR (RIGHT r) c = showR r c
 show_{|OBJECT|} showX (OBJECT x) c = showX x c
 
-derive show_ Color, T
+derive show_ Color, T, Tree, Foobar, Maybe
+instance toString (Tree a) | show_{|*|} a where toString t = unwords $ show t
+instance toString (Foobar a) | show_{|*|} a where toString t = unwords $ show t
+instance toString (Maybe a) | show_{|*|} a where toString t = unwords $ show t
 
 show a = show_{|*|} a []
 
@@ -47,21 +50,59 @@ parse{|Int|} [i:r] = Just (toInt i, r)
 // apply f to the parse result and g to the rest input
 mapResult f g r = mapMaybe (mapPair f g) r
 
+/*
+:: Parser a :== [String] -> Result a
+
 // drop the head of the list if it matches the given token
-match :: String [String] -> [String]
-match _ [] = []
-match token input=:[head:tail]
-  | token == head = tail
-  | otherwise     = input
+match :: String -> Parser String
+match token = \input = case input of
+  [] = Nothing
+  [head:tail] =
+    if (token == head)
+       (Just (head, tail))
+       (Nothing)
+
+(lefty) :: (Parser a) (Parser b) -> Parser a
+(lefty) pa pb = \input = case pa input of
+  Nothing = Nothing
+  Just (a, restA) = case pb restA of
+    Nothing = Nothing
+    Just (_, restB) = Just (a, restB)
+
+(righty) :: (Parser a) (Parser b) -> Parser b
+(righty) pa pb = \input = case pa input of
+  Nothing = Nothing
+  Just (_, restA) = case pb restA of
+    Nothing = Nothing
+    Just (b, restB) = Just (b, restB)
+    */
 
 parse{|UNIT|} r = Just (UNIT, r)
 
+//parse{|CONS|} _ [] = Nothing
+//parse{|CONS of {gcd_name, gcd_arity}|} parseA [name:r]
+  //| name == gcd_name = mapResult CONS id $ ((chomp ")") righty parseA lefty (chomp "(")) r
+  //| otherwise = Nothing
+    //where
+      //chomp s = if (gcd_arity > 0) (match s) (\i -> Just ("", i))
+
 parse{|CONS|} _ [] = Nothing
-parse{|CONS of {gcd_name, gcd_arity}|} parseA [name:r]
-  | name == gcd_name = mapResult CONS (chomp ")") $ parseA $ chomp "(" r
-  | otherwise = Nothing
+parse{|CONS of {gcd_name, gcd_arity}|} parseA input =
+  if (gcd_arity > 0) parseWithBraces parseWithoutBraces
     where
-      chomp s = if (gcd_arity > 0) (match s) id
+      parseWithoutBraces =
+        if (hd input == gcd_name)
+          (case parseA $ tl input of
+            Nothing = Nothing
+            Just (a, rest) = Just (CONS a, rest))
+          Nothing
+      parseWithBraces =
+        if ((hd $ tl input) == gcd_name)
+          (case parseA $ tl $ tl input of
+            Nothing = Nothing
+            Just (a, rest) = Just (CONS a, tl rest)
+          )
+          Nothing
 
 parse{|PAIR|} parseA parseB input =
   case parseA input of
@@ -79,7 +120,7 @@ parse{|EITHER|} parseL parseR input =
 
 parse{|OBJECT|} parseA input = mapResult OBJECT id $ parseA input
 
-derive parse Color, T
+derive parse Color, T, Tree, Foobar
 
 //------------------- eq -----------------
 generic eq a :: a a -> Bool
@@ -95,14 +136,17 @@ eq{|EITHER|} _   eqr (RIGHT x) (RIGHT y) = eqr x y
 eq{|EITHER|} _ _ _ _ = False
 eq{|OBJECT|} f (OBJECT x) (OBJECT y) = f x y
 
-derive eq Color, T
+derive eq Color, T, Tree, Foobar
 instance == Color where (==) x y = eq{|*|} x y
+instance == (Tree a) | eq{|*|} a where (==) x y = eq{|*|} x y
+instance == (Foobar a) | eq{|*|} a where (==) x y = eq{|*|} x y
 
 //------------------ some data types --------------
 
 :: T        = C
 :: Color    = Red | Yellow | Blue
 :: Tree a   = Tip | Bin a (Tree a) (Tree a)
+:: Foobar a = Foobar a
 
 //------------------ general useful --------------
 
@@ -115,6 +159,7 @@ derive bimap Maybe, [], T, Color
   //[ Testcase "foobar" $ assert $ testTrue == (Just (True, []))
   //]
 
+
 Start = runTests
     [ Testcase "parse o show for Bool" $ assert $ and $ [test True, test False]
     , Testcase "toColor o fromColor" $
@@ -124,20 +169,24 @@ Start = runTests
     , Testcase "show for Color Yellow" $ StringList (show Yellow) shouldBe StringList ["Yellow"]
     //, Testcase "show for [1]" $ StringList (show [1]) shouldBe StringList ["(", "Cons", "1", "Nil", ")"]
     , Testcase "show for T" $ StringList (show C) shouldBe StringList ["C"]
-    //, Testcase "show for aTree" $
-        //StringList (show aTree) shouldBe StringList ["Bin", "2", "Tip", "Bin", "4", "Tip", "Tip"]
+    , Testcase "show for aTree" $
+        StringList (show aTree) shouldBe StringList ["(", "Bin", "2", "Tip", "(", "Bin", "4", "Tip", "Tip", ")", ")"]
+    , Testcase "show for Foobar" $
+        StringList (show $ Foobar 42) shouldBe StringList ["(", "Foobar", "42", ")"]
     //, Testcase "show for (1, True)" $
         //StringList (show (1, True)) shouldBe StringList ["Tuple2", "1", "True"]
 
     , Testcase "parse o show for Int" $ assert $ and [test i \\ i <- [-25 .. 25]]
     , Testcase "parse o show for T" $ assert $ test C
     , Testcase "parse o show for Color" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
-    //, Testcase "parse o show for Tree" $ assert $ test aTree
+    , Testcase "parse o show for Tree" $ assert $ test aTree
     //, Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
     //, Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
     //, Testcase "parse o show for (Bool, [Int])" $
         //assert $ test [(a,b) \\ a <- [True, False], b <- [[1 .. 5], [10 .. 100], [-300 .. 100]]]
     ]
+
+aTree = Bin 2 Tip (Bin 4 Tip Tip)
 
 /**************** to test if parse and show work properly *************************/
 
