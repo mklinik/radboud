@@ -146,8 +146,10 @@ instance map2 EITHER        where map2 f g (LEFT  x)  = LEFT  (f x)
 
 /**************** please add all new code below this line *************************/
 
-instance eq0 Color  where eq0  c1 c2 = eq2 (eq2 (eq1 eq0) (eq1 eq0)) (eq1 eq0) (fromColor c1) (fromColor c2)
-instance ==  Color  where (==) c1 c2 = eq0 c1 c2    // just to use the well-known notation...
+instance eq0 Color  where
+  eq0  c1 c2 = eq2 (eq2 (eq1 eq0) (eq1 eq0)) (eq1 eq0) (fromColor c1) (fromColor c2)
+instance ==  Color  where
+  (==) c1 c2 = eq0 c1 c2    // just to use the well-known notation...
 
 class show_1 t :: (a [String] -> [String]) (t a) [String] -> [String]
 
@@ -164,19 +166,25 @@ instance show_2 EITHER where
   show_2 _     showB (RIGHT b) c = showB b c
 
 instance show_0 Color where
-  show_0 color c = show_2 (show_2 (show_1 show_0) (show_1 show_0)) (show_1 show_0) (fromColor color) c
+  show_0 color c =
+    show_2 (show_2 (show_1 show_0) (show_1 show_0)) (show_1 show_0) (fromColor color) c
 
 instance show_0 T where
   show_0 t c = show_1 show_0 (fromT t) c
 
 instance show_1 [] where
-  show_1 showA list c = show_2 (show_1 show_0) (show_1 (show_2 showA $ show_1 showA)) (fromList list) c
+  show_1 showA list c =
+    show_2 (show_1 show_0) (show_1 (show_2 showA $ show_1 showA)) (fromList list) c
 
 instance show_0 [a] | show_0 a where
   show_0 list c = show_1 show_0 list c
 
 instance show_1 Tree where
-  show_1 showA tree c = show_2 (show_1 show_0) (show_1 (show_2 showA (show_2 (show_1 showA) (show_1 showA)))) (fromTree tree) c
+  show_1 showA tree c =
+    show_2 (show_1 show_0)
+           (show_1 (show_2 showA (show_2 (show_1 showA) (show_1 showA))))
+           (fromTree tree)
+           c
 
 instance show_0 (Tree a) | show_0 a where
   show_0 tree c = show_1 show_0 tree c
@@ -214,23 +222,30 @@ instance parse2 EITHER where
       Just (b, restR) = Just (RIGHT b, restR)
       Nothing = Nothing
 
+mapFst :: (a -> c) (a, b) -> (c, b)
+mapFst f (x, y) = (f x, y)
+
 instance parse0 Color where
-  parse0 input = case parse2 (parse2 (parse1 "Red" parse0) (parse1 "Yellow" parse0)) (parse1 "Blue" parse0) input of
-    Nothing = Nothing
-    Just (c, rest) = Just (toColor c, rest)
+  parse0 input = mapMaybe (mapFst toColor) $
+    parse2 (parse2 (parse1 "Red" parse0)
+                   (parse1 "Yellow" parse0))
+           (parse1 "Blue" parse0)
+           input
 
 instance parse1 [] where
-  parse1 name parseA input
-    = mapMaybe (\(x, y) = (toList x, y)) $
-        parse2 (parse1 "Nil" parse0) (parse1 "Cons" (parse2 parseA $ parse1 name parseA)) input
+  parse1 name parseA input = mapMaybe (mapFst toList) $
+    parse2 (parse1 "Nil" parse0)
+           (parse1 "Cons" (parse2 parseA $ parse1 name parseA))
+           input
 
 instance parse0 [a] | parse0 a where
   parse0 input = parse1 "" parse0 input
 
 instance parse1 Tree where
-  parse1 name parseA input
-    = mapMaybe (\(x, y) = (toTree x, y)) $
-        parse2 (parse1 "Tip" parse0) (parse1 "Bin" (parse2 parseA (parse2 (parse1 name parseA) (parse1 name parseA)))) input
+  parse1 name parseA input = mapMaybe (mapFst toTree) $
+    parse2 (parse1 "Tip" parse0)
+           (parse1 "Bin" (parse2 parseA (parse2 (parse1 name parseA) (parse1 name parseA))))
+           input
 
 instance parse0 (Tree a) | parse0 a where
   parse0 input = parse1 "" parse0 input
