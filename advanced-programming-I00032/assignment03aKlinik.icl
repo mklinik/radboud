@@ -18,14 +18,9 @@ import StdEnv, StdMaybe
 
 class show_0 a where show_0 :: a [String] -> [String]
 
-instance show_0 Int  where show_0 i    c = [IntTag :toString i:c]
-instance show_0 Bool where show_0 b    c = [BoolTag:toString b:c]
-instance show_0 UNIT where show_0 unit c = [UNITTag:c]
-
-IntTag  :== "Int"
-BoolTag :== "Bool"
-UNITTag :== "UNIT"
-PAIRTag :== "PAIR"
+instance show_0 Int  where show_0 i    c = [toString i:c]
+instance show_0 Bool where show_0 b    c = [toString b:c]
+instance show_0 UNIT where show_0 unit c = c
 
 show :: a -> [String] | show_0 a
 show a = show_0 a []
@@ -36,16 +31,15 @@ class parse0 a :: [String] -> Result a
 
 instance parse0 Int
 where
-    parse0 [IntTag,i:r] = Just (toInt i, r)
+    parse0 [i:r] = Just (toInt i, r)
     parse0 r = Nothing
 instance parse0 Bool
 where
-    parse0 [BoolTag,b:r] = Just (b=="True", r)
+    parse0 [b:r] = Just (b=="True", r)
     parse0 r = Nothing
 instance parse0 UNIT
 where
-    parse0 [UNITTag:r] = Just (UNIT, r)
-    parse0 r = Nothing
+    parse0 r = Just (UNIT, r)
 
 /**************** Example Types and conversions *************************/
 
@@ -152,21 +146,92 @@ instance map2 EITHER        where map2 f g (LEFT  x)  = LEFT  (f x)
 
 /**************** please add all new code below this line *************************/
 
-instance eq0 Color  where eq0  c1 c2 = False        // TO BE IMPROVED
+instance eq0 Color  where eq0  c1 c2 = eq2 (eq2 (eq1 eq0) (eq1 eq0)) (eq1 eq0) (fromColor c1) (fromColor c2)
 instance ==  Color  where (==) c1 c2 = eq0 c1 c2    // just to use the well-known notation...
+
+class show_1 t :: (a [String] -> [String]) (t a) [String] -> [String]
+
+instance show_1 CONS where
+  show_1 showA (CONS s a) c = [s : showA a c]
+
+class show_2 t :: (a [String] -> [String]) (b [String] -> [String]) (t a b) [String] -> [String]
+
+instance show_2 PAIR where
+  show_2 showA showB (PAIR a b) c = showA a $ showB b c
+
+instance show_2 EITHER where
+  show_2 showA _     (LEFT  a) c = showA a c
+  show_2 _     showB (RIGHT b) c = showB b c
+
+instance show_0 Color where
+  show_0 color c = show_2 (show_2 (show_1 show_0) (show_1 show_0)) (show_1 show_0) (fromColor color) c
+
+instance show_1 [] where
+  show_1 showA list c = show_2 (show_1 show_0) (show_1 (show_2 showA $ show_1 showA)) (fromList list) c
+
+instance show_0 [a] | toString a where
+  show_0 list c = show_1 (\x c -> [toString x:c]) list c
 
 instance map1 []    where map1 f l = map f l        // TO BE IMPROVED, use generic version
 
-// some initial tests, please extend
-Start
- =  [ and [ test i \\ i <- [-25 .. 25]]
-    , and [ c == toColor (fromColor c) \\ c <- [Red, Yellow, Blue]]
-//  , and [ test c \\ c <- [Red,Yellow,Blue]]
-//  , test [1 .. 3]
+Start = runTests
+    [ Testcase "parse o show for Ints" $ assert $ and [test i \\ i <- [-25 .. 25]]
+    , Testcase "toColor o fromColor" $ assert $ and [ c == toColor (fromColor c) \\ c <- [Red, Yellow, Blue]]
+    , Testcase "show_0 for Color Red" $ StringList (show Red) shouldBe StringList ["Red"]
+    , Testcase "show_0 for Color Yellow" $ StringList (show Yellow) shouldBe StringList ["Yellow"]
+    , Testcase "show_0 for [1]" $ StringList (show [1]) shouldBe StringList ["Cons", "1", "Nil"]
+    //, Testcase "parse o show for Colors" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
+    //, Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
 //  , test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
 //  etc.
     // maps
-    , map1 ((+) 1) [0 .. 5] == [1 .. 6]
+    //, map1 ((+) 1) [0 .. 5] == [1 .. 6]
     ]
 
 aTree = Bin 2 Tip (Bin 4 Tip Tip)
+
+/**************** Test Library *******************************/
+
+:: Testcase = Testcase String TestResult
+:: TestResult = Passed | Failed String
+
+(shouldBe) :: a a -> TestResult
+  | == a
+  & toString a
+(shouldBe) x y
+  | x == y    = Passed
+  | otherwise = Failed ("\n expected: '" +++ toString y +++
+                       "'\n  but got: '" +++ toString x +++ "'")
+
+assert :: Bool -> TestResult
+assert True  = Passed
+assert False = Failed "failed"
+
+runTests :: [Testcase] -> String
+runTests tests
+  | any failed tests = unlines (map reason (filter failed tests))
+  | otherwise        = "all tests passed\n"
+  where
+    failed (Testcase _ (Failed _)) = True
+    failed (Testcase _  Passed   ) = False
+    reason (Testcase description (Failed r)) = description +++ ": " +++ r
+    reason (Testcase _            Passed   ) = "ok"
+    unlines :: [String] -> String
+    unlines xs = foldr (\x y = x +++ "\n" +++ y) "" xs
+
+// Newtype wrapper for string lists. Because toString of [String] doesn't work in Clean.
+:: StringList = StringList [String]
+instance toString StringList where
+  toString (StringList ss) = toString` ss (\x =  "[" +++ x)
+    where
+      toString` :: [String] (String -> String) -> String
+      toString` []     c = c "]"
+      toString` [s:[]] c = c (toString` [] (\x = s +++ x))
+      toString` [s:ss] c = c (toString` ss (\x = s +++ "," +++ x))
+instance == StringList where
+  (==) (StringList ss) (StringList ts) = ss == ts
+
+/**************** Helper Functions *******************************/
+
+($) infixr 0 :: (a -> b) a -> b
+($) f a = f a
