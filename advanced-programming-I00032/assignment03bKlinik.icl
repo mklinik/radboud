@@ -11,12 +11,24 @@ module assignment03bKlinik
 */
 
 import StdEnv, StdGeneric, StdMaybe
+import StdListExtensions
 
 //------------------ show --------------
 generic show_ a :: a [String] -> [String]
 
 show_{|Int|}  i c = [toString i:c]
 show_{|Bool|} b c = [toString b:c]
+
+show_{|UNIT|} _ c = c
+show_{|CONS of {gcd_name, gcd_arity}|} showX (CONS x) c
+  | gcd_arity > 0 = ["(" : gcd_name : showX x [")" : c]]
+  | otherwise     = [      gcd_name : showX x c]
+show_{|PAIR|} showX showY (PAIR x y) c = showX x $ showY y c
+show_{|EITHER|} showL _     (LEFT  l) c = showL l c
+show_{|EITHER|} _     showR (RIGHT r) c = showR r c
+show_{|OBJECT|} showX (OBJECT x) c = showX x c
+
+derive show_ Color, T
 
 show a = show_{|*|} a []
 
@@ -25,9 +37,66 @@ show a = show_{|*|} a []
 
 generic parse a :: [String] -> Result a
 
+parse{|Bool|} [] = Nothing
 parse{|Bool|} ["True" :r] = Just (True ,r)
 parse{|Bool|} ["False":r] = Just (False,r)
-parse{|Bool|} _ = Nothing
+
+parse{|Int|} [] = Nothing
+parse{|Int|} [i:r] = Just (toInt i, r)
+
+// apply f to the parse result and g to the rest input
+mapResult f g r = mapMaybe (mapPair f g) r
+
+// drop the head of the list if it matches the given token
+match :: String [String] -> [String]
+match _ [] = []
+match token input=:[head:tail]
+  | token == head = tail
+  | otherwise     = input
+
+parse{|UNIT|} r = Just (UNIT, r)
+
+parse{|CONS|} _ [] = Nothing
+parse{|CONS of {gcd_name, gcd_arity}|} parseA [name:r]
+  | name == gcd_name = mapResult CONS (chomp ")") $ parseA $ chomp "(" r
+  | otherwise = Nothing
+    where
+      chomp s = if (gcd_arity > 0) (match s) id
+
+parse{|PAIR|} parseA parseB input =
+  case parseA input of
+    Nothing = Nothing
+    Just (a, restA) = case parseB restA of
+      Nothing = Nothing
+      Just (b, restB) = Just (PAIR a b, restB)
+
+parse{|EITHER|} parseL parseR input =
+  case parseL input of
+    Nothing = case parseR input of
+      Nothing = Nothing
+      Just (r, rest) = Just (RIGHT r, rest)
+    Just (l, rest) = Just (LEFT l, rest)
+
+parse{|OBJECT|} parseA input = mapResult OBJECT id $ parseA input
+
+derive parse Color, T
+
+//------------------- eq -----------------
+generic eq a :: a a -> Bool
+
+eq{|Bool|} x y = x == y
+eq{|Int|} x y = x == y
+
+eq{|UNIT|} _ _ = True
+eq{|CONS|} f (CONS x) (CONS y) = f x y
+eq{|PAIR|} eqx eqy (PAIR leftX leftY) (PAIR rightX rightY) = eqx leftX rightX && eqy leftY rightY
+eq{|EITHER|} eql _   (LEFT  x) (LEFT  y) = eql x y
+eq{|EITHER|} _   eqr (RIGHT x) (RIGHT y) = eqr x y
+eq{|EITHER|} _ _ _ _ = False
+eq{|OBJECT|} f (OBJECT x) (OBJECT y) = f x y
+
+derive eq Color, T
+instance == Color where (==) x y = eq{|*|} x y
 
 //------------------ some data types --------------
 
@@ -38,11 +107,110 @@ parse{|Bool|} _ = Nothing
 //------------------ general useful --------------
 
 instance + String where (+) s t = s+++t
-derive bimap Maybe, []
+derive bimap Maybe, [], T, Color
 
 //------------------ tests --------------
 
-Start = testTrue
+//Start = runTests
+  //[ Testcase "foobar" $ assert $ testTrue == (Just (True, []))
+  //]
 
-testTrue :: Result Bool
-testTrue = parse{|*|} (show True)
+Start = runTests
+    [ Testcase "parse o show for Bool" $ assert $ and $ [test True, test False]
+    , Testcase "toColor o fromColor" $
+        assert $ and [ c == bimap{|*|}.map_to (bimap{|*|}.map_from c) \\ c <- [Red, Yellow, Blue]]
+    , Testcase "show for Color Red" $ StringList (show Red) shouldBe StringList ["Red"]
+    , Testcase "show for T" $ StringList (show C) shouldBe StringList ["C"]
+    , Testcase "show for Color Yellow" $ StringList (show Yellow) shouldBe StringList ["Yellow"]
+    //, Testcase "show for [1]" $ StringList (show [1]) shouldBe StringList ["(", "Cons", "1", "Nil", ")"]
+    , Testcase "show for T" $ StringList (show C) shouldBe StringList ["C"]
+    //, Testcase "show for aTree" $
+        //StringList (show aTree) shouldBe StringList ["Bin", "2", "Tip", "Bin", "4", "Tip", "Tip"]
+    //, Testcase "show for (1, True)" $
+        //StringList (show (1, True)) shouldBe StringList ["Tuple2", "1", "True"]
+
+    , Testcase "parse o show for Int" $ assert $ and [test i \\ i <- [-25 .. 25]]
+    , Testcase "parse o show for T" $ assert $ test C
+    , Testcase "parse o show for Color" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
+    //, Testcase "parse o show for Tree" $ assert $ test aTree
+    //, Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
+    //, Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
+    //, Testcase "parse o show for (Bool, [Int])" $
+        //assert $ test [(a,b) \\ a <- [True, False], b <- [[1 .. 5], [10 .. 100], [-300 .. 100]]]
+    ]
+
+/**************** to test if parse and show work properly *************************/
+
+test :: t -> Bool | eq{|*|}, show_{|*|}, parse{|*|} t
+test x
+    = case parse{|*|} (show x) of
+        Just (y,[]) = eq{|*|} x y
+        _           = False
+
+/**************** Test Library *******************************/
+
+:: Testcase = Testcase String TestResult
+:: TestResult = Passed | Failed String
+
+(shouldBe) :: a a -> TestResult
+  | == a
+  & toString a
+(shouldBe) x y
+  | x == y    = Passed
+  | otherwise = Failed ("\n expected: '" +++ toString y +++
+                       "'\n  but got: '" +++ toString x +++ "'")
+
+assert :: Bool -> TestResult
+assert True  = Passed
+assert False = Failed "failed"
+
+runTests :: [Testcase] -> String
+runTests tests
+  | any failed tests = unlines (map reason (filter failed tests))
+  | otherwise        = "all tests passed\n"
+  where
+    failed (Testcase _ (Failed _)) = True
+    failed (Testcase _  Passed   ) = False
+    reason (Testcase description (Failed r)) = description +++ ": " +++ r
+    reason (Testcase _            Passed   ) = "ok"
+    unlines :: [String] -> String
+    unlines xs = foldr (\x y = x +++ "\n" +++ y) "" xs
+
+// Newtype wrappers for [String] and [Int]. Because toString [String] doesn't work in Clean.
+listToString :: (a -> String) [a] -> String
+listToString f xs = listToString` f xs (\x = "[" +++ x)
+  where
+    listToString` :: (a -> String) [a] (String -> String) -> String
+    listToString` _ []     c = c "]"
+    listToString` f [s:[]] c = c (listToString` f [] (\x = f s +++ x))
+    listToString` f [s:ss] c = c (listToString` f ss (\x = f s +++ "," +++ x))
+
+:: StringList = StringList [String]
+instance toString StringList where
+  toString (StringList l) = listToString id l
+
+instance == StringList where
+  (==) (StringList ss) (StringList ts) = ss == ts
+
+:: IntList = IntList [Int]
+instance toString IntList where
+  toString (IntList l) = listToString toString l
+
+instance == IntList where
+  (==) (IntList ss) (IntList ts) = ss == ts
+
+/**************** Helper Functions *******************************/
+
+($) infixr 0 :: .(a -> b) a -> b
+($) f a = f a
+
+unwords = concat o intersperse " "
+concat = foldl (+++) ""
+
+mapFst :: (a -> c) (a, b) -> (c, b)
+mapFst f (x, y) = (f x, y)
+
+mapSnd :: (b -> c) (a, b) -> (a, c)
+mapSnd f (x, y) = (x, f y)
+
+mapPair f g (a, b) = (f a, g b)
