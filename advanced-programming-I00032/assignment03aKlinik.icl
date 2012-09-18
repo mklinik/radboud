@@ -347,19 +347,33 @@ runTests tests
     unlines :: [String] -> String
     unlines xs = foldr (\x y = x +++ "\n" +++ y) "" xs
 
-// Newtype wrapper for [String]. Because toString [String] doesn't work in Clean.
+// Newtype wrappers for [String] and [Int]. Because toString [String] doesn't work in Clean.
+listToString :: (a -> String) [a] -> String
+listToString f xs = listToString` f xs (\x = "[" +++ x)
+  where
+    listToString` :: (a -> String) [a] (String -> String) -> String
+    listToString` _ []     c = c "]"
+    listToString` f [s:[]] c = c (listToString` f [] (\x = f s +++ x))
+    listToString` f [s:ss] c = c (listToString` f ss (\x = f s +++ "," +++ x))
+
 :: StringList = StringList [String]
 instance toString StringList where
-  toString (StringList ss) = toString` ss (\x =  "[" +++ x)
-    where
-      toString` :: [String] (String -> String) -> String
-      toString` []     c = c "]"
-      toString` [s:[]] c = c (toString` [] (\x = s +++ x))
-      toString` [s:ss] c = c (toString` ss (\x = s +++ "," +++ x))
+  toString (StringList l) = listToString id l
+
 instance == StringList where
   (==) (StringList ss) (StringList ts) = ss == ts
+
+:: IntList = IntList [Int]
+instance toString IntList where
+  toString (IntList l) = listToString toString l
+
+instance == IntList where
+  (==) (IntList ss) (IntList ts) = ss == ts
 
 /**************** Helper Functions *******************************/
 
 ($) infixr 0 :: (a -> b) a -> b
 ($) f a = f a
+
+fac 0 = 1
+fac n = n * fac (n - 1)
