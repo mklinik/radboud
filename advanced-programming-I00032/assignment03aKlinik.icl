@@ -233,9 +233,6 @@ instance parse2 EITHER where
       Just (b, restR) = Just (RIGHT b, restR)
       Nothing = Nothing
 
-mapFst :: (a -> c) (a, b) -> (c, b)
-mapFst f (x, y) = (f x, y)
-
 instance parse0 Color where
   parse0 input = mapMaybe (mapFst toColor) $
     parse2 (parse2 (parse1 "Red" parse0)
@@ -408,3 +405,6 @@ fac n = n * fac (n - 1)
 
 unwords = concat o intersperse " "
 concat = foldl (+++) ""
+
+mapFst :: (a -> c) (a, b) -> (c, b)
+mapFst f (x, y) = (f x, y)
