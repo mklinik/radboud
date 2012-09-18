@@ -256,6 +256,19 @@ instance eq1 Tree where
 instance eq0 (Tree a) | eq0 a where
   eq0 x y = eq1 eq0 x y
 
+instance eq2 (,) where
+  eq2 eqa eqb x y = eq1 (eq2 eqa eqb) (fromTup x) (fromTup y)
+
+instance eq0 (a, b) | eq0 a & eq0 b where
+  eq0 x y = eq2 eq0 eq0 x y
+
+instance parse2 (,) where
+  parse2 parseA parseB input = mapMaybe (mapFst toTup) $
+    parse1 "Tuple2" (parse2 parseA parseB) input
+
+instance parse0 (a, b) | parse0 a & parse0 b where
+  parse0 input = parse2 parse0 parse0 input
+
 instance map1 []    where map1 f l = map f l        // TO BE IMPROVED, use generic version
 
 Start = runTests
@@ -270,7 +283,7 @@ Start = runTests
     , Testcase "parse o show for Colors" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
     , Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
     , Testcase "parse o show for aTree" $ assert $ test aTree
-    //, Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
+    , Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
 //  etc.
     // maps
     //, map1 ((+) 1) [0 .. 5] == [1 .. 6]
