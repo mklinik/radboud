@@ -1,4 +1,4 @@
-module skeleton3b
+module assignment03bKlinik
 
 /*
   Advanced Programming 2012. 

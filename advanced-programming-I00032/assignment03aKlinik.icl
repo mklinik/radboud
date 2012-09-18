@@ -1,4 +1,4 @@
-module skeleton3a
+module assignment03aKlinik
 
 /*
   Advanced Programming 2012. 
@@ -126,9 +126,9 @@ instance eq0 Int      where eq0 n m                       = n == m
 instance eq1 CONS     where eq1 f   (CONS s x) (CONS t y) = s == t && f x y
 
 instance eq2 PAIR     where eq2 f g (PAIR a b) (PAIR x y) = f a x && g b y
-instance eq2 EITHER     where eq2 f g (LEFT  x)  (LEFT  y)  = f x y
-                    eq2 f g (RIGHT x)  (RIGHT y)  = g x y
-                    eq2 f g _          _          = False
+instance eq2 EITHER   where eq2 f g (LEFT  x)  (LEFT  y)  = f x y
+                            eq2 f g (RIGHT x)  (RIGHT y)  = g x y
+                            eq2 f g _          _          = False
 
 instance eq0 [a] | eq0 a  where eq0   l m = eq1 eq0 l m
 instance eq1 []       where eq1 f l m = eq2 (eq1 eq0) (eq1 (eq2 f (eq1 f))) (fromList l) (fromList m)
@@ -146,7 +146,7 @@ instance map1 CONS      where map1 f   (CONS n x) = CONS n (f x)
 
 instance map2 PAIR      where map2 f g (PAIR x y) = PAIR  (f x) (g y)
 instance map2 EITHER    where map2 f g (LEFT  x)  = LEFT  (f x)
-                    map2 f g (RIGHT y)  = RIGHT (g y)
+                              map2 f g (RIGHT y)  = RIGHT (g y)
 
 /**************** End Prelude *************************/
 
