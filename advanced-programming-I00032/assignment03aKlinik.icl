@@ -146,6 +146,15 @@ instance map2 EITHER        where map2 f g (LEFT  x)  = LEFT  (f x)
 
 /**************** please add all new code below this line *************************/
 
+// Implement show_ and parse at least for the types
+//  - Int,      [x]
+//  - Bool,     [x]
+//  - T,        [x]
+//  - Color,    [x]
+//  - Tree a,   [x]
+//  - [a], and  [x]
+//  - (a,b)     [x]
+
 instance eq0 Color  where
   eq0  c1 c2 = eq2 (eq2 (eq1 eq0) (eq1 eq0)) (eq1 eq0) (fromColor c1) (fromColor c2)
 instance ==  Color  where
@@ -269,22 +278,39 @@ instance parse2 (,) where
 instance parse0 (a, b) | parse0 a & parse0 b where
   parse0 input = parse2 parse0 parse0 input
 
+instance eq0 T where
+  eq0 x y = eq1 eq0 (fromT x) (fromT y)
+
+instance parse0 T where
+  parse0 input = mapMaybe (mapFst toT) $ parse1 "C" parse0 input
+
+instance eq0 Bool where
+  eq0 x y = x == y
+
 instance map1 []    where map1 f l = map f l        // TO BE IMPROVED, use generic version
 
 Start = runTests
-    [ Testcase "parse o show for Ints" $ assert $ and [test i \\ i <- [-25 .. 25]]
-    , Testcase "toColor o fromColor" $ assert $ and [ c == toColor (fromColor c) \\ c <- [Red, Yellow, Blue]]
+    [ Testcase "toColor o fromColor" $
+        assert $ and [ c == toColor (fromColor c) \\ c <- [Red, Yellow, Blue]]
     , Testcase "show for Color Red" $ StringList (show Red) shouldBe StringList ["Red"]
     , Testcase "show for Color Yellow" $ StringList (show Yellow) shouldBe StringList ["Yellow"]
     , Testcase "show for [1]" $ StringList (show [1]) shouldBe StringList ["Cons", "1", "Nil"]
     , Testcase "show for T" $ StringList (show C) shouldBe StringList ["C"]
-    , Testcase "show for aTree" $ StringList (show aTree) shouldBe StringList ["Bin", "2", "Tip", "Bin", "4", "Tip", "Tip"]
-    , Testcase "show for (1, True)" $ StringList (show (1, True)) shouldBe StringList ["Tuple2", "1", "True"]
-    , Testcase "parse o show for Colors" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
+    , Testcase "show for aTree" $
+        StringList (show aTree) shouldBe StringList ["Bin", "2", "Tip", "Bin", "4", "Tip", "Tip"]
+    , Testcase "show for (1, True)" $
+        StringList (show (1, True)) shouldBe StringList ["Tuple2", "1", "True"]
+
+    , Testcase "parse o show for Int" $ assert $ and [test i \\ i <- [-25 .. 25]]
+    , Testcase "parse o show for Bool" $ assert $ and $ [test True, test False]
+    , Testcase "parse o show for T" $ assert $ test C
+    , Testcase "parse o show for Color" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
+    , Testcase "parse o show for Tree" $ assert $ test aTree
     , Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
-    , Testcase "parse o show for aTree" $ assert $ test aTree
     , Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
-//  etc.
+    , Testcase "parse o show for (Bool, [Int])" $
+        assert $ test [(a,b) \\ a <- [True, False], b <- [[1 .. 5], [10 .. 100], [-300 .. 100]]]
+
     // maps
     //, map1 ((+) 1) [0 .. 5] == [1 .. 6]
     ]
@@ -321,7 +347,7 @@ runTests tests
     unlines :: [String] -> String
     unlines xs = foldr (\x y = x +++ "\n" +++ y) "" xs
 
-// Newtype wrapper for string lists. Because toString of [String] doesn't work in Clean.
+// Newtype wrapper for [String]. Because toString [String] doesn't work in Clean.
 :: StringList = StringList [String]
 instance toString StringList where
   toString (StringList ss) = toString` ss (\x =  "[" +++ x)
