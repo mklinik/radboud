@@ -166,20 +166,40 @@ instance show_2 EITHER where
 instance show_0 Color where
   show_0 color c = show_2 (show_2 (show_1 show_0) (show_1 show_0)) (show_1 show_0) (fromColor color) c
 
+instance show_0 T where
+  show_0 t c = show_1 show_0 (fromT t) c
+
 instance show_1 [] where
   show_1 showA list c = show_2 (show_1 show_0) (show_1 (show_2 showA $ show_1 showA)) (fromList list) c
 
+toStringC x c = [toString x:c]
+
 instance show_0 [a] | toString a where
-  show_0 list c = show_1 (\x c -> [toString x:c]) list c
+  show_0 list c = show_1 toStringC list c
+
+instance show_1 Tree where
+  show_1 showA tree c = show_2 (show_1 show_0) (show_1 (show_2 showA (show_2 (show_1 showA) (show_1 showA)))) (fromTree tree) c
+
+instance show_0 (Tree a) | toString a where
+  show_0 tree c = show_1 toStringC tree c
+
+instance show_2 (,) where
+  show_2 showA showB tuple c = show_1 (show_2 showA showB) (fromTup tuple) c
+
+instance show_0 (a, b) | toString a & toString b where
+  show_0 tuple c = show_2 toStringC toStringC tuple c
 
 instance map1 []    where map1 f l = map f l        // TO BE IMPROVED, use generic version
 
 Start = runTests
     [ Testcase "parse o show for Ints" $ assert $ and [test i \\ i <- [-25 .. 25]]
     , Testcase "toColor o fromColor" $ assert $ and [ c == toColor (fromColor c) \\ c <- [Red, Yellow, Blue]]
-    , Testcase "show_0 for Color Red" $ StringList (show Red) shouldBe StringList ["Red"]
-    , Testcase "show_0 for Color Yellow" $ StringList (show Yellow) shouldBe StringList ["Yellow"]
-    , Testcase "show_0 for [1]" $ StringList (show [1]) shouldBe StringList ["Cons", "1", "Nil"]
+    , Testcase "show for Color Red" $ StringList (show Red) shouldBe StringList ["Red"]
+    , Testcase "show for Color Yellow" $ StringList (show Yellow) shouldBe StringList ["Yellow"]
+    , Testcase "show for [1]" $ StringList (show [1]) shouldBe StringList ["Cons", "1", "Nil"]
+    , Testcase "show for T" $ StringList (show C) shouldBe StringList ["C"]
+    , Testcase "show for aTree" $ StringList (show aTree) shouldBe StringList ["Bin", "2", "Tip", "Bin", "4", "Tip", "Tip"]
+    , Testcase "show for (1, True)" $ StringList (show (1, True)) shouldBe StringList ["Tuple2", "1", "True"]
     //, Testcase "parse o show for Colors" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
     //, Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
 //  , test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
