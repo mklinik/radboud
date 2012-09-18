@@ -32,11 +32,11 @@ class parse0 a :: [String] -> Result a
 instance parse0 Int
 where
     parse0 [i:r] = Just (toInt i, r)
-    parse0 r = Nothing
+    parse0 [] = Nothing
 instance parse0 Bool
 where
     parse0 [b:r] = Just (b=="True", r)
-    parse0 r = Nothing
+    parse0 [] = Nothing
 instance parse0 UNIT
 where
     parse0 r = Just (UNIT, r)
@@ -189,6 +189,46 @@ instance show_2 (,) where
 instance show_0 (a, b) | toString a & toString b where
   show_0 tuple c = show_2 toStringC toStringC tuple c
 
+
+class parse1 t :: ([String] -> Result a) String [String] -> Result (t a)
+
+instance parse1 CONS where
+  parse1 _      _        []    = Nothing
+  parse1 parseA consName [name:input]
+    | consName == name = case parseA input of
+        Nothing = Nothing
+        Just (a, rest) = Just (CONS name a, rest)
+    | otherwise = Nothing
+
+class parse2 t :: ([String] -> Result a) ([String] -> Result b) [String] -> Result (t a b)
+
+instance parse2 PAIR where
+  parse2 parseA parseB input = case parseA input of
+    Nothing = Nothing
+    Just (a, restA) = case parseB restA of
+      Nothing = Nothing
+      Just (b, restB) = Just (PAIR a b, restB)
+
+instance parse2 EITHER where
+  parse2 parseL parseR input = case parseL input of
+    Just (a, restL) = Just (LEFT a, restL)
+    Nothing = case parseR input of
+      Just (b, restR) = Just (RIGHT b, restR)
+      Nothing = Nothing
+
+instance parse0 Color where
+  parse0 input = case parse2 (parse2 (parse1 parse0 "Red") (parse1 parse0 "Yellow")) (parse1 parse0 "Blue") input of
+    Nothing = Nothing
+    Just (c, rest) = Just (toColor c, rest)
+
+instance parse1 [] where
+  parse1 parseA name input
+    = mapMaybe (\(x, y) = (toList x, y))
+        (parse2 (parse1 parse0 "Nil") (parse1 (parse2 parseA $ parse1 parseA name) "Cons") input)
+
+instance parse0 [a] | parse0 a where
+  parse0 input = parse1 parse0 "" input
+
 instance map1 []    where map1 f l = map f l        // TO BE IMPROVED, use generic version
 
 Start = runTests
@@ -200,13 +240,14 @@ Start = runTests
     , Testcase "show for T" $ StringList (show C) shouldBe StringList ["C"]
     , Testcase "show for aTree" $ StringList (show aTree) shouldBe StringList ["Bin", "2", "Tip", "Bin", "4", "Tip", "Tip"]
     , Testcase "show for (1, True)" $ StringList (show (1, True)) shouldBe StringList ["Tuple2", "1", "True"]
-    //, Testcase "parse o show for Colors" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
-    //, Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
-//  , test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
+    , Testcase "parse o show for Colors" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
+    , Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
+    //, Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
 //  etc.
     // maps
     //, map1 ((+) 1) [0 .. 5] == [1 .. 6]
     ]
+
 
 aTree = Bin 2 Tip (Bin 4 Tip Tip)
 
