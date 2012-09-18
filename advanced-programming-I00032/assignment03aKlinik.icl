@@ -287,7 +287,13 @@ instance parse0 T where
 instance eq0 Bool where
   eq0 x y = x == y
 
-instance map1 []    where map1 f l = map f l        // TO BE IMPROVED, use generic version
+// Use these deﬁnitions to map the factorial function over the expressions
+//  - [1 . . 10] ,
+//  - Bin 2 Tip (Bin 4 Tip Tip)
+//  - ([1 . . 10], Bin 2 Tip (Bin 4 Tip Tip)) .
+
+instance map1 [] where
+  map1 f l = toList $ map2 (map1 map0) (map1 (map2 f (map1 f))) $ fromList l
 
 Start = runTests
     [ Testcase "toColor o fromColor" $
@@ -312,7 +318,9 @@ Start = runTests
         assert $ test [(a,b) \\ a <- [True, False], b <- [[1 .. 5], [10 .. 100], [-300 .. 100]]]
 
     // maps
-    //, map1 ((+) 1) [0 .. 5] == [1 .. 6]
+    , Testcase "" $ map1 ((+) 1) [0 .. 5] shouldBe [1 .. 6]
+    , Testcase "map the factorial function over [1 .. 10]" $
+        (IntList $ map1 fac [1 .. 10]) shouldBe IntList [1,2,6,24,120,720,5040,40320,362880,3628800]
     ]
 
 
