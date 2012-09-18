@@ -172,29 +172,27 @@ instance show_0 T where
 instance show_1 [] where
   show_1 showA list c = show_2 (show_1 show_0) (show_1 (show_2 showA $ show_1 showA)) (fromList list) c
 
-toStringC x c = [toString x:c]
-
-instance show_0 [a] | toString a where
-  show_0 list c = show_1 toStringC list c
+instance show_0 [a] | show_0 a where
+  show_0 list c = show_1 show_0 list c
 
 instance show_1 Tree where
   show_1 showA tree c = show_2 (show_1 show_0) (show_1 (show_2 showA (show_2 (show_1 showA) (show_1 showA)))) (fromTree tree) c
 
-instance show_0 (Tree a) | toString a where
-  show_0 tree c = show_1 toStringC tree c
+instance show_0 (Tree a) | show_0 a where
+  show_0 tree c = show_1 show_0 tree c
 
 instance show_2 (,) where
   show_2 showA showB tuple c = show_1 (show_2 showA showB) (fromTup tuple) c
 
-instance show_0 (a, b) | toString a & toString b where
-  show_0 tuple c = show_2 toStringC toStringC tuple c
+instance show_0 (a, b) | show_0 a & show_0 b where
+  show_0 tuple c = show_2 show_0 show_0 tuple c
 
 
-class parse1 t :: ([String] -> Result a) String [String] -> Result (t a)
+class parse1 t :: String ([String] -> Result a) [String] -> Result (t a)
 
 instance parse1 CONS where
   parse1 _      _        []    = Nothing
-  parse1 parseA consName [name:input]
+  parse1 consName parseA [name:input]
     | consName == name = case parseA input of
         Nothing = Nothing
         Just (a, rest) = Just (CONS name a, rest)
@@ -217,17 +215,31 @@ instance parse2 EITHER where
       Nothing = Nothing
 
 instance parse0 Color where
-  parse0 input = case parse2 (parse2 (parse1 parse0 "Red") (parse1 parse0 "Yellow")) (parse1 parse0 "Blue") input of
+  parse0 input = case parse2 (parse2 (parse1 "Red" parse0) (parse1 "Yellow" parse0)) (parse1 "Blue" parse0) input of
     Nothing = Nothing
     Just (c, rest) = Just (toColor c, rest)
 
 instance parse1 [] where
-  parse1 parseA name input
-    = mapMaybe (\(x, y) = (toList x, y))
-        (parse2 (parse1 parse0 "Nil") (parse1 (parse2 parseA $ parse1 parseA name) "Cons") input)
+  parse1 name parseA input
+    = mapMaybe (\(x, y) = (toList x, y)) $
+        parse2 (parse1 "Nil" parse0) (parse1 "Cons" (parse2 parseA $ parse1 name parseA)) input
 
 instance parse0 [a] | parse0 a where
-  parse0 input = parse1 parse0 "" input
+  parse0 input = parse1 "" parse0 input
+
+instance parse1 Tree where
+  parse1 name parseA input
+    = mapMaybe (\(x, y) = (toTree x, y)) $
+        parse2 (parse1 "Tip" parse0) (parse1 "Bin" (parse2 parseA (parse2 (parse1 name parseA) (parse1 name parseA)))) input
+
+instance parse0 (Tree a) | parse0 a where
+  parse0 input = parse1 "" parse0 input
+
+instance eq1 Tree where
+  eq1 eqa x y = eq2 (eq1 eq0) (eq1 (eq2 eqa (eq2 (eq1 eqa) (eq1 eqa)))) (fromTree x) (fromTree y)
+
+instance eq0 (Tree a) | eq0 a where
+  eq0 x y = eq1 eq0 x y
 
 instance map1 []    where map1 f l = map f l        // TO BE IMPROVED, use generic version
 
@@ -242,6 +254,7 @@ Start = runTests
     , Testcase "show for (1, True)" $ StringList (show (1, True)) shouldBe StringList ["Tuple2", "1", "True"]
     , Testcase "parse o show for Colors" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
     , Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
+    , Testcase "parse o show for aTree" $ assert $ test aTree
     //, Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
 //  etc.
     // maps
