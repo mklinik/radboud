@@ -36,8 +36,9 @@ where
     parse0 [] = Nothing
 instance parse0 Bool
 where
-    parse0 [b:r] = Just (b=="True", r)
-    parse0 [] = Nothing
+    parse0 ["True" :r] = Just (True,  r)
+    parse0 ["False":r] = Just (False, r)
+    parse0 _ = Nothing
 instance parse0 UNIT
 where
     parse0 r = Just (UNIT, r)
