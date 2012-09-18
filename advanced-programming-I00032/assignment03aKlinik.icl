@@ -11,6 +11,7 @@ module assignment03aKlinik
 */
 
 import StdEnv, StdMaybe
+import StdListExtensions
 
 /************* showing *******************/
 
@@ -287,13 +288,26 @@ instance parse0 T where
 instance eq0 Bool where
   eq0 x y = x == y
 
+// some standard overloads for trees
+instance == (Tree a) | eq0 a where
+  (==) x y = eq0 x y
+
+instance toString (Tree a) | show_0 a where
+  toString t = unwords $ show t
+
 // Use these deﬁnitions to map the factorial function over the expressions
 //  - [1 . . 10] ,
 //  - Bin 2 Tip (Bin 4 Tip Tip)
 //  - ([1 . . 10], Bin 2 Tip (Bin 4 Tip Tip)) .
 
 instance map1 [] where
-  map1 f l = toList $ map2 (map1 map0) (map1 (map2 f (map1 f))) $ fromList l
+  map1 f x = toList $ map2 (map1 map0) (map1 (map2 f (map1 f))) $ fromList x
+
+instance map1 Tree where
+  map1 f x = toTree $ map2 (map1 map0) (map1 (map2 f (map2 (map1 f) (map1 f)))) $ fromTree x
+
+instance map2 (,) where
+  map2 f g x = toTup $ map1 (map2 f g) $ fromTup x
 
 Start = runTests
     [ Testcase "toColor o fromColor" $
@@ -318,9 +332,14 @@ Start = runTests
         assert $ test [(a,b) \\ a <- [True, False], b <- [[1 .. 5], [10 .. 100], [-300 .. 100]]]
 
     // maps
-    , Testcase "" $ map1 ((+) 1) [0 .. 5] shouldBe [1 .. 6]
+    , Testcase "map +1 over a list of integers" $ map1 ((+) 1) [0 .. 5] shouldBe [1 .. 6]
     , Testcase "map the factorial function over [1 .. 10]" $
         (IntList $ map1 fac [1 .. 10]) shouldBe IntList [1,2,6,24,120,720,5040,40320,362880,3628800]
+    , Testcase "map the factorial function over a tree" $
+        map1 fac (Bin 2 Tip (Bin 4 Tip Tip)) shouldBe (Bin 2 Tip (Bin 24 Tip Tip))
+    , Testcase "map the factorial function over ([1 . . 10], Bin 2 Tip (Bin 4 Tip Tip))" $
+        assert $ map2 (map1 fac) (map1 fac) ([1 .. 10], Bin 2 Tip (Bin 4 Tip Tip))
+          == ([1,2,6,24,120,720,5040,40320,362880,3628800], Bin 2 Tip (Bin 24 Tip Tip))
     ]
 
 
@@ -385,3 +404,6 @@ instance == IntList where
 
 fac 0 = 1
 fac n = n * fac (n - 1)
+
+unwords = concat o intersperse " "
+concat = foldl (+++) ""
