@@ -50,11 +50,10 @@ parse{|Int|} [i:r] = Just (toInt i, r)
 // apply f to the parse result and g to the rest input
 mapResult f g r = mapMaybe (mapPair f g) r
 
-/*
 :: Parser a :== [String] -> Result a
 
 // drop the head of the list if it matches the given token
-match :: String -> Parser String
+match :: String -> ([String] -> Result String)
 match token = \input = case input of
   [] = Nothing
   [head:tail] =
@@ -62,47 +61,30 @@ match token = \input = case input of
        (Just (head, tail))
        (Nothing)
 
-(lefty) :: (Parser a) (Parser b) -> Parser a
-(lefty) pa pb = \input = case pa input of
-  Nothing = Nothing
-  Just (a, restA) = case pb restA of
-    Nothing = Nothing
-    Just (_, restB) = Just (a, restB)
-
-(righty) :: (Parser a) (Parser b) -> Parser b
-(righty) pa pb = \input = case pa input of
-  Nothing = Nothing
-  Just (_, restA) = case pb restA of
-    Nothing = Nothing
-    Just (b, restB) = Just (b, restB)
-    */
-
 parse{|UNIT|} r = Just (UNIT, r)
 
-//parse{|CONS|} _ [] = Nothing
-//parse{|CONS of {gcd_name, gcd_arity}|} parseA [name:r]
-  //| name == gcd_name = mapResult CONS id $ ((chomp ")") righty parseA lefty (chomp "(")) r
-  //| otherwise = Nothing
-    //where
-      //chomp s = if (gcd_arity > 0) (match s) (\i -> Just ("", i))
+(<$) :: a ([String] -> Result b) -> ([String] -> Result a)
+(<$) f parser = \input = (mapMaybe $ mapFst (const f)) $ parser input
+
+(<*>) :: (Result (a -> b)) ([String] -> Result a) -> (Result b)
+(<*>) Nothing _ = Nothing
+(<*>) (Just (f, input)) parser =
+  case parser input of
+    Nothing = Nothing
+    Just (a, rest) = Just (f a, rest)
+
+(<*) :: (Result a) ([String] -> Result b) -> (Result a)
+(<*) Nothing _ = Nothing
+(<*) (Just (a, input)) parser =
+  case parser input of
+    Nothing = Nothing
+    Just (_, rest) = Just (a, rest)
 
 parse{|CONS|} _ [] = Nothing
 parse{|CONS of {gcd_name, gcd_arity}|} parseA input =
-  if (gcd_arity > 0) parseWithBraces parseWithoutBraces
+  (CONS <$ chomp "(") input <* match gcd_name <*> parseA <* chomp ")"
     where
-      parseWithoutBraces =
-        if (hd input == gcd_name)
-          (case parseA $ tl input of
-            Nothing = Nothing
-            Just (a, rest) = Just (CONS a, rest))
-          Nothing
-      parseWithBraces =
-        if ((hd $ tl input) == gcd_name)
-          (case parseA $ tl $ tl input of
-            Nothing = Nothing
-            Just (a, rest) = Just (CONS a, tl rest)
-          )
-          Nothing
+      chomp s = if (gcd_arity > 0) (match s) (\x -> Just ("", x))
 
 parse{|PAIR|} parseA parseB input =
   case parseA input of
