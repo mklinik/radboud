@@ -47,12 +47,10 @@ parse{|Bool|} ["False":r] = Just (False,r)
 parse{|Int|} [] = Nothing
 parse{|Int|} [i:r] = Just (toInt i, r)
 
-// apply f to the parse result and g to the rest input
-mapResult f g r = mapMaybe (mapPair f g) r
+// apply a function to a parse result
+mapResult = mapMaybe o mapFst
 
-:: Parser a :== [String] -> Result a
-
-// drop the head of the list if it matches the given token
+// drop the head of the list if it matches the given token, otherwise fail
 match :: String -> ([String] -> Result String)
 match token = \input = case input of
   [] = Nothing
@@ -63,22 +61,18 @@ match token = \input = case input of
 
 parse{|UNIT|} r = Just (UNIT, r)
 
-(<$) :: a ([String] -> Result b) -> ([String] -> Result a)
-(<$) f parser = \input = (mapMaybe $ mapFst (const f)) $ parser input
+:: Parser a :== ([String] -> Result a)
 
-(<*>) :: (Result (a -> b)) ([String] -> Result a) -> (Result b)
+(<$) infixl 4 :: a (Parser b) -> (Parser a)
+(<$) f parser = \input = mapResult (const f) $ parser input
+
+(<*>) infixl 5 :: (Result (a -> b)) (Parser a) -> (Result b)
 (<*>) Nothing _ = Nothing
-(<*>) (Just (f, input)) parser =
-  case parser input of
-    Nothing = Nothing
-    Just (a, rest) = Just (f a, rest)
+(<*>) (Just (f, input)) parser = mapResult f $ parser input
 
-(<*) :: (Result a) ([String] -> Result b) -> (Result a)
+(<*) infixl 5 :: (Result a) (Parser b) -> (Result a)
 (<*) Nothing _ = Nothing
-(<*) (Just (a, input)) parser =
-  case parser input of
-    Nothing = Nothing
-    Just (_, rest) = Just (a, rest)
+(<*) (Just (a, input)) parser = mapResult (const a) $ parser input
 
 parse{|CONS|} _ [] = Nothing
 parse{|CONS of {gcd_name, gcd_arity}|} parseA input =
@@ -100,7 +94,7 @@ parse{|EITHER|} parseL parseR input =
       Just (r, rest) = Just (RIGHT r, rest)
     Just (l, rest) = Just (LEFT l, rest)
 
-parse{|OBJECT|} parseA input = mapResult OBJECT id $ parseA input
+parse{|OBJECT|} parseA input = mapResult OBJECT $ parseA input
 
 derive parse Color, T, Tree, Foobar
 
