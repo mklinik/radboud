@@ -38,7 +38,7 @@ instance parse0 Bool
 where
     parse0 ["True" :r] = Just (True,  r)
     parse0 ["False":r] = Just (False, r)
-    parse0 _ = Nothing
+    parse0 [] = Nothing
 instance parse0 UNIT
 where
     parse0 r = Just (UNIT, r)
@@ -153,14 +153,39 @@ instance map2 EITHER        where map2 f g (LEFT  x)  = LEFT  (f x)
 //  - Bool,     [x]
 //  - T,        [x]
 //  - Color,    [x]
-//  - Tree a,   [x]
 //  - [a], and  [x]
+//  - Tree a,   [x]
 //  - (a,b)     [x]
+
+
+// ---------- equality --------------
 
 instance eq0 Color  where
   eq0  c1 c2 = eq2 (eq2 (eq1 eq0) (eq1 eq0)) (eq1 eq0) (fromColor c1) (fromColor c2)
 instance ==  Color  where
   (==) c1 c2 = eq0 c1 c2    // just to use the well-known notation...
+
+instance eq1 Tree where
+  eq1 eqa x y = eq2 (eq1 eq0) (eq1 (eq2 eqa (eq2 (eq1 eqa) (eq1 eqa)))) (fromTree x) (fromTree y)
+
+instance eq0 (Tree a) | eq0 a where
+  eq0 x y = eq1 eq0 x y
+instance == (Tree a) | eq0 a where
+  (==) x y = eq0 x y
+
+instance eq2 (,) where
+  eq2 eqa eqb x y = eq1 (eq2 eqa eqb) (fromTup x) (fromTup y)
+
+instance eq0 (a, b) | eq0 a & eq0 b where
+  eq0 x y = eq2 eq0 eq0 x y
+
+instance eq0 T where
+  eq0 x y = eq1 eq0 (fromT x) (fromT y)
+
+instance eq0 Bool where
+  eq0 x y = x == y
+
+// ------- printing ------------
 
 class show_1 t :: (a [String] -> [String]) (t a) [String] -> [String]
 
@@ -176,12 +201,12 @@ instance show_2 EITHER where
   show_2 showA _     (LEFT  a) c = showA a c
   show_2 _     showB (RIGHT b) c = showB b c
 
+instance show_0 T where
+  show_0 t c = show_1 show_0 (fromT t) c
+
 instance show_0 Color where
   show_0 color c =
     show_2 (show_2 (show_1 show_0) (show_1 show_0)) (show_1 show_0) (fromColor color) c
-
-instance show_0 T where
-  show_0 t c = show_1 show_0 (fromT t) c
 
 instance show_1 [] where
   show_1 showA list c =
@@ -199,6 +224,8 @@ instance show_1 Tree where
 
 instance show_0 (Tree a) | show_0 a where
   show_0 tree c = show_1 show_0 tree c
+instance toString (Tree a) | show_0 a where
+  toString t = unwords $ show t
 
 instance show_2 (,) where
   show_2 showA showB tuple c = show_1 (show_2 showA showB) (fromTup tuple) c
@@ -206,6 +233,7 @@ instance show_2 (,) where
 instance show_0 (a, b) | show_0 a & show_0 b where
   show_0 tuple c = show_2 show_0 show_0 tuple c
 
+// ------------ parsing --------------
 
 class parse1 t :: String ([String] -> Result a) [String] -> Result (t a)
 
@@ -233,6 +261,9 @@ instance parse2 EITHER where
       Just (b, restR) = Just (RIGHT b, restR)
       Nothing = Nothing
 
+instance parse0 T where
+  parse0 input = mapMaybe (mapFst toT) $ parse1 "C" parse0 input
+
 instance parse0 Color where
   parse0 input = mapMaybe (mapFst toColor) $
     parse2 (parse2 (parse1 "Red" parse0)
@@ -258,18 +289,6 @@ instance parse1 Tree where
 instance parse0 (Tree a) | parse0 a where
   parse0 input = parse1 "" parse0 input
 
-instance eq1 Tree where
-  eq1 eqa x y = eq2 (eq1 eq0) (eq1 (eq2 eqa (eq2 (eq1 eqa) (eq1 eqa)))) (fromTree x) (fromTree y)
-
-instance eq0 (Tree a) | eq0 a where
-  eq0 x y = eq1 eq0 x y
-
-instance eq2 (,) where
-  eq2 eqa eqb x y = eq1 (eq2 eqa eqb) (fromTup x) (fromTup y)
-
-instance eq0 (a, b) | eq0 a & eq0 b where
-  eq0 x y = eq2 eq0 eq0 x y
-
 instance parse2 (,) where
   parse2 parseA parseB input = mapMaybe (mapFst toTup) $
     parse1 "Tuple2" (parse2 parseA parseB) input
@@ -277,26 +296,7 @@ instance parse2 (,) where
 instance parse0 (a, b) | parse0 a & parse0 b where
   parse0 input = parse2 parse0 parse0 input
 
-instance eq0 T where
-  eq0 x y = eq1 eq0 (fromT x) (fromT y)
-
-instance parse0 T where
-  parse0 input = mapMaybe (mapFst toT) $ parse1 "C" parse0 input
-
-instance eq0 Bool where
-  eq0 x y = x == y
-
-// some standard overloads for trees
-instance == (Tree a) | eq0 a where
-  (==) x y = eq0 x y
-
-instance toString (Tree a) | show_0 a where
-  toString t = unwords $ show t
-
-// Use these deﬁnitions to map the factorial function over the expressions
-//  - [1 . . 10] ,
-//  - Bin 2 Tip (Bin 4 Tip Tip)
-//  - ([1 . . 10], Bin 2 Tip (Bin 4 Tip Tip)) .
+// ------------ mapping -----------------
 
 instance map1 [] where
   map1 f x = toList $ map2 (map1 map0) (map1 (map2 f (map1 f))) $ fromList x
@@ -323,21 +323,41 @@ Start = runTests
     , Testcase "parse o show for Bool" $ assert $ and $ [test True, test False]
     , Testcase "parse o show for T" $ assert $ test C
     , Testcase "parse o show for Color" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
-    , Testcase "parse o show for Tree" $ assert $ test aTree
     , Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
+    , Testcase "parse o show for Tree Int" $ assert $ test aTree
     , Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
     , Testcase "parse o show for (Bool, [Int])" $
         assert $ test [(a,b) \\ a <- [True, False], b <- [[1 .. 5], [10 .. 100], [-300 .. 100]]]
 
     // maps
+
+    // Use these deﬁnitions to map the factorial function over the expressions
+    //  - [1 . . 10] ,
+    //  - Bin 2 Tip (Bin 4 Tip Tip)
+    //  - ([1 . . 10], Bin 2 Tip (Bin 4 Tip Tip)) .
     , Testcase "map +1 over a list of integers" $ map1 ((+) 1) [0 .. 5] shouldBe [1 .. 6]
     , Testcase "map the factorial function over [1 .. 10]" $
         (IntList $ map1 fac [1 .. 10]) shouldBe IntList [1,2,6,24,120,720,5040,40320,362880,3628800]
     , Testcase "map the factorial function over a tree" $
-        map1 fac (Bin 2 Tip (Bin 4 Tip Tip)) shouldBe (Bin 2 Tip (Bin 24 Tip Tip))
+        map1 fac aTree shouldBe (Bin 2 Tip (Bin 24 Tip Tip))
     , Testcase "map the factorial function over ([1 . . 10], Bin 2 Tip (Bin 4 Tip Tip))" $
-        assert $ map2 (map1 fac) (map1 fac) ([1 .. 10], Bin 2 Tip (Bin 4 Tip Tip))
+        assert $ map2 (map1 fac) (map1 fac) ([1 .. 10], aTree)
           == ([1,2,6,24,120,720,5040,40320,362880,3628800], Bin 2 Tip (Bin 24 Tip Tip))
+
+    // Use the generic map to apply \i.(i, fac i) to all elements in the list [1 .. 10].
+    , Testcase "map \i.(i, fac i) to the list [1 .. 10]" $
+        assert $ map1 (\i = (i, fac i)) [1 .. 10] ==
+          [ (1, 1)
+          , (2, 2)
+          , (3, 6)
+          , (4, 24)
+          , (5, 120)
+          , (6, 720)
+          , (7, 5040)
+          , (8, 40320)
+          , (9, 362880)
+          , (10, 3628800)
+          ]
     ]
 
 
