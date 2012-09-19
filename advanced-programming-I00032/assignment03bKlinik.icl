@@ -47,11 +47,14 @@ parse{|Bool|} ["False":r] = Just (False,r)
 parse{|Int|} [] = Nothing
 parse{|Int|} [i:r] = Just (toInt i, r)
 
-// apply a function to a parse result
-mapResult = mapMaybe o mapFst
+parse{|UNIT|} r = Just (UNIT, r)
+
+
+// ---- ad-hoc parser combinators ---
+:: Parser a :== ([String] -> Result a)
 
 // drop the head of the list if it matches the given token, otherwise fail
-match :: String -> ([String] -> Result String)
+match :: String -> Parser String
 match token = \input = case input of
   [] = Nothing
   [head:tail] =
@@ -59,33 +62,34 @@ match token = \input = case input of
        (Just (head, tail))
        (Nothing)
 
-parse{|UNIT|} r = Just (UNIT, r)
+inject :: a -> Parser a
+inject a = \input = Just (a, input)
 
-:: Parser a :== ([String] -> Result a)
+(<*>) infixl :: (Parser (a -> b)) (Parser a) -> (Parser b)
+(<*>) parserAB parserA = \input =
+  case parserAB input of
+    Nothing = Nothing
+    Just (f, restAB) = case parserA restAB of
+      Nothing = Nothing
+      Just (a, restA) = Just (f a, restA)
 
-(<$) infixl 4 :: a (Parser b) -> (Parser a)
-(<$) f parser = \input = mapResult (const f) $ parser input
+(<*) infixl :: (Parser a) (Parser b) -> (Parser a)
+(<*) parserA parserB = const <$> parserA <*> parserB
 
-(<*>) infixl 5 :: (Result (a -> b)) (Parser a) -> (Result b)
-(<*>) Nothing _ = Nothing
-(<*>) (Just (f, input)) parser = mapResult f $ parser input
+(<$>) infixl :: (a -> b) (Parser a) -> (Parser b)
+(<$>) f parser = inject f <*> parser
 
-(<*) infixl 5 :: (Result a) (Parser b) -> (Result a)
-(<*) Nothing _ = Nothing
-(<*) (Just (a, input)) parser = mapResult (const a) $ parser input
+(<$) infixl :: a (Parser b) -> (Parser a)
+(<$) f parser = inject f <* parser
+// ---- END parser combinators ------
 
 parse{|CONS|} _ [] = Nothing
 parse{|CONS of {gcd_name, gcd_arity}|} parseA input =
-  (CONS <$ chomp "(") input <* match gcd_name <*> parseA <* chomp ")"
+  (CONS <$ chomp "(" <* match gcd_name <*> parseA <* chomp ")") input
     where
-      chomp s = if (gcd_arity > 0) (match s) (\x -> Just ("", x))
+      chomp s = if (gcd_arity > 0) (match s) (inject "")
 
-parse{|PAIR|} parseA parseB input =
-  case parseA input of
-    Nothing = Nothing
-    Just (a, restA) = case parseB restA of
-      Nothing = Nothing
-      Just (b, restB) = Just (PAIR a b, restB)
+parse{|PAIR|} parseA parseB input = (PAIR <$> parseA <*> parseB) input
 
 parse{|EITHER|} parseL parseR input =
   case parseL input of
@@ -94,7 +98,7 @@ parse{|EITHER|} parseL parseR input =
       Just (r, rest) = Just (RIGHT r, rest)
     Just (l, rest) = Just (LEFT l, rest)
 
-parse{|OBJECT|} parseA input = mapResult OBJECT $ parseA input
+parse{|OBJECT|} parseA input = (OBJECT <$> parseA) input
 
 derive parse Color, T, Tree, Foobar
 
@@ -156,6 +160,7 @@ Start = runTests
     , Testcase "parse o show for T" $ assert $ test C
     , Testcase "parse o show for Color" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
     , Testcase "parse o show for Tree" $ assert $ test aTree
+    , Testcase "parse o show for Tree" $ assert $ test $ Foobar 42
     //, Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
     //, Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
     //, Testcase "parse o show for (Bool, [Int])" $
