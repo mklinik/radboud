@@ -62,9 +62,11 @@ match token = \input = case input of
        (Just (head, tail))
        (Nothing)
 
+// wrap something in a parse result, without consuming input
 inject :: a -> Parser a
 inject a = \input = Just (a, input)
 
+// apply the result of the left parser to the result of the right parser
 (<*>) infixl :: (Parser (a -> b)) (Parser a) -> (Parser b)
 (<*>) parserAB parserA = \input =
   case parserAB input of
@@ -73,12 +75,15 @@ inject a = \input = Just (a, input)
       Nothing = Nothing
       Just (a, restA) = Just (f a, restA)
 
+// run both parsers, drop the first result and return the second result
 (<*) infixl :: (Parser a) (Parser b) -> (Parser a)
 (<*) parserA parserB = const <$> parserA <*> parserB
 
+// apply the given function to a parse result
 (<$>) infixl :: (a -> b) (Parser a) -> (Parser b)
 (<$>) f parser = inject f <*> parser
 
+// run the parser, discard the result and return the given value
 (<$) infixl :: a (Parser b) -> (Parser a)
 (<$) f parser = inject f <* parser
 // ---- END parser combinators ------
@@ -89,7 +94,7 @@ parse{|CONS of {gcd_name, gcd_arity}|} parseA input =
     where
       chomp s = if (gcd_arity > 0) (match s) (inject "")
 
-parse{|PAIR|} parseA parseB input = (PAIR <$> parseA <*> parseB) input
+parse{|PAIR|} parseA parseB input = (PAIR <$> parseA <*> parseB) input // applicative parsing is so cool!
 
 parse{|EITHER|} parseL parseR input =
   case parseL input of
@@ -156,11 +161,17 @@ Start = runTests
     , Testcase "show for (1, True)" $
         StringList (show (1, True)) shouldBe StringList ["(", "_Tuple2", "1", "True", ")"]
 
+    // now this works (it didn't work in assignment 2)
+    , Testcase "'Tip' does not parse as a the empty Int list" $
+        assert $ (parse{|*|} ["Tip"]) == failedIntList
+    , Testcase "'Nil' does not parse as a Tree Int" $
+        assert $ (parse{|*|} ["Nil"]) == failedIntTree
+
     , Testcase "parse o show for Int" $ assert $ and [test i \\ i <- [-25 .. 25]]
     , Testcase "parse o show for T" $ assert $ test C
     , Testcase "parse o show for Color" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
     , Testcase "parse o show for Tree" $ assert $ test aTree
-    , Testcase "parse o show for Tree" $ assert $ test $ Foobar 42
+    , Testcase "parse o show for Foobar" $ assert $ test $ Foobar 42
     , Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
     , Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
     , Testcase "parse o show for (Bool, [Int])" $
@@ -168,6 +179,12 @@ Start = runTests
     ]
 
 aTree = Bin 2 Tip (Bin 4 Tip Tip)
+
+failedIntList :: Result [Int]
+failedIntList = Nothing
+
+failedIntTree :: Result (Tree Int)
+failedIntTree = Nothing
 
 /**************** to test if parse and show work properly *************************/
 
