@@ -28,7 +28,7 @@ show_{|EITHER|} showL _     (LEFT  l) c = showL l c
 show_{|EITHER|} _     showR (RIGHT r) c = showR r c
 show_{|OBJECT|} showX (OBJECT x) c = showX x c
 
-derive show_ Color, T, Tree, Foobar, Maybe
+derive show_ Color, T, Tree, Foobar, Maybe, [], (,)
 instance toString (Tree a) | show_{|*|} a where toString t = unwords $ show t
 instance toString (Foobar a) | show_{|*|} a where toString t = unwords $ show t
 instance toString (Maybe a) | show_{|*|} a where toString t = unwords $ show t
@@ -100,7 +100,7 @@ parse{|EITHER|} parseL parseR input =
 
 parse{|OBJECT|} parseA input = (OBJECT <$> parseA) input
 
-derive parse Color, T, Tree, Foobar
+derive parse Color, T, Tree, Foobar, [], (,)
 
 //------------------- eq -----------------
 generic eq a :: a a -> Bool
@@ -116,7 +116,7 @@ eq{|EITHER|} _   eqr (RIGHT x) (RIGHT y) = eqr x y
 eq{|EITHER|} _ _ _ _ = False
 eq{|OBJECT|} f (OBJECT x) (OBJECT y) = f x y
 
-derive eq Color, T, Tree, Foobar
+derive eq Color, T, Tree, Foobar, [], (,)
 instance == Color where (==) x y = eq{|*|} x y
 instance == (Tree a) | eq{|*|} a where (==) x y = eq{|*|} x y
 instance == (Foobar a) | eq{|*|} a where (==) x y = eq{|*|} x y
@@ -147,24 +147,24 @@ Start = runTests
     , Testcase "show for Color Red" $ StringList (show Red) shouldBe StringList ["Red"]
     , Testcase "show for T" $ StringList (show C) shouldBe StringList ["C"]
     , Testcase "show for Color Yellow" $ StringList (show Yellow) shouldBe StringList ["Yellow"]
-    //, Testcase "show for [1]" $ StringList (show [1]) shouldBe StringList ["(", "Cons", "1", "Nil", ")"]
+    , Testcase "show for [1]" $ StringList (show [1]) shouldBe StringList ["(", "_Cons", "1", "_Nil", ")"]
     , Testcase "show for T" $ StringList (show C) shouldBe StringList ["C"]
     , Testcase "show for aTree" $
         StringList (show aTree) shouldBe StringList ["(", "Bin", "2", "Tip", "(", "Bin", "4", "Tip", "Tip", ")", ")"]
     , Testcase "show for Foobar" $
         StringList (show $ Foobar 42) shouldBe StringList ["(", "Foobar", "42", ")"]
-    //, Testcase "show for (1, True)" $
-        //StringList (show (1, True)) shouldBe StringList ["Tuple2", "1", "True"]
+    , Testcase "show for (1, True)" $
+        StringList (show (1, True)) shouldBe StringList ["(", "_Tuple2", "1", "True", ")"]
 
     , Testcase "parse o show for Int" $ assert $ and [test i \\ i <- [-25 .. 25]]
     , Testcase "parse o show for T" $ assert $ test C
     , Testcase "parse o show for Color" $ assert $ and [test c \\ c <- [Red,Yellow,Blue]]
     , Testcase "parse o show for Tree" $ assert $ test aTree
     , Testcase "parse o show for Tree" $ assert $ test $ Foobar 42
-    //, Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
-    //, Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
-    //, Testcase "parse o show for (Bool, [Int])" $
-        //assert $ test [(a,b) \\ a <- [True, False], b <- [[1 .. 5], [10 .. 100], [-300 .. 100]]]
+    , Testcase "parse o show for [Int]" $ assert $ test [1 .. 3]
+    , Testcase "parse o show for (Int, Int)" $ assert $ test [(a,b) \\ a <- [1 .. 2], b <- [5 .. 7]]
+    , Testcase "parse o show for (Bool, [Int])" $
+        assert $ test [(a,b) \\ a <- [True, False], b <- [[1 .. 5], [10 .. 100], [-300 .. 100]]]
     ]
 
 aTree = Bin 2 Tip (Bin 4 Tip Tip)
