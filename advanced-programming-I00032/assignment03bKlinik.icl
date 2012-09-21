@@ -28,7 +28,9 @@ show_{|EITHER|} showL _     (LEFT  l) c = showL l c
 show_{|EITHER|} _     showR (RIGHT r) c = showR r c
 show_{|OBJECT|} showX (OBJECT x) c = showX x c
 
-derive show_ Color, T, Tree, Foobar, Maybe, [], (,)
+show_{| (,) |} showA showB (a, b) c = ["(" : showA a ["," : showB b [")" : c]]]
+
+derive show_ Color, T, Tree, Foobar, Maybe, []
 instance toString (Tree a) | show_{|*|} a where toString t = unwords $ show t
 instance toString (Foobar a) | show_{|*|} a where toString t = unwords $ show t
 instance toString (Maybe a) | show_{|*|} a where toString t = unwords $ show t
@@ -105,7 +107,12 @@ parse{|EITHER|} parseL parseR input =
 
 parse{|OBJECT|} parseA input = (OBJECT <$> parseA) input
 
-derive parse Color, T, Tree, Foobar, [], (,)
+mkTuple a b = (a, b)
+
+// did I mention that applicative parsing is awesome?
+parse{| (,) |} parseA parseB input = (mkTuple <$ match "(" <*> parseA <* match "," <*> parseB <* match ")") input
+
+derive parse Color, T, Tree, Foobar, []
 
 //------------------- eq -----------------
 generic eq a :: a a -> Bool
@@ -140,11 +147,6 @@ derive bimap Maybe, [], T, Color
 
 //------------------ tests --------------
 
-//Start = runTests
-  //[ Testcase "foobar" $ assert $ testTrue == (Just (True, []))
-  //]
-
-
 Start = runTests
     [ Testcase "parse o show for Bool" $ assert $ and $ [test True, test False]
     , Testcase "toColor o fromColor" $
@@ -159,7 +161,7 @@ Start = runTests
     , Testcase "show for Foobar" $
         StringList (show $ Foobar 42) shouldBe StringList ["(", "Foobar", "42", ")"]
     , Testcase "show for (1, True)" $
-        StringList (show (1, True)) shouldBe StringList ["(", "_Tuple2", "1", "True", ")"]
+        StringList (show (1, True)) shouldBe StringList ["(", "1", ",", "True", ")"]
 
     // now this works (it didn't work in assignment 2)
     , Testcase "'Tip' does not parse as a the empty Int list" $
