@@ -1,0 +1,53 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bussproofs}
+\usepackage{parskip}
+\begin{document}
+
+\def\arr{\rightarrow}
+\def\lam{\lambda}
+
+\section*{Exercise 1}
+
+a. Show that $(B \arr (A \arr B) \arr C) \arr B \arr C$ is a tautology.
+\begin{prooftree}
+                \AxiomC{$[B \arr (A \arr B) \arr C ^x]$}
+                         \AxiomC{$[B^y]$}
+                  \RightLabel{\scriptsize $E\arr$}
+                  \BinaryInfC{$(A\arr B)\arr C$}
+                                           \AxiomC{$[B^y]$}
+                                                \RightLabel{\scriptsize $I[z] \arr$}
+                                         \UnaryInfC{$A \arr B$}
+                               \RightLabel{\scriptsize $E \arr$}
+                      \BinaryInfC{$C$}
+                          \RightLabel{\scriptsize $I[y] \arr$}
+            \UnaryInfC{$B \arr C$}
+                  \RightLabel{\scriptsize $I[x] \arr$}
+\UnaryInfC{$(B \arr (A \arr B) \arr C) \arr B \arr C$}
+\end{prooftree}
+
+b. Give the type derivation in simly typed $\lambda$-calculus corresponding to the proof of 1a.
+\begin{prooftree}
+\def\fCenter{\ \vdash\ }
+
+\AxiomC{}
+\UnaryInfC{$\Gamma \vdash x : B \arr (A \arr B) \arr C$}
+\AxiomC{}
+\UnaryInfC{$\Gamma \vdash y : B$}
+\BinaryInfC{$\Gamma \vdash x y : (A \arr B) \arr C$}
+
+   \AxiomC{}
+   \UnaryInfC{$\Gamma, z:A \vdash y : B$}
+   \UnaryInfC{$\Gamma \vdash \lam z : A . y : A \arr B$}
+\BinaryInf$\Gamma \fCenter x y (\lam z:A . y) : C$
+\UnaryInf$x:B \arr (A \arr B) \arr C \fCenter \lam y:B . x y (\lam z : A . y) : B \arr C$
+\UnaryInfC{$\vdash \lam x:B \arr (A \arr B) \arr C .
+                   \lam y:B .
+                     x y (\lam z:A.y) : (B \arr (A \arr B) \arr C) \arr B \arr C
+$}
+\end{prooftree}
+where $\Gamma = x:B \arr (A \arr B) \arr C, y:B$.
+
+\end{document}
