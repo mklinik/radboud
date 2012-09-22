@@ -1,13 +1,13 @@
 Parameter A B C : Set.
 
 
-Definition LamOneA' :=
+Definition oneB' :=
   fun (x:B -> (A -> B) -> C) 
       (y:B)
   => x y ((fun (z:B) (w:A) => z) y).
-Check LamOneA'.
+Check oneB'.
 
-Lemma LemOneA : (B -> ((A -> B) -> C)) -> B -> C.
+Lemma oneA : (B -> ((A -> B) -> C)) -> B -> C.
 Proof.
 intro x.
 intro y.
@@ -18,13 +18,13 @@ exact y.
 Qed.
 
 
-Definition LamOneA :=
+Definition oneB :=
   fun (x:B -> (A -> B) -> C)
       (y:B)
   => x y (fun (w:A) => y).
-Check LamOneA.
+Check oneB.
 
-Lemma LemOneA' : ((B -> (A -> B)) -> C) -> B -> C.
+Lemma oneA' : ((B -> (A -> B)) -> C) -> B -> C.
 Proof.
 intro x.
 intro y.
@@ -71,3 +71,46 @@ exact H0.
 intros.
 exact H0.
 Qed.
+
+Lemma twoA : (A -> A -> B) -> A -> B.
+Proof.
+intro x.
+intro y.
+apply x.
+exact y.
+exact y.
+Qed.
+
+Definition twoB :=
+  fun (x : A -> A -> B)
+      (y : A)
+  => x y y.
+Check twoB.
+
+Lemma threeA : ((A -> B -> A) -> B) -> B.
+Proof.
+intro x.
+apply x.
+intro y.
+intro z.
+exact y.
+Qed.
+
+Definition threeB :=
+  fun x : (A -> B -> A) -> B
+  => x (fun (y:A) (z:B) => y).
+Check threeB.
+
+Parameter D : Prop.
+Lemma fourA : ((A -> B) -> C -> D) -> C -> B -> D.
+intros x y z.
+apply x.
+intro w.
+exact z.
+exact y.
+Qed.
+
+Definition fourB :=
+  fun (x : (A -> B) -> C -> D) (y : C) (z : B)
+  => x (fun w:A => z) y.
+Check fourB.

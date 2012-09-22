@@ -28,7 +28,7 @@ a. Show that $(B \arr (A \arr B) \arr C) \arr B \arr C$ is a tautology.
 \UnaryInfC{$(B \arr (A \arr B) \arr C) \arr B \arr C$}
 \end{prooftree}
 
-b. Give the type derivation in simly typed $\lambda$-calculus corresponding to the proof of 1a.
+b. Give the type derivation in simply typed $\lambda$-calculus corresponding to the proof of 1a.
 \begin{prooftree}
 \def\fCenter{\ \vdash\ }
 
@@ -49,5 +49,120 @@ b. Give the type derivation in simly typed $\lambda$-calculus corresponding to t
 $}
 \end{prooftree}
 where $\Gamma = x:B \arr (A \arr B) \arr C, y:B$.
+
+\section*{Exercise 2}
+
+a. Show that $(A \arr A \arr B) \arr A \arr B$ is a tautology.
+\begin{prooftree}
+\AxiomC{$[A \arr A \arr B^x]$}
+\AxiomC{$[A^y]$}
+\RightLabel{\scriptsize $E\arr$}
+\BinaryInfC{$A \arr B$}
+\AxiomC{$[A^y]$}
+\RightLabel{\scriptsize $E\arr$}
+\BinaryInfC{$B$}
+\RightLabel{\scriptsize $I[y]\arr$}
+\UnaryInfC{$A \arr B$}
+\RightLabel{\scriptsize $I[x]\arr$}
+\UnaryInfC{$(A \arr A \arr B) \arr A \arr B$}
+\end{prooftree}
+
+b. Give the type derivation in simply typed $\lambda$-calculus corresponding to the proof of 2a.
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$\Gamma \vdash x : A \arr A \arr B$}
+\AxiomC{}
+\UnaryInfC{$\Gamma \vdash y : A$}
+\BinaryInfC{$\Gamma \vdash x y : A \arr B$}
+\AxiomC{}
+\UnaryInfC{$\Gamma \vdash y : A$}
+\BinaryInfC{$\Gamma \vdash x y y : B$}
+\UnaryInfC{$x:(A \arr A \arr B) \vdash \lam y:A . x y y : A \arr B$}
+\UnaryInfC{$\vdash \lam x:(A \arr A \arr B) . \lam y:A . x y y : (A \arr A \arr B) \arr A \arr B$}
+\end{prooftree}
+where $\Gamma = x:(A \arr A \arr B), y:A$.
+
+\section*{Exercise 3}
+
+a. Show that the formula $((A \arr B \arr A) \arr B) \arr B$ is a tautology of
+first-order minimal propositional logic.
+\begin{prooftree}
+\AxiomC{[$(A \arr B \arr A) \arr B^x]$}
+
+\AxiomC{$[A^y]$}
+\RightLabel{\scriptsize $I[z]\arr$}
+\UnaryInfC{$B \arr A$}
+\RightLabel{\scriptsize $I[y]\arr$}
+\UnaryInfC{$A \arr B \arr A$}
+\RightLabel{\scriptsize $E\arr$}
+\BinaryInfC{$B$}
+\RightLabel{\scriptsize $I[x]\arr$}
+\UnaryInfC{$((A \arr B \arr A) \arr B) \arr B$}
+\end{prooftree}
+
+b. Give the type derivation in simply typed $\lam$-calculus corresponding to the
+proof of 3a.
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$\Gamma \vdash x : (A \arr B \arr A) \arr B$}
+
+\AxiomC{}
+\UnaryInfC{$\Gamma,y:A,z:B \vdash y : A$}
+\UnaryInfC{$\Gamma,y:A \vdash \lam z:B.y : B \arr A$}
+\UnaryInfC{$\Gamma \vdash (\lam y:A . \lam z:B . y) : A \arr B \arr A$}
+\BinaryInfC{$\Gamma \vdash x (\lam y:A . \lam z:B . y) : B$}
+\UnaryInfC{$\vdash \lam x : (A \arr B \arr A) \arr B . x (\lam y:A . \lam z:B . y) : ((A \arr B \arr A) \arr B) \arr B$}
+\end{prooftree}
+where $\Gamma = x : (A \arr B \arr A) \arr B$.
+
+\section*{Exercise 4}
+
+a. Show that $((A \arr B) \arr C \arr D) \arr C \arr B \arr D$ is a tautology.
+\begin{prooftree}
+
+\AxiomC{[$(A \arr B) \arr C \arr D^x]$}
+
+\AxiomC{$[B^z]$}
+\RightLabel{\scriptsize $I[w]\arr$}
+\UnaryInfC{$A \arr B$}
+\RightLabel{\scriptsize $E\arr$}
+\BinaryInfC{$C \arr D$}
+
+\AxiomC{$[C^y]$}
+\RightLabel{\scriptsize $E\arr$}
+\BinaryInfC{$D$}
+\RightLabel{\scriptsize $I[z]\arr$}
+\UnaryInfC{$B \arr D$}
+\RightLabel{\scriptsize $I[y]\arr$}
+\UnaryInfC{$C \arr B \arr D$}
+\RightLabel{\scriptsize $I[x]\arr$}
+\UnaryInfC{$((A \arr B) \arr C \arr D) \arr C \arr B \arr D$}
+\end{prooftree}
+
+b. Give the type derivation in simply typed $\lam$-calculus corresponding to the
+proof of 4a.
+\begin{prooftree}
+\def\fCenter{\ \vdash\ }
+
+\AxiomC{}
+\UnaryInfC{$\Gamma \vdash x : (A \arr B) \arr C \arr D$}
+
+\AxiomC{}
+\UnaryInfC{$\Gamma, w:A \vdash z : B$}
+\UnaryInfC{$\Gamma \vdash (\lam w:A.z) : A \arr B$}
+\BinaryInfC{$\Gamma \vdash x(\lam w:A.z) : C \arr D$}
+
+\AxiomC{}
+\UnaryInfC{$\Gamma \vdash y : C$}
+
+\BinaryInf$\Gamma \fCenter x (\lam w:A.z) y : D$
+\UnaryInf$x : (A \arr B) \arr C \arr D, y:C \fCenter \lam z:B . x(\lam w:A.z)y : B \arr D$
+\UnaryInf$x : (A \arr B) \arr C \arr D \fCenter \lam y:C . \lam z:B . x(\lam w:A.z)y : C \arr B \arr D$
+
+\UnaryInfC{$\vdash \lam x : (A \arr B) \arr C \arr D . \lam y : C \lam z : B .
+  x (\lam w:A.z) y :
+  ((A \arr B) \arr C \arr D) \arr C \arr B \arr D$}
+\end{prooftree}
+where $\Gamma = x : (A \arr B) \arr C \arr D, y:C, z:B$.
 
 \end{document}
