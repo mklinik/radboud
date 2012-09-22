@@ -165,4 +165,42 @@ proof of 4a.
 \end{prooftree}
 where $\Gamma = x : (A \arr B) \arr C \arr D, y:C, z:B$.
 
+\section*{Exercise 5}
+
+a. What is the definition of a detour in a natural deduction proof?
+
+A detour is an arrow introduction followed immediately by an arrow elimination.
+
+b. Give a proof of $A \arr A \arr A$ in first-order minimal propositional logic that
+contains a detour.
+\begin{prooftree}
+\AxiomC{$[A^z]$}
+\RightLabel{\scriptsize $I[z]\arr$}
+\UnaryInfC{$A \arr A$}
+
+\AxiomC{$[A^x]$}
+\RightLabel{\scriptsize $E\arr$}
+\BinaryInfC{$A$}
+\RightLabel{\scriptsize $I[y]\arr$}
+\UnaryInfC{$A \arr A$}
+
+\RightLabel{\scriptsize $I[x]\arr$}
+\UnaryInfC{$A \arr A \arr A$}
+\end{prooftree}
+
+c. Give the $\lam$-term that corresponds to the proof of 5b.
+Which part corresponds to the detour?
+Give the normal form of the $\lam$-term.
+
+The $\lam$-term
+\begin{equation*}
+  \lam x:A . \lam y:A . (\lam z:A.z) x
+\end{equation*}
+corresponds to the proof of 5b. The part
+\begin{equation*}(\lam z:A.z) x\end{equation*} corresponds to the
+detour. The normal form of this term is
+\begin{equation*}
+  \lam x:A . \lam y:A . x
+\end{equation*}
+
 \end{document}
