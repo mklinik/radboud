@@ -64,11 +64,21 @@ Qed.
    choosing something appropriately. *)
 
 (* exercise; you need the "apply with". *)
-(*Lemma two : peirce -> double_negation.
+Lemma two : peirce -> double_negation.
 Proof.
-(*! proof *)
+unfold peirce.
+unfold double_negation.
+unfold not.
+intro PE.
+intro A.
+intro.
+apply PE with False.
+intro.
+elimtype False.
+apply H.
+assumption.
 
-Qed.*)
+Qed.
 
 (* exercise *)
 Lemma three : double_negation -> excluded_middle.
@@ -113,23 +123,65 @@ Qed.
 Lemma everything_related :
   excluded_middle -> forall A B : Prop , (A -> B) \/ (B -> A).
 Proof.
-
-
+unfold excluded_middle.
+unfold not.
+intro EM.
+intros A B.
+elim EM with (A := B).
+intro.
+left.
+intro.
+assumption.
+intro.
+right.
+intro.
+elimtype False.
+apply H.
+assumption.
 Qed.
 
 Lemma de_morgan :
   excluded_middle -> forall A B : Prop , ~(~A/\~B) -> A\/B.
 Proof.
-(*! proof *)
-
+unfold excluded_middle.
+unfold not.
+intro EM.
+intro A.
+intro B.
+intro H.
+elim EM with (A := A).
+intro.
+left.
+assumption.
+intro H0.
+elim EM with (A := B).
+intro.
+right.
+assumption.
+intro H1.
+elimtype False.
+apply H.
+split.
+assumption.
+assumption.
 Qed.
 
 (* exercise
    note that this lemma is true intuitionistically *)
 Lemma about_implication : forall A B : Prop , (~A \/ B) -> (A -> B).
 Proof.
-(*! proof *)
-
+intro A.
+intro B.
+unfold not.
+intro.
+intro.
+elim H.
+intro.
+elimtype False.
+apply H1.
+assumption.
+intro.
+assumption.
 Qed.
 
 (* exercise
@@ -137,7 +189,28 @@ Qed.
 Lemma classical_implication :
   excluded_middle -> forall A B : Prop , (A -> B) -> (~A \/ B).
 Proof.
-(*! proof *)
+unfold excluded_middle.
+unfold not.
+intro EM.
+intros A B.
+intro x.
+elim EM with (A:=B).
+intro.
+right.
+assumption.
+intro.
+
+left.
+elim EM with (A := B).
+intros.
+apply H.
+assumption.
+intros.
+apply H0.
+apply x.
+assumption.
+
+
 
 Qed.
 
@@ -145,7 +218,20 @@ Qed.
 Lemma about_classical_implication :
   excluded_middle -> forall A B : Prop , ~B \/ (A ->B).
 Proof.
-(*! proof *)
+unfold excluded_middle.
+unfold not.
+intro EM.
+intros A B.
+elim EM with (A:=B).
+right.
+intro.
+elim EM with (A:=A).
+intro.
+assumption.
+intro.
+assumption.
+left.
+assumption.
 
 Qed.
 (*
