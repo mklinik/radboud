@@ -133,3 +133,6 @@ Qed.
 
 End barber.
 
+(*
+vim: filetype=coq
+*)

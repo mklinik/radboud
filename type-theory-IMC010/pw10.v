@@ -310,3 +310,6 @@ end
 
 (* perform some tests using the trees above *)
 
+(*
+vim: filetype=coq
+*)

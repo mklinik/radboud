@@ -564,3 +564,6 @@ simpl.
 apply sorted_insert.
 exact IHl.
 Qed.
+(*
+vim: filetype=coq
+*)

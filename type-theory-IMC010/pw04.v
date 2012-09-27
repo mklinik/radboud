@@ -310,3 +310,6 @@ Proof.
 (*! proof *)
 
 Qed.
+(*
+vim: filetype=coq
+*)

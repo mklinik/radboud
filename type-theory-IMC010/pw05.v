@@ -325,3 +325,6 @@ Inductive palindrome : natlist -> Prop := (*! term *)
   .
 
 
+(*
+vim: filetype=coq
+*)

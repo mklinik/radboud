@@ -143,3 +143,6 @@ Proof.
 
 Qed.
 
+(*
+vim: filetype=coq
+*)

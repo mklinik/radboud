@@ -189,3 +189,6 @@ Check (*! term *)
   .
 
 
+(*
+vim: filetype=coq
+*)

@@ -315,3 +315,6 @@ Fixpoint conjunction (t : polybintree bool) {struct t} : bool := (*! term *)
 
 End inductivetypes.
 
+(*
+vim: filetype=coq
+*)

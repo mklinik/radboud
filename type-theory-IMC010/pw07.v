@@ -204,3 +204,6 @@ Qed.
 
 End logical_framework.
 
+(*
+vim: filetype=coq
+*)
