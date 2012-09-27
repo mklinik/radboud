@@ -1,0 +1,44 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bussproofs}
+\usepackage{parskip}
+\begin{document}
+
+\def\arr{\rightarrow}
+\def\lam{\lambda}
+
+\begin{prooftree}
+\AxiomC{$[\forall A . A \lor \neg A^{EM}]$}
+
+\AxiomC{$[B^{H}]$}
+\RightLabel{\scriptsize I[H0]$\arr$}
+\UnaryInfC{$(A \arr B)$}
+\RightLabel{\scriptsize Il$\lor$}
+\UnaryInfC{$(A \arr B) \lor (B \arr A)$}
+\RightLabel{\scriptsize I[H]$\arr$}
+\UnaryInfC{$B \arr (A \arr B) \lor (B \arr A)$}
+
+\AxiomC{$[B \arr False^{H}]$}
+\AxiomC{$[B^{H0}]$}
+\RightLabel{\scriptsize E$\arr$}
+\BinaryInfC{$False$}
+\RightLabel{\scriptsize falsum}
+\UnaryInfC{$A$}
+\RightLabel{\scriptsize I[H0]$\arr$}
+\UnaryInfC{$(B \arr A)$}
+\RightLabel{\scriptsize Ir$\lor$}
+\UnaryInfC{$(A \arr B) \lor (B \arr A)$}
+\RightLabel{\scriptsize I[H]$\arr$}
+\UnaryInfC{$\neg B \arr (A \arr B) \lor (B \arr A)$}
+
+\RightLabel{\scriptsize E[A:=B]$\lor$}
+\TrinaryInfC{$(A \arr B) \lor (B \arr A)$}
+\RightLabel{\scriptsize I$\forall$}
+\UnaryInfC{$\forall A, B . (A \arr B) \lor (B \arr A)$}
+\RightLabel{\scriptsize I[EM] $\arr$}
+\UnaryInfC{$(\forall A . A \lor \neg A) \arr \forall A, B . (A \arr B) \lor (B \arr A)$}
+\end{prooftree}
+
+\end{document}
