@@ -55,23 +55,30 @@ Print example2.
 (* exercise 1: prove the lemma and inspect the proof term *)
 Lemma one : (forall x : Terms, P x) -> P M.
 Proof.
-(*! proof *)
-
+intro u.
+apply u.
 Qed.
+Print one.
 
 (* exercise 2: prove the lemma and inspect the proof term *)
-Lemma two : (A -> forall x : Terms, P x) -> forall y : Terms, A -> P y.
+Lemma two : (A -> forall x : Terms, P x) -> (forall y : Terms, A -> P y).
 Proof.
-(*! proof *)
-
+intro H.
+intro y.
+intro x.
+apply H.
+exact x.
 Qed.
+Print two.
 
 (* exercise 3: prove the lemma and inspect the proof term *)
 Lemma three : A -> forall x : Terms, A.
 Proof.
-(*! proof *)
-
+intro x.
+intro y.
+exact x.
 Qed.
+Print three.
 
 (* example, see slides 13-14-15 of week 7 *)
 Definition AS :=
@@ -83,6 +90,7 @@ Theorem AS_implies_IR : AS -> IR.
 Proof.
 unfold AS.
 unfold IR.
+unfold not.
 intro h.
 intro x.
 intro i.
@@ -100,22 +108,31 @@ Definition reflif := forall x : Terms, (exists y : Terms, R x y) -> R x x.
    define sym as the proposition stating that
    R is symmetric, that is,
    if x and y are related via R, then y and x are related via R *)
-Definition sym := (*! term *)
-  .
+Definition sym := forall x y : Terms, R x y -> R y x.
 
 (* exercise 5:
    define trans as the proposition stating that
    R is transitive, that is,
    if x and y are related via R, and y and z are related via R,
    then x and z are related via R  *)
-Definition trans := (*! term *)
-  .
+Definition trans := forall x y z : Terms, (R x y /\ R y z) -> R x z.
 
 (* exercise 6: prove the following Lemma *)
 Lemma str : sym -> trans -> reflif.
 Proof.
-(*! proof *)
-
+unfold sym, trans, reflif.
+intro sym.
+intro trans.
+intro.
+intro.
+elim H.
+intro.
+intro.
+apply trans with x0.
+split.
+exact H0.
+apply sym.
+apply H0.
 Qed.
 
 End pred1.
