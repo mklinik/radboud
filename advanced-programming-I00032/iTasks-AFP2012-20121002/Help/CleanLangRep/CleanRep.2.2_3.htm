@@ -1,0 +1,461 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection4>
+
+<p class=Heading1Chapter><span lang=EN-US><br>
+<a name="_Toc311797974"></a></span><span style='position:absolute;z-index:251668992;
+left:0px;margin-left:38px;margin-top:19px;width:200px;height:97px'><img
+width=200 height=97 src="CleanRep.2.2_files/image001.jpg"></span><span
+lang=EN-US>Chapter 1<a name="_Toc524343485"></a><a name="_Basic_Semantics"></a><br>
+Basic Semantics</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="50%" valign=bottom style='width:50.42%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>1.1</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_1.1_Graph_Rewriting">Graph Rewriting</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="49%" valign=top style='width:49.58%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>1.2</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_1.2_Global_Graphs">Global Graphs</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>The semantics of C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+is based on <i>Term Graph Rewriting</i></span><i><span
+lang=EN-US> Sys­tems</span></i><span lang=EN-US> (Barendregt, 1987; Plas­me­i­jer
+and Van Eekelen, 1993). This means that functions in a C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> pro­gram se­mantically work on <i>graphs</i> in­stead of the usual <i>terms</i>.
+This enabled us to incorporate C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US>’s typical features
+(definition of cyclic data structures, lazy copying, uniqueness typing) which
+would otherwise be very difficult to give a pro­per semantics for. However, in
+many cases the programmer does not need to be aware of the fact that he/she is
+manipulating graphs. Evaluation of a C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> program takes
+place in the same way as in other lazy functional languages. One of the “differ­ences”
+between C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> and other functional languages is that when a variable occurs more
+than once in a function body, the se­mantics <i>pre­scribe</i> that the actual
+argument is shared (the semantics of most other lan­guages do not pre­s­cribe
+this although it is common practice in any implementation of a func­tional lan­guage).
+Fur­ther­more, one can label any expression to make the definition of cyclic
+structures possible. So, people familiar with other functio­nal languages will
+have no problems writing C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> programs.</span></p>
+
+<p class=par><span lang=EN-US>When larger applications are being written, or,
+when C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> is interfaced with the non-functio­nal world, or, when efficiency
+counts, or, when one simply wants to have a good understanding of the lan­guage
+it is good to have some knowledge of the basic semantics of C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> which is based on term graph rewriting. In this chapter a short
+introduction into the basic semantics of C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+is given. An ex­tensive treatment of the underlying semantics and the
+implementation techniques of C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> can be found in
+Plasmeijer and Van Eekelen (1993).</span></p>
+
+<h2><a name="_Toc311797975"></a><a name="_Toc524343486"></a><a
+name="_1.1_Graph_Rewriting"></a><span lang=EN-US>1.1    Graph Rewriting</span></h2>
+
+<p class=par><span lang=EN-US>A C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><i><span lang=EN-US> program</span></i><span lang=EN-US> basically consists of a number of <i>graph rewrite rule</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US> (<i>function definition</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US>) which spe­c­ify how a given <i>graph</i>
+(the<span style='display:none'>.ib</span> <span style='display:none'>.i</span><i>initial
+expression</i><span style='display:none'>;</span>) has to be <i>rewritten</i> </span></p>
+
+<p class=par><span lang=EN-US>A <i>graph</i></span><span
+lang=EN-US> is a set of nodes. Each node has a defining <i>node-identifier</i></span><span
+lang=EN-US> (the <i>node-id</i></span><span
+lang=EN-US>). A <i>node</i></span><span
+lang=EN-US> con­sists of a <i>sym­bol</i></span><span
+lang=EN-US> and a (possibly empty) sequence of <i>applied node-id’s</i> (the <i>argu­ments</i>
+of the symbol) </span><span lang=EN-US> <i>Applied node-id’s</i> can be seen as <i>refer­ence</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US> (<i>arc</i></span><i><span lang=EN-US>s</span></i><span lang=EN-US>) to nodes in the graph, as such they have a <i>direc­tion</i>:
+from the node in which the node-id is applied to the node of which the node-id
+is the defining identifier.</span></p>
+
+<p class=par><span lang=EN-US>Each <i>graph rewrite rule</i></span><span
+lang=EN-US> consists of a <i>left-hand side graph</i></span><span
+lang=EN-US> (the <i>pattern</i></span><span
+lang=EN-US>) and a <i>right-hand side</i> (rhs) consist­ing of a <i>graph</i> </span><span
+lang=EN-US>(the <i>contractum</i></span><span
+lang=EN-US>) or just a <i>single</i> node-id (a <i>redirec­tion</i></span><span
+lang=EN-US>). In C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> rewrite rules are not comparing</span><span
+lang=EN-US>: the left-hand side (lhs) graph of a rule is a tree</span><span lang=EN-US>, i.e. each node identi­fier is applied only once, so there exists ex­actly
+one path from the root to a node of this graph.</span></p>
+
+<p class=par><span lang=EN-US>A rewrite rule defines a (<i>partial</i>) <i>function</i></span><span lang=EN-US> The <i>function symbol</i></span><i><span
+lang=EN-US> </span></i><span lang=EN-US>is the root symbol of the left-hand
+side graph of the rule alternatives. All other symbols that appear in rewrite
+rules, are <i>con­structor symbol</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US>.</span></p>
+
+<p class=par><span lang=EN-US>The <i>program graph</i></span><span
+lang=EN-US> is the graph that is rewritten according to the rules. Initially,
+this pro­gram graph is fixed: it con­sists of a single node containing the
+symbol </span><span class=clean><span lang=EN-US>Start</span></span><span
+lang=EN-US>, so there is no need to spec­ify this graph in the program ex­plic­itly.
+The part of the graph that matches the pat­tern of a cer­tain rewrite rule is
+cal­led a <i>redex</i></span><span
+lang=EN-US> (<i>reducible ex­pression</i></span><span
+lang=EN-US>). A <i>rewrite of a redex</i></span><span
+lang=EN-US> to its <i>reduct</i></span><span
+lang=EN-US> can take place ac­cording to the right-hand side of the cor­respond­ing
+rewrite rule. If the right-hand side is a contrac­tum then the rewrite consists
+of building this contrac­tum and doing a redi­rec­tion of the root of the re­dex
+to root of the right-hand side. Otherwise, only a redirec­tion of the root of
+the re­dex to the single node-id specified on the right-hand side is per­formed.
+A <i>redirection</i> of a node</span><span
+lang=EN-US>-id n</span><sub><span lang=EN-US style='font-size:10.0pt'>1</span></sub><span
+lang=EN-US> to a node-id n</span><sub><span lang=EN-US style='font-size:10.0pt'>2</span></sub><span
+lang=EN-US> means that all ap­plied occur­rences of n</span><sub><span
+lang=EN-US style='font-size:10.0pt'>1</span></sub><span lang=EN-US> are
+replaced by occurrences of n</span><sub><span lang=EN-US style='font-size:10.0pt'>2</span></sub><span
+lang=EN-US> (which is in re­ality com­monly imple­mented by <i>overwriting</i>
+n</span><sub><span lang=EN-US style='font-size:10.0pt'>1</span></sub><span
+lang=EN-US> with n</span><sub><span lang=EN-US style='font-size:10.0pt'>2</span></sub><span
+lang=EN-US>).</span></p>
+
+<p class=par><span lang=EN-US>A <i>reduction strategy</i></span><span
+lang=EN-US> is a function that makes choices out of the available redexes. A <i>re­du­cer</i></span><i><span lang=EN-US> </span></i><span lang=EN-US>is a pro­cess that reduces redexes
+that are indicated by the strategy. The result of a reducer is rea­ched as soon
+as the re­duction strategy does not indicate redexes any more. A graph is in <i>nor­mal
+form</i></span><i><span
+lang=EN-US> </span></i><span lang=EN-US>if none of the patterns in the rules
+match any part of the graph. A graph is said to be in <i>root normal form</i></span><span
+lang=EN-US> when the root of a graph is not the root of a redex and can never
+become the root of a redex. In general it is undecidable whether a graph is in
+root normal form.</span></p>
+
+<p class=par><span lang=EN-US>A pattern </span><i><span lang=EN-US>partially matches</span></i><span lang=EN-US> a graph if firstly the symbol
+of the root of the pattern equals the sym­bol of the root of the graph and sec­ondly
+in positions where symbols in the pattern are not syn­tac­ti­cally equal to
+symbols in the graph, the corresponding sub-graph is a redex or the sub-graph
+it­self is par­tially matching a rule. A graph is in <i>strong root normal form</i></span><i><span
+lang=EN-US> </span></i><span lang=EN-US>if the graph does not par­tially match
+any rule. It is decidable whether or not a graph is in strong root normal form.
+A graph in strong root nor­mal form does not partially match any rule, so it is
+also in root nor­mal form.</span></p>
+
+<p class=par><span lang=EN-US>The default reduction strategy used in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> is the <i>functional reduction strategy</i></span><span
+lang=EN-US>. Redu­c­ing graphs ac­cor­ding to this strategy resembles very much
+the way exe­cution proceeds in other lazy func­tional lan­gua­ges: in the
+standard lambda calculus semantics the functional strategy corre­s­ponds to nor­mal
+order re­duction. On graph rewrite rules the functional strategy proceeds as
+fol­lows: if there are sev­eral rewrite rules for a par­ticular function, the
+rules are tried in textual or­der; pat­terns are tested from left to right;
+evaluation to strong root normal form of ar­guments is forced when an ac­tual
+ar­gu­ment is matched against a corresponding non-variable part of the pat­tern.
+A formal def­ini­tion of this strategy can be found in (Toyama <i>et al.</i>,
+1991).</span></p>
+
+<h3><a name="_Toc311797976"></a><a name="_Toc524343487"><span lang=EN-US>1.1.1 A
+Small Example</span></a></h3>
+
+<p class=par><span lang=EN-US>Consider the following C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+program:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>Add Zero z       =    z                         (1)</span></p>
+
+<p class=ex><span lang=EN-US>Add (Succ a) z   =    Succ (Add a z)            (2)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start            =    Add (Succ o) o</span></p>
+
+<p class=ex><span lang=EN-US>                       </span><span class=cleankw><span
+lang=PT-BR>where</span></span></p>
+
+<p class=ex><span lang=PT-BR>                          o = Zero              (3)</span></p>
+
+<p class=par><span lang=EN-US>In C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> a distinction is
+between function definitions (graph rewriting rules) and graphs (constant de­f­ini­tions).
+A semantic equivalent definition of the program above is given below where this
+dis­tinction is made explicit (“</span><span class=clean><span lang=EN-US>=&gt;</span></span><span
+lang=EN-US>” indi­cates a rewrite rule whereas &quot;</span><span class=clean><span
+lang=EN-US>=:</span></span><span lang=EN-US>&quot; is used for a constant (<i>sub-</i>)
+<i>graph</i> def­inition</span></p>
+
+<p class=exb><span lang=EN-US> </span></p>
+
+<p class=ex><span lang=PT-BR>Add Zero z       =&gt;    z                       
+(1)</span></p>
+
+<p class=ex><span lang=EN-US>Add (Succ a) z   =&gt;    Succ (Add a z)          
+(2)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start            =&gt;    Add (Succ o) o</span></p>
+
+<p class=ex><span lang=EN-US>                       </span><span class=cleankw><span
+lang=PT-BR>where</span></span></p>
+
+<p class=ex><span lang=PT-BR>                           o =: Zero            (3)</span></p>
+
+<p class=par><span lang=EN-US>These rules are internally translated to a
+semantically equivalent set of rules in which the graph struc­ture on both
+left-hand side as right-hand side of the rewrite rules has been made explicit
+by adding node-id’s. Using the set of rules with explicit node-id’s it will be
+easier to understand what the mean­ing is of the rules in the graph rewriting
+world. </span></p>
+
+<p class=ex><span lang=EN-US>x =: Add y z</span></p>
+
+<p class=ex><span lang=PT-BR>y =: Zero        =&gt;   z                        
+(1)</span></p>
+
+<p class=ex><span lang=EN-US>x =: Add y z</span></p>
+
+<p class=ex><span lang=PT-BR>y =: Succ a      =&gt;   m =: Succ n</span></p>
+
+<p class=ex><span lang=PT-BR>                      n =: Add a z              (2)</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>x =: Start       =&gt;   m =: Add n o</span></p>
+
+<p class=ex><span lang=PT-BR>                      n =: Succ o</span></p>
+
+<p class=ex><span lang=PT-BR>                      </span><span lang=EN-US>o =:
+Zero                 (3)</span></p>
+
+<p class=parkeep><span lang=EN-US>The fixed initial program graph that is in
+memory when a program starts is the follow­ing:</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width=308 valign=top style='width:231.0pt;padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par><span lang=EN-US>The initial graph in linear notation:</span></p>
+  <p class=exb><span lang=EN-US>&nbsp;</span></p>
+  <p class=ex><span lang=EN-US>@DataRoot     =: Graph @StartNode</span></p>
+  <p class=ex><span lang=EN-US>@StartNode    =: Start</span></p>
+  <p class=exb><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par><span lang=EN-US>The initial graph in pictorial notation:</span></p>
+  <p class=pic align=center style='text-align:center'><span lang=EN-US><img
+  border=0 width=113 height=52 src="CleanRep.2.2_files/image002.gif"></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>To distinguish the node-id’s appearing in the
+rewrite rules from the node-id’s appearing in the graph the lat­ter al­ways
+begin with a ‘</span><span class=clean><span lang=EN-US>@</span></span><span
+lang=EN-US>’.</span></p>
+
+<p class=par><span lang=EN-US>The initial graph is rewritten until it is in
+normal form. Therefore a C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> program must at least
+con­tain a “ <i>start rule</i></span><span
+lang=EN-US>” that matches this initial graph via a pat­tern. The right-hand
+side of the start rule spe­c­i­fies the actual computa­tion. In this start rule
+in the left-hand side the symbol </span><span class=clean><span lang=EN-US>Start</span></span><span
+lang=EN-US> is used. However, the symbols </span><span class=clean><span
+lang=EN-US>Graph</span></span><span lang=EN-US> and </span><span class=clean><span
+lang=EN-US>Initial</span></span><span
+lang=EN-US> (<a href="#_1.2_Global_Graphs">see next Section</a>) are internal,
+so they cannot ac­tu­ally be addressed in any rule.</span></p>
+
+<p class=par><span lang=EN-US>The patterns in rewrite rules contain <i>formal
+node-id</i></span><i><span
+lang=EN-US>’s</span></i><span lang=EN-US>. During the matching these formal
+nodei­d’s are mapped to the <i>ac­tual node-id</i></span><i><span lang=EN-US>’s</span></i><span lang=EN-US> of the graph </span><span
+lang=EN-US> After that the following se­mantic actions are per­formed:</span></p>
+
+<p class=par><span lang=EN-US>The start node is the only redex matching rule
+(3). The contractum can now be con­structed:</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width=305 valign=top style='width:229.0pt;padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par><span lang=EN-US>The contractum in linear notation:</span></p>
+  <p class=exb><span lang=EN-US>&nbsp;</span></p>
+  <p class=ex><span lang=EN-US>@A =: Add  @B @C</span></p>
+  <p class=ex><span lang=PT-BR>@B =: Succ @C</span></p>
+  <p class=ex><span lang=PT-BR>@C =: Zero</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par><span lang=EN-US>The contractum in pictorial notation:</span></p>
+  <p class=pic align=center style='text-align:center'><span lang=EN-US><img
+  border=0 width=114 height=69 src="CleanRep.2.2_files/image003.gif"></span></p>
+  <p class=pic align=center style='text-align:center'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>All applied occurrences of </span><span
+class=clean><span lang=EN-US>@StartNode</span></span><span lang=EN-US> will be
+replaced by occurrences of </span><span class=clean><span lang=EN-US>@A</span></span><span
+lang=EN-US>. The graph after re­writ­ing is then:</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width=308 valign=top style='width:231.0pt;padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par><span lang=EN-US>The graph after rewriting:</span></p>
+  <p class=exb><span lang=EN-US>&nbsp;</span></p>
+  <p class=ex><span lang=EN-US>@DataRoot     =: Graph @A</span></p>
+  <p class=ex><span lang=EN-US>@StartNode    =: Start</span></p>
+  <p class=ex><span lang=EN-US>@A =: Add  @B @C</span></p>
+  <p class=ex><span lang=PT-BR>@B =: Succ @C</span></p>
+  <p class=ex><span lang=PT-BR>@C =: Zero</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par><span lang=EN-US>Pictorial notation:</span></p>
+  <p class=pic align=center style='text-align:center'><span lang=EN-US><img
+  border=0 width=150 height=129 src="CleanRep.2.2_files/image004.gif"></span></p>
+  <p class=pic align=center style='text-align:center'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>This completes one rewrite. All nodes that are
+not accessible from </span><span class=clean><span lang=EN-US>@DataRoot</span></span><span
+lang=EN-US> are garbage and not con­si­dered any more in the next rewrite
+steps. In an implementation once in a while garbage col­lec­tion is per­formed
+in order to re­claim the memory space occupied by these garbage nodes. In this
+ex­ample the start node is not accessible from the data root node after the
+rewrite step and can be left out.</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width=308 valign=top style='width:231.0pt;padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par><span lang=EN-US>The graph after garbage collection:</span></p>
+  <p class=exb><span lang=EN-US>&nbsp;</span></p>
+  <p class=ex><span lang=EN-US>@DataRoot     =: Graph @A</span></p>
+  <p class=ex><span lang=EN-US>@A =: Add  @B @C</span></p>
+  <p class=ex><span lang=PT-BR>@B =: Succ @C</span></p>
+  <p class=ex style='page-break-after:auto'><span lang=PT-BR>@C =: Zero</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par><span lang=EN-US>Pictorial notation :</span></p>
+  <p class=pic align=center style='text-align:center'><span lang=EN-US><img
+  border=0 width=130 height=99 src="CleanRep.2.2_files/image005.gif"></span></p>
+  <p class=pic align=center style='text-align:center'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>The graph accessible from </span><span
+class=clean><span lang=EN-US>@DataRoot</span></span><span lang=EN-US> still
+contains a redex. It matches rule 2 yielding the ex­pected nor­mal form:</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width=308 valign=top style='width:231.0pt;padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par><span lang=EN-US>The final graph:</span></p>
+  <p class=exb><span lang=EN-US>&nbsp;</span></p>
+  <p class=ex><span lang=EN-US>@DataRoot =: Graph @D</span></p>
+  <p class=ex><span lang=EN-US>@D =: Succ @C</span></p>
+  <p class=ex style='page-break-after:auto'><span lang=EN-US>@C =: Zero</span></p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par><span lang=EN-US>Pictorial notation :</span></p>
+  <p class=pic align=center style='text-align:center'><span lang=EN-US><img
+  border=0 width=106 height=82 src="CleanRep.2.2_files/image006.gif"></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>The fact that graphs are being used in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> gives the programmer the abil­ity to explicitly share terms or to
+create cyclic structures. In this way time and space ef­ficiency can be
+obtained.</span></p>
+
+<h2><a name="_Toc311797977"></a><a name="_Toc524343488"></a><a
+name="_1.2_Global_Graphs"></a><span lang=EN-US>1.2    Global Graphs</span></h2>
+
+<p class=par><span lang=EN-US>Due to the presence of global graphs in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> the initial graph in a specific C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+program is slightly different from the basic semantics. In a specific C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> program the initial graph is defined as:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span
+lang=EN-US>@DataRoot    =: Graph </span><span
+lang=EN-US>@StartNode @GlobId<sub>1</sub> @GlobId<sub>2</sub> … @GlobId<sub>n</sub></span></p>
+
+<p class=ex><span
+lang=EN-US>@StartNode   =: Start</span></p>
+
+<p class=ex><span lang=EN-US>@GlobId<sub>1</sub>     =: Initial</span></p>
+
+<p class=ex><span lang=EN-US>@GlobId<sub>2</sub>     =: Initial</span></p>
+
+<p class=ex><span lang=EN-US>…</span></p>
+
+<p class=ex><span lang=EN-US>@GlobId<sub>n</sub>     =: Initial</span></p>
+
+<p class=par><span lang=EN-US>The root of the initial graph will not only
+contain the node-id of the start node, the root of the graph to be rewritten,
+but it will also contain for each <i>global graph</i></span><span
+lang=EN-US> (<a href="CleanRep.2.2_12.htm#_5.2_Defining_Graphs">see 10.2</a>) a reference to an
+initial node (initialized with the symbol </span><span class=clean><span
+lang=EN-US>Initial</span></span><span
+lang=EN-US>). All references to a specific global graph will be references to
+its initial node or, when it is rewritten, they will be references to its
+reduct.<a name="_1.3_Key_Features"></a></span></p>
+
+</div>
+
+</body>
+</html>

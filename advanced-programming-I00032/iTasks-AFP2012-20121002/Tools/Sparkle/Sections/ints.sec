@@ -1,0 +1,360 @@
+SECTION DEPENDENCIES:
+  THEOREM tertium                    (tautology)
+  THEOREM move_not                   (booleans)
+  SYMBOL <_int                    :: "!Int !Int -> Bool"
+  SYMBOL +_int                    :: "!Int !Int -> Int"
+  SYMBOL -_int                    :: "!Int !Int -> Int"
+  SYMBOL <=                       :: "!a !a -> Bool | Ord a"
+  SYMBOL _create_dictionary_Ord;  :: " | < untypable"
+  SYMBOL _create_dictionary_<;    :: "!untypable -> "
+  SYMBOL *_int                    :: "!Int !Int -> Int"
+  SYMBOL ==_int                   :: "!Int !Int -> Bool"
+  SYMBOL min                      :: "!a !a -> a | Ord a"
+
+SECTION DEFINES:
+  THEOREM <=_<                     : (All x (All y {(= (@ 3 <= (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) x y) (BOOL True)) <-> (= (@ 0 <_int y x) (BOOL False))}))
+  THEOREM <=_==                    : (All y (All x {{(= (@ 3 <= (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) x y) (BOOL True)) /\ (= (@ 3 <= (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) y x) (BOOL True))} <-> (= (@ 7 ==_int x y) (BOOL True))}))
+  THEOREM <=_left_of_<             : (All x (All y (All z {(= (@ 3 <= (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) x y) (BOOL True)) -> {(= (@ 0 <_int y z) (BOOL True)) -> (= (@ 0 <_int x z) (BOOL True))}})))
+  THEOREM <=_right_of_<            : (All y (All z (All x {(= (@ 3 <= (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) y z) (BOOL True)) -> {(= (@ 0 <_int x y) (BOOL True)) -> (= (@ 0 <_int x z) (BOOL True))}})))
+  THEOREM <_<=                     : (All x (All y {(= (@ 0 <_int x y) (BOOL True)) <-> (= (@ 3 <= (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) y x) (BOOL False))}))
+  THEOREM <_implies_<=             : (All x (All y {(= (@ 0 <_int x y) (BOOL True)) -> (= (@ 3 <= (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) x y) (BOOL True))}))
+  THEOREM <_implies_not_==         : (All x (All y {(= (@ 0 <_int x y) (BOOL True)) -> (= (@ 7 ==_int x y) (BOOL False))}))
+  THEOREM add_right1_of_<          : (All m (All n (All p {(= (@ 0 <_int m n) (BOOL True)) -> {(= (@ 0 <_int p (INT 0)) (BOOL False)) -> (= (@ 0 <_int m (@ 1 +_int p n)) (BOOL True))}})))
+  THEOREM add_right2_of_<          : (All m (All n (All p {(= (@ 0 <_int m n) (BOOL True)) -> {(= (@ 0 <_int p (INT 0)) (BOOL False)) -> (= (@ 0 <_int m (@ 1 +_int n p)) (BOOL True))}})))
+  THEOREM add_to_<                 : (All p (All m (All n {~(= p BOTTOM) -> (= (@ 0 <_int m n) (@ 0 <_int (@ 1 +_int m p) (@ 1 +_int n p)))})))
+  THEOREM associative_+            : (All x (All y (All z (= (@ 1 +_int (@ 1 +_int x y) z) (@ 1 +_int x (@ 1 +_int y z))))))
+  THEOREM commutative_+            : (All x (All y (= (@ 1 +_int x y) (@ 1 +_int y x))))
+  THEOREM int_==                   : (All x (All y {~(= x BOTTOM) -> {~(= y BOTTOM) -> {(= (@ 7 ==_int x y) (BOOL True)) <-> (= x y)}}}))
+  THEOREM int_==_False             : (All x (All y {~(= x BOTTOM) -> {~(= y BOTTOM) -> {(= (@ 7 ==_int x y) (BOOL False)) <-> ~(= x y)}}}))
+  THEOREM min_-                    : (All a (All x (All b (= (@ 8 min (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) (@ 2 -_int a x) (@ 2 -_int b x)) (@ 2 -_int (@ 8 min (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) a b) x)))))
+  THEOREM not_reflexive_<          : (All x {~(= x BOTTOM) -> (= (@ 0 <_int x x) (BOOL False))})
+  THEOREM not_smaller              : (All x (All y {(= (@ 0 <_int x y) (BOOL False)) <-> (= (@ 0 <_int y (@ 1 +_int x (INT 1))) (BOOL True))}))
+  THEOREM reverse_<                : (All x (All y {(= (@ 0 <_int x y) (BOOL True)) -> (= (@ 0 <_int y x) (BOOL False))}))
+  THEOREM subtract_from_<          : (All p (All m (All n {~(= p BOTTOM) -> (= (@ 0 <_int m n) (@ 0 <_int (@ 2 -_int m p) (@ 2 -_int n p)))})))
+  THEOREM symmetric_int_==         : (All x (All y (= (@ 7 ==_int x y) (@ 7 ==_int y x))))
+  THEOREM times_greater_zero       : (All x {~(= x BOTTOM) -> (= (@ 0 <_int (@ 6 *_int x x) (INT 0)) (BOOL False))})
+  THEOREM transitive_<             : (All x (All y (All z {(= (@ 0 <_int x y) (BOOL True)) -> {(= (@ 0 <_int y z) (BOOL True)) -> (= (@ 0 <_int x z) (BOOL True))}})))
+  THEOREM transitive_<=            : (All y (All z (All x {(= (@ 3 <= (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) x y) (BOOL True)) -> {(= (@ 3 <= (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) y z) (BOOL True)) -> (= (@ 3 <= (@ 4 _create_dictionary_Ord; (@ 5 _create_dictionary_<; (@ 0 <_int))) x z) (BOOL True))}})))
+  THEOREM x_-_x                    : (All x {~(= x BOTTOM) -> (= (@ 2 -_int x x) (INT 0))})
+  THEOREM x_<_succ_x               : (All x {~(= x BOTTOM) -> (= (@ 0 <_int x (@ 1 +_int x (INT 1))) (BOOL True))})
+
+THEOREM:
+  <=_<
+DEPENDS:
+  3 4 5 0
+PROOF:
+  Reduce NF All (  ).
+  Rewrite -> All "move_not".
+  Reduce NF All (  ).
+  Reflexive.
+
+THEOREM:
+  <=_==
+DEPENDS:
+  3 4 5 0 7
+PROOF:
+  Introduce y x.
+  Cut ("tertium" P (= x BOTTOM)).
+  Introduce H1.
+  Case Shallow H1.
+  1. Rewrite -> All H1.
+     Reduce NF All (  ).
+     SplitIff.
+     1. Definedness.
+     2. Definedness.
+  2. Cut ("tertium" P (= y BOTTOM)).
+     Introduce H2.
+     Case Deep H2.
+     1. Rewrite -> All H2.
+        Reduce NF All (  ).
+        SplitIff.
+        1. Definedness.
+        2. Definedness.
+     2. SplitIff.
+        1. Introduce H3.
+           Split Deep H3.
+           Compare x with y.
+           1. Definedness.
+           2. Definedness.
+           3. Rewrite -> All "<=_<" in H4.
+              Introduce H5.
+              IntCompare.
+           4. Introduce H5 H6 H7.
+              Rewrite -> All "int_==".
+              1. Exact H7.
+              2. Definedness.
+              3. Definedness.
+           5. Introduce H5.
+              Rewrite -> All "<=_<" in H3.
+              IntCompare.
+        2. Introduce H3.
+           Rewrite -> All "int_==" in H3.
+           1. Rewrite -> All H3.
+              Split Deep.
+              1. Reduce NF All (  ).
+                 IntCompare.
+              2. Reduce NF All (  ).
+                 IntCompare.
+           2. Exact H1.
+           3. Exact H2.
+
+THEOREM:
+  <=_left_of_<
+DEPENDS:
+  3 4 5 0
+PROOF:
+  Introduce x y z H1 H2.
+  ReduceH NF All in H1 (  ).
+  IntCompare.
+
+THEOREM:
+  <=_right_of_<
+DEPENDS:
+  3 4 5 0
+PROOF:
+  Introduce y z x H1 H2.
+  ReduceH NF All in H1 (  ).
+  IntCompare.
+
+THEOREM:
+  <_<=
+DEPENDS:
+  0 3 4 5
+PROOF:
+  Reduce NF All (  ).
+  Rewrite -> All "move_not".
+  Reduce NF All (  ).
+  Reflexive.
+
+THEOREM:
+  <_implies_<=
+DEPENDS:
+  0 3 4 5
+PROOF:
+  Introduce x y H1.
+  Reduce NF All (  ).
+  IntCompare.
+
+THEOREM:
+  <_implies_not_==
+DEPENDS:
+  0 7
+PROOF:
+  Axiom.
+
+THEOREM:
+  add_right1_of_<
+DEPENDS:
+  0 1
+PROOF:
+  Axiom.
+
+THEOREM:
+  add_right2_of_<
+DEPENDS:
+  0 1
+PROOF:
+  Introduce m n p H1 H2.
+  Rewrite -> All "commutative_+".
+  Apply "add_right1_of_<".
+  Split Deep.
+  1. Exact H1.
+  2. Exact H2.
+
+THEOREM:
+  add_to_<
+DEPENDS:
+  0 1
+PROOF:
+  Axiom.
+
+THEOREM:
+  associative_+
+DEPENDS:
+  1
+PROOF:
+  Axiom.
+
+THEOREM:
+  commutative_+
+DEPENDS:
+  1
+PROOF:
+  Axiom.
+
+THEOREM:
+  int_==
+DEPENDS:
+  7
+PROOF:
+  Axiom.
+
+THEOREM:
+  int_==_False
+DEPENDS:
+  7
+PROOF:
+  Introduce x y H1 H2.
+  SplitIff.
+  1. Introduce H3.
+     Contradiction.
+     Rewrite <- All "int_==" in H4.
+     1. Rewrite -> All H4 in H3.
+        AbsurdEqualityH H3.
+     2. Exact H1.
+     3. Exact H2.
+  2. Introduce H3.
+     Contradiction.
+     Explicit Cases (@ 7 ==_int x y).
+     1. Definedness.
+     2. Introduce H5.
+        Contradiction H3.
+        Rewrite <- All "int_==".
+        1. Exact H5.
+        2. Exact H1.
+        3. Exact H2.
+     3. Introduce H5.
+        Absurd H5 H4.
+
+THEOREM:
+  min_-
+DEPENDS:
+  0 2 8 4 5
+PROOF:
+  Introduce a x b.
+  Reduce NF All (  ).
+  Assume {(= x BOTTOM) \/ ~(= x BOTTOM)}.
+  1. Case Shallow H1.
+     1. Rewrite -> All H1.
+        Reduce NF All (  ).
+        Reflexive.
+     2. Assume (= (@ 0 <_int a b) (@ 0 <_int (@ 2 -_int a x) (@ 2 -_int b x))).
+        1. Unshare True 1 x All.
+           Unshare True 1 y All.
+           Rewrite <- All H2.
+           SplitCase 1.
+           1. Definedness.
+           2. Reflexive.
+           3. Reflexive.
+        2. Apply "subtract_from_<".
+           Definedness.
+  2. Apply "tertium".
+
+THEOREM:
+  not_reflexive_<
+DEPENDS:
+  0
+PROOF:
+  Axiom.
+
+THEOREM:
+  not_smaller
+DEPENDS:
+  0 1
+PROOF:
+  Axiom.
+
+THEOREM:
+  reverse_<
+DEPENDS:
+  0
+PROOF:
+  Introduce x y H1.
+  IntCompare.
+
+THEOREM:
+  subtract_from_<
+DEPENDS:
+  0 2
+PROOF:
+  Axiom.
+
+THEOREM:
+  symmetric_int_==
+DEPENDS:
+  7
+PROOF:
+  Introduce x y.
+  Cut ("tertium" P (= x BOTTOM)).
+  Introduce H1.
+  Case Deep H1.
+  1. Rewrite -> All H1.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Cut ("tertium" P (= y BOTTOM)).
+     Introduce H2.
+     Case Deep H2.
+     1. Rewrite -> All H2.
+        Reduce NF All (  ).
+        Reflexive.
+     2. Explicit Cases (@ 7 ==_int x y).
+        1. Definedness.
+        2. Introduce H3.
+           Rewrite -> All H3.
+           Rewrite -> All "int_==" in H3.
+           1. Symmetric H3.
+              Rewrite <- All "int_==" in H3.
+              1. Rewrite -> All H3.
+                 Reflexive.
+              2. Exact H2.
+              3. Exact H1.
+           2. Exact H1.
+           3. Exact H2.
+        3. Introduce H3.
+           Rewrite -> All H3.
+           Rewrite -> All "int_==_False" in H3.
+           1. Contradiction.
+              Contradiction H3.
+              Symmetric.
+              Contradiction.
+              Contradiction H4.
+              Rewrite <- All "int_==_False" in H5.
+              1. Rewrite -> All H5.
+                 Reflexive.
+              2. Exact H2.
+              3. Exact H1.
+           2. Exact H1.
+           3. Exact H2.
+
+THEOREM:
+  times_greater_zero
+DEPENDS:
+  0 6
+PROOF:
+  Axiom.
+
+THEOREM:
+  transitive_<
+DEPENDS:
+  0
+PROOF:
+  Axiom.
+
+THEOREM:
+  transitive_<=
+DEPENDS:
+  3 4 5 0
+PROOF:
+  Introduce y z x H1 H2.
+  ReduceH NF All in H1 (  ).
+  ReduceH NF All in H2 (  ).
+  Reduce NF All (  ).
+  IntCompare.
+
+THEOREM:
+  x_-_x
+DEPENDS:
+  2
+PROOF:
+  Axiom.
+
+THEOREM:
+  x_<_succ_x
+DEPENDS:
+  0 1
+PROOF:
+  Introduce x H1.
+  Rewrite <- All "not_smaller".
+  IntCompare.
+
+

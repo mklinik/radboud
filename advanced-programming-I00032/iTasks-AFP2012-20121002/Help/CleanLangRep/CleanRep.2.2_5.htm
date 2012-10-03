@@ -1,0 +1,3754 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection6>
+
+<p class=Heading1Chapter><span style='position:absolute;z-index:251677184;
+left:0px;margin-left:38px;margin-top:19px;width:200px;height:97px'><img
+width=200 height=97 src="CleanRep.2.2_files/image001.jpg"></span><a
+name="_Toc311797995"><span lang=EN-US><br>
+Chapter 3</span></a><a name="_Toc524343506"></a><a name="_Defining_Functions"></a><span
+lang=EN-US><br>
+Defining Functions</span><span lang=EN-US> and Constants</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="50%" valign=top style='width:50.32%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="10%" valign=top style='width:10.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>3.1</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_3.1_Functions">Functions</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="10%" valign=top style='width:10.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>3.2</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_3.2_Patterns">Patterns</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="10%" valign=top style='width:10.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>3.3</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_3.3_Guards">Guards</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="10%" valign=top style='width:10.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>3.4</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_3.4_Expressions">Expressions</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="49%" valign=top style='width:49.68%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>3.5</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_3.5_Local_Definitions">Local Definitions</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>3.6</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_Defining_Types">Defining Constants</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>3.7</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_Defining_Types">Typing Functions</a></span></p>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>&nbsp;</span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>In this Chapter<i> </i>we explain how functions (actually:
+<i>graph rewrite rules</i>) and constants (actually: graph expressions) are
+defined in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>. The body of a function consists of an (root) expression (<a
+href="#_3.4_Expressions">see 3.4</a>). With help of patterns (<a
+href="#_3.2_Patterns">see 3.2</a>) and guards (<a href="#_3.3_Guards">see 3.3</a>)
+a distinction can be made between several alternative defini­tions for a
+function. Functions and constants can be defined locally in a function
+definition. For programming convenience (forcing evaluation, observation of
+unique objects and threading of se­quen­cial operations) a special let
+construction is provided (<a href="#_3.5_Local_Definitions">see 3.5.1</a>). The
+typing of functions is discussed in <a href="#_3.7_Typing_Functions">Section
+3.7</a>. For overloaded functions see <a href="CleanRep.2.2_8.htm#_Overloading">Chapter 6</a>.
+For functions working on unique datatypes see <a href="CleanRep.2.2_11.htm#_Uniqueness_Typing">Chapter
+9</a>. </span></p>
+
+<h2><a name="_Toc311797996"></a><a name="_Toc524343507"></a><a
+name="_3.1_Defining_Functions"></a><a name="_3.1_Functions"></a><span
+lang=EN-US>3.1    Functions</span></h2>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[FunctionTypeDef]
+  </span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_Defining_Types">see Chapter 4 for typing functions</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DefOfFunction</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DefOfFunction</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{FunctionAltDef
+  </span><span class=clean><span lang=EN-US style='color:#3366FF'>;</span></span><span
+  lang=EN-US>}+</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionAltDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Function
+  {Pattern}</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_3.2_Patterns">see 3.2 for patterns</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{LetBeforeExpression}</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_3.6_Special_Local">see 3.5.4</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{{</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US> Guard} </span><span
+  class=cleanb><span lang=EN-US>=</span></span><span lang=EN-US>[</span><span
+  class=cleanb><span lang=EN-US>&gt;</span></span><span lang=EN-US>]
+  FunctionBody}+</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_3.3_Guards">see 3.3 for guards</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[LocalFunctionAltDefs]</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_3.5_Local_Definitions">see 3.5</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Function </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>FunctionName</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// ordinary
+  function</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>(</span><span
+  class=clean><span lang=EN-US>FunctionName</span></span><span lang=EN-US>)</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// operator
+  function used prefix</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionBody</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RootExpression
+  ;</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_3.4_Expressions">see 3.4</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[LocalFunctionDefs]</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_3.5_Local_Definitions">see 3.5</a></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>A <i>function definition</i></span><span
+lang=EN-US> consists of one or more definition of a <i>function alternative</i></span><span
+lang=EN-US> (rewrite rule). On the left-hand side of such a function
+alternative a <i>pattern</i> can be specified which can serve a whole se­quence
+of <i>guarded function bodies</i> (called the <i>rule alternative</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US>) </span><span
+lang=EN-US> The root ex­pression (<a href="#_3.4_Expressions">see 3.4</a>) of a
+particular rule alternative is cho­sen for evaluation when</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;the patterns <span style='display:
+none'>  </span>specified in the formal arguments  are matching  the
+corresponding actual arguments of the func­tion ap­plication (<a
+href="#_3.2_Patterns">see 3.2</a>) <i>and</i></span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;the optional <i>guard</i> </span><span
+lang=EN-US>(<a href="#_3.3_Guards">see 3.3</a>) specified on the right-hand
+side evaluates to </span><span lang=EN-US style='font-family:Courier'>True</span><span
+lang=EN-US>.</span></p>
+
+<p class=lopal><span lang=EN-US>&#x2005;The alternatives are tried in textual order. A
+func­tion can be preceded by a defini­tion of its type (<a
+href="#_Defining_Types">Section 3.7</a>). </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Function definitions are only allowed in implementa­tion modules (<a
+href="CleanRep.2.2_4.htm#_2.3_Implementation_Modules">see 2.3</a>).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>It is required that the function alterna­tives of a function are
+textually grouped together (separated by semi-co­lons when the layout sensitive
+mode is not chosen).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Each alternative of a function must start with the same function
+symbol.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A function has a fixed arity, so in each rule the same number of
+formal arguments must be spec­i­fied. Functions can be used curried and applied
+to any number of arguments though, as usual in higher or­der func­tional
+languages.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The function name must in principle be different from other names in
+the same name space and same scope (<a href="CleanRep.2.2_4.htm#_2.1_Identifiers,_Scopes">see 2.1</a>).
+However, it is possible to overload functions and operators (<a
+href="CleanRep.2.2_8.htm#_Overloading">see Chapter 6</a>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of function definitions in a C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> module.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> example                                  </span><span
+class=cleancom><span lang=EN-US>// module header</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>import</span></span><span
+lang=EN-US> StdInt                                   </span><span
+class=cleancom><span lang=EN-US>// implicit import</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>map:: (a -&gt; b) [a] -&gt; [b]                      
+</span><span class=cleancom><span lang=EN-US>// type of map</span></span></p>
+
+<p class=ex><span lang=EN-US>map f list = [f e \\ e &lt;- list]                 
+</span><span class=cleancom><span lang=EN-US>// definition of the function map</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>square:: Int -&gt; Int                             </span><span
+class=cleancom><span lang=EN-US>// type of square</span></span></p>
+
+<p class=ex><span lang=EN-US>square x = x * x                                </span><span
+class=cleancom><span lang=EN-US>// definition of the function square</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start:: [Int]                                   </span><span
+class=cleancom><span lang=EN-US>// type of Start rule</span></span></p>
+
+<p class=ex><span lang=EN-US>Start = map square [1..1000]                    </span><span
+class=cleancom><span lang=EN-US>// definition of the Start rule</span></span></p>
+
+<p class=par><a name="_3.1.1_Operators"></a><span lang=EN-US>An <i>operator</i></span><span lang=EN-US> is a <i>function with arity two</i> that can be used as infix
+operator (brackets are left out) or as ordinary prefix function (the operator
+name preceding its arguments has to be sur­rounded by brackets). The <i>precedence</i>
+</span><span
+lang=EN-US>(</span><span class=clean><span lang=EN-US>0</span></span><span
+lang=EN-US> through </span><span class=clean><span lang=EN-US>9</span></span><span
+lang=EN-US>) and <i>fixity</i></span><span
+lang=EN-US> (</span><span class=cleankw><span lang=EN-US>infixl</span></span><span
+lang=EN-US>eft</span><span class=clean><span lang=EN-US>, </span></span><span
+class=cleankw><span lang=EN-US>infixr</span></span><span lang=EN-US>ight</span><span
+class=clean><span lang=EN-US>, </span></span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US>) that can be defined in the
+type definition (<a href="#_3.6.2_Typing_Operators">see 3.7.1</a>) of the opera­tors
+deter­mine the priority of the op­erator applica­tion in an ex­pression. A
+higher precedence binds more tightly. When operators have equal precedence, the
+fix­ity determines the priority. </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When an operator is used in infix position</span><span
+lang=EN-US> <i>both</i> arguments have to be present. Operators can be used in
+a curried way, but then they have to be used as ordinary prefix functions.</span></p>
+
+<p class=lopal><span lang=EN-US>&#x2005;</span></p>
+
+<p class=exth><span lang=EN-US>Operator definition.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>(++) </span><span class=cleankw><span lang=EN-US>infixr</span></span><span
+lang=EN-US> 0:: [a] [a] -&gt; [a]</span></p>
+
+<p class=ex><span lang=EN-US>(++) []      ly  = ly</span></p>
+
+<p class=ex><span lang=EN-US>(++) [x:xs]  ly  = [x:xs ++ ly]</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>(o) </span><span class=cleankw><span lang=EN-US>infixr</span></span><span
+lang=EN-US> 9:: (a -&gt; b) (c -&gt; a) -&gt; (c -&gt; b)</span></p>
+
+<p class=ex><span lang=PT-BR>(o) f g = \x = f (g x)</span></p>
+
+<h2><a name="_Toc311797997"></a><a name="_Toc524343508"></a><a
+name="_3.2_Patterns"></a><span lang=EN-US>3.2    Patterns</span></h2>
+
+<p class=par><span lang=EN-US>A <i>pattern</i></span><span
+lang=EN-US> specified on the left-hand side of a function definition specifies
+the formal arguments of a function. A function alternative is chosen only if
+the actual arguments of the function application match the formal arguments. A
+formal argument is either a constant (some <i>data constructor</i></span><span
+lang=EN-US> with its optional arguments that can consist of sub-pat­terns) or
+it is a variable. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Pattern</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[Variable </span><span
+  class=cleanb><span lang=EN-US>=:</span></span><span lang=EN-US>] BrackPattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackPattern</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span lang=EN-US>GraphPattern</span><span
+  class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Constructor</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>PatternVariable</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SpecialPattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DynamicPattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_10.htm#_Dynamics">see Chapter 8</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphPattern</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Constructor
+  {Pattern}</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleancom><span
+  lang=EN-US>// Ordinary data constructor</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphPattern
+  </span><span class=clean><span lang=EN-US>ConstructorName</span></span><span
+  lang=EN-US> GraphPattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleancom><span
+  lang=EN-US>// Infix data constructor</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Pattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>PatternVariable</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Variable</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>_</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>A <i>pattern variable</i></span><span
+lang=EN-US> can be a (node) <i>variable</i> or a <i>wildcard. </i>A <i>variable</i></span><span
+lang=EN-US> is a formal argument</span><span
+lang=EN-US> of a function that matches on <i>any</i> concrete value of the
+corre­sponding actual argu­ment and therefore it does <i>not</i> force evalua­tion
+of this argument. A <i>wildcard</i></span><span
+lang=EN-US> is an <i>anonymous</i> vari­able</span><span
+lang=EN-US> (&quot;</span><span class=clean><span lang=EN-US>_</span></span><span
+lang=EN-US>&quot;) one can use to indi­cate that the correspond­ing argument is
+not used in the right-hand side of the function. A <i>vari­able</i></span><span
+lang=EN-US> </span><span
+lang=EN-US>can be at­tached to a pat­tern (using the symbol ‘</span><span
+class=clean><span lang=EN-US>=:</span></span><span lang=EN-US>’) that makes it
+possible to iden­tify (<i>label</i>) the whole pat­tern as well as its
+contents. When a constant (data constructor) is specified as formal argument,
+the actual argument must contain the same constant in order to have a
+successful match.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an algebraic data type definition and
+its use in a pattern match in a function definition.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Tree a = Node a (Tree a) (Tree a)</span></p>
+
+<p class=ex><span lang=EN-US>         | Nil</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Mirror:: (Tree a) -&gt; Tree a</span></p>
+
+<p class=ex><span lang=EN-US>Mirror (Node e left right) = Node e (Mirror right)
+(Mirror left)</span></p>
+
+<p class=ex><span lang=EN-US>Mirror Nil                 = Nil</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Use of anonymous variables.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: Complex :== (!Real,!Real)                        
+</span><span class=cleancom><span lang=EN-US>// synonym type def</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>realpart:: Complex -&gt; Real</span></p>
+
+<p class=ex><span lang=EN-US>realpart (re,_) = re                                 </span><span
+class=cleancom><span lang=EN-US>// re and _ are pattern variables</span></span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Use of list patterns, use of guards, use of
+variables to identify patterns and sub-patterns; </span><span class=clean><span
+lang=EN-US>merge </span></span><span lang=EN-US>merges two (sorted) lazy lists
+into one (sorted) list.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>merge:: [Int] [Int] -&gt; [Int]</span></p>
+
+<p class=ex><span lang=EN-US>merge f []   = f</span></p>
+
+<p class=ex><span lang=EN-US>merge [] s   = s</span></p>
+
+<p class=ex><span lang=EN-US>merge f=:[x:xs] s=:[y:ys]</span></p>
+
+<p class=ex><span lang=EN-US>| x&lt;y        = [x:merge xs s]</span></p>
+
+<p class=ex><span lang=EN-US>| x==y       = merge f ys</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise  = [y:merge f ys]</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>It is possible that the specified patterns turn a function into a
+partial function</span><span
+lang=EN-US> (<a href="#_4.3.3_Typing_Partial">see 3.7.3</a>). When a par­tial
+function is applied outside the domain for which the function is defined it
+will result into a <i>run-time</i> error. A compile time <i>warning</i> is
+generated that such a situation might arise.</span></p>
+
+<p class=par><a name="_3.2.1_Constructor_Patterns"></a><a
+name="_3.2.2_Simple_Constructor"></a><a name="_3.2.3_Variables_and"></a><span
+lang=EN-US>The formal arguments of a function and the function body are
+contained in a new local scope.</span></p>
+
+<p class=exb></p>
+
+<p class=ex><span style='position:absolute;z-index:251637248;margin-left:89px;
+margin-top:0px;width:240px;height:17px'><img width=240 height=17
+src="CleanRep.2.2_files/image014.gif"></span><span lang=EN-US>functionName args
+= expression                    </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>All variable symbols introduced at the left-hand side of a function
+definition must have differ­ent names.</span></p>
+
+<p class=par><span lang=EN-US>For convenience and efficiency special syntax is
+provided to express pattern match on data structures of predefined type and
+record type. They are treated elsewhere (see below).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SpecialPattern</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BasicValuePattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_6.htm#_4.1.2_Patterns_of">see 4.1.2</a> </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ListPattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_6.htm#_4.2.1_List_Patterns">see 4.2.2</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TuplePattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_6.htm#_4.3.2_Tuple_Patterns">see 4.3.2</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayPattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_6.htm#_4.4.2_Array_Patterns">see 4.4.2</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordPattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_7.htm#_5.2.2_Record_Patterns">see  5.2.2</a></span></p>
+  </td>
+ </tr>
+</table>
+
+<h2><a name="_Toc311797998"></a><a name="_Toc524343517"></a><a
+name="_3.2.4_Constant_Values"></a><a name="_3.2.5_List_Patterns"></a><a
+name="_3.3_Guards"></a><span lang=EN-US>3.3    Guards</span></h2>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Guard</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BooleanExpr</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>otherwise</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>A <i>guard</i></span><span
+lang=EN-US> is a Boolean expression attached to a rule alternative</span><span
+lang=EN-US> that can be regarded as generalisa­tion of the pattern match</span><span lang=EN-US>ing mechanism: the alternative only matches when the patterns defined
+on the left hand-side match <i>and</i> its (optional) guard evaluates to </span><span
+class=clean><span lang=EN-US>True</span></span><span lang=EN-US> (<a
+href="#_3.1_Defining_Functions">see 3.1</a>). Otherwise the <i>next</i> alter­native
+of the function is tried. Pattern matching always takes place <i>before</i> the
+guards are evalu­ated.</span></p>
+
+<p class=par><span lang=EN-US>The guards are tried in <i>textual order</i>. The
+alterna­tive corre­spond­ing to the first guard that yields </span><span
+class=clean><span lang=EN-US>True</span></span><span lang=EN-US> will be evalu­ated.
+A right-hand side without a guard can be re­garded to have a guard that always
+evalu­ates to </span><span class=clean><span lang=EN-US>True</span></span><span
+lang=EN-US> (the ‘otherwise’ or ‘default’ case). In </span><span class=clean><span
+lang=EN-US>keyword</span></span><span lang=EN-US> </span><span class=cleankw><span
+lang=EN-US>otherwise</span></span><span
+lang=EN-US> is syn­o­nym for </span><span class=clean><span lang=EN-US>True</span></span><span
+lang=EN-US> for people who like to emphasize<span style='color:red'> </span>the
+default option. </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Only the last rule alternative of a function can have otherwise as
+guard or can have no guard. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>It is possible that the guards turn the function into a partial
+function (<a href="#_4.3.3_Typing_Partial">see 3.6.3</a>). When a partial func­tion</span><span
+lang=EN-US> is ap­plied outside the domain for which the function is defined it
+will result into a <i>run-time</i> error. At compile time this cannot be
+detected.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Function definition with guards.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>filter:: Int [Int] -&gt; [Int]</span></p>
+
+<p class=ex><span lang=EN-US>filter pr [n:str]</span></p>
+
+<p class=ex><span lang=EN-US>| n mod pr == 0   = filter pr str</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise       = [n:filter pr str]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Equivalent definition of previous </span><span
+lang=EN-US style='font-family:"Courier New"'>filter</span><span lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>filter:: Int [Int] -&gt; [Int]</span></p>
+
+<p class=ex><span lang=EN-US>filter pr [n:str]</span></p>
+
+<p class=ex><span lang=EN-US>| n mod pr == 0   = filter pr str</span></p>
+
+<p class=ex><span lang=EN-US>                  = [n:filter pr str]</span></p>
+
+<p class=par><span lang=EN-US>Guards can be nested. When a guard on one level
+evaluates to </span><span class=clean><span lang=EN-US>True</span></span><span
+lang=EN-US>, the guards on a next level are tried. </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>To ensure that at least one of the alternatives of a nested guard
+will be successful, a nested guarded alternative must always have a  'default
+case' as last alternative.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a nested guard.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>example arg1 arg2</span></p>
+
+<p class=ex><span lang=EN-US>| predicate11 arg1                                  
+</span><span class=cleancom><span lang=EN-US>// if predicate11 arg1</span></span></p>
+
+<p class=ex><span lang=EN-US>    | predicate21 arg2 = calculate1 arg1 arg2       
+</span><span class=cleancom><span lang=EN-US>//  then (if predicate21 arg2 </span></span></p>
+
+<p class=ex><span lang=EN-US>    | predicate22 arg2 = calculate2 arg1 arg2       
+</span><span class=cleancom><span lang=EN-US>//  elseif predicate22 arg2 then </span></span></p>
+
+<p class=ex><span lang=EN-US>    | </span><span class=cleankw><span lang=EN-US>otherwise</span></span><span
+lang=EN-US>        = calculate3 arg1 arg2        </span><span class=cleancom><span
+lang=EN-US>//  else …)</span></span></p>
+
+<p class=ex><span lang=EN-US>| predicate12 arg1     = calculate4 arg1 arg2        </span><span
+class=cleancom><span lang=EN-US>// elseif predicate12 arg1 then …</span></span></p>
+
+<h2><a name="_Toc311797999"></a><a name="_Toc524343518"></a><a
+name="_3.4_Expressions"></a><span lang=EN-US>3.4    Expressions</span></h2>
+
+<p class=par><span lang=EN-US>The main body of a function is called the <i>root
+expression</i>. The root expression is a graph expression.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RootExpression</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphExpr</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphExpr</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Application</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Application</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{BrackGraph}+</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphExpr
+  Operator GraphExpr</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GenericAppExpr</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackGraph</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphVariable</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Constructor</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Function</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span lang=EN-US>GraphExpr</span><span
+  class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LambdaAbstr</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_3.4.1_Lambda_Abstraction">see 3.4.1</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CaseExpr</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_3.4.2_Case_Expression">see 3.4.2</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LetExpr</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_3.4.3_Let_Expression:">see 3.5.1</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SpecialExpression</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DynamicExpression</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Function</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>FunctionName</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span class=clean><span lang=EN-US>FunctionName</span></span><span
+  class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Constructor</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>ConstructorName</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span class=clean><span lang=EN-US>ConstructorName</span></span><span
+  class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Operator </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>FunctionName</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>ConstructorName</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphVariable</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Variable</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SelectorVariable</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><a name="_3.4.1_Applications"></a><span lang=EN-US>An expression
+gen­erally expresses an application of a function to its actual arguments or
+the (automatic) creation of a data structure simply by ap­ply­ing a data
+constructor to its ar­gu­ments. </span><span
+lang=EN-US>Each function or data construc­tor can be used in a <i>curried</i>
+way and can therefore be applied to any number (zero or more) of argu­ments. A
+function will only be rewritten if it is applied to a number of argu­ments
+equal to the arity of the function (<a href="#_3.1_Defining_Functions">see 3.1</a>).
+Function and constructors applied on zero arguments just form a syntactic unit
+(for non-operators no brackets are nee­ded in this case). </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>All expressions have to be of correct type (<a
+href="CleanRep.2.2_7.htm#_Defining_New_Types">see Chapter 5</a>).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>All symbols that appear in an expression must have been defined
+somewhere within the scope in which the expression appears (<a
+href="CleanRep.2.2_4.htm#_2.1_Identifiers,_Scopes">see 2.1</a>).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>There has to be a definition for each node variable and selector
+variable within in the scope of the graph ex­pression.</span></p>
+
+<p class=par><i><span lang=EN-US>Operators</span></i><span lang=EN-US> are
+special functions or data constructors defined with arity two which can be ap­plied
+in infix position </span><span
+lang=EN-US> The <i>precedence</i> </span><span
+lang=EN-US>(</span><span class=clean><span lang=EN-US>0</span></span><span
+lang=EN-US> through </span><span class=clean><span lang=EN-US>9</span></span><span
+lang=EN-US>) and <i>fixity</i></span><span
+lang=EN-US> (</span><span class=cleankw><span lang=EN-US>infixl</span></span><span
+lang=EN-US>eft</span><span class=clean><span lang=EN-US>, </span></span><span
+class=cleankw><span lang=EN-US>infixr</span></span><span lang=EN-US>ight</span><span
+class=clean><span lang=EN-US>, </span></span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US>) which can be defined in the
+type definition of the opera­tors deter­mine the priority of the op­erator
+applica­tion in an ex­pression. A higher precedence binds more tightly. When
+operators have equal precedence, the fix­ity determines the priority. In an
+expression an ordinary function appli­cation has a very high pri­or­ity (</span><span
+class=clean><span lang=EN-US>10</span></span><span lang=EN-US>). Only selection
+of record elements (<a href="CleanRep.2.2_7.htm#_Selection_of_a">see 5.2.1</a>) and ar­ray
+elements (<a href="CleanRep.2.2_6.htm#_4.4.1_Creating_Arrays">see 4.4.1</a>) binds more tightly (</span><span
+class=clean><span lang=EN-US>11</span></span><span lang=EN-US>). Besides that,
+due to the priority, brackets can sometimes be omitted; op­erator appli­cations
+behave just like other applications.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>It is not allowed to apply operators with equal precedence in an
+expression in such a way that their</span><span lang=EN-US style='font-family:
+Symbol'> </span><span lang=EN-US>fixity</span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US>con­flict.</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>So,</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>when</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>in</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>a<sub>1</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>op<sub>1</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>a<sub>2</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>op<sub>2</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>a<sub>3</sub></span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US>the</span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US>operators</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>op<sub>1</sub></span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US>and</span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US style='font-family:Courier'>op<sub>2</sub></span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>have</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>the</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>same</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>precedence</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>a</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>conflict</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>arises</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>when</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>op<sub>1</sub></span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US>is</span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US>defined</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>as</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>infixr</span><span lang=EN-US style='font-family:
+Symbol'> </span><span lang=EN-US>implying</span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US>that</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>the</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>expression</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>must</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>be</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>read</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>as</span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'> </span><span
+lang=EN-US style='font-family:Courier'>a<sub>1</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>op<sub>1</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>(a<sub>2</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>op<sub>2</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>a<sub>3</sub>)</span><sub><span lang=EN-US
+style='font-family:Symbol'> </span></sub><span lang=EN-US>while</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>op<sub>2</sub></span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US>is</span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US>defined</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>as</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>infixl</span><span lang=EN-US style='font-family:
+Symbol'> </span><span lang=EN-US>implying</span><span lang=EN-US
+style='font-family:Symbol'> </span><span lang=EN-US>that</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>the</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>expres­sion</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>must</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>be</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>read</span><span
+lang=EN-US style='font-family:Symbol'> </span><span lang=EN-US>as</span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'> </span><span
+lang=EN-US style='font-family:Courier'>(a<sub>1</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>op<sub>1</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>a<sub>2</sub>)</span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>op<sub>2</sub></span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'> </span><span lang=EN-US
+style='font-family:Courier'>a<sub>3</sub></span><span lang=EN-US>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When an operator is used in infix position <i>both</i> arguments
+have to be present. Operators can be used in a <i>curried</i> way (applied to
+less than two arguments), but then they have to be used as ordi­nary <i>prefix</i>
+functions / con­struc­tors. When an operator is used as prefix function c.q.
+constructor, it has to be surrounded by brac­k­ets.</span></p>
+
+<p class=par><a name="_3.4.2_Constructor_or"></a><a
+name="_3.4.3_Graph_Variables"></a><span lang=EN-US>There are two kinds of
+variables that can appear in a graph expression: <i>variable</i></span><i><span lang=EN-US>s</span></i><span lang=EN-US> introduced as <i>for­mal ar­gument</i></span><span
+lang=EN-US> of a function (<a href="#_3.1_Defining_Functions">see 3.1</a> and <a
+href="#_3.2_Patterns">3.2</a>) and <i>selector variable</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US> (defined in a <i>selector</i> to
+identify parts of a graph expression, <a href="#_Selectors">see 3.6</a>) </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a cyclic root expression. y is the
+root expression referring to a cyclic graph. The multiplication operator </span><span
+class=clean><span lang=EN-US>*</span></span><span lang=EN-US> is used prefix
+here in a curried way.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>ham:: [Int]</span></p>
+
+<p class=ex><span lang=EN-US>ham = y </span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span><span
+lang=EN-US> y = [1:merge (map ((*) 2) y) (merge (map ((*) 3) y) (map ((*) 5)
+y))] </span></p>
+
+<p class=par><span lang=EN-US>For conve­nience and ef­ficiency special syntax
+is pro­vided to create expressions of data struc­tures of prede­fined type and
+of record type that is considered as a special kind of algebraic type. They are
+treated in elsewhere.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SpecialExpression</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BasicValue</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_6.htm#_4.1.1_Creating_Constant">see 4.1.1</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>List</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_6.htm#_4.2.1_Creating_Lists">see 4.2.1</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Tuple</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_6.htm#_4.3.1_Creating_Tuples">see 4.3.1</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Array</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_6.htm#_4.4.1_Creating_Arrays">see 4.4.1</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArraySelection</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_6.htm#_Selection_of_an">see 4.4.1</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Record</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_7.htm#_4.2.3_Defining_Synonym">see 5.2.1</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordSelection</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_7.htm#_Selection_of_a">see 5.2.1</a></span></p>
+  </td>
+ </tr>
+</table>
+
+<h3><a name="_Toc311798000"></a><a name="_Toc524343536"></a><a
+name="_3.4.4_Creating_Constant"></a><a name="_3.4.9_Lambda_Abstraction"></a><a
+name="_3.4.1_Lambda_Abstraction"></a><span lang=EN-US>3.4.1 Lambda Abstraction</span></h3>
+
+<p class=par><span lang=EN-US>Sometimes it can be convenient to define a tiny
+function in an expression “right on the spot”. For this purpose one can use a <i>lambda
+abstraction</i>. An anonymous function is defined which can have several formal
+arguments that can be patterns as common in or­dinary function definitions (<a
+href="#_Defining_Functions">see Chapter 3</a>). However, only simple functions
+can be defined in this way: no guards, no rule alternatives, and no local
+definitions.</span></p>
+
+<p class=par><span lang=EN-US>For compatibility with C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='text-transform:uppercase'> </span><span lang=EN-US>1.3 it is also
+allowed to use the arrow (‘</span><span class=clean><span lang=EN-US>-&gt;</span></span><span
+lang=EN-US>’) to separate the for­mal arguments from the function body:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LambdaAbstr</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>\</span></span><span lang=EN-US> {Pattern}</span><span
+  class=cleanb><span lang=EN-US> =</span></span><span lang=EN-US>   GraphExpr</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>\</span></span><span lang=EN-US> {Pattern}</span><span
+  class=cleanb><span lang=EN-US> -&gt;</span></span><span lang=EN-US> GraphExpr</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a Lambda expression.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>AddTupleList:: [(Int,Int)] -&gt; [Int]</span></p>
+
+<p class=ex><span lang=EN-US>AddTupleList list = map (\(x,y) = x+y) list</span></p>
+
+<p class=par><span lang=EN-US>A lambda expression introduces a new scope (<a
+href="CleanRep.2.2_4.htm#_2.1_Identifiers,_Scopes">see 2.1</a>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The arguments of the anonymous function being
+defined have the only a meaning in the corresponding function body.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251638272;margin-left:10px;
+margin-top:0px;width:263px;height:15px'><img width=263 height=15
+src="CleanRep.2.2_files/image015.gif"></span><span lang=EN-US>\ arg1 arg2 ...
+argn = function_body</span></p>
+
+<h3><a name="_Toc311798001"></a><a name="_Toc524343537"></a><a
+name="_3.4.10_Case_Expression"></a><a name="_3.4.2_Case_Expression"></a><span
+lang=EN-US>3.4.2 Case Expression and Conditional Expression</span></h3>
+
+<p class=par><span lang=EN-US>For programming convenience a <i>case expression</i>
+and <i>conditional expres­sion</i> are added.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CaseExpr</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>case</span></span><span
+  lang=EN-US> GraphExpr</span><span class=cleankw><span lang=EN-US> of</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US style='color:#3366FF'>{</span></span><span lang=EN-US>
+  {CaseAltDef}+</span><span class=cleankw><span lang=EN-US style='color:#3366FF'>
+  }</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>if</span></span><span lang=EN-US> </span><span
+  lang=EN-US>BrackGraph BrackGraph BrackGraph </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CaseAltDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{Pattern}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{{LetBeforeExpression}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US> Guard} </span><span
+  class=cleanb><span lang=EN-US>=</span></span><span lang=EN-US> [</span><span
+  class=cleanb><span lang=EN-US>&gt;</span></span><span lang=EN-US>]
+  FunctionBody}+</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[LocalFunctionAltDefs]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{Pattern}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{{LetBeforeExpression}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US> Guard} </span><span
+  class=cleanb><span lang=EN-US>-&gt;</span></span><span lang=EN-US>
+  FunctionBody}+</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[LocalFunctionAltDefs]</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>In a <i>case expression</i></span><span
+lang=EN-US> first the discriminating expression is evaluated after which the
+case alternatives are tried in textual order. Case alternatives are similar to
+function alternatives. This is not so strange because a case expression is
+internally translated to a function definition (see the example below). Each
+alterna­tive contains a left-hand side pattern (<a href="#_3.2_Patterns">see
+3.2</a>) that is optionally followed by a <i>let-before</i> (<a
+href="#_3.6_Special_Local">see 3.5.4</a>)<span style='color:red'> </span>and a
+guard (<a href="#_3.3_Guards">see 3.3</a>). When a pattern matches and the optional
+guard evaluates to </span><span class=clean><span lang=EN-US>True</span></span><span
+lang=EN-US> the corresponding al­ternative is cho­sen. A new block struc­ture</span><span
+lang=EN-US> (scope</span><span
+lang=EN-US>) is cre­a­ted for each case alternative (<a
+href="CleanRep.2.2_4.htm#_2.1_Identifiers,_Scopes">see 2.1</a>).</span></p>
+
+<p class=par><span lang=EN-US>For compatibility with C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+1.3.x it is also allowed to use the arrow (‘</span><span class=clean><span
+lang=EN-US>-&gt;</span></span><span lang=EN-US>’) to separate the case
+alternatives:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The variables defined in the patterns have the
+only a meaning in the corresponding alternative.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>case</span></span><span
+lang=EN-US> expression </span><span class=cleankw><span lang=EN-US>of</span></span></p>
+
+<p class=ex><span style='position:absolute;z-index:251639296;margin-left:25px;
+margin-top:0px;width:190px;height:15px'><img width=190 height=15
+src="CleanRep.2.2_files/image016.gif"></span><span lang=EN-US>    pattern1 =
+alternative1</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251640320;margin-left:25px;
+margin-top:0px;width:190px;height:15px'><img width=190 height=15
+src="CleanRep.2.2_files/image017.gif"></span><span lang=EN-US>    pattern2 =
+alternative2</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251641344;margin-left:25px;
+margin-top:12px;width:191px;height:17px'><img width=191 height=17
+src="CleanRep.2.2_files/image018.gif"></span><span lang=EN-US>    ...</span></p>
+
+<p class=ex><span lang=EN-US>    patternn = alternativen</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>All alternatives in the case expression must be of the same type.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When none of the pat­terns matches a <i>run-time</i> error is gener­ated.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The case expression</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>h x =    </span><span class=cleankw><span
+lang=EN-US>case</span></span><span lang=EN-US> g x </span><span class=cleankw><span
+lang=EN-US>of</span></span></p>
+
+<p class=ex><span lang=EN-US>         [hd:_]  = hd</span></p>
+
+<p class=ex><span lang=EN-US>         []      = abort &quot;result of call g x
+in h is empty&quot;</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>is semantically equivalent to:</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>h x = mycase (g x)</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    mycase  [hd:_]  = hd</span></p>
+
+<p class=ex><span lang=EN-US>    mycase  []      = abort &quot;result of call g
+x in h is empty&quot;</span></p>
+
+<p class=par><span lang=EN-US>In a <i>conditional expression</i></span><span
+lang=EN-US> first the Boolean expression is evaluated after which either the
+then- or the else-part is chosen. The conditional expression can be seen as a
+simple kind of case expres­sion.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The then- and else-part in the conditional expression must be of the
+same type.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The discriminating ex­pression must be of type </span><span
+lang=EN-US style='font-family:Courier'>Bool</span><span lang=EN-US>.</span></p>
+
+<h2><a name="_Toc311798002"></a><a name="_Toc524343539"></a><a
+name="_3.4.11_Let_Expression:"></a><a name="_3.4.3_Let_Expression:"></a><a
+name="_3.5_Local_Definitions"></a><span lang=EN-US>3.5    Local Definitions</span></h2>
+
+<p class=par><span lang=EN-US>Sometimes it is convenient to introduce
+definitions that have a limited scope and are not visible throughout the whole
+module. One can define <i>functions </i>that have a local scope, i.e. which
+have only a meaning in a certain pro­gram region. Outside the scope the
+functions are unknown. This locality can be used to get a better program
+structure: functions that are only used in a certain program area can re­main
+hidden outside that area.</span></p>
+
+<p class=par><span lang=EN-US>Besides functions one can also convenient to
+define constant selectors. Constants are named graph expressions (<a
+href="#_3.6_Defining_Constants">see 3.6</a>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LocalDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphDef</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionDef</span></p>
+  </td>
+ </tr>
+</table>
+
+<h3><a name="_Toc524343540"></a><a name="_Toc311798003"></a><a
+name="_Toc524343538"></a><a name="_3.5.1_Where_Block:"></a><a
+name="_3.5.4_Defining_Local"></a><a name="_3.5.1_Let_Expression:"></a><span
+lang=EN-US>3.5.1 Let Expression: Local Definitions in Expressions</span></h3>
+
+<p class=par><span lang=EN-US>A <i>let</i> expression is an expression that
+enables to introduce a new scope (</span><a href="CleanRep.2.2_4.htm#_2.1_Identifiers,_Scopes"><span
+lang=EN-US>see 2.1</span></a><span lang=EN-US>) in an expression in which local
+functions and constants can be defined. Such local definitions can be
+introduced anywhere in an expression using a let expression with the following
+syntax.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LetExpresssion</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>let</span></span><span lang=EN-US> </span><span class=clean><b><span
+  lang=EN-US style='color:#3366FF'>{</span></b></span><span lang=EN-US>
+  {LocalDef}+ </span><span class=cleankw><span lang=EN-US style='color:#3366FF'>}</span></span><span
+  lang=EN-US> </span><span class=cleankw><span lang=EN-US>in</span></span><span
+  lang=EN-US> </span><span lang=EN-US>GraphExpr</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The function and selectors defined in the </span><span
+class=clean><span lang=EN-US>let</span></span><span lang=EN-US> block only have
+a meaning within the </span><span class=clean><span lang=EN-US>expression</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251661824;margin-left:-4px;
+margin-top:1px;width:300px;height:66px'><img width=300 height=66
+src="CleanRep.2.2_files/image019.gif"></span><span class=cleankw><span
+lang=EN-US>let</span></span></p>
+
+<p class=ex><span style='position:absolute;z-index:251660800;margin-left:92px;
+margin-top:0px;width:196px;height:14px'><img width=196 height=14
+src="CleanRep.2.2_files/image020.gif"></span><span lang=EN-US>    function
+arguments = function_body</span></p>
+
+<p class=ex><span lang=EN-US>    selector = expr</span></p>
+
+<p class=ex><span lang=EN-US>    ...</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>in</span></span><span
+lang=EN-US>  expression</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a let expression used within a list
+comprehension.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>doublefibs n = [</span><span class=cleankw><span
+lang=EN-US>let</span></span><span lang=EN-US> a = fib i </span><span
+class=cleankw><span lang=EN-US>in</span></span><span lang=EN-US> (a, a) \\ i
+&lt;- [0..n]]</span></p>
+
+<h3><a name="_Toc311798004"></a><a name="_3.5.2_Where_Block:"></a><span
+lang=EN-US>3.5.2 Where Block: Local Definitions in a Function Alternative</span></h3>
+
+<p class=par><span lang=EN-US>At the end of each function alternative one can
+locally define functions and constant graphs in a <i>where</i> <i>block</i></span><span
+lang=EN-US>.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LocalFunctionAltDefs</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[</span><span
+  class=cleankw><span lang=EN-US>where</span></span><span
+  lang=EN-US>] </span><span class=cleankw><span lang=EN-US style='color:#3366FF'>{</span></span><span
+  lang=EN-US> {LocalDef}+ </span><span class=cleankw><span lang=EN-US
+  style='color:#3366FF'>}</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>Functions and graphs defined in a <i>where</i>
+block can be used anywhere in the corre­sponding function alternative (i.e. in
+all guards and rule alternatives following a pattern, <a
+href="#_3.1_Defining_Functions">see 3.1</a>) as in­dicated in the fol­low­ing
+picture showing the scope of a <i>where</i> block.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The function and selectors defined in the </span><span
+class=clean><span lang=EN-US>where</span></span><span lang=EN-US> block can be
+used locally in the whole function definition.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>function formal_arguments </span></p>
+
+<p class=ex><span style='position:absolute;z-index:251644416;margin-left:72px;
+margin-top:13px;width:255px;height:15px'><img width=255 height=15
+src="CleanRep.2.2_files/image021.gif"></span><span style='position:relative;
+z-index:251642368'><span style='position:absolute;left:59px;top:-14px;
+width:327px;height:106px'><img width=327 height=106
+src="CleanRep.2.2_files/image022.gif"></span></span><span style='position:absolute;
+z-index:251643392;margin-left:72px;margin-top:0px;width:255px;height:15px'><img
+width=255 height=15 src="CleanRep.2.2_files/image021.gif"></span><span
+lang=EN-US>         | guard1      = function_alternative1</span></p>
+
+<p class=ex><span lang=EN-US>         | guard2      = function_alternative2</span></p>
+
+<p class=ex><span lang=EN-US>         | </span><span class=cleankw><span
+lang=EN-US>otherwise</span></span><span lang=EN-US>   = default_alternative</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>         where</span></span></p>
+
+<p class=ex><span lang=EN-US>             selector = expr</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251645440;margin-left:199px;
+margin-top:0px;width:155px;height:14px'><img width=155 height=14
+src="CleanRep.2.2_files/image023.gif"></span><span lang=EN-US>             local_function
+args = function_body</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>sieve and filter are local functions defined in
+a </span><span class=clean><span lang=EN-US>where</span></span><span
+lang=EN-US> block. They have only a meaning inside primes. At the global level
+the functions are unknown.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>primes::[Int]</span></p>
+
+<p class=ex><span lang=EN-US>primes = sieve [2..]</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    sieve::[Int] -&gt; [Int]                           
+</span><span class=cleancom><span lang=EN-US>// local function of primes</span></span></p>
+
+<p class=ex><span lang=EN-US>    </span><span lang=PT-BR>sieve [pr:r]  =
+[pr:sieve (filter pr r)]</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>    </span><span lang=EN-US>filter::Int [Int]
+-&gt; [Int]                       </span><span class=cleancom><span lang=EN-US>//
+local function of primes</span></span></p>
+
+<p class=ex><span lang=PT-BR>    filter pr [n:r]</span></p>
+
+<p class=ex><span lang=PT-BR>    | n mod pr == 0   = filter pr r</span></p>
+
+<p class=ex><span lang=PT-BR>    | </span><span class=cleankw><span lang=EN-US>otherwise</span></span><span
+lang=PT-BR>       = [n:filter pr r]</span></p>
+
+<p class=par><span lang=EN-US>Notice that the scope rules are such that the
+formal arguments of the surrounding function alternative are vis­i­ble to the
+locally defined functions and graphs. The arguments can therefore directly be
+addressed in the local definitions. Such local definitions cannot always be
+typed explicitly (<a href="#_3.7_Typing_Functions">see 3.7</a>). </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Alternative definition of </span><span
+lang=EN-US style='font-family:Courier'>primes</span><span lang=EN-US>. The
+function </span><span lang=EN-US style='font-family:Courier'>filter</span><span
+lang=EN-US> is locally defined for </span><span lang=EN-US style='font-family:
+Courier'>sieve</span><span lang=EN-US>. </span><span lang=EN-US
+style='font-family:Courier'>filter</span><span lang=EN-US> can directly access
+arguments </span><span lang=EN-US style='font-family:Courier'>pr</span><span
+lang=EN-US> of </span><span lang=EN-US style='font-family:Courier'>sieve</span><span
+lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>primes::[Int]</span></p>
+
+<p class=ex><span lang=EN-US>primes = sieve [2..]</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    sieve::[Int] -&gt; [Int]                           
+</span><span class=cleancom><span lang=EN-US>// local function of primes</span></span></p>
+
+<p class=ex><span lang=EN-US>    </span><span lang=PT-BR>sieve [pr:r] =
+[pr:sieve (filter r)]</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>    where</span></span></p>
+
+<p class=ex><span lang=EN-US>        filter::[Int] -&gt; [Int]                      
+</span><span class=cleancom><span lang=EN-US>// local function of sieve</span></span></p>
+
+<p class=ex><span lang=EN-US>        </span><span lang=PT-BR>filter [n:r]</span></p>
+
+<p class=ex><span lang=PT-BR>        | n mod pr == 0   = filter r</span></p>
+
+<p class=ex><span lang=PT-BR>        | </span><span class=cleankw><span
+lang=EN-US>otherwise</span></span><span lang=PT-BR>       = [n:filter r]</span></p>
+
+<h3><a name="_Toc311798005"></a><a name="_Toc524343541"></a><a
+name="_3.5.2_With_Block:"></a><a name="_3.5.3_With_Block:"></a><span
+lang=EN-US>3.5.3 With Block: Local Definitions in a Guarded Alternative</span></h3>
+
+<p class=par><span lang=EN-US>One can also locally define functions and graphs
+at the end of each guarded rule alternative using a <i>with</i> <i>block</i></span><span
+lang=EN-US>.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LocalFunctionDefs</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[</span><span
+  class=cleankw><span lang=EN-US>with</span></span><span
+  lang=EN-US>] </span><span class=clean><b><span lang=EN-US style='color:#3366FF'>{</span></b></span><span
+  lang=EN-US> {LocalDef}+ </span><span class=cleankw><span lang=EN-US
+  style='color:#3366FF'>}</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LocalDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphDef</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionDef</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>Functions and graphs defined in a <i>with</i>
+block can only be used in the corresponding rule al­ternative as indicated in
+the following picture showing the scope of a <i>with</i> block.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The function and selectors defined in the </span><span
+class=clean><span lang=EN-US>with</span></span><span lang=EN-US> block can be
+locally only be used in the corresponding function alternative.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251649536;margin-left:181px;
+margin-top:10px;width:306px;height:62px'><img width=306 height=62
+src="CleanRep.2.2_files/image024.gif"></span><span style='position:absolute;
+z-index:251646464;margin-left:60px;margin-top:0px;width:433px;height:142px'><img
+width=433 height=142 src="CleanRep.2.2_files/image025.gif"></span><span
+lang=EN-US>function formal arguments </span></p>
+
+<p class=ex><span lang=EN-US>         | guard1     =   function_alternative1</span></p>
+
+<p class=ex><span lang=EN-US>                          </span><span
+class=cleankw><span lang=EN-US>with</span></span></p>
+
+<p class=ex><span lang=EN-US>                               selector = expr</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251650560;margin-left:181px;
+margin-top:21px;width:306px;height:62px'><img width=306 height=62
+src="CleanRep.2.2_files/image026.gif"></span><span style='position:absolute;
+z-index:251647488;margin-left:328px;margin-top:0px;width:155px;height:14px'><img
+width=155 height=14 src="CleanRep.2.2_files/image027.gif"></span><span
+lang=EN-US>                               local_function args = function_body<br>
+<br>
+         | guard2     =   function_alternative2</span></p>
+
+<p class=ex><span lang=EN-US>                          </span><span
+class=cleankw><span lang=EN-US>with</span></span></p>
+
+<p class=ex><span lang=EN-US>                               selector = expr</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251648512;margin-left:328px;
+margin-top:1px;width:155px;height:14px'><img width=155 height=14
+src="CleanRep.2.2_files/image027.gif"></span><span lang=EN-US>                              
+local_function args = function_body</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US>Notice that the scope rules are such that the
+arguments of the surrounding guarded rule alternative are visible to the
+locally defined functions and graphs. The arguments can therefore directly be
+addressed in the local definitions. Such local definitions cannot always be
+typed explicitly (<a href="#_3.7_Typing_Functions">see 3.7</a>). </span></p>
+
+<h3><a name="_Toc311798006"></a><a name="_Toc524343547"></a><a
+name="_3.5.3_Defining_Local"></a><a name="_3.6_Special_Local"></a><a
+name="_3.6.1_Strict_Let"></a><a name="_3.6.2_Let-Before_Expression:"></a><a
+name="_3.5.4_Let-Before_Expression:"></a><span lang=EN-US>3.5.4 Let-Before
+Expression: Local Constants defined between Guard</span><span lang=EN-US>s</span></h3>
+
+<p class=par><span lang=EN-US>Many of the functions for input and output in the
+C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> I/O library are state transition functions. Such a state is often
+passed from one function to another in a single threaded way (<a
+href="CleanRep.2.2_11.htm#_Uniqueness_Typing">see Chapter 9</a>) to force a specific order of
+evaluation. This is certainly the case when the state is of unique type. The
+threading parameter has to be renamed to distinguish its different versions.
+The following example shows a typical example:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Use of state transition functions. The uniquely
+typed state file is passed from one function to another involving a number of renamings:
+file, file1, file2)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>readchars:: *File -&gt; ([Char], *File)</span></p>
+
+<p class=ex><span lang=EN-US>readchars file</span></p>
+
+<p class=ex><span lang=EN-US>| not ok     = ([],file1)</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise  = ([char:chars], file2)</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (ok,char,file1)   = freadc file</span></p>
+
+<p class=ex><span lang=EN-US>    (chars,file2)     = readchars file1</span></p>
+
+<p class=par><span lang=EN-US>This explicit renaming of threaded parameters not
+only looks very ugly, these kind of definitions are sometimes also hard to read
+as well (in which order do things happen? which state is passed in which
+situation?). We have to admit: an imperative style of programming is much
+easier to read when things have to happen in a certain order such as is the
+case when doing I/O. That is why we have in­troduced <i>let-before</i>
+expressions.</span></p>
+
+<p class=par><i><span lang=EN-US>Let-before</span></i><span lang=EN-US>
+expressions are special let expressions that can be defined before a guard or
+function body. In this way one can specify sequential actions in the order in
+which they suppose to happen. <i>Let-before</i> expressions have the following
+syntax:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LetBeforeExpression</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US># </span></span><span lang=EN-US>{GraphDef}+</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US> | </span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>#!</span></span><span lang=EN-US>{GraphDef}+</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>The form with the exclamation mark (</span><span
+class=clean><span lang=EN-US>#!</span></span><span lang=EN-US>) forces the
+evaluation of the node-ids that appear in the left-hand sides of the
+definitions. Notice that one can only define constant selectors (GraphDef) in a
+Let-before expression. One cannot define functions.</span></p>
+
+<p class=par><i><span lang=EN-US>Let-before</span></i><span lang=EN-US>
+expressions have a special scope rule to obtain an imperative programming look.
+The vari­ables in the left-hand side of these definitions do not appear in the
+scope of the right-hand side of that definition, but they do appear in the
+scope of the other definitions that follow (including the root ex­pression,
+excluding local definitions in where blocks.</span></p>
+
+<p class=exb><span lang=EN-US> </span></p>
+
+<p class=exth><span lang=EN-US>This is shown in the following picture:</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251651584;margin-left:57px;
+margin-top:15px;width:217px;height:93px'><img width=217 height=93
+src="CleanRep.2.2_files/image028.gif"></span><span lang=EN-US><br>
+Function args</span></p>
+
+<p class=ex><span style='position:relative;z-index:251652608'><span
+style='position:absolute;left:59px;top:-1px;width:210px;height:58px'><img
+width=210 height=58 src="CleanRep.2.2_files/image029.gif"></span></span><span
+lang=EN-US>         # selector1  = expression1</span></p>
+
+<p class=ex><span lang=EN-US>         | guard1     = expression2</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251653632;margin-left:62px;
+margin-top:0px;width:202px;height:28px'><img width=202 height=28
+src="CleanRep.2.2_files/image030.gif"></span><span lang=EN-US>         #
+selector2  = expression3</span></p>
+
+<p class=ex><span lang=EN-US>         | guard2     = expression4</span></p>
+
+<p class=ex><span lang=EN-US>         </span><span class=cleankw><span
+lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>             local_definitions</span></p>
+
+<p class=par><span lang=EN-US>Notice that a variable defined in a let-before
+expression cannot be used in a where expression. The reverse is true however:
+definitions in the where expression can be used in the let before expression.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Use of let before expressions, short notation,
+re-using names taking use of the special scope of the let before)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>readchars:: *File -&gt; ([Char], *File)</span></p>
+
+<p class=ex><span lang=EN-US>readchars file</span></p>
+
+<p class=ex><span lang=EN-US>#   (ok,char,file)    = freadc file</span></p>
+
+<p class=ex><span lang=EN-US>|   not ok            = ([],file)</span></p>
+
+<p class=ex><span lang=EN-US>#   (chars,file)      = readchars file</span></p>
+
+<p class=ex><span lang=EN-US>=   ([char:chars], file)</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Equivalent definition renaming threaded
+parameters)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>readchars:: *File -&gt; ([Char], *File)</span></p>
+
+<p class=ex><span lang=EN-US>readchars file</span></p>
+
+<p class=ex><span lang=EN-US>#   (ok,char,file1)   = freadc file</span></p>
+
+<p class=ex><span lang=EN-US>|   not ok            = ([],file1)</span></p>
+
+<p class=ex><span lang=EN-US>#   (chars, file2)    = readchars file1</span></p>
+
+<p class=ex><span lang=EN-US>=   ([char:chars], file2)</span></p>
+
+<p class=par><span lang=EN-US>The notation can also be dangerous: the same name
+is used on different spots while the meaning of the name is not always the same
+(one has to take the scope into account which changes from definition to
+definition). However, the notation is rather safe when it is used to thread
+parameters of unique type. The type system will spot it when such parameters
+are not used in a correct single threaded manner. We do not recommend the use
+of let before expressions to adopt an imperative pro­gram­ming style for other
+cases. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Abuse of let before expression.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>exchange:: (a, b) -&gt; (b, a)</span></p>
+
+<p class=ex><span lang=EN-US>exchange (x, y)</span></p>
+
+<p class=ex><span lang=EN-US>#   temp = x</span></p>
+
+<p class=ex><span lang=EN-US>    x    = y</span></p>
+
+<p class=ex><span lang=EN-US>    y    = temp</span></p>
+
+<p class=ex><span lang=EN-US>=   (x, y)</span></p>
+
+<h2><a name="_Toc524343548"></a><a name="_Toc524343565"></a><a
+name="_Toc311798007"></a><a name="_Toc524343543"></a><a name="_Defining_Types"></a><a
+name="_3.6_Typing_Functions"></a><a name="_3.6_Defining_Constants"></a><span
+lang=EN-US>3.6    Defining Constants</span></h2>
+
+<p class=par><span lang=EN-US>One can give a name to a constant expression
+(actually a graph), such that the expression can be used in (and shared by)
+other expressions. One can also identify cer­tain parts of a constant via a
+projection function called a selector (see below).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selector </span><span
+  class=cleanb><span lang=EN-US>=</span></span><span lang=EN-US>[</span><span
+  class=cleanb><span lang=EN-US>:</span></span><span lang=EN-US>] GraphExpr</span><span
+  class=clean><span lang=EN-US> <span style='color:blue'>;</span></span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Graph locally defined in a function: the graph
+labeled </span><span lang=EN-US style='font-family:Courier'>last</span><span
+lang=EN-US> is shared in the function </span><span lang=EN-US style='font-family:
+Courier'>StripNewline</span><span lang=EN-US> and compu­ted only once.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>StripNewline:: String -&gt; String</span></p>
+
+<p class=ex><span lang=EN-US>StripNewline &quot;&quot; = &quot;&quot;</span></p>
+
+<p class=ex><span lang=EN-US>StripNewline string</span></p>
+
+<p class=ex><span lang=EN-US>| string !! last&lt;&gt;'\n' = string</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise            = string%(0,last-1)</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span><span
+lang=EN-US> </span></p>
+
+<p class=ex><span lang=EN-US>    last = maxindex string</span></p>
+
+<p class=par><span
+lang=EN-US style='display:none'>.</span><span lang=EN-US>When a <i>graph</i> is
+<i>defined</i> actually a name is given to (part) of an expression. The
+definition of a graph can be compared with a definition of a <i>constant </i>(data)
+or a <i>constant</i> (<i>projection</i>) <i>function</i>. <span
+style='display:none'>i.constant function;</span></span><span
+lang=EN-US>However, no­tice that graphs are constructed according to the basic
+semantics of C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> (</span><a href="CleanRep.2.2_3.htm#_Basic_Semantics"><span
+lang=EN-US>see Chapter 1</span></a><span lang=EN-US>) that means that multiple
+references to the same graph will result in <i>sharing</i></span><span lang=EN-US> of that graph. Recur­sive refer­ences will result in <i>cyclic graph</i></span><i><span
+lang=EN-US> structures</span></i><span lang=EN-US>. Graphs have the property
+that they <i>are computed only once</i> and that their value is <i>remembered</i>
+within the scope they are de­fined in. </span></p>
+
+<p class=par><span lang=EN-US>Graph definitions differ from constant function
+definitions. A <i>constant function def­ini­tion</i> is just a function defined
+with arity zero (</span><a href="#_3.1_Defining_Functions"><span lang=EN-US>see
+3.1</span></a><span lang=EN-US>). A constant function defines an ordinary graph
+rewriting rule: multiple references to a function just means that the same def­ini­tion
+is used such that a (constant) function <i>will be recomputed again for each
+occurrence of the function symbol made</i>. This difference can have
+consequences for the time and space behavior of function definitions (</span><a
+href="CleanRep.2.2_12.htm#_5.2_Defining_Graphs"><span lang=EN-US>see 10.2</span></a><span
+lang=EN-US>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The Hamming numbers defined using a locally
+defined cyclic constant graph and defined by us­ing a globally de­fined
+recursive constant function. The first definition (ham1) is efficient because
+already computed num­bers are reused via sharing. The second definition (ham2 )
+is much more inefficient because the recur­sive function recomputes everything.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>ham1:: [Int]</span></p>
+
+<p class=ex><span lang=EN-US>ham1 = y </span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span><span
+lang=EN-US> y = [1:merge (map ((*) 2) y) (merge (map ((*) 3) y) (map ((*) 5)
+y))] </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>ham2:: [Int]</span></p>
+
+<p class=ex><span lang=EN-US>ham2 = [1:merge (map ((*) 2) ham2) (merge (map
+((*) 3) ham2) (map ((*) 5) ham2 ))] </span></p>
+
+<p class=par><span lang=EN-US>Syntactically the definition of a graph is distinguished
+from the definition of a function by the sym­bol which sepa­rates left-hand
+side from right-hand side: &quot;</span><span class=clean><span lang=EN-US>=:</span></span><span
+lang=EN-US>&quot; is used for graphs while &quot;</span><span class=clean><span
+lang=EN-US>=&gt;</span></span><span lang=EN-US>&quot; is used for func­tions.
+However, in general the more common symbol &quot;</span><span class=clean><span
+lang=EN-US>=</span></span><span lang=EN-US>&quot; is used for both type of
+definitions. Gen­erally it is clear from the context what is meant (functions
+have parameters, selectors are also easy recognisi­ble). However, when a simple
+con­stant is defined the syntax is ambiguous (it can be a constant func­tion
+definition as well as a constant graph definition). </span></p>
+
+<p class=par><span lang=EN-US>To allow the use of the &quot;</span><span
+class=clean><span lang=EN-US>=</span></span><span lang=EN-US>&quot; whenever
+possible, the following rule is followed. Local constant defini­tions are <i>by
+default</i> taken to be <i>graph</i> definitions and therefore shared, globally
+they are <i>by default</i> taken to be <i>function</i> defini­tions (</span><a
+href="#_3.1_Defining_Functions"><span lang=EN-US>see 3.1</span></a><span
+lang=EN-US>) and therefore recomputed. If one wants to obtain a different
+behavior one has to explicit state the na­ture of the constant definition (has
+it to be shared or has it to be recomputed) by using &quot;</span><span
+class=clean><span lang=EN-US>=:</span></span><span lang=EN-US>&quot; (on the
+global level, meaning it is a constant graph which is shared) or &quot;</span><span
+class=clean><span lang=EN-US>=&gt;</span></span><span lang=EN-US>&quot; (on the
+local level, meaning it is a constant function and has to be recomputed).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Local constant graph versus local constant
+function definition: </span><span lang=EN-US style='font-family:Courier'>biglist1</span><span
+lang=EN-US> and </span><span lang=EN-US style='font-family:Courier'>biglist2</span><span
+lang=EN-US> is a <i>graph</i> which is com­puted only once, </span><span
+lang=EN-US style='font-family:Courier'>biglist3</span><span lang=EN-US> is a
+constant <i>function</i> which is computed every time it is ap­plied.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>biglist1 =   [1..10000]                 </span><span
+class=cleancom><span lang=EN-US>// a graph (if defined locally)</span></span></p>
+
+<p class=ex><span lang=EN-US>biglist1 =   [1..10000]                 </span><span
+class=cleancom><span lang=EN-US>// a constant function (if defined globally)</span></span></p>
+
+<p class=ex><span lang=EN-US>biglist2 =:  [1..10000]                 </span><span
+class=cleancom><span lang=EN-US>// a graph (always)</span></span></p>
+
+<p class=ex><span lang=EN-US>biglist3 =&gt;  [1..10000]                 </span><span
+class=cleancom><span lang=EN-US>// a constant function (always)</span></span></p>
+
+<p class=par><span lang=EN-US>The garbage collector will collect locally
+defined graphs</span><span
+lang=EN-US> when they are no longer connected to the root of the program graph
+(</span><a href="CleanRep.2.2_3.htm#_Basic_Semantics"><span lang=EN-US>see Chapter 1</span></a><span
+lang=EN-US>).</span></p>
+
+<h3><a name="_Toc311798008"></a><a name="_Toc524343544"></a><a name="_Selectors"></a><span
+lang=EN-US>3.6.1 Selectors</span></h3>
+
+<p class=par><span lang=EN-US>The left-hand side of a graph definition can be a
+simple name, but is can also be a more complicated pattern called a selector. A
+<i>selector</i></span><span
+lang=EN-US> is a pattern which introduces one or more new <i>selector variable</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US> im­plicitly defining <i>pro­jection
+function</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US> to identify (parts of) a constant
+graph being defined </span><span
+lang=EN-US> One can iden­tify the sub-graph as a whole or one can identify its
+components. A selector can contain constants (also user defined constants
+introduced by algebraic type definitions), variables and wildcards. With a <i>wild­card</i></span><span lang=EN-US> one can indi­cate that one is not interested in certain com­ponents.</span></p>
+
+<p class=par><span lang=EN-US>Selectors cannot be defined globally. They can
+only locally be defined in a let (</span><a href="#_3.5.1_Let_Expression:"><span
+lang=EN-US>see 3.5.1</span></a><span lang=EN-US>), a let-before (</span><a
+href="#_3.5.4_Let-Before_Expression:"><span lang=EN-US>see 3.5.4</span></a><span
+lang=EN-US>), a where-block (</span><a href="#_3.5.2_Where_Block:"><span
+lang=EN-US>see 3.5.2</span></a><span lang=EN-US>), and a with-block (</span><a
+href="#_3.5.3_With_Block:"><span lang=EN-US>see 3.5.3</span></a><span
+lang=EN-US>). Selectors can furthermore appear on the left-hand side of
+generators in list comprehensions (</span><a href="CleanRep.2.2_6.htm#_List_Comprehensions"><span
+lang=EN-US>see 4.2.1</span></a><span lang=EN-US>) and array compre­hensions (</span><a
+href="CleanRep.2.2_6.htm#_4.4.1_Creating_Arrays"><span lang=EN-US>see 4.4.1</span></a><span
+lang=EN-US>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selector</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackPattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// </span><a
+  href="#_3.2_Patterns"><span lang=EN-US>for bracket patterns see 3.2</span></a></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Use of a selector to locally select tuple
+elements.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>unzip::[(a,b)] -&gt; ([a],[b])</span></p>
+
+<p class=ex><span lang=EN-US>unzip []          = ([],[])</span></p>
+
+<p class=ex><span lang=EN-US>unzip [(x,y):xys] = ([x:xs],[y:ys])</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (xs,ys) = unzip xys</span></p>
+
+<p class=nlop><a name="_3.7_Typing_Functions"></a><span lang=EN-US
+style='font-size:12.0pt;font-family:"Times New Roman";color:#FFCC99'><img src="square_8.png" />
+</span><span style="margin-left:16px"></span><span lang=EN-US>When
+a selector on the left-hand side of a graph definition is not matching the graph
+on the right-hand side it will result in a <i>run-time</i> error.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The selector variables introduced in the selector must be different
+from each other and not al­ready be used in the same scope and name space (</span><a
+href="CleanRep.2.2_3.htm#_1.2_Global_Graphs"><span lang=EN-US>see 1.2</span></a><span lang=EN-US>).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>To avoid the specification of patterns that may fail at run-time, it
+is not allowed to test on zero arity constructors. For instance, list used in a
+selector pattern need to be of form </span><span lang=EN-US style='font-family:
+Courier'>[a:_]</span><span lang=EN-US>. </span><span lang=EN-US
+style='font-family:Courier'>[a] </span><span lang=EN-US>cannot be used because
+it stands for </span><span lang=EN-US style='font-family:Courier'>[a:[]] </span><span
+lang=EN-US>implying a test on the zero arity constructor </span><span
+lang=EN-US style='font-family:Courier'>[]</span><span lang=EN-US>. If the
+pattern is a record only those fields which contents one is interested in need
+to be indicated in the pat­tern </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Arrays cannot be used as pattern in a selector. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Selectors cannot be defined globally.</span></p>
+
+<h2><a name="_Toc311798009"></a><a name="_3.7_Typing_Functions_1"></a><span
+lang=EN-US>3.7    Typing Functions</span></h2>
+
+<p class=par><span
+lang=EN-US>Although one is in general not obligated to explicitly specify the <i>type
+of a function</i> (the C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> compiler can in general <i>infer</i>
+the type) the explicit specification of the type is <i>highly recommended</i>
+to increase the readabil­ity of the program.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionDef </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[FunctionTypeDef]
+  </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DefOfFunction</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionTypeDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>FunctionName</span></span><span lang=EN-US> </span><span
+  class=cleanb><span lang=EN-US>::</span></span><span lang=EN-US> FunctionType</span><span
+  class=clean><span lang=EN-US> <span style='color:#3366FF'>;</span></span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span class=clean><span lang=EN-US>FunctionName</span></span><span
+  class=cleanb><span lang=EN-US>)</span></span><span lang=EN-US> [Fix][Prec] [</span><span
+  class=cleanb><span lang=EN-US>::</span></span><span lang=EN-US> FunctionType]
+  </span><span class=clean><span lang=EN-US style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Fix </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>infixl</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=PT-BR>infixr</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=PT-BR>infix</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>Prec </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>Digit</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Type </span><span
+  class=cleanb><span lang=EN-US>-&gt;</span></span><span lang=EN-US> Type
+  [ClassContext] [UnqTypeUnEqualities]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Type</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{BrackType}+</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[UniversalQuantVariables]
+  [Strict] [UnqTypeAttrib] SimpleType</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UniversalQuantVariables</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>A.</span></span><span lang=EN-US>{TypeVariable }+</span><span
+  class=cleanb><span lang=EN-US>:</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>An explicit specification is <i>required</i> when
+a function is exported, or when the programmer wants to im­pose addi­tional
+restrictions on the application of the function (e.g. a more restricted type
+can be speci­fied, strict­ness informa­tion can be added as explained in </span><a
+href="CleanRep.2.2_12.htm#_10.1_Annotations_to"><span lang=EN-US>Chapter 10.1</span></a><span
+lang=EN-US>, a class context for the type vari­a­bles to express overloading
+can be de­fined as explained in </span><a href="CleanRep.2.2_6.htm#_Predefined_Types"><span
+lang=EN-US>Chapter 7</span></a><span lang=EN-US>, uniqueness information can be
+added as ex­plained in 3.7.5</span><a href="#_3.7.5_Functions_with"><span
+lang=EN-US style='color:windowtext;text-decoration:none'>3.7.5 Functions with
+Strict Arguments</span></a><span lang=EN-US>). </span></p>
+
+<p class=par><span lang=EN-US>The C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> type system uses a
+combination of Milner/Mycroft type assignment. This has as consequence that the
+type system in some rare cases is not capable to infer the type of a function
+(using the Milner/Hindley system) although it will approve a given type (using
+the Mycroft system; see Plasmeijer and Van Eekelen, 1993). Also when
+universally quantified types of rank 2 are used (</span><a
+href="#_3.7.4_Explicite_use"><span lang=EN-US>see 3.7.4</span></a><span
+lang=EN-US>), explicit typing by the programmer is required.</span></p>
+
+<p class=par><span
+lang=EN-US>The Cartesian product is used for the specification of the function
+type. The Cartesian product is de­noted by juxtaposition of the bracketed
+argument types. For the case of a single argument the brac­kets can be left
+out. In type specifications the binding priority of the application of type con­struc­tors
+is higher than the binding of the arrow </span><span class=clean><span
+lang=EN-US>-&gt;</span></span><span lang=EN-US>. To indicate that one defines
+an operator the function name is on the left-hand side surrounded by brackets. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The function symbol before the double colon should be the same as
+the function symbol of the cor­re­sponding rewrite rule.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The arity of the func­tions has to correspond with the number of
+arguments of which the Carte­sian product is taken. So, in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> one can tell the arity of the function by its type.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Showing how the arity of a function is reflected
+in type.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>map:: (a-&gt;b) [a] -&gt; [b]                                  
+</span><span class=cleancom><span lang=EN-US>// map has arity 2</span></span></p>
+
+<p class=ex><span lang=EN-US>map f []     =   []</span></p>
+
+<p class=ex><span lang=EN-US>map f [x:xs] =   [f x : map f xs]</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>domap:: ((a-&gt;b) [a] -&gt; [b])                              
+</span><span class=cleancom><span lang=EN-US>// domap has arity zero</span></span></p>
+
+<p class=ex><span lang=EN-US>domap = map</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The arguments and the result types of a function should be of kind </span><span
+lang=EN-US style='font-family:Courier'>X</span><span lang=EN-US>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>In the specification of a type of a locally defined function one
+cannot refer to a type variable in­tro­duced in the type specifica­tion of a
+surrounding function (there is not yet a scope rule on ty­pes de­fined). The
+pro­grammer can therefore not specify the type of such a local function.
+However, the type will be inferred and checked (after it is lifted by the
+compiler to the global le­vel) by the type system.</span></p>
+
+<p class=lopal><span lang=EN-US>&#x2005;</span></p>
+
+<p class=exth><b><span lang=EN-US>Counter example</span></b><span lang=EN-US>
+(illegal type specification). The function </span><span lang=EN-US
+style='font-family:Courier'>g</span><span lang=EN-US> returns a tuple. The type
+of the first tuple el­ement is the same as the type of the polymorphic argument
+of </span><span lang=EN-US style='font-family:Courier'>f</span><span
+lang=EN-US>. Such a dependency (here indicated by “</span><span lang=EN-US
+style='font-family:Courier'>^</span><span lang=EN-US>” cannot be specified).</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>f:: a -&gt; (a,a)</span></p>
+
+<p class=ex><span lang=EN-US>f x = g x</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span class=cleancom><span lang=EN-US>    // g:: b -&gt; (a^,b)</span></span></p>
+
+<p class=ex><span lang=EN-US>    g y = (x,y)</span></p>
+
+<h3><a name="_Toc311798010"></a><a name="_Toc524343566"></a><a
+name="_4.3.1_Typing_Curried"></a><a name="_3.7.1_Typing_Curried"></a><span
+lang=EN-US>3.7.1 Typing Curried Functions</span></h3>
+
+<p class=par><span
+lang=EN-US>In C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> all symbols (functions and
+constructors) are defined with <i>fixed arity</i>. However, in an appli­ca­tion
+it is of course al­lowed to apply them to an arbi­trary number of arguments. A <i>curried
+appli­cation</i> </span><span
+lang=EN-US> of a function is an application of a function with a number of
+arguments which is less than its arity (note that in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+the arity of a function can be de­rived from its type).</span><span
+lang=EN-US> With the aid of the pre­de­fined in­ter­nal function _</span><span
+class=clean><span lang=EN-US>AP </span></span><span lang=EN-US>a curried func­tion
+applied on the required number of arguments is trans­formed into an equivalent
+uncurried func­tion application.</span></p>
+
+<p class=par><span lang=EN-US>The type axiom’s of the C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+type system include for all </span><span class=clean><span lang=EN-US>s</span></span><span
+lang=EN-US> defined with arity </span><span class=clean><span lang=EN-US>n</span></span><span
+lang=EN-US> the equiva­lence of </span><span class=clean><span lang=EN-US>s::(t1-&gt;(t2-&gt;(…(tn-&gt;tr)…))</span></span><span
+lang=EN-US> with </span><span class=clean><span lang=EN-US>s::t1</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>t2</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>…</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>tn</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>-&gt;</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>tr</span></span><span
+lang=EN-US>.</span></p>
+
+<h3><a name="_Toc311798011"></a><a name="_Toc524343567"></a><a
+name="_4.3.2_Typing_Operators"></a><a name="_3.6.2_Typing_Operators"></a><span
+lang=EN-US>3.7.2 Typing Operators</span></h3>
+
+<p class=par><span lang=EN-US>An <i>operator</i> </span><span
+lang=EN-US> is a <i>function with arity two</i> that can be used in infix
+position. An operator can be de­fined by en­closing the operator name between
+parentheses in the left-hand-side of the function defini­tion. An operator has
+a <i>precedence</i> </span><span
+lang=EN-US> (</span><span class=clean><span lang=EN-US>0</span></span><span
+lang=EN-US> through </span><span class=clean><span lang=EN-US>9</span></span><span
+lang=EN-US>, default </span><span class=clean><span lang=EN-US>9</span></span><span
+lang=EN-US>) and a <i>fixity</i> </span><span
+lang=EN-US> (</span><span class=cleankw><span lang=EN-US>infixl</span></span><span
+lang=EN-US style='font-family:Courier;display:none'>.i<b>nfixl</b>;</span><span
+lang=EN-US>, </span><span class=cleankw><span lang=EN-US>infixr</span></span><span
+class=clean><span lang=EN-US> </span></span><span lang=EN-US>or just </span><span
+class=cleankw><span lang=EN-US>infix</span></span><span class=clean><span
+lang=EN-US>,</span></span><span lang=EN-US> default </span><span class=cleankw><span
+lang=EN-US>infixl</span></span><span lang=EN-US>). A higher precedence binds
+more tightly. When operators have equal prece­dence, the fixity de­termines the
+priority. In an expression an ordinary function applica­tion al­ways has the
+highest priority (</span><span class=clean><span lang=EN-US>10</span></span><span
+lang=EN-US>). See also </span><a href="#_3.1_Defining_Functions"><span
+lang=EN-US>Section 3.1</span></a><span lang=EN-US> and </span><a
+href="#_3.4_Expressions"><span lang=EN-US>3.4</span></a><span lang=EN-US>.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The type of an operator must obey the requirements as defined for
+typing functions with ar­ity two.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>If the opera­tor is explicitly typed the operator name should also
+be put be­tween parentheses in the type rule.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When an infix operator is enclosed be­tween parentheses it can be
+applied as a prefix func­tion. Pos­sible re­cur­sive definitions of the newly
+defined opera­tor on the right-hand-side also fol­low this con­vention.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an operator definition and its type.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>(o) </span><span class=cleankw><span lang=EN-US>infix</span></span><span
+lang=EN-US> 8:: (x -&gt; y) (z -&gt; x) -&gt; (z -&gt; y)               </span><span
+class=cleancom><span lang=EN-US>// function composition</span></span></p>
+
+<p class=ex><span lang=PT-BR>(o) f g = \x -&gt; f (g x)</span></p>
+
+<h3><a name="_Toc311798012"></a><a name="_Toc524343568"></a><a
+name="_4.3.3_Typing_Partial"></a><span lang=EN-US>3.7.3 Typing Partial
+Functions</span></h3>
+
+<p class=par><span
+lang=EN-US>Patterns and guards imply a condition that has to be fulfilled
+before a rewrite rule can be applied (</span><a href="#_3.2_Patterns"><span
+lang=EN-US>see 3.2 </span></a><span lang=EN-US>and </span><a href="#_3.3_Guards"><span
+lang=EN-US>3.3</span></a><span lang=EN-US>). This makes it possible to define <i>partial</i>
+<i>function</i> </span><i><span
+lang=EN-US>s</span></i><span lang=EN-US>, functions which are not de­fi­ned for
+all possible values of the specified type.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When a partial function is applied to a value outside the domain for
+which the function is de­fined it will result into a <i>run-time</i> error. The
+compiler gives a warning when functions are defined which might be partial.</span></p>
+
+<p class=par><span
+lang=EN-US>With the </span><span class=clean><span lang=EN-US>abort</span></span><span
+lang=EN-US> expression (see </span><span class=clean><span lang=EN-US>StdMisc.dcl</span></span><span
+lang=EN-US>) one can change any partial function into a <i>total</i> <i>func­tion</i>
+</span><span
+lang=EN-US> (the </span><span class=clean><span lang=EN-US>abort </span></span><span
+lang=EN-US> expression can have any type). The </span><span class=clean><span
+lang=EN-US>abort</span></span><span lang=EN-US> expression can be used to give
+a user-defined run-time error mes­sage</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Use of abort to make a function total.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>fac:: Int -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>fac 0        = 1</span></p>
+
+<p class=ex><span lang=PT-BR>fac n</span></p>
+
+<p class=ex><span lang=PT-BR>| n&gt;=1       = n * fac (n - 1)</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise  = abort &quot;fac called with a
+negative number&quot;</span></p>
+
+<h3><a name="_Toc311798013"></a><a name="_4.4_Typing_Overloaded"></a><a
+name="_3.7.4_Explicite_use"></a><span lang=EN-US>3.7.4 Explicit use of the
+Universal Quantifier in Function Types</span></h3>
+
+<p class=par><span lang=EN-US>When a type of a polymorphic function is
+specified in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US>, the universal quantifier is generally
+left out. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The function </span><span class=clean><span
+lang=EN-US>map</span></span><span lang=EN-US> defined as usual, no universal
+quantifier is specified:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>map:: (a-&gt;b) [a] -&gt; [b]</span></p>
+
+<p class=ex><span lang=EN-US>map f []     =   []</span></p>
+
+<p class=ex><span lang=EN-US>map f [x:xs] =   [f x : map f xs]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Counter Example.</span></b><span lang=EN-US>
+The same function </span><span class=clean><span lang=EN-US>map</span></span><span
+lang=EN-US> again, but now the implicit assumed universal quantifier has been
+made visible. It shows the meaning of the specified type more precisely, but is
+makes the type definition a bit longer as well. </span><b><span lang=EN-US
+style='color:#FF6600'>The current version of Clean does not yet allow universal
+quantifiers on the topmost level !!</span></b></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>map:: A.a b:(a-&gt;b) [a] -&gt; [b]</span></p>
+
+<p class=ex><span lang=EN-US>map f []     =   []</span></p>
+
+<p class=ex><span lang=EN-US>map f [x:xs] =   [f x : map f xs]</span></p>
+
+<p class=par><b><span lang=EN-US style='color:#FF6600'>Not yet Implemented: </span></b><span
+lang=EN-US>In Clean 2.0 it is allowed to explicitly write down the universal
+quantifier. One can write down the qualifier <span class=clean><span
+style='font-family:"Microsoft Sans Serif","sans-serif"'>A.</span></span> (for
+all) direct after the <span class=clean><span style='font-family:"Microsoft Sans Serif","sans-serif"'>::</span></span>
+in the type definition of a function. In this way one can explicitly introduce
+the type variables used in the type definition of the function. As usual, the
+type variables thus introduced have the whole function type definition as
+scope.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><a name="OLE_LINK1"><span
+  lang=EN-US>FunctionType</span></a></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Type </span><span
+  class=cleanb><span lang=EN-US>-&gt;</span></span><span lang=EN-US> Type
+  [ClassContext] [UnqTypeUnEqualities]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Type</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{BrackType}+</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[UniversalQuantVariables]
+  [Strict] [UnqTypeAttrib] SimpleType</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UniversalQuantVariables</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>A.</span></span><span lang=EN-US>{TypeVariable }+</span><span
+  class=cleanb><span lang=EN-US>:</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><b><span lang=EN-US style='color:#FF6600'>Implemented: </span></b><span
+lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0 offers Rank 2 polymorphism: it is also possible to specify the
+universal quantifier with as scope the type of an argument of a function or the
+type of the result of a function. This makes it possible to pass polymorphic
+functions as an argument to a function which otherwise would be treated
+monomorphic. The advantage of the use of Rank 2 polymorphism is that more programs
+will be approved by the type system, but one explicitly (by writing down the
+universal quantifier) has to specify in the type of function that such a
+polymorphic function is expected as argument or delivered as result.</span></p>
+
+<p class=par><b><span lang=EN-US style='color:#FF6600'>Not yet Implemented: </span></b><span
+lang=EN-US>We will allow Rank N polymorphism. We are working on it.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: The function </span><span class=clean><span
+lang=EN-US>h</span></span><span lang=EN-US> is used to apply a polymorphic
+function of type </span><span class=clean><span lang=EN-US>(A.a: [a] -&gt; Int)</span></span><span
+lang=EN-US> to a list of </span><span class=clean><span lang=EN-US>Int</span></span><span
+lang=EN-US> as well as a list of </span><span class=clean><span lang=EN-US>Char</span></span><span
+lang=EN-US>. Due to the explicit use of the universal quantifier in the type
+specification of </span><span class=clean><span lang=EN-US>h</span></span><span
+lang=EN-US> this definition is approved.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>h:: (A.a: [a] -&gt; Int) -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>h f = f [1..100] + f ['a'..'z']</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start = h length</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Counter Example</span></b><span lang=EN-US>:
+The function </span><span class=clean><span lang=EN-US>h2</span></span><span
+lang=EN-US> is used to apply a function of type </span><span class=clean><span
+lang=EN-US>([a] -&gt; Int)</span></span><span lang=EN-US> to a list of </span><span
+class=clean><span lang=EN-US>Int</span></span><span lang=EN-US> as well as a
+list of </span><span class=clean><span lang=EN-US>Char</span></span><span
+lang=EN-US>. In this case the definition is rejected due to a type unification
+error. It is assumed that the argument of </span><span class=clean><span
+lang=EN-US>h2</span></span><span lang=EN-US> is unifiable with </span><span
+class=clean><span lang=EN-US>[a] -&gt; Int</span></span><span lang=EN-US>, but
+it is not assumed that the argument of </span><span class=clean><span
+lang=EN-US>h2</span></span><span lang=EN-US> is </span><span class=clean><span
+lang=EN-US>(A.a: [a] -&gt; Int)</span></span><span lang=EN-US>. So, the type
+variable </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> is unified with both </span><span class=clean><span lang=EN-US>Int</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>Char</span></span><span
+lang=EN-US>, which gives rise to a type error.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>h2:: ([a] -&gt; Int) -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>h2 f = f [1..100] + f ['a'..'z']</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start = h2 length</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Counter Example</span></b><span lang=EN-US>:
+The function </span><span class=clean><span lang=EN-US>h3</span></span><span
+lang=EN-US> is used to apply a function to a list of </span><span class=clean><span
+lang=EN-US>Int</span></span><span lang=EN-US> as well as a list of </span><span
+class=clean><span lang=EN-US>Char</span></span><span lang=EN-US>. Since no type
+is specified the type inference system will assume f to be of type </span><span
+class=clean><span lang=EN-US>([a] -&gt; Int)</span></span><span lang=EN-US> but
+not of type </span><span class=clean><span lang=EN-US>(A.a: [a] -&gt; Int)</span></span><span
+lang=EN-US>. The situation is the same as above and we will again get a type
+error.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>h3 f = f [1..100] + f ['a'..'z']</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start = h3 length</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> cannot infer polymorphic functions of Rank 2 automatically! One is
+obligated to explicitly specify universally quantified types of Rank 2. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Explicit universal quantification on higher ranks than rank 2 (e.g.
+quantifiers specified somewhere inside the type specification of a function
+argument) is not allowed.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A polymorphic function of Rank 2 cannot be used in a curried way for
+those arguments in which the function is universally quantified.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Counter Examples</span></b><span lang=EN-US>:
+In the example below it is shown that </span><span class=clean><span
+lang=EN-US>f1</span></span><span lang=EN-US> can only be used when applied to <i>all</i>
+its arguments since its last argument is universally quantified. The function </span><span
+class=clean><span lang=EN-US>f2</span></span><span lang=EN-US> can be used
+curried only with respect to its last argument that is not universally
+quantified.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>f1:: a (A.b:b-&gt;b) -&gt; a</span></p>
+
+<p class=ex><span lang=EN-US>f1 x id = id x</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>f2:: (A.b:b-&gt;b) a -&gt; a</span></p>
+
+<p class=ex><span lang=EN-US>f2 id x = id x</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>illegal1 = f1                               </span><span
+class=cleancom><span lang=EN-US>// this will raise a type error</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>illegal2 = f1 3                             </span><span
+class=cleancom><span lang=EN-US>// this will raise a type error</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>legal1 :: Int</span></p>
+
+<p class=ex><span lang=EN-US>legal1 = f1 3 id </span><span class=cleankw><span
+lang=EN-US>where</span></span><span lang=EN-US> id x = x              </span><span
+class=cleancom><span lang=EN-US>// ok</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>illegal3 = f2                               </span><span
+class=cleancom><span lang=EN-US>// this will raise a type error</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>legal2 :: (a -&gt; a)</span></p>
+
+<p class=ex><span lang=EN-US>legal2 = f2 id </span><span class=cleankw><span
+lang=EN-US>where</span></span><span lang=EN-US> id x = x               </span><span
+class=cleancom><span lang=EN-US>// ok</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>legal3 :: Int</span></p>
+
+<p class=ex><span lang=EN-US>legal3 = f2 id 3 </span><span class=cleankw><span
+lang=EN-US>where</span></span><span lang=EN-US> id x = x              </span><span
+class=cleancom><span lang=EN-US>// ok</span></span></p>
+
+<h3><a name="_Toc311798014"></a><a name="_3.7.5_Functions_with"></a><span
+lang=EN-US>3.7.5 Functions with Strict Arguments</span></h3>
+
+<p class=par><span lang=EN-US>In the type definition of a function the
+arguments can optionally be annotated as being strict. In rea­son­ing about
+functions it will always be true that the corresponding ar­guments will be in
+strong root normal form (</span><a href="CleanRep.2.2_4.htm#_2.1_Identifiers,_Scopes"><span
+lang=EN-US>see 2.1</span></a><span lang=EN-US>) before the rewriting of the
+function takes place. In general, strictness information will increase the
+efficiency of execution (</span><a href="CleanRep.2.2_12.htm#_Strictness,_Macros_and"><span
+lang=EN-US>see Chapter 10</span></a><span lang=EN-US>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Type </span><span
+  class=cleanb><span lang=EN-US>-&gt;</span></span><span lang=EN-US> Type
+  [ClassContext] [UnqTypeUnEqualities]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Type</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{BrackType}+</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[UniversalQuantVariables]
+  [Strict] [UnqTypeAttrib] SimpleType</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a function with strict annotated
+arguments.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Acker:: !Int !Int -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>Acker 0 j =  inc j</span></p>
+
+<p class=ex><span lang=EN-US>Acker i 0 =  Acker (dec i) 1</span></p>
+
+<p class=ex><span lang=EN-US>Acker i j =  Acker (dec i) (Acker i (dec j))</span></p>
+
+<p class=par><span lang=EN-US>The C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> compiler includes
+a fast and clever strictness analyzer that is based on abstract reduc­tion
+(Nöcker, 1993). The compiler can derive the strict­ness of the function
+arguments in many cases, such as for the example above. Therefore there is gen­erally
+no need to add strictness annotations to the type of a function by hand. When a
+function is exported from a module (</span><a href="CleanRep.2.2_4.htm#_Defining_Modules"><span
+lang=EN-US>see Chapter 2</span></a><span lang=EN-US>), its type has to be
+specified in the definition module. To obtain optimal efficiency, the
+programmer should also include the strictness information to the type
+definition in the definition module. One can ask the compiler to print out the
+types with the derived strictness information and paste this into the
+definition module.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Notice that strictness annotations are only allowed at the outermost
+level of the argument type. Strictness annotations inside type instances of
+arguments are not possible (with exception for some pre­defined types like
+tuples and lists). Any (part of) a data structure can be changed from lazy to
+strict, but this has to be specified in the type definition (</span><a
+href="CleanRep.2.2_7.htm#_5.1.5_Strictness_Annotations"><span lang=EN-US>see 5.1.5</span></a><span
+lang=EN-US>). </span></p>
+
+</div>
+
+</body>
+</html>

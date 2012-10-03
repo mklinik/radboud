@@ -1,0 +1,506 @@
+SECTION DEPENDENCIES:
+
+SECTION DEFINES:
+  THEOREM add_fun                  : (All f (All x (All y {(= x y) -> (= {f @ x} {f @ y})})))
+  THEOREM and_false_x              : (ALL P {{FALSE /\ P} <-> FALSE})
+  THEOREM and_true_x               : (ALL P {{TRUE /\ P} <-> P})
+  THEOREM and_x_false              : (ALL P {{P /\ FALSE} <-> FALSE})
+  THEOREM and_x_true               : (ALL P {{P /\ TRUE} <-> P})
+  THEOREM deMorgan_and             : (ALL P (ALL Q {~{P /\ Q} <-> {~P \/ ~Q}}))
+  THEOREM deMorgan_or              : (ALL P (ALL Q {~{P \/ Q} <-> {~P /\ ~Q}}))
+  THEOREM exists_forall            : {(EX P P) <-> ~(ALL P ~P)}
+  THEOREM idempotent_and           : (ALL P {{P /\ P} <-> P})
+  THEOREM idempotent_or            : (ALL P {{P \/ P} <-> P})
+  THEOREM implies_false_x          : (ALL P {{FALSE -> P} <-> TRUE})
+  THEOREM implies_or               : (ALL P (ALL Q {{P -> Q} <-> {~P \/ Q}}))
+  THEOREM implies_true_x           : (ALL P {{TRUE -> P} <-> P})
+  THEOREM implies_x_false          : (ALL P {{P -> FALSE} <-> ~P})
+  THEOREM implies_x_true           : (ALL P {{P -> TRUE} <-> TRUE})
+  THEOREM invert_implies           : (ALL P (ALL Q {{P -> Q} <-> {~Q -> ~P}}))
+  THEOREM not_false                : {~FALSE <-> TRUE}
+  THEOREM not_true                 : {~TRUE <-> FALSE}
+  THEOREM or_false_x               : (ALL P {{FALSE \/ P} <-> P})
+  THEOREM or_not_left              : (ALL P (ALL Q {~P -> {{P \/ Q} <-> Q}}))
+  THEOREM or_not_right             : (ALL P (ALL Q {~Q -> {{P \/ Q} <-> P}}))
+  THEOREM or_true_x                : (ALL P {{TRUE \/ P} <-> TRUE})
+  THEOREM or_x_false               : (ALL P {{P \/ FALSE} <-> P})
+  THEOREM or_x_true                : (ALL P {{P \/ TRUE} <-> TRUE})
+  THEOREM reflexive_implies        : (ALL P {{P -> P} <-> TRUE})
+  THEOREM remove_double_negation   : (ALL P {~~P <-> P})
+  THEOREM split_iff                : (ALL P (ALL Q {{P <-> Q} <-> {{P -> Q} /\ {Q -> P}}}))
+  THEOREM symmetric_and            : (ALL P (ALL Q {{P /\ Q} <-> {Q /\ P}}))
+  THEOREM symmetric_or             : (ALL P (ALL Q {{P \/ Q} <-> {Q \/ P}}))
+  THEOREM tertium                  : (ALL P {P \/ ~P})
+  THEOREM use_implies_in_or        : (ALL P (ALL Q (ALL R {{P -> Q} -> {{P \/ R} -> {Q \/ R}}})))
+
+THEOREM:
+  add_fun
+DEPENDS:
+  
+PROOF:
+  Introduce f x y H1.
+  Rewrite -> All H1.
+  Reflexive.
+
+THEOREM:
+  and_false_x
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Split Shallow H1.
+     ExFalso H1.
+  2. Introduce H1.
+     ExFalso H1.
+
+THEOREM:
+  and_true_x
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Split Shallow H1.
+     Exact H2.
+  2. Introduce H1.
+     Split Shallow.
+     1. Trivial.
+     2. Exact H1.
+
+THEOREM:
+  and_x_false
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Split Shallow H1.
+     ExFalso H2.
+  2. Introduce H1.
+     ExFalso H1.
+
+THEOREM:
+  and_x_true
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Split Shallow H1.
+     Exact H1.
+  2. Introduce H1.
+     Split Shallow.
+     1. Exact H1.
+     2. Trivial.
+
+THEOREM:
+  deMorgan_and
+DEPENDS:
+  
+PROOF:
+  Introduce P Q.
+  SplitIff.
+  1. Introduce H1.
+     Contradiction.
+     Contradiction H1.
+     Split Shallow.
+     1. Contradiction.
+        Contradiction H2.
+        Case Shallow 1.
+        Exact H3.
+     2. Contradiction.
+        Contradiction H2.
+        Case Shallow 2.
+        Exact H3.
+  2. Introduce H1.
+     Contradiction.
+     Split Shallow H2.
+     Case Shallow H1.
+     1. Absurd H1 H2.
+     2. Absurd H1 H3.
+
+THEOREM:
+  deMorgan_or
+DEPENDS:
+  
+PROOF:
+  Introduce P Q.
+  SplitIff.
+  1. Introduce H1.
+     Split Shallow.
+     1. Contradiction.
+        Contradiction H1.
+        Case Shallow 1.
+        Exact H2.
+     2. Contradiction.
+        Contradiction H1.
+        Case Shallow 2.
+        Exact H2.
+  2. Introduce H1.
+     Split Shallow H1.
+     Contradiction.
+     Case Shallow H3.
+     1. Absurd H1 H3.
+     2. Absurd H2 H3.
+
+THEOREM:
+  exists_forall
+DEPENDS:
+  
+PROOF:
+  SplitIff.
+  1. Introduce H1.
+     Contradiction.
+     Witness for H1.
+     Assume ~P.
+     1. Absurd H1 H3.
+     2. Apply H2.
+  2. Introduce H1.
+     Contradiction.
+     Contradiction H1.
+     Introduce P.
+     Contradiction.
+     Contradiction H2.
+     WitnessP P.
+     Exact H3.
+
+THEOREM:
+  idempotent_and
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Split Shallow H1.
+     Exact H2.
+  2. Introduce H1.
+     Split Shallow.
+     1. Exact H1.
+     2. Exact H1.
+
+THEOREM:
+  idempotent_or
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Case Shallow H1.
+     1. Exact H1.
+     2. Exact H1.
+  2. Introduce H1.
+     Case Shallow 1.
+     Exact H1.
+
+THEOREM:
+  implies_false_x
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Trivial.
+  2. Introduce H1 H2.
+     ExFalso H2.
+
+THEOREM:
+  implies_or
+DEPENDS:
+  
+PROOF:
+  Introduce P Q.
+  SplitIff.
+  1. Introduce H1.
+     Cut ("tertium" P P).
+     Introduce H2.
+     Case Shallow H2.
+     1. Case Shallow 2.
+        Apply H1.
+        Exact H2.
+     2. Case Shallow 1.
+        Exact H2.
+  2. Introduce H1 H2.
+     Case Shallow H1.
+     1. Absurd H1 H2.
+     2. Exact H1.
+
+THEOREM:
+  implies_true_x
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Apply H1.
+     Trivial.
+  2. Introduce H1 H2.
+     Exact H1.
+
+THEOREM:
+  implies_x_false
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Contradiction.
+     Apply H1.
+     Exact H2.
+  2. Introduce H1 H2.
+     Absurd H1 H2.
+
+THEOREM:
+  implies_x_true
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Trivial.
+  2. Introduce H1 H2.
+     Trivial.
+
+THEOREM:
+  invert_implies
+DEPENDS:
+  
+PROOF:
+  Introduce P Q.
+  SplitIff.
+  1. Introduce H1 H2.
+     Contradiction.
+     Apply H1 to H3.
+     Absurd H2 H4.
+  2. Introduce H1 H2.
+     Contradiction.
+     Apply H1 to H3.
+     Absurd H2 H4.
+
+THEOREM:
+  not_false
+DEPENDS:
+  
+PROOF:
+  SplitIff.
+  1. Introduce H1.
+     Trivial.
+  2. Introduce H1.
+     Contradiction.
+     ExFalso H2.
+
+THEOREM:
+  not_true
+DEPENDS:
+  
+PROOF:
+  SplitIff.
+  1. Introduce H1.
+     Contradiction H1.
+     Trivial.
+  2. Introduce H1.
+     ExFalso H1.
+
+THEOREM:
+  or_false_x
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Case Shallow H1.
+     1. ExFalso H1.
+     2. Exact H1.
+  2. Introduce H1.
+     Case Shallow 2.
+     Exact H1.
+
+THEOREM:
+  or_not_left
+DEPENDS:
+  
+PROOF:
+  Introduce P Q H1.
+  SplitIff.
+  1. Introduce H2.
+     Case Shallow H2.
+     1. Absurd H1 H2.
+     2. Exact H2.
+  2. Introduce H2.
+     Case Shallow 2.
+     Exact H2.
+
+THEOREM:
+  or_not_right
+DEPENDS:
+  
+PROOF:
+  Introduce P Q H1.
+  SplitIff.
+  1. Introduce H2.
+     Case Shallow H2.
+     1. Exact H2.
+     2. Absurd H1 H2.
+  2. Introduce H2.
+     Case Shallow 1.
+     Exact H2.
+
+THEOREM:
+  or_true_x
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Trivial.
+  2. Introduce H1.
+     Case Shallow 1.
+     Trivial.
+
+THEOREM:
+  or_x_false
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Case Shallow H1.
+     1. Exact H1.
+     2. ExFalso H1.
+  2. Introduce H1.
+     Case Shallow 1.
+     Exact H1.
+
+THEOREM:
+  or_x_true
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Trivial.
+  2. Introduce H1.
+     Case Shallow 2.
+     Trivial.
+
+THEOREM:
+  reflexive_implies
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Trivial.
+  2. Introduce H1 H2.
+     Exact H2.
+
+THEOREM:
+  remove_double_negation
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  SplitIff.
+  1. Introduce H1.
+     Contradiction.
+     Absurd H1 H2.
+  2. Introduce H1.
+     Contradiction.
+     Absurd H1 H2.
+
+THEOREM:
+  split_iff
+DEPENDS:
+  
+PROOF:
+  Introduce P Q.
+  SplitIff.
+  1. Introduce H1.
+     SplitIff H1.
+     Split Shallow.
+     1. Exact H2.
+     2. Exact H3.
+  2. Introduce H1.
+     Split Shallow H1.
+     SplitIff.
+     1. Exact H1.
+     2. Exact H2.
+
+THEOREM:
+  symmetric_and
+DEPENDS:
+  
+PROOF:
+  Introduce P Q.
+  SplitIff.
+  1. Introduce H1.
+     Split Shallow H1.
+     Split Shallow.
+     1. Exact H2.
+     2. Exact H1.
+  2. Introduce H1.
+     Split Shallow H1.
+     Split Shallow.
+     1. Exact H2.
+     2. Exact H1.
+
+THEOREM:
+  symmetric_or
+DEPENDS:
+  
+PROOF:
+  Introduce P Q.
+  SplitIff.
+  1. Introduce H1.
+     Case Shallow H1.
+     1. Case Shallow 2.
+        Exact H1.
+     2. Case Shallow 1.
+        Exact H1.
+  2. Introduce H1.
+     Case Shallow H1.
+     1. Case Shallow 2.
+        Exact H1.
+     2. Case Shallow 1.
+        Exact H1.
+
+THEOREM:
+  tertium
+DEPENDS:
+  
+PROOF:
+  Introduce P.
+  Contradiction.
+  Rewrite -> All "deMorgan_or" in H1.
+  Split Shallow H1.
+  Absurd H1 H2.
+
+THEOREM:
+  use_implies_in_or
+DEPENDS:
+  
+PROOF:
+  Introduce P Q R H1 H2.
+  Case Deep H2.
+  1. Case Shallow 1.
+     Apply H1.
+     Exact H2.
+  2. Case Shallow 2.
+     Exact H2.
+
+

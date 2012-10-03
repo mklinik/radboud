@@ -1,0 +1,1428 @@
+SECTION DEPENDENCIES:
+  THEOREM x_-_x                      (ints)
+  THEOREM subtract_from_<            (ints)
+  THEOREM not_smaller                (ints)
+  THEOREM add_to_<                   (ints)
+  THEOREM add_right1_of_<            (ints)
+  THEOREM transitive_<=              (ints)
+  THEOREM x_<_succ_x                 (ints)
+  THEOREM <=_<                       (ints)
+  THEOREM transitive_<               (ints)
+  THEOREM reverse_<                  (ints)
+  SYMBOL <_int                    :: "!Int !Int -> Bool"
+  SYMBOL -_int                    :: "!Int !Int -> Int"
+  SYMBOL +_int                    :: "!Int !Int -> Int"
+  SYMBOL length_list              :: "![a] -> Int"
+  SYMBOL take                     :: "Int ![a] -> [a]"
+  SYMBOL reverse                  :: "![a] -> [a]"
+  SYMBOL drop                     :: "Int ![a] -> [a]"
+  SYMBOL o                        :: "(a -> b) (c -> a) -> c -> b"
+  SYMBOL min                      :: "!a !a -> a | Ord a"
+  SYMBOL _create_dictionary_Ord;  :: " | < untypable"
+  SYMBOL _create_dictionary_<;    :: "!untypable -> "
+  SYMBOL <=                       :: "!a !a -> Bool | Ord a"
+  SYMBOL finite                   :: "![a] -> Bool"
+  SYMBOL ++                       :: "![a] [a] -> [a]"
+  SYMBOL evalFilter               :: "!(a -> Bool) ![a] -> Bool"
+  SYMBOL takeWhile                :: "(a -> Bool) ![a] -> [a]"
+  SYMBOL dropWhile                :: "(a -> Bool) ![a] -> [a]"
+  SYMBOL sum                      :: "![a] -> a | + a & zero a"
+  SYMBOL _create_dictionary_+;    :: "!untypable -> "
+  SYMBOL _create_dictionary_zero; :: "!untypable -> "
+  SYMBOL zero_int                 :: "Int"
+  SYMBOL sum2                     :: "![Int] -> Int"
+  SYMBOL map                      :: "(a -> b) ![a] -> [b]"
+  SYMBOL splitAt                  :: "!Int [a] -> ([a], [a])"
+  SYMBOL fst                      :: "!(!a, b) -> a"
+  SYMBOL snd                      :: "!(a, !b) -> b"
+  SYMBOL reverse2                 :: "![a] -> [a]"
+  SYMBOL *_int                    :: "!Int !Int -> Int"
+  SYMBOL prod                     :: "![a] -> a | * a & one a"
+  SYMBOL _create_dictionary_*;    :: "!untypable -> "
+  SYMBOL _create_dictionary_one;  :: "!untypable -> "
+  SYMBOL one_int                  :: "Int"
+  SYMBOL prod2                    :: "![Int] -> Int"
+  SYMBOL repeat                   :: "a -> [a]"
+  SYMBOL repeatn                  :: "!Int a -> [a]"
+  SYMBOL length2                  :: "![a] -> Int"
+  SYMBOL indexList                :: "![a] -> [Int]"
+  SYMBOL flatten                  :: "![[a]] -> [a]"
+  SYMBOL isEmpty                  :: "![a] -> Bool"
+  SYMBOL filter                   :: "(a -> Bool) ![a] -> [a]"
+  SYMBOL not                      :: "!Bool -> Bool"
+  SYMBOL any                      :: "(a -> Bool) ![a] -> Bool"
+  SYMBOL hd                       :: "![a] -> a"
+  SYMBOL last                     :: "![a] -> a"
+  SYMBOL foldr                    :: "(a -> b -> b) b ![a] -> b"
+  SYMBOL ||                       :: "!Bool Bool -> Bool"
+  SYMBOL or                       :: "![Bool] -> Bool"
+  SYMBOL &&                       :: "!Bool Bool -> Bool"
+  SYMBOL and                      :: "![Bool] -> Bool"
+  SYMBOL foldl                    :: "(a -> b -> a) a ![b] -> a"
+  SYMBOL flip                     :: "!(a -> b -> c) b a -> c"
+
+SECTION DEFINES:
+  THEOREM ++_x_Nil                 : (All xs (= (@ 13 ++ xs []) xs))
+  THEOREM and_++                   : (All xs (All ys (= (@ 48 and (@ 13 ++ xs ys)) (@ 47 && (@ 48 and xs) (@ 48 and ys)))))
+  THEOREM associative_++           : (All xs (All ys (All zs (= (@ 13 ++ (@ 13 ++ xs ys) zs) (@ 13 ++ xs (@ 13 ++ ys zs))))))
+  THEOREM drop_0_xs                : (All xs (= (@ 6 drop (INT 0) xs) xs))
+  THEOREM drop_drop                : (All m (All n {(= (@ 0 <_int m (INT 0)) (BOOL False)) -> {(= (@ 0 <_int n (INT 0)) (BOOL False)) -> (= (@ 7 o (@ 6 drop m) (@ 6 drop n)) (@ 6 drop (@ 2 +_int m n)))}}))
+  THEOREM drop_repeat              : (All n (All el {~(= n BOTTOM) -> (= (@ 6 drop n (@ 33 repeat el)) (@ 33 repeat el))}))
+  THEOREM filter_++                : (All p (All xs (All ys (= (@ 39 filter p (@ 13 ++ xs ys)) (@ 13 ++ (@ 39 filter p xs) (@ 39 filter p ys))))))
+  THEOREM filter_flatten           : (All p (= (@ 7 o (@ 39 filter p) (@ 37 flatten)) (@ 7 o (@ 37 flatten) (@ 22 map (@ 39 filter p)))))
+  THEOREM finite_++                : (All xs (All ys {(= (@ 12 finite xs) (BOOL True)) -> {(= (@ 12 finite ys) (BOOL True)) -> (= (@ 12 finite (@ 13 ++ xs ys)) (BOOL True))}}))
+  THEOREM finite_defined_length    : (All xs {~(= (@ 3 length_list xs) BOTTOM) <-> (= (@ 12 finite xs) (BOOL True))})
+  THEOREM finite_reverse           : (All xs {(= (@ 12 finite xs) (BOOL True)) -> (= (@ 12 finite (@ 5 reverse xs)) (BOOL True))})
+  THEOREM flatten_++               : (All xs (All ys (= (@ 37 flatten (@ 13 ++ xs ys)) (@ 13 ++ (@ 37 flatten xs) (@ 37 flatten ys)))))
+  THEOREM flatten_map              : (All f (= (@ 7 o (@ 37 flatten) (@ 22 map (@ 22 map f))) (@ 7 o (@ 22 map f) (@ 37 flatten))))
+  THEOREM foldl_flip_Cons          : (= (@ 49 foldl (@ 50 flip (@ -9 _Cons)) []) (@ 5 reverse))
+  THEOREM foldl_foldr              : (All f (All e {(All x (All y (All z (= {f @ {f @ x y} z} {f @ x {f @ y z}})))) -> {(All x (= {f @ e x} x)) -> {(All x (= {f @ x e} x)) -> {(All x (= {f @ BOTTOM x} BOTTOM)) -> {(All x (= {f @ x BOTTOM} BOTTOM)) -> (All xs (= (@ 49 foldl f e xs) (@ 44 foldr f e xs)))}}}}}))
+  THEOREM foldl_foldr_+            : (All xs (= (@ 49 foldl (@ 2 +_int) (INT 0) xs) (@ 44 foldr (@ 2 +_int) (INT 0) xs)))
+  THEOREM foldl_lemma              : (All f (All e {(All x (All y (All z (= {f @ {f @ x y} z} {f @ x {f @ y z}})))) -> {(All x (= {f @ e x} x)) -> {(All x (= {f @ x e} x)) -> {(All x (= {f @ BOTTOM x} BOTTOM)) -> {(All x (= {f @ x BOTTOM} BOTTOM)) -> (All ys (All x (= (@ 49 foldl f x ys) {f @ x (@ 49 foldl f e ys)})))}}}}}))
+  THEOREM foldr_&&                 : (= (@ 44 foldr (@ 47 &&) (BOOL True)) (@ 48 and))
+  THEOREM foldr_*                  : (= (@ 44 foldr (@ 27 *_int) (INT 1)) (@ 28 prod (@ 29 _create_dictionary_*; (@ 27 *_int)) (@ 30 _create_dictionary_one; (@ 31 one_int))))
+  THEOREM foldr_+                  : (= (@ 44 foldr (@ 2 +_int) (INT 0)) (@ 17 sum (@ 18 _create_dictionary_+; (@ 2 +_int)) (@ 19 _create_dictionary_zero; (@ 20 zero_int))))
+  THEOREM foldr_++                 : (= (@ 44 foldr (@ 13 ++) []) (@ 37 flatten))
+  THEOREM foldr_Cons               : (All f (= (@ 44 foldr (@ 7 o (@ -9 _Cons) f) []) (@ 22 map f)))
+  THEOREM foldr_||                 : (= (@ 44 foldr (@ 45 ||) (BOOL False)) (@ 46 or))
+  THEOREM hd_++                    : (All xs (All ys {~(= xs []) -> (= (@ 42 hd (@ 13 ++ xs ys)) (@ 42 hd xs))}))
+  THEOREM hd_reverse               : (All xs (= (@ 42 hd (@ 5 reverse xs)) (@ 43 last xs)))
+  THEOREM isEmpty_filter_not_any   : (All p (All xs (= (@ 38 isEmpty (@ 39 filter p xs)) (@ 40 not (@ 41 any p xs)))))
+  THEOREM length_++                : (All xs (All ys (= (@ 3 length_list (@ 13 ++ xs ys)) (@ 2 +_int (@ 3 length_list xs) (@ 3 length_list ys)))))
+  THEOREM length_finite            : (All xs {(= (@ 12 finite xs) (BOOL True)) -> (= (@ 0 <_int (@ 3 length_list xs) (INT 0)) (BOOL False))})
+  THEOREM length_flatten           : (All xs (= (@ 3 length_list (@ 37 flatten xs)) (@ 17 sum (@ 18 _create_dictionary_+; (@ 2 +_int)) (@ 19 _create_dictionary_zero; (@ 20 zero_int)) (@ 22 map (@ 3 length_list) xs))))
+  THEOREM length_indexList         : (All xs (= (@ 3 length_list xs) (@ 3 length_list (@ 36 indexList xs))))
+  THEOREM length_length2           : (= (@ 3 length_list) (@ 35 length2))
+  THEOREM length_map               : (All f (All xs (= (@ 3 length_list (@ 22 map f xs)) (@ 3 length_list xs))))
+  THEOREM length_repeatn           : (All n (All el {(= (@ 0 <_int n (INT 0)) (BOOL False)) -> (= (@ 3 length_list (@ 34 repeatn n el)) n)}))
+  THEOREM length_reverse           : (All xs (= (@ 3 length_list (@ 5 reverse xs)) (@ 3 length_list xs)))
+  THEOREM length_take_repeat       : (All n (All el {(= (@ 0 <_int n (INT 0)) (BOOL False)) -> (= (@ 3 length_list (@ 4 take n (@ 33 repeat el))) n)}))
+  THEOREM map_++                   : (All f (All xs (All ys (= (@ 22 map f (@ 13 ++ xs ys)) (@ 13 ++ (@ 22 map f xs) (@ 22 map f ys))))))
+  THEOREM map_o                    : (All f (All g (= (@ 22 map (@ 7 o f g)) (@ 7 o (@ 22 map f) (@ 22 map g)))))
+  THEOREM map_reverse              : (All f (= (@ 7 o (@ 22 map f) (@ 5 reverse)) (@ 7 o (@ 5 reverse) (@ 22 map f))))
+  THEOREM prod_prod2               : (= (@ 28 prod (@ 29 _create_dictionary_*; (@ 27 *_int)) (@ 30 _create_dictionary_one; (@ 31 one_int))) (@ 32 prod2))
+  THEOREM reverse_++               : (All xs (All ys {(= (@ 12 finite xs) (BOOL True)) -> (= (@ 5 reverse (@ 13 ++ xs ys)) (@ 13 ++ (@ 5 reverse ys) (@ 5 reverse xs)))}))
+  THEOREM reverse_isNil            : (All xs {(= (@ 5 reverse xs) []) <-> (= xs [])})
+  THEOREM reverse_reverse          : (All xs {(= (@ 12 finite xs) (BOOL True)) -> (= (@ 5 reverse (@ 5 reverse xs)) xs)})
+  THEOREM reverse_reverse2         : (= (@ 5 reverse) (@ 26 reverse2))
+  THEOREM splitAt_++               : (All n (All xs {~(= n BOTTOM) -> (= (@ 13 ++ (@ 24 fst (@ 23 splitAt n xs)) (@ 25 snd (@ 23 splitAt n xs))) xs)}))
+  THEOREM sum_++                   : (All xs (All ys (= (@ 17 sum (@ 18 _create_dictionary_+; (@ 2 +_int)) (@ 19 _create_dictionary_zero; (@ 20 zero_int)) (@ 13 ++ xs ys)) (@ 2 +_int (@ 17 sum (@ 18 _create_dictionary_+; (@ 2 +_int)) (@ 19 _create_dictionary_zero; (@ 20 zero_int)) xs) (@ 17 sum (@ 18 _create_dictionary_+; (@ 2 +_int)) (@ 19 _create_dictionary_zero; (@ 20 zero_int)) ys)))))
+  THEOREM sum_map_+_1              : (All xs (= (@ 17 sum (@ 18 _create_dictionary_+; (@ 2 +_int)) (@ 19 _create_dictionary_zero; (@ 20 zero_int)) (@ 22 map (@ 2 +_int (INT 1)) xs)) (@ 2 +_int (@ 17 sum (@ 18 _create_dictionary_+; (@ 2 +_int)) (@ 19 _create_dictionary_zero; (@ 20 zero_int)) xs) (@ 3 length_list xs))))
+  THEOREM sum_sum2                 : (= (@ 17 sum (@ 18 _create_dictionary_+; (@ 2 +_int)) (@ 19 _create_dictionary_zero; (@ 20 zero_int))) (@ 21 sum2))
+  THEOREM takeWhile_++_dropWhile   : (All f (All xs {(= (@ 14 evalFilter f xs) (BOOL True)) -> (= (@ 13 ++ (@ 15 takeWhile f xs) (@ 16 dropWhile f xs)) xs)}))
+  THEOREM take_++_drop             : (All n (All xs {~(= n BOTTOM) -> (= (@ 13 ++ (@ 4 take n xs) (@ 6 drop n xs)) xs)}))
+  THEOREM take_++_left             : (All n (All xs (All ys {(= (@ 0 <_int n (@ 2 +_int (@ 3 length_list xs) (INT 1))) (BOOL True)) -> {~(= ys BOTTOM) -> (= (@ 4 take n (@ 13 ++ xs ys)) (@ 4 take n xs))}})))
+  THEOREM take_all                 : (All n (All xs {(= (@ 0 <_int n (@ 3 length_list xs)) (BOOL False)) -> (= (@ 4 take n xs) xs)}))
+  THEOREM take_o_drop              : (All n (All m {(= (@ 0 <_int n (INT 0)) (BOOL False)) -> {(= (@ 0 <_int m (INT 0)) (BOOL False)) -> (= (@ 7 o (@ 4 take m) (@ 6 drop n)) (@ 7 o (@ 6 drop n) (@ 4 take (@ 2 +_int m n))))}}))
+  THEOREM take_o_take              : (All m (All n {(= (@ 0 <_int m (INT 0)) (BOOL False)) -> {(= (@ 0 <_int n (INT 0)) (BOOL False)) -> (= (@ 7 o (@ 4 take m) (@ 4 take n)) (@ 4 take (@ 8 min (@ 9 _create_dictionary_Ord; (@ 10 _create_dictionary_<; (@ 0 <_int))) m n)))}}))
+  THEOREM take_reverse             : (All n (All xs {(= (@ 0 <_int n (INT 0)) (BOOL False)) -> {(= (@ 0 <_int (@ 3 length_list xs) n) (BOOL False)) -> (= (@ 4 take n (@ 5 reverse xs)) (@ 5 reverse (@ 6 drop (@ 1 -_int (@ 3 length_list xs) n) xs)))}}))
+
+THEOREM 0-0-95-0:
+  ++_x_Nil
+DEPENDS:
+  13
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH.
+     Reduce NF All (  ).
+     Injective.
+     Split Deep.
+     1. Reflexive.
+     2. Exact IH.
+  
+THEOREM 0-0-95-0:
+  and_++
+DEPENDS:
+  48 13 47
+PROOF:
+  Induction xs.
+  1. Introduce ys.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce ys.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH ys.
+     Reduce NF All (  ).
+     SplitCase 1.
+     1. Definedness.
+     2. Apply IH.
+     3. Reduce NF All (  ).
+        Reflexive.
+
+THEOREM 0-0-95-0:
+  associative_++
+DEPENDS:
+  13
+PROOF:
+  Induction xs.
+  1. Introduce ys zs.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce ys zs.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH ys zs.
+     Reduce NF All (  ).
+     Injective.
+     Split Deep.
+     1. Reflexive.
+     2. Apply IH.
+
+THEOREM 0-0-95-0:
+  drop_0_xs
+DEPENDS:
+  6
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Reduce NF All (  ).
+     Reflexive.
+
+THEOREM:
+  drop_drop
+DEPENDS:
+  0 2 7 6
+PROOF:
+  Extensionality xs.
+  Reduce NF All (  ).
+  Induction xs.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH m n H1 H2.
+     CompareH using H2.
+     1. Rewrite -> All H2.
+        Reduce NF All (  ).
+        IntArith All.
+        Unshare True 1 n All.
+        Reflexive.
+     2. CompareH using H1.
+        1. Rewrite -> All H1.
+           Reduce NF All (  ).
+           Unshare True 1 n All.
+           IntArith All.
+           Rewrite -> All H2.
+           Reduce NF All (  ).
+           Rewrite -> All "drop_0_xs".
+           Reflexive.
+        2. Reduce NF All (  ).
+           Unshare True 1 n All.
+           Rewrite -> All H2.
+           Reduce NF All (  ).
+           Assume (= (@ 0 <_int (INT 0) (@ 2 +_int m n)) (BOOL True)).
+           1. Rewrite -> All H3.
+              Reduce NF All (  ).
+              Rewrite -> All IH.
+              1. IntArith All.
+                 Reflexive.
+              2. Rewrite -> All "not_smaller".
+                 Apply "transitive_<".
+                 WitnessE m.
+                 Split Deep.
+                 1. Exact H1.
+                 2. Apply "x_<_succ_x".
+                    Definedness.
+              3. Rewrite -> All "not_smaller".
+                 IntArith All.
+                 Exact H2.
+           2. Apply "add_right1_of_<".
+              Split Deep.
+              1. Exact H2.
+              2. IntCompare.
+
+THEOREM:
+  drop_repeat
+DEPENDS:
+  6 33
+PROOF:
+  Induction n.
+  1. Definedness.
+  2. Introduce H1 el H2.
+     Reduce RNF All (  ).
+     Unshare True 1 xs All.
+     SplitCase 1.
+     1. Definedness.
+     2. IntCompare.
+     3. Reflexive.
+  3. Introduce el H1.
+     Rewrite -> All "drop_0_xs".
+     Reflexive.
+  4. Introduce H1 H2 el H3.
+     Reduce RNF (drop 1 NO) (  ).
+     Unshare True 1 n All.
+     Unshare True 1 xs All.
+     IntArith All.
+     SplitCase 1.
+     1. Definedness.
+     2. Apply H2.
+        Definedness.
+     3. Reduce 1 (repeat 2 NO) (  ).
+        Reflexive.
+
+THEOREM 0-0-95-0:
+  filter_++
+DEPENDS:
+  39 13
+PROOF:
+  Induction xs.
+  1. Introduce p ys.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce p ys.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH p ys.
+     Reduce NF All (  ).
+     Unshare True 1 x All.
+     SplitCase 1.
+     1. Definedness.
+     2. Reduce NF All (  ).
+        Injective.
+        Split Deep.
+        1. Reflexive.
+        2. Apply IH.
+     3. Apply IH.
+
+THEOREM:
+  filter_flatten
+DEPENDS:
+  7 39 37 22
+PROOF:
+  Extensionality xs.
+  Reduce NF All (  ).
+  Induction xs.
+  1. Introduce p.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce p.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH p.
+     Reduce NF All (  ).
+     Rewrite -> All "filter_++".
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM 95-0-0-0:
+  finite_++
+DEPENDS:
+  12 13
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Introduce ys H1 H2.
+     Reduce NF All (  ).
+     Exact H2.
+  3. Introduce x xs IH ys H1 H2.
+     ReduceH NF All in H1 (  ).
+     Reduce NF All (  ).
+     Apply IH.
+     Split Deep.
+     1. Exact H1.
+     2. Exact H2.
+
+THEOREM:
+  finite_defined_length
+DEPENDS:
+  3 12
+PROOF:
+  Induction xs.
+  1. Reduce NF All (  ).
+     SplitIff.
+     1. Definedness.
+     2. Definedness.
+  2. Reduce NF All (  ).
+     SplitIff.
+     1. Reflexive.
+     2. Definedness.
+  3. Reduce NF All (  ).
+     Introduce x xs IH.
+     RefineUndefinedness.
+     SplitIff.
+     1. Introduce H1.
+        Rewrite <- All IH.
+        Contradiction.
+        Contradiction H1.
+        Case Shallow 1.
+        Definedness.
+     2. Introduce H1.
+        Contradiction.
+        Case Deep H2.
+        1. Rewrite <- All IH in H1.
+           Definedness.
+        2. Definedness.
+
+THEOREM 95-0-0-0:
+  finite_reverse
+DEPENDS:
+  12 5
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Introduce H1.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH H1.
+     ReduceH NF All in H1 (  ).
+     Reduce NF All (  ).
+     Apply "finite_++".
+     Split Deep.
+     1. Apply IH.
+        Exact H1.
+     2. Reduce NF All (  ).
+        Reflexive.
+
+THEOREM 0-0-95-0:
+  flatten_++
+DEPENDS:
+  37 13
+PROOF:
+  Induction xs.
+  1. Introduce ys.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce ys.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH ys.
+     Reduce NF All (  ).
+     Rewrite -> All "associative_++".
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM:
+  flatten_map
+DEPENDS:
+  7 37 22
+PROOF:
+  Extensionality xs.
+  Reduce NF All (  ).
+  Induction xs.
+  1. Introduce f.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce f.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH f.
+     Reduce NF All (  ).
+     Rewrite -> All "map_++".
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM:
+  foldl_flip_Cons
+DEPENDS:
+  5 49 50
+PROOF:
+  Extensionality xs.
+  Introduce xs.
+  Rewrite <- All ("++_x_Nil" E (@ 5 reverse xs)).
+  GeneralizeE xs to ys.
+  GeneralizeE [] to zs.
+  Induction ys.
+  1. Introduce zs.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce zs.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce y ys IH zs.
+     Reduce NF All (  ).
+     Rewrite -> All "associative_++".
+     Reduce NF All (  ).
+     Apply IH.
+
+THEOREM:
+  foldl_foldr
+DEPENDS:
+  49 44
+PROOF:
+  Introduce f e H1 H2 H3 H4 H5.
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH.
+     Reduce NF All (  ).
+     Rewrite -> All H2.
+     Rewrite -> All ("foldl_lemma" E f E e).
+     1. Rewrite -> All IH.
+        Reflexive.
+     2. Exact H1.
+     3. Exact H2.
+     4. Exact H3.
+     5. Exact H4.
+     6. Exact H5.
+
+THEOREM:
+  foldl_foldr_+
+DEPENDS:
+  49 2 44
+PROOF:
+  Apply "foldl_foldr".
+  Split Deep.
+  1. Uncurry.
+     IntArith All.
+     Reflexive.
+  2. Uncurry.
+     IntArith All.
+     Reflexive.
+  3. Uncurry.
+     IntArith All.
+     Reflexive.
+  4. Reduce NF All (  ).
+     Reflexive.
+  5. Reduce NF All (  ).
+     Reflexive.
+
+THEOREM:
+  foldl_lemma
+DEPENDS:
+  49
+PROOF:
+  Introduce f e H1 H2 H3 H4 H5.
+  Induction ys.
+  1. Introduce x.
+     Reduce NF All (  ).
+     Rewrite -> All H5.
+     Reflexive.
+  2. Introduce x.
+     Reduce NF All (  ).
+     Rewrite -> All H3.
+     Reflexive.
+  3. Introduce y ys IH x.
+     Reduce NF All (  ).
+     Rewrite -> All H2.
+     Rewrite -> All IH.
+     Apply H1.
+
+THEOREM:
+  foldr_&&
+DEPENDS:
+  44 47 48
+PROOF:
+  Extensionality xs.
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH.
+     Reduce NF All (  ).
+     SplitCase 1.
+     1. Definedness.
+     2. Rewrite -> All H1.
+        Reduce NF All (  ).
+        Apply IH.
+     3. Rewrite -> All H1.
+        Reduce NF All (  ).
+        Reflexive.
+
+THEOREM:
+  foldr_*
+DEPENDS:
+  44 27 28 29 30 31
+PROOF:
+  Extensionality xs.
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH.
+     ReduceH NF All in IH (  ).
+     Reduce NF All (  ).
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM:
+  foldr_+
+DEPENDS:
+  44 2 17 18 19 20
+PROOF:
+  Extensionality xs.
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH.
+     ReduceH NF All in IH (  ).
+     Reduce NF All (  ).
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM:
+  foldr_++
+DEPENDS:
+  44 13 37
+PROOF:
+  Extensionality xs.
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH.
+     Reduce NF All (  ).
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM:
+  foldr_Cons
+DEPENDS:
+  44 7 22
+PROOF:
+  Extensionality xs.
+  Induction xs.
+  1. Introduce f.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce f.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH f.
+     Reduce NF All (  ).
+     Injective.
+     Split Deep.
+     1. Reflexive.
+     2. ReduceH NF All in IH (  ).
+        Apply IH.
+
+THEOREM:
+  foldr_||
+DEPENDS:
+  44 45 46
+PROOF:
+  Extensionality xs.
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH.
+     Reduce NF All (  ).
+     SplitCase 1.
+     1. Definedness.
+     2. Rewrite -> All H1.
+        Reduce NF All (  ).
+        Reflexive.
+     3. Rewrite -> All H1.
+        Reduce NF All (  ).
+        Exact IH.
+
+THEOREM:
+  hd_++
+DEPENDS:
+  42 13
+PROOF:
+  Induction xs.
+  1. Introduce ys H1.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce ys H1.
+     Contradiction H1.
+     Reflexive.
+  3. Introduce x xs IH ys H1.
+     Reduce NF All (  ).
+     Reflexive.
+
+THEOREM:
+  hd_reverse
+DEPENDS:
+  5 42 43
+PROOF:
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Reduce NF All (  ).
+     Introduce x xs IH.
+     SplitCase 1.
+     1. Definedness.
+     2. Rewrite -> All H1.
+        Reduce NF All (  ).
+        Reflexive.
+     3. Witness for H1.
+        Witness for H1.
+        Rewrite -> All "hd_++".
+        1. Exact IH.
+        2. Rewrite -> All H1.
+           Reduce NF All (  ).
+           Contradiction.
+           Cases (@ 5 reverse c2).
+           1. Definedness.
+           2. ReduceH NF All in H2 (  ).
+              AbsurdEqualityH H2.
+           3. ReduceH NF All in H2 (  ).
+              AbsurdEqualityH H2.
+
+THEOREM:
+  isEmpty_filter_not_any
+DEPENDS:
+  38 39 40 41
+PROOF:
+  Induction xs.
+  1. Introduce p.
+     Reduce NF All (  ).
+     Definedness.
+  2. Introduce p.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH p.
+     Reduce NF All (  ).
+     SplitCase 1.
+     1. Reduce NF All (  ).
+        Definedness.
+     2. Reduce NF All (  ).
+        Reflexive.
+     3. Apply IH.
+
+THEOREM 0-0-95-0:
+  length_++
+DEPENDS:
+  3 13 2
+PROOF:
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     IntArith All.
+     Reflexive.
+  3. Reduce NF All (  ).
+     Introduce x xs IH ys.
+     IntArith All.
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM:
+  length_finite
+DEPENDS:
+  3 12 0
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Reduce NF All (  ).
+     Introduce x xs IH H1.
+     Apply "reverse_<".
+     Apply IH to H1.
+     CompareH using H2.
+     1. Rewrite -> All H2.
+        IntArith All.
+        IntCompare.
+     2. Apply "transitive_<".
+        WitnessE (@ 3 length_list xs).
+        Split Deep.
+        1. Exact H2.
+        2. Apply "x_<_succ_x".
+           Definedness.
+
+THEOREM:
+  length_flatten
+DEPENDS:
+  3 37 17 18 2 19 20 22
+PROOF:
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH.
+     ReduceH NF All in IH (  ).
+     Reduce NF All (  ).
+     Rewrite -> All "length_++".
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM:
+  length_indexList
+DEPENDS:
+  3 36
+PROOF:
+  Reduce NF All (  ).
+  Introduce xs.
+  Explicit Assume ~(= (INT 0) BOTTOM).
+  1. GeneralizeE xs to ys.
+     GeneralizeE (INT 0) to n.
+     Induction ys.
+     1. Reduce NF All (  ).
+        Definedness.
+     2. Reduce NF All (  ).
+        Reflexive.
+     3. Introduce y ys IH n H1.
+        Reduce NF All (  ).
+        Rewrite <- All IH.
+        1. Reflexive.
+        2. Definedness.
+  2. Definedness.
+
+THEOREM 0-0-0-95:
+  length_length2
+DEPENDS:
+  2 3 35
+PROOF:
+  Extensionality xs.
+  Reduce NF All (  ).
+  Assume (All n (= n (@ 2 +_int n (INT 0)))).
+  1. Rewrite -> 1 H1.
+     Discard 0 0 1 H1.
+     GeneralizeE (INT 0) to n.
+     Induction xs.
+     1. Introduce n.
+        Reduce NF All (  ).
+        Reflexive.
+     2. Introduce n.
+        Reduce NF All (  ).
+        IntArith All.
+        Reflexive.
+     3. Introduce x xs IH n.
+        Reduce NF All (  ).
+        IntArith All.
+        Rewrite <- All IH.
+        IntArith All.
+        Reflexive.
+  2. IntArith All.
+     Reflexive.
+
+THEOREM 0-0-95-0:
+  length_map
+DEPENDS:
+  3 22
+PROOF:
+  Induction xs.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH f.
+     Reduce NF All (  ).
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM:
+  length_repeatn
+DEPENDS:
+  0 3 34
+PROOF:
+  Introduce n el H1.
+  Reduce 1 All (  ).
+  Apply "length_take_repeat".
+  Exact H1.
+
+THEOREM 0-0-95-0:
+  length_reverse
+DEPENDS:
+  3 5
+PROOF:
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH.
+     Reduce NF All (  ).
+     Rewrite -> All "length_++".
+     Reduce NF All (  ).
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM:
+  length_take_repeat
+DEPENDS:
+  0 3 4 33
+PROOF:
+  Induction n.
+  1. Definedness.
+  2. Introduce H1 el H2.
+     IntCompare.
+  3. Introduce el H1.
+     Reduce RNF All (  ).
+     Reflexive.
+  4. Introduce H1 H2 el H3.
+     Reduce RNF All (  ).
+     Unshare True 1 n All.
+     IntArith All.
+     SplitCase 1.
+     1. Definedness.
+     2. Opaque 4 take.
+        Opaque 33 repeat.
+        Reduce RNF All (  ).
+        Rewrite -> All H2.
+        1. Reflexive.
+        2. Exact H1.
+     3. Reduce NF All (  ).
+        CompareH using H4.
+        1. Exact H4.
+        2. IntCompare.
+
+THEOREM 0-0-95-0:
+  map_++
+DEPENDS:
+  22 13
+PROOF:
+  Induction xs.
+  1. Introduce f ys.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce f ys.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH f ys.
+     Reduce NF All (  ).
+     Injective.
+     Split Deep.
+     1. Reflexive.
+     2. Apply IH.
+
+THEOREM:
+  map_o
+DEPENDS:
+  22 7
+PROOF:
+  Extensionality xs.
+  Reduce NF All (  ).
+  Induction xs.
+  1. Introduce f g.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce f g.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH f g.
+     Reduce NF All (  ).
+     Injective.
+     Split Deep.
+     1. Reflexive.
+     2. Apply IH.
+
+THEOREM:
+  map_reverse
+DEPENDS:
+  7 22 5
+PROOF:
+  Extensionality xs.
+  Reduce NF All (  ).
+  Induction xs.
+  1. Introduce f.
+     Reduce NF All (  ).
+     Reflexive.
+  2. Introduce f.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH f.
+     Reduce NF All (  ).
+     Rewrite -> All "map_++".
+     Reduce NF All (  ).
+     Rewrite -> All IH.
+     Reflexive.
+
+THEOREM 0-0-0-95:
+  prod_prod2
+DEPENDS:
+  27 28 29 30 31 32
+PROOF:
+  Extensionality xs.
+  Reduce NF (prod2 1 NO) (  ).
+  Assume (All n (= n (@ 27 *_int (INT 1) n))).
+  1. Rewrite -> 1 H1.
+     GeneralizeE (INT 1) to n.
+     Reduce NF All (  ).
+     Discard 0 0 1 H1.
+     Induction xs.
+     1. Introduce n.
+        Reduce NF All (  ).
+        Reflexive.
+     2. Introduce n.
+        Reduce NF All (  ).
+        IntArith All.
+        Reflexive.
+     3. Introduce x xs IH n.
+        Reduce NF All (  ).
+        Rewrite <- All IH.
+        IntArith All.
+        Reflexive.
+  2. IntArith All.
+     Reflexive.
+
+THEOREM:
+  reverse_++
+DEPENDS:
+  12 5 13
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Introduce ys H1.
+     Discard 0 0 1 H1.
+     Reduce NF All (  ).
+     Rewrite -> All "++_x_Nil".
+     Reflexive.
+  3. Introduce x xs IH ys H1.
+     ReduceH NF All in H1 (  ).
+     Reduce NF All (  ).
+     Rewrite -> All IH.
+     1. Rewrite -> All "associative_++".
+        Reflexive.
+     2. Exact H1.
+
+THEOREM 0-0-95-0:
+  reverse_isNil
+DEPENDS:
+  5
+PROOF:
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Reduce NF All (  ).
+     Introduce x xs IH.
+     SplitIff.
+     1. Introduce H1.
+        Cases (@ 5 reverse xs).
+        1. Definedness.
+        2. ReduceH NF All in H1 (  ).
+           AbsurdEqualityH H1.
+        3. ReduceH NF All in H1 (  ).
+           AbsurdEqualityH H1.
+     2. Introduce H1.
+        AbsurdEqualityH H1.
+
+THEOREM:
+  reverse_reverse
+DEPENDS:
+  12 5
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH H1.
+     ReduceH NF All in H1 (  ).
+     Reduce NF All (  ).
+     Rewrite -> All "reverse_++".
+     1. Reduce NF All (  ).
+        Injective.
+        Split Deep.
+        1. Reflexive.
+        2. Apply IH.
+           Exact H1.
+     2. Apply "finite_reverse".
+        Exact H1.
+
+THEOREM 0-0-0-95:
+  reverse_reverse2
+DEPENDS:
+  5 26
+PROOF:
+  Extensionality xs.
+  Reduce NF All (  ).
+  Rewrite <- 1 "++_x_Nil".
+  GeneralizeE [] to ys.
+  Induction xs.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH ys.
+     Reduce NF All (  ).
+     Rewrite -> All "associative_++".
+     Reduce NF All (  ).
+     Apply IH.
+
+THEOREM:
+  splitAt_++
+DEPENDS:
+  23 1 13 24 25
+PROOF:
+  Induction xs.
+  1. Introduce n H1.
+     Reduce+ 1 (splitAt 1 NO) (  ).
+     Reduce+ 1 (splitAt 2 NO) (  ).
+     SplitCase 1.
+     1. Definedness.
+     2. Reduce NF All (  ).
+        Definedness.
+     3. Reduce NF All (  ).
+        Definedness.
+  2. Introduce n H1.
+     Reduce+ 1 (splitAt 2 NO) (  ).
+     Reduce+ RNF (splitAt 1 NO) (  ).
+     SplitCase 1.
+     1. Definedness.
+     2. Reduce NF All (  ).
+        Reflexive.
+     3. Reduce NF All (  ).
+        Reflexive.
+  3. Introduce x xs IH n H1.
+     Reduce+ 1 (splitAt 2 NO) (  ).
+     Reduce+ 1 (splitAt 1 NO) (  ).
+     SplitCase 1.
+     1. Definedness.
+     2. Reduce NF All (  ).
+        Reflexive.
+     3. Reduce NF All (  ).
+        Injective.
+        Split Deep.
+        1. Reflexive.
+        2. SpecializeE IH with (@ 1 -_int n (INT 1)).
+           Assume ~(= (@ 1 -_int n (INT 1)) BOTTOM).
+           1. Apply IH to H4.
+              Cases (@ 23 splitAt (@ 1 -_int n (INT 1)) xs).
+              1. Reduce NF All (  ).
+                 Definedness.
+              2. Reduce NF All (  ).
+                 ReduceH NF All in H5 (  ).
+                 Exact H5.
+           2. Definedness.
+
+THEOREM 0-0-95-0:
+  sum_++
+DEPENDS:
+  17 18 2 19 20 13
+PROOF:
+  Induction xs.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Introduce ys.
+     Reduce NF All (  ).
+     IntArith All.
+     Reflexive.
+  3. Reduce NF All (  ).
+     Introduce x xs IH ys.
+     Rewrite -> All IH.
+     IntArith All.
+     Reflexive.
+
+THEOREM:
+  sum_map_+_1
+DEPENDS:
+  17 18 2 19 20 22 3
+PROOF:
+  Induction xs.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH.
+     ReduceH NF All in IH (  ).
+     Reduce NF All (  ).
+     IntArith All.
+     Rewrite -> All IH.
+     IntArith All.
+     Reflexive.
+
+THEOREM 0-0-0-95:
+  sum_sum2
+DEPENDS:
+  2 17 18 19 20 21
+PROOF:
+  Extensionality xs.
+  Reduce NF (sum2 1 NO) (  ).
+  Assume (All n (= n (@ 2 +_int (INT 0) n))).
+  1. Rewrite -> 1 H1.
+     Discard 0 0 1 H1.
+     GeneralizeE (INT 0) to n.
+     Reduce NF All (  ).
+     Induction xs.
+     1. Reduce NF All (  ).
+        Definedness.
+     2. Reduce NF All (  ).
+        IntArith All.
+        Reflexive.
+     3. Introduce x xs IH n.
+        Reduce NF All (  ).
+        Rewrite <- All IH.
+        IntArith All.
+        Reflexive.
+  2. IntArith All.
+     Reflexive.
+
+THEOREM 0-0-95-0:
+  takeWhile_++_dropWhile
+DEPENDS:
+  14 13 15 16
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH f H1.
+     ReduceH NF All in H1 (  ).
+     Reduce NF All (  ).
+     SplitCase 1.
+     1. Rewrite -> All H2 in H1.
+        ReduceH NF All in H1 (  ).
+        Definedness.
+     2. Rewrite -> All H2 in H1.
+        ReduceH NF All in H1 (  ).
+        Reduce NF All (  ).
+        Injective.
+        Split Deep.
+        1. Reflexive.
+        2. Apply IH.
+           Exact H1.
+     3. Rewrite -> All H2 in H1.
+        ReduceH NF All in H1 (  ).
+        Reduce NF All (  ).
+        Reflexive.
+
+THEOREM 0-0-95-0:
+  take_++_drop
+DEPENDS:
+  13 4 6
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Introduce n H1.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH n H1.
+     Reduce NF All (  ).
+     SplitCase 1.
+     1. Definedness.
+     2. Reduce NF All (  ).
+        Injective.
+        Split Deep.
+        1. Reflexive.
+        2. Apply IH.
+           Definedness.
+     3. Reduce NF All (  ).
+        Reflexive.
+
+THEOREM:
+  take_++_left
+DEPENDS:
+  0 2 3 4 13
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Introduce n ys H1 H2.
+     Reduce NF All (  ).
+     ReduceH NF All in H1 (  ).
+     Cases ys.
+     1. Definedness.
+     2. Reduce NF All (  ).
+        Reflexive.
+     3. Reduce NF All (  ).
+        SplitCase 1.
+        1. Definedness.
+        2. IntCompare.
+        3. Reflexive.
+  3. Introduce x xs IH n ys H1 H2.
+     ReduceH NF All in H1 (  ).
+     IntArithH All to H1.
+     Reduce NF All (  ).
+     SplitCase 1.
+     1. Reflexive.
+     2. Injective.
+        Split Deep.
+        1. Reflexive.
+        2. Apply IH.
+           Split Deep.
+           1. Rewrite -> All ("add_to_<" E (INT 1)).
+              1. IntArith All.
+                 Exact H1.
+              2. Definedness.
+           2. Exact H2.
+     3. Reflexive.
+
+THEOREM:
+  take_all
+DEPENDS:
+  11 9 10 0 2 3 12 4
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH n H1.
+     Reduce NF All (  ).
+     ReduceH NF All in H1 (  ).
+     SplitCase 1.
+     1. Definedness.
+     2. Injective.
+        Split Deep.
+        1. Reflexive.
+        2. Apply IH.
+           Rewrite -> All ("add_to_<" E (INT 1)).
+           1. IntArith All.
+              Exact H1.
+           2. Definedness.
+     3. Assume (= (@ 12 finite xs) (BOOL True)).
+        1. Apply "length_finite" to H3.
+           Rewrite <- All "<=_<" in H1.
+           Rewrite <- All "<=_<" in H2.
+           Rewrite <- All "<=_<" in H4.
+           Assume (= (@ 11 <= (@ 9 _create_dictionary_Ord; (@ 10 _create_dictionary_<; (@ 0 <_int))) n (@ 3 length_list xs)) (BOOL True)).
+           1. Assume (= (@ 11 <= (@ 9 _create_dictionary_Ord; (@ 10 _create_dictionary_<; (@ 0 <_int))) (@ 2 +_int (@ 3 length_list xs) (INT 1)) (@ 3 length_list xs)) (BOOL True)).
+              1. ReduceH NF All in H6 (  ).
+                 Rewrite -> All "x_<_succ_x" in H6.
+                 1. ReduceH NF All in H6 (  ).
+                    AbsurdEqualityH H6.
+                 2. Definedness.
+              2. Apply "transitive_<=".
+                 WitnessE n.
+                 Split Deep.
+                 1. Exact H1.
+                 2. Exact H5.
+           2. Apply "transitive_<=".
+              WitnessE (INT 0).
+              Split Deep.
+              1. Exact H2.
+              2. Exact H4.
+        2. Rewrite <- All "finite_defined_length".
+           Definedness.
+
+THEOREM:
+  take_o_drop
+DEPENDS:
+  0 7 4 6 2
+PROOF:
+  Extensionality xs.
+  Reduce NF All (  ).
+  Induction xs.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH n m H1 H2.
+     Reduce NF All (  ).
+     Unshare True 1 n All.
+     CompareH using H1.
+     1. Rewrite -> All H1.
+        Reduce NF All (  ).
+        IntArith All.
+        CompareH using H2.
+        1. Rewrite -> All H2.
+           Reduce NF All (  ).
+           Reflexive.
+        2. Rewrite -> All H2.
+           Reduce NF All (  ).
+           Reflexive.
+     2. Rewrite -> All H1.
+        Reduce NF All (  ).
+        Rewrite -> All ("add_right1_of_<" E (INT 0) E n E m).
+        1. Reduce NF All (  ).
+           Rewrite -> All H1.
+           Reduce NF All (  ).
+           Rewrite -> All IH.
+           1. IntArith All.
+              Reflexive.
+           2. Rewrite -> All "not_smaller".
+              IntArith All.
+              Exact H1.
+           3. Exact H2.
+        2. Exact H1.
+        3. Exact H2.
+
+THEOREM:
+  take_o_take
+DEPENDS:
+  0 7 4 8 9 10
+PROOF:
+  Extensionality xs.
+  Reduce NF (o 1 NO) (  ).
+  Induction xs.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH m n H1 H2.
+     Reduce NF (take 1 NO) (  ).
+     CompareH using H2.
+     1. Rewrite -> All H2.
+        Reduce NF All (  ).
+        Rewrite -> All H1.
+        Reduce NF All (  ).
+        Reflexive.
+     2. Rewrite -> All H2.
+        Reduce NF (take 1 NO) (  ).
+        CompareH using H1.
+        1. Rewrite -> All H1.
+           Reduce NF All (  ).
+           Rewrite -> All H2.
+           Reduce NF All (  ).
+           Reflexive.
+        2. Rewrite -> All H1.
+           Reduce NF (case 1 NO) (  ).
+           Rewrite -> All IH.
+           1. Reduce NF All (  ).
+              Unshare True 1 x All.
+              Unshare True 1 y All.
+              Unshare True 1 n All.
+              Rewrite -> 1 ("add_to_<" E (INT 1)).
+              1. IntArith All.
+                 SplitCase 1.
+                 1. Definedness.
+                 2. Rewrite -> All H1.
+                    Reduce NF All (  ).
+                    Reflexive.
+                 3. Rewrite -> All H2.
+                    Reduce NF All (  ).
+                    Reflexive.
+              2. Definedness.
+           2. Rewrite -> All "not_smaller".
+              IntArith All.
+              Exact H1.
+           3. Rewrite -> All "not_smaller".
+              IntArith All.
+              Exact H2.
+
+THEOREM:
+  take_reverse
+DEPENDS:
+  0 1 2 3 4 5 6
+PROOF:
+  Induction xs.
+  1. Definedness.
+  2. Introduce n H1 H2.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce x xs IH n H1 H2.
+     ReduceH NF All in H2 (  ).
+     Reduce NF All (  ).
+     Unshare True 1 n All.
+     CompareH using H2.
+     1. Rewrite -> All H2.
+        Rewrite -> All "x_-_x".
+        1. Reduce NF All (  ).
+           Apply "take_all".
+           Rewrite -> All "length_++".
+           Rewrite -> All "length_reverse".
+           Reduce NF All (  ).
+           Rewrite -> All H2.
+           IntCompare.
+        2. Definedness.
+     2. Assume (= (@ 0 <_int (INT 0) (@ 1 -_int (@ 2 +_int (@ 3 length_list xs) (INT 1)) n)) (BOOL True)).
+        1. Rewrite -> All H3.
+           Reduce NF All (  ).
+           IntArith All.
+           Rewrite <- All IH.
+           1. Apply "take_++_left".
+              Split Deep.
+              1. Rewrite -> All "length_reverse".
+                 Exact H2.
+              2. Definedness.
+           2. Exact H1.
+           3. Rewrite -> All "not_smaller".
+              Exact H2.
+        2. Rewrite -> All ("subtract_from_<" E n) in H2.
+           1. Rewrite -> All "x_-_x" in H2.
+              1. Exact H2.
+              2. Definedness.
+           2. Definedness.
+
+
+

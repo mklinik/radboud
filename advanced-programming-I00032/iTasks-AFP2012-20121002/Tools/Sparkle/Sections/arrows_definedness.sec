@@ -1,0 +1,818 @@
+SECTION DEPENDENCIES:
+  THEOREM not_smaller                (ints)
+  SYMBOL evalEditableData         :: "[(({#Char}, {#Char}), {#Char})] -> Bool"
+  SYMBOL write`                   :: "({#Char}, {#Char}) {#Char} [(({#Char}, {#Char}), {#Char})] -> [(({#Char}, {#Char}), {#Char})]"
+  SYMBOL evalEditorId             :: "({#Char}, {#Char}) -> Bool"
+  SYMBOL evalString               :: "!{#Char} -> Bool"
+  SYMBOL read`                    :: "({#Char}, {#Char}) [(({#Char}, {#Char}), {#Char})] -> {#Char}"
+  SYMBOL evalEvent                :: "(({#Char}, {#Char}), {#Char}) -> Bool"
+  SYMBOL evalEState               :: "(a -> Bool) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> Bool"
+  SYMBOL >>>                      :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) ((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)"
+  SYMBOL evalEither               :: "(a -> Bool) (b -> Bool) (Either a b) -> Bool"
+  SYMBOL left                     :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], Either a c, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], Either b c, EventStatus)"
+  SYMBOL iterateN                 :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], (Int, a), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], (Int, a), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus)"
+  SYMBOL +_int                    :: "!Int !Int -> Int"
+  SYMBOL evalNTuple               :: "(a -> Bool) (Int, a) -> Bool"
+  SYMBOL <_int                    :: "!Int !Int -> Bool"
+  SYMBOL >=                       :: "!a !a -> Bool | Ord a"
+  SYMBOL _create_dictionary_Ord;  :: " | < untypable"
+  SYMBOL _create_dictionary_<;    :: "!untypable -> "
+  SYMBOL evalEventStatus          :: "EventStatus -> Bool"
+  SYMBOL o                        :: "(a -> b) (c -> a) -> c -> b"
+  SYMBOL fst                      :: "!(!a, b) -> a"
+  SYMBOL first                    :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], (a, c), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], (b, c), EventStatus)"
+  SYMBOL snd3                     :: "!(a, !b, c) -> b"
+  SYMBOL editsets                 :: "(({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], (({#Char}, {#Char}), {#Char}), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], {#Char}, EventStatus)"
+  SYMBOL editreads                :: "(({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], ({#Char}, {#Char}), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], {#Char}, EventStatus)"
+  SYMBOL ==_tuple10000            :: "!({#Char}, {#Char}) !({#Char}, {#Char}) -> Bool"
+  SYMBOL arr                      :: "(a -> b) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)"
+  SYMBOL evalTuple                :: "(a -> Bool) (b -> Bool) (a, b) -> Bool"
+
+SECTION DEFINES:
+  THEOREM decompose_evalEState     : (All A (All data (All a (All status {(= (@ 6 evalEState A (TUPLE data a status)) (BOOL True)) <-> {(= (@ 0 evalEditableData data) (BOOL True)) /\ {(= {A @ a} (BOOL True)) /\ (= (@ 17 evalEventStatus status) (BOOL True))}}}))))
+  THEOREM decompose_evalEditableData: (All i (All v (All data {(= (@ 0 evalEditableData [(TUPLE i v):data]) (BOOL True)) <-> {(= (@ 2 evalEditorId i) (BOOL True)) /\ {(= (@ 3 evalString v) (BOOL True)) /\ (= (@ 0 evalEditableData data) (BOOL True))}}})))
+  THEOREM decompose_evalEditorId   : (All n (All v {(= (@ 2 evalEditorId (TUPLE n v)) (BOOL True)) <-> {(= (@ 3 evalString n) (BOOL True)) /\ (= (@ 3 evalString v) (BOOL True))}}))
+  THEOREM decompose_evalEvent      : (All i (All v {(= (@ 5 evalEvent (TUPLE i v)) (BOOL True)) <-> {(= (@ 2 evalEditorId i) (BOOL True)) /\ (= (@ 3 evalString v) (BOOL True))}}))
+  THEOREM decompose_evalTuple      : (All f (All g (All a (All b {(= (@ 26 evalTuple f g (TUPLE a b)) (BOOL True)) <-> {(= {f @ a} (BOOL True)) /\ (= {g @ b} (BOOL True))}}))))
+  THEOREM evalEState_o             : (All A (All f (All data (All a (All status (= (@ 6 evalEState (@ 18 o A f) (TUPLE data a status)) (@ 6 evalEState A (TUPLE data {f @ a} status))))))))
+  THEOREM eval_arr                 : (All ev (All A (All state (All B (All f {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 6 evalEState A state) (BOOL True)) -> {(All a {(= {A @ a} (BOOL True)) -> (= {B @ {f @ a}} (BOOL True))}) -> (= (@ 6 evalEState B (@ 25 arr f ev state)) (BOOL True))}}})))))
+  THEOREM eval_compareEditorId     : (All i1 (All i2 {(= (@ 2 evalEditorId i1) (BOOL True)) -> {(= (@ 2 evalEditorId i2) (BOOL True)) -> ~(= (@ 24 ==_tuple10000 i1 i2) BOTTOM)}}))
+  THEOREM eval_editreads           : (All ev (All state {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 6 evalEState (@ 2 evalEditorId) state) (BOOL True)) -> (= (@ 6 evalEState (@ 3 evalString) (@ 23 editreads ev state)) (BOOL True))}}))
+  THEOREM eval_editsets            : (All ev (All state {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 6 evalEState (@ 5 evalEvent) state) (BOOL True)) -> (= (@ 6 evalEState (@ 3 evalString) (@ 22 editsets ev state)) (BOOL True))}}))
+  THEOREM eval_first1              : (All ev (All A (All state (All B (All f {~(= (@ 21 snd3 state) BOTTOM) -> {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 6 evalEState (@ 18 o A (@ 19 fst)) state) (BOOL True)) -> {(All e (All s {(= (@ 5 evalEvent e) (BOOL True)) -> {(= (@ 6 evalEState A s) (BOOL True)) -> (= (@ 6 evalEState B {f @ e s}) (BOOL True))}})) -> (= (@ 6 evalEState (@ 18 o B (@ 19 fst)) (@ 20 first f ev state)) (BOOL True))}}}})))))
+  THEOREM eval_first2              : (All ev (All data (All status (All B (All f {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEditableData data) (BOOL True)) -> {(= (@ 17 evalEventStatus status) (BOOL True)) -> {(All e (All d (All s {(= (@ 5 evalEvent e) (BOOL True)) -> {(= (@ 0 evalEditableData d) (BOOL True)) -> {(= (@ 17 evalEventStatus s) (BOOL True)) -> (= (@ 6 evalEState B {f @ e (TUPLE d BOTTOM s)}) (BOOL True))}}}))) -> (= (@ 6 evalEState (@ 18 o B (@ 19 fst)) (@ 20 first f ev (TUPLE data BOTTOM status))) (BOOL True))}}}})))))
+  THEOREM eval_iterateN            : (All ev (All A (All state (All f {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 6 evalEState (@ 12 evalNTuple A) state) (BOOL True)) -> {(All e (All s {(= (@ 5 evalEvent e) (BOOL True)) -> {(= (@ 6 evalEState (@ 12 evalNTuple A) s) (BOOL True)) -> (= (@ 6 evalEState A {f @ e s}) (BOOL True))}})) -> (= (@ 6 evalEState A (@ 10 iterateN f ev state)) (BOOL True))}}}))))
+  THEOREM eval_iterateN_reformulated: (All n (All ev (All data (All a (All status (All A (All f {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEditableData data) (BOOL True)) -> {(= (@ 14 >= (@ 15 _create_dictionary_Ord; (@ 16 _create_dictionary_<; (@ 13 <_int))) n (INT 0)) (BOOL True)) -> {(= {A @ a} (BOOL True)) -> {(= (@ 17 evalEventStatus status) (BOOL True)) -> {(All e (All s {(= (@ 5 evalEvent e) (BOOL True)) -> {(= (@ 6 evalEState (@ 12 evalNTuple A) s) (BOOL True)) -> (= (@ 6 evalEState A {f @ e s}) (BOOL True))}})) -> (= (@ 6 evalEState A (@ 10 iterateN f ev (TUPLE data (TUPLE n a) status))) (BOOL True))}}}}}})))))))
+  THEOREM eval_left                : (All ev (All A (All C (All state (All B (All f {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 6 evalEState (@ 8 evalEither A C) state) (BOOL True)) -> {(All e (All s {(= (@ 5 evalEvent e) (BOOL True)) -> {(= (@ 6 evalEState A s) (BOOL True)) -> (= (@ 6 evalEState B {f @ e s}) (BOOL True))}})) -> (= (@ 6 evalEState (@ 8 evalEither B C) (@ 9 left f ev state)) (BOOL True))}}}))))))
+  THEOREM eval_read                : (All i (All data {(= (@ 2 evalEditorId i) (BOOL True)) -> {(= (@ 0 evalEditableData data) (BOOL True)) -> (= (@ 3 evalString (@ 4 read` i data)) (BOOL True))}}))
+  THEOREM eval_seq                 : (All ev (All A (All state (All B (All f (All C (All g {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 6 evalEState A state) (BOOL True)) -> {(All e (All s {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 6 evalEState A s) (BOOL True)) -> (= (@ 6 evalEState B {f @ e s}) (BOOL True))}})) -> {(All e (All s {(= (@ 5 evalEvent ev) (BOOL True)) -> {(= (@ 6 evalEState B s) (BOOL True)) -> (= (@ 6 evalEState C {g @ e s}) (BOOL True))}})) -> (= (@ 6 evalEState C (@ 7 >>> f g ev state)) (BOOL True))}}}})))))))
+  THEOREM eval_write               : (All i (All v (All data {(= (@ 2 evalEditorId i) (BOOL True)) -> {(= (@ 3 evalString v) (BOOL True)) -> {(= (@ 0 evalEditableData data) (BOOL True)) -> (= (@ 0 evalEditableData (@ 1 write` i v data)) (BOOL True))}}})))
+  THEOREM not_read_bottom          : (All i (All data {(= (@ 2 evalEditorId i) (BOOL True)) -> {(= (@ 0 evalEditableData data) (BOOL True)) -> ~(= (@ 4 read` i data) BOTTOM)}}))
+  THEOREM not_write_bottom         : (All i (All v (All data {(= (@ 2 evalEditorId i) (BOOL True)) -> {(= (@ 3 evalString v) (BOOL True)) -> {(= (@ 0 evalEditableData data) (BOOL True)) -> ~(= (@ 1 write` i v data) BOTTOM)}}})))
+
+THEOREM:
+  decompose_evalEState
+DEPENDS:
+  6 0 17
+PROOF:
+  Introduce A data a status.
+  Reduce NF All (  ).
+  SplitCase 1.
+  1. SplitIff.
+     1. Definedness.
+     2. Definedness.
+  2. SplitCase 1.
+     1. SplitIff.
+        1. Definedness.
+        2. Definedness.
+     2. SplitIff.
+        1. Introduce H3.
+           Split Deep.
+           1. Exact H1.
+           2. Exact H2.
+           3. Exact H3.
+        2. Introduce H3.
+           Split Deep H3.
+           Exact H5.
+     3. SplitIff.
+        1. AbsurdEquality.
+        2. Introduce H3.
+           Split Deep H3.
+           Rewrite -> All H2 in H4.
+           AbsurdEqualityH H4.
+  3. SplitIff.
+     1. AbsurdEquality.
+     2. Introduce H2.
+        Split Deep H2.
+        Rewrite -> All H1 in H2.
+        AbsurdEqualityH H2.
+
+THEOREM:
+  decompose_evalEditableData
+DEPENDS:
+  0 2 3
+PROOF:
+  Introduce i v data.
+  Reduce NF All (  ).
+  SplitCase 1.
+  1. SplitIff.
+     1. Definedness.
+     2. Introduce H2.
+        Split Deep H2.
+        Rewrite -> All H2 in H1.
+        Definedness.
+  2. SplitCase 1.
+     1. SplitIff.
+        1. Definedness.
+        2. Introduce H3.
+           Split Deep H3.
+           Rewrite -> All H4 in H2.
+           Definedness.
+     2. SplitIff.
+        1. Introduce H3.
+           Split Deep.
+           1. Exact H1.
+           2. Exact H2.
+           3. Exact H3.
+        2. Introduce H3.
+           Split Deep H3.
+           Exact H5.
+     3. SplitIff.
+        1. AbsurdEquality.
+        2. Introduce H3.
+           Split Deep H3.
+           Rewrite -> All H4 in H2.
+           AbsurdEqualityH H2.
+  3. SplitIff.
+     1. AbsurdEquality.
+     2. Introduce H2.
+        Split Deep H2.
+        Rewrite -> All H1 in H2.
+        AbsurdEqualityH H2.
+
+THEOREM:
+  decompose_evalEditorId
+DEPENDS:
+  2 3
+PROOF:
+  Introduce n v.
+  Reduce NF All (  ).
+  SplitCase 1.
+  1. SplitIff.
+     1. Definedness.
+     2. Definedness.
+  2. SplitIff.
+     1. Introduce H2.
+        Split Shallow.
+        1. Exact H1.
+        2. Exact H2.
+     2. Introduce H2.
+        Split Shallow H2.
+        Exact H3.
+  3. SplitIff.
+     1. AbsurdEquality.
+     2. Introduce H2.
+        Split Shallow H2.
+        Rewrite -> All H1 in H2.
+        AbsurdEqualityH H2.
+
+THEOREM:
+  decompose_evalEvent
+DEPENDS:
+  5 2 3
+PROOF:
+  Introduce i v.
+  Reduce NF All (  ).
+  SplitCase 1.
+  1. SplitIff.
+     1. Definedness.
+     2. Definedness.
+  2. SplitIff.
+     1. Introduce H2.
+        Split Shallow.
+        1. Exact H1.
+        2. Exact H2.
+     2. Introduce H2.
+        Split Shallow H2.
+        Exact H3.
+  3. SplitIff.
+     1. AbsurdEquality.
+     2. Introduce H2.
+        Split Shallow H2.
+        Rewrite -> All H1 in H2.
+        AbsurdEqualityH H2.
+
+THEOREM:
+  decompose_evalTuple
+DEPENDS:
+  26
+PROOF:
+  Introduce f g a b.
+  Reduce NF All (  ).
+  SplitCase 1.
+  1. SplitIff.
+     1. Definedness.
+     2. Introduce H2.
+        Split Shallow H2.
+        Rewrite -> All H1 in H2.
+        Definedness.
+  2. SplitIff.
+     1. Introduce H2.
+        Split Shallow.
+        1. Exact H1.
+        2. Exact H2.
+     2. Introduce H2.
+        Split Shallow H2.
+        Exact H3.
+  3. SplitIff.
+     1. AbsurdEquality.
+     2. Introduce H2.
+        Split Shallow H2.
+        Rewrite -> All H1 in H2.
+        AbsurdEqualityH H2.
+
+THEOREM:
+  evalEState_o
+DEPENDS:
+  6 18
+PROOF:
+  Introduce A f data a status.
+  Reduce NF All (  ).
+  Reflexive.
+
+THEOREM:
+  eval_arr
+DEPENDS:
+  6 5 25
+PROOF:
+  Introduce ev A state B f H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x2 to a.
+     RenameE x3 to status.
+     Opaque 6 evalEState.
+     Reduce NF All (  ).
+     Rewrite -> All "decompose_evalEState" in H2.
+     Split Deep H2.
+     Rewrite -> All "decompose_evalEState".
+     Split Deep.
+     1. Exact H4.
+     2. Apply H3.
+        Exact H5.
+     3. Exact H6.
+
+THEOREM:
+  eval_compareEditorId
+DEPENDS:
+  2 24
+PROOF:
+  Introduce i1 i2.
+  Explicit Cases i1.
+  1. Introduce H1 H2 H3.
+     Rewrite -> All H1 in H2.
+     ReduceH NF All in H2 (  ).
+     Definedness.
+  2. Introduce n1 v1 H1.
+     Rewrite -> All H1.
+     Discard 0 0 1 H1.
+     Explicit Cases i2.
+     1. Introduce H1 H2 H3.
+        Rewrite -> All H1 in H3.
+        ReduceH NF All in H3 (  ).
+        Definedness.
+     2. Introduce n2 v2 H1.
+        Rewrite -> All H1.
+        Discard 0 0 1 H1.
+        Introduce H1 H2.
+        Reduce NF All (  ).
+        Rewrite -> All "decompose_evalEditorId" in H1.
+        Split Shallow H1.
+        Rewrite -> All "decompose_evalEditorId" in H2.
+        Split Shallow H2.
+        SplitCase 1.
+        1. Definedness.
+        2. Definedness.
+        3. Contradiction.
+           Definedness.
+
+THEOREM:
+  eval_editreads
+DEPENDS:
+  3 4 1 0 6 5 2 23
+PROOF:
+  Introduce ev state H1 H2.
+  Cases ev.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to i1.
+     RenameE x2 to v1.
+     Explicit Rewrite -> All "decompose_evalEvent" in H1.
+     Introduce H3.
+     Split Shallow H3.
+     Cases state.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to data.
+        RenameE x3 to status.
+        Explicit Rewrite -> All "decompose_evalEState" in H2.
+        Introduce H5.
+        Split Deep H5.
+        UncurryH in H6.
+        RenameE x2 to i2.
+        Opaque 6 evalEState.
+        Reduce NF All (  ).
+        Cases status.
+        1. ReduceH NF All in H7 (  ).
+           Definedness.
+        2. Reduce NF All (  ).
+           Rewrite -> All H6.
+           Reduce NF All (  ).
+           Assume (= (@ 3 evalString (@ 4 read` i2 data)) (BOOL True)).
+           1. Reduce NF All (  ).
+              Rewrite -> All "decompose_evalEState".
+              Split Deep.
+              1. Exact H5.
+              2. Exact H8.
+              3. Exact H7.
+           2. Apply "eval_read".
+              Split Shallow.
+              1. Exact H6.
+              2. Exact H5.
+        3. Reduce NF All (  ).
+           SplitCase 1.
+           1. Contradiction H8.
+              Apply "eval_compareEditorId".
+              Split Shallow.
+              1. Exact H3.
+              2. Exact H6.
+           2. Rewrite -> All H6.
+              Reduce NF All (  ).
+              Assume (= (@ 0 evalEditableData (@ 1 write` i2 v1 data)) (BOOL True)).
+              1. Assume ~(= (@ 1 write` i2 v1 data) BOTTOM).
+                 1. Reduce NF All (  ).
+                    Rewrite -> All "decompose_evalEState".
+                    Split Deep.
+                    1. Exact H9.
+                    2. Exact H4.
+                    3. Reduce NF All (  ).
+                       Reflexive.
+                 2. Contradiction.
+                    Rewrite -> All H10 in H9.
+                    ReduceH NF All in H9 (  ).
+                    Definedness.
+              2. Apply "eval_write".
+                 Split Deep.
+                 1. Exact H6.
+                 2. Exact H4.
+                 3. Exact H5.
+           3. Rewrite -> All H6.
+              Reduce NF All (  ).
+              Assume (= (@ 3 evalString (@ 4 read` i2 data)) (BOOL True)).
+              1. Reduce NF All (  ).
+                 Rewrite -> All "decompose_evalEState".
+                 Split Deep.
+                 1. Exact H5.
+                 2. Exact H9.
+                 3. Reduce NF All (  ).
+                    Reflexive.
+              2. Apply "eval_read".
+                 Split Shallow.
+                 1. Exact H6.
+                 2. Exact H5.
+
+THEOREM:
+  eval_editsets
+DEPENDS:
+  1 0 6 5 3 22
+PROOF:
+  Introduce ev state H1 H2.
+  Cases ev.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to i1.
+     RenameE x2 to v1.
+     Rewrite -> All "decompose_evalEvent" in H1.
+     Split Shallow H1.
+     Cases state.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to data.
+        RenameE x3 to status.
+        Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        Cases x2.
+        1. ReduceH NF All in H6 (  ).
+           Definedness.
+        2. RenameE x1 to i2.
+           RenameE x2 to v2.
+           Rewrite -> All "decompose_evalEvent" in H6.
+           Split Shallow H6.
+           Opaque 6 evalEState.
+           Assume (= (@ 0 evalEditableData (@ 1 write` i2 v1 data)) (BOOL True)).
+           1. Assume ~(= (@ 1 write` i2 v1 data) BOTTOM).
+              1. Assume (= (@ 0 evalEditableData (@ 1 write` i2 v2 data)) (BOOL True)).
+                 1. Assume ~(= (@ 1 write` i2 v2 data) BOTTOM).
+                    1. Reduce NF All (  ).
+                       Cases status.
+                       1. ReduceH NF All in H7 (  ).
+                          Definedness.
+                       2. Discard 0 0 1 H7.
+                          Reduce NF All (  ).
+                          Rewrite -> All H8.
+                          Reduce NF All (  ).
+                          Rewrite -> All "decompose_evalEState".
+                          Split Deep.
+                          1. Exact H12.
+                          2. Exact H9.
+                          3. Reduce NF All (  ).
+                             Reflexive.
+                       3. Reduce NF All (  ).
+                          SplitCase 1.
+                          1. Contradiction H14.
+                             Apply "eval_compareEditorId".
+                             Split Shallow.
+                             1. Exact H3.
+                             2. Exact H8.
+                          2. Rewrite -> All H8.
+                             Reduce NF All (  ).
+                             Rewrite -> All "decompose_evalEState".
+                             Split Deep.
+                             1. Exact H10.
+                             2. Exact H4.
+                             3. Reduce NF All (  ).
+                                Reflexive.
+                          3. Rewrite -> All H8.
+                             Reduce NF All (  ).
+                             Rewrite -> All "decompose_evalEState".
+                             Split Deep.
+                             1. Exact H12.
+                             2. Exact H9.
+                             3. Reduce NF All (  ).
+                                Reflexive.
+                    2. Contradiction.
+                       Rewrite -> All H13 in H12.
+                       ReduceH NF All in H12 (  ).
+                       Definedness.
+                 2. Apply "eval_write".
+                    Split Deep.
+                    1. Exact H8.
+                    2. Exact H9.
+                    3. Exact H5.
+              2. Contradiction.
+                 Rewrite -> All H11 in H10.
+                 ReduceH NF All in H10 (  ).
+                 Definedness.
+           2. Apply "eval_write".
+              Split Deep.
+              1. Exact H8.
+              2. Exact H4.
+              3. Exact H5.
+
+THEOREM:
+  eval_first1
+DEPENDS:
+  6 21 5 18 19 20
+PROOF:
+  Introduce ev A state B f H1 H2 H3 H4.
+  Cases state.
+  1. ReduceH NF All in H3 (  ).
+     Definedness.
+  2. RenameE x1 to data1.
+     RenameE x3 to status1.
+     Cases x2.
+     1. ReduceH NF All in H1 (  ).
+        Definedness.
+     2. Discard 0 0 1 H1.
+        RenameE x1 to a.
+        RenameE x2 to c.
+        Rewrite -> All "evalEState_o" in H3.
+        UncurryH in H3.
+        ReduceH NF (fst 1 NO) in H3 (  ).
+        Reduce NF (first 1 NO) (  ).
+        Unshare True 1 _x All.
+        SpecializeE H4 with ev.
+        SpecializeE H4 with (TUPLE data1 a status1).
+        Apply H4 to H2.
+        Apply H5 to H3.
+        Explicit Cases {f @ ev (TUPLE data1 a status1)}.
+        1. Introduce H7.
+           Rewrite -> All H7 in H6.
+           ReduceH NF All in H6 (  ).
+           Definedness.
+        2. Introduce data2 b status2 H7.
+           Rewrite -> All H7.
+           Rewrite -> All "evalEState_o".
+           Opaque 6 evalEState.
+           Reduce NF All (  ).
+           Rewrite <- All H7.
+           Exact H6.
+
+THEOREM:
+  eval_first2
+DEPENDS:
+  6 5 0 17 18 19 20
+PROOF:
+  Introduce ev data status B f H1 H2 H3 H4.
+  Opaque 6 evalEState.
+  Reduce NF (first 1 NO) (  ).
+  Unshare True 1 _x All.
+  SpecializeE H4 with ev.
+  SpecializeE H4 with data.
+  SpecializeE H4 with status.
+  Apply H4 to H1.
+  Apply H5 to H2.
+  Apply H6 to H3.
+  Explicit Cases {f @ ev (TUPLE data BOTTOM status)}.
+  1. Introduce H8.
+     Rewrite -> All H8 in H7.
+     ReduceH NF All in H7 (  ).
+     Definedness.
+  2. Introduce data2 b status2 H8.
+     Rewrite -> All H8.
+     Rewrite -> All "evalEState_o".
+     Reduce NF All (  ).
+     Rewrite <- All H8.
+     Exact H7.
+
+THEOREM:
+  eval_iterateN
+DEPENDS:
+  13 5 6 12 10
+PROOF:
+  Introduce ev A state f H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x3 to status.
+     Cases x2.
+     1. Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        ReduceH NF All in H5 (  ).
+        Definedness.
+     2. RenameE x1 to n.
+        RenameE x2 to a.
+        Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        Apply "eval_iterateN_reformulated".
+        Split Deep.
+        1. Exact H1.
+        2. Exact H4.
+        3. ReduceH NF All in H5 (  ).
+           Reduce NF All (  ).
+           Cases (@ 13 <_int n (INT 0)).
+           1. ReduceH NF All in H5 (  ).
+              Definedness.
+           2. ReduceH NF All in H5 (  ).
+              AbsurdEqualityH H5.
+           3. Reduce NF All (  ).
+              Reflexive.
+        4. ReduceH NF All in H5 (  ).
+           Cases (@ 13 <_int n (INT 0)).
+           1. ReduceH NF All in H5 (  ).
+              Definedness.
+           2. ReduceH NF All in H5 (  ).
+              AbsurdEqualityH H5.
+           3. ReduceH NF All in H5 (  ).
+              Exact H5.
+        5. Exact H6.
+        6. Exact H3.
+
+THEOREM:
+  eval_iterateN_reformulated
+DEPENDS:
+  10 11 6 12 13 5 0 14 15 16 17
+PROOF:
+  Induction n.
+  1. Definedness.
+  2. Introduce H1 ev data a status A f H2 H3 H4 H5 H6 H7.
+     ReduceH NF All in H4 (  ).
+     Rewrite -> All H1 in H4.
+     ReduceH NF All in H4 (  ).
+     AbsurdEqualityH H4.
+  3. Introduce ev data a status A f H1 H2 H3 H4 H5 H6.
+     Discard 0 0 1 H3.
+     Reduce NF (iterateN 1 NO) (  ).
+     Rewrite -> All "decompose_evalEState".
+     Split Deep.
+     1. Exact H2.
+     2. Exact H4.
+     3. Exact H5.
+  4. Introduce H1 H2 ev data a status A f H3 H4 H5 H6 H7 H8.
+     Reduce RNF (iterateN 1 NO) (  ).
+     Unshare True 1 n All.
+     Assume (= (@ 13 <_int (INT 0) (@ 11 +_int n (INT 1))) (BOOL True)).
+     1. Rewrite -> All H9.
+        Reduce 2 (case 1 NO) (  ).
+        Explicit SpecializeE H8 with ev.
+        Introduce H10.
+        SpecializeE H10 with (TUPLE data (TUPLE (@ 11 +_int n (INT 1)) a) status).
+        Apply H10 to H3.
+        Assume (= (@ 6 evalEState (@ 12 evalNTuple A) (TUPLE data (TUPLE (@ 11 +_int n (INT 1)) a) status)) (BOOL True)).
+        1. Apply H11 to H12.
+           Explicit Cases {f @ ev (TUPLE data (TUPLE (@ 11 +_int n (INT 1)) a) status)}.
+           1. Introduce H14.
+              Rewrite -> All H14 in H13.
+              ReduceH NF All in H13 (  ).
+              Definedness.
+           2. Introduce data2 ev2 status2 H14.
+              Rewrite -> All H14.
+              Opaque 10 iterateN.
+              Reduce NF All (  ).
+              IntArith All.
+              Rewrite -> All H14 in H13.
+              Rewrite -> All "decompose_evalEState" in H13.
+              Split Deep H13.
+              Apply H2.
+              Split Deep.
+              1. Exact H3.
+              2. Exact H15.
+              3. Reduce NF All (  ).
+                 Rewrite -> All H1.
+                 Reduce NF All (  ).
+                 Reflexive.
+              4. Exact H16.
+              5. Exact H17.
+              6. Exact H8.
+        2. Rewrite -> All "decompose_evalEState".
+           Split Deep.
+           1. Exact H4.
+           2. Reduce NF All (  ).
+              ReduceH NF All in H5 (  ).
+              Rewrite -> All H5.
+              Reduce NF All (  ).
+              Exact H6.
+           3. Exact H7.
+     2. Rewrite <- All "not_smaller".
+        Exact H1.
+
+THEOREM:
+  eval_left
+DEPENDS:
+  6 5 8 9
+PROOF:
+  Introduce ev A C state B f H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data1.
+     RenameE x3 to status1.
+     Rewrite -> All "decompose_evalEState" in H2.
+     Split Deep H2.
+     Cases x2.
+     1. ReduceH NF All in H5 (  ).
+        Definedness.
+     2. RenameE x1 to a.
+        Reduce NF (left 1 NO) (  ).
+        Unshare True 1 _x All.
+        SpecializeE H3 with ev.
+        SpecializeE H3 with (TUPLE data1 a status1).
+        Apply H3 to H1.
+        ReduceH NF All in H5 (  ).
+        Assume (= (@ 6 evalEState A (TUPLE data1 a status1)) (BOOL True)).
+        1. Apply H7 to H8.
+           Explicit Cases {f @ ev (TUPLE data1 a status1)}.
+           1. Introduce H10.
+              Rewrite -> All H10 in H9.
+              ReduceH NF All in H9 (  ).
+              Definedness.
+           2. Introduce data2 b status2 H10.
+              Rewrite -> All H10.
+              Opaque 6 evalEState.
+              Reduce NF All (  ).
+              Rewrite -> All H10 in H9.
+              Rewrite -> All "decompose_evalEState" in H9.
+              Split Deep H9.
+              Rewrite -> All "decompose_evalEState".
+              Split Deep.
+              1. Exact H11.
+              2. Reduce NF All (  ).
+                 Exact H12.
+              3. Exact H13.
+        2. Rewrite -> All "decompose_evalEState".
+           Split Deep.
+           1. Exact H4.
+           2. Exact H5.
+           3. Exact H6.
+     3. RenameE x1 to c.
+        Reduce NF (left 1 NO) (  ).
+        Rewrite -> All "decompose_evalEState".
+        Split Deep.
+        1. Exact H4.
+        2. Reduce NF All (  ).
+           ReduceH NF All in H5 (  ).
+           Exact H5.
+        3. Exact H6.
+
+THEOREM:
+  eval_read
+DEPENDS:
+  2 0 3 4
+PROOF:
+  Induction data.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Introduce i H1 H2.
+     Reduce NF All (  ).
+     Cases i.
+     1. ReduceH NF All in H1 (  ).
+        Definedness.
+     2. Rewrite -> All "decompose_evalEditorId" in H1.
+        Split Shallow H1.
+        Reduce NF All (  ).
+        Reflexive.
+  3. Introduce data datas IH i H1 H2.
+     Reduce NF All (  ).
+     Cases data.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. Rewrite -> All "decompose_evalEditableData" in H2.
+        Split Deep H2.
+        Reduce NF All (  ).
+        SplitCase 1.
+        1. Contradiction H5.
+           Apply "eval_compareEditorId".
+           Split Shallow.
+           1. Exact H2.
+           2. Exact H1.
+        2. Exact H3.
+        3. Apply IH.
+           Split Shallow.
+           1. Exact H1.
+           2. Exact H4.
+
+THEOREM:
+  eval_seq
+DEPENDS:
+  5 6 7
+PROOF:
+  Introduce ev A state B f C g H1 H2 H3 H4.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x2 to a.
+     RenameE x3 to status.
+     Reduce NF All (  ).
+     Apply H4.
+     Split Shallow.
+     1. Exact H1.
+     2. Apply H3.
+        Split Shallow.
+        1. Exact H1.
+        2. Exact H2.
+
+THEOREM:
+  eval_write
+DEPENDS:
+  2 3 0 1
+PROOF:
+  Induction data.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Introduce i v H1 H2 H3.
+     Reduce NF All (  ).
+     Rewrite -> All H1.
+     Reduce NF All (  ).
+     Reflexive.
+  3. Introduce data datas IH i v H1 H2 H3.
+     Cases data.
+     1. ReduceH NF All in H3 (  ).
+        Definedness.
+     2. Rewrite -> All "decompose_evalEditableData" in H3.
+        Split Deep H3.
+        Reduce NF All (  ).
+        SplitCase 1.
+        1. Contradiction H6.
+           Apply "eval_compareEditorId".
+           Split Shallow.
+           1. Exact H3.
+           2. Exact H1.
+        2. Rewrite -> All "decompose_evalEditableData".
+           Split Deep.
+           1. Exact H1.
+           2. Exact H2.
+           3. Exact H5.
+        3. Rewrite -> All "decompose_evalEditableData".
+           Split Deep.
+           1. Exact H3.
+           2. Exact H4.
+           3. Apply IH.
+              Split Deep.
+              1. Exact H1.
+              2. Exact H2.
+              3. Exact H5.
+
+THEOREM:
+  not_read_bottom
+DEPENDS:
+  3 4 2 0
+PROOF:
+  Introduce i data H1 H2.
+  Assume (= (@ 3 evalString (@ 4 read` i data)) (BOOL True)).
+  1. Definedness.
+  2. Apply "eval_read".
+     Split Shallow.
+     1. Exact H1.
+     2. Exact H2.
+
+THEOREM:
+  not_write_bottom
+DEPENDS:
+  0 1 2 3
+PROOF:
+  Introduce i v data H1 H2 H3.
+  Assume (= (@ 0 evalEditableData (@ 1 write` i v data)) (BOOL True)).
+  1. Contradiction.
+     Rewrite -> All H5 in H4.
+     ReduceH NF All in H4 (  ).
+     Definedness.
+  2. Apply "eval_write".
+     Split Deep.
+     1. Exact H1.
+     2. Exact H2.
+     3. Exact H3.
+
+

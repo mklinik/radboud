@@ -1,0 +1,3792 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection7>
+
+<p class=Heading1Chapter><span style='position:absolute;z-index:251678208;
+left:0px;margin-left:38px;margin-top:19px;width:200px;height:97px'><img
+width=200 height=97 src="CleanRep.2.2_files/image001.jpg"></span><a
+name="_Toc311798015"></a><span lang=EN-US style='font-size:12.0pt;font-family:
+"New York","serif"'><br>
+</span><span lang=EN-US>Chapter 4<a name="_Predefined_Types"></a><br>
+Predefined Types</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="50%" valign=top style='width:50.32%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="10%" valign=top style='width:10.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>4.1</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_4.1_Basic_Types:">Basic Types: Int, Real, Char and
+    Bool</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="10%" valign=top style='width:10.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>4.2</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_4.2_Lists">Lists</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="10%" valign=top style='width:10.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>4.3</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="CleanRep.2.2_7.htm#_4.3_Typing_Functions">Tuples</a></span></p>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>&nbsp;</span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="49%" valign=top style='width:49.68%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>4.4</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="CleanRep.2.2_5.htm#_4.4_Typing_Overloaded">Arrays</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>4.5</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_4.5_Predefined_Type">Predefined Type Constructors</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>4.6</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="CleanRep.2.2_8.htm#_4.5_Defining_Uniqueness">Arrow Types</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>4.7</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_4.6_Predefined_Abstract">Predefined Abstract Types</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>Certain types like </span><span class=clean><span
+lang=EN-US>Int</span></span><span lang=EN-US>egers, </span><span class=clean><span
+lang=EN-US>Bool</span></span><span lang=EN-US>eans, </span><span class=clean><span
+lang=EN-US>Char</span></span><span lang=EN-US>acters, </span><span class=clean><span
+lang=EN-US>Real</span></span><span lang=EN-US>s, Lists, Tuples and Arrays are
+that frequently used that they have been predefined in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> for reasons of efficiency and/or notational convenience. These
+types and the syntactic sugar that has been added to create and to inspect (via
+pattern matching) objects of these popular types are treated in this chapter.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>PredefinedType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BasicType</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_4.1_Predefined_Types">see 4.1</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ListType</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_4.2_Lists_1">see 4.2</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TupleType</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_4.3_Tuples">see 4.3</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayType</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_4.4_Arrays">see 4.4</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrowType</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_4.5_Arrow_Types">see 4.6</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>PredefAbstractType</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_4.2_Defining_New">see 4.7</a></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>In Chapter 5 we will explain how new types can be
+defined. </span></p>
+
+<h2><a name="_Toc311798016"></a><a name="_Toc524343550"></a><a
+name="_4.1_Predefined_Types"></a><a name="_4.1.1_Basic_Types"></a><a
+name="_4.1_Basic_Types:"></a><span lang=EN-US>4.1    Basic Types</span><span
+lang=EN-US>: Int, Real, Char and Bool</span></h2>
+
+<p class=par><i><span lang=EN-US>Basic types</span></i><span lang=EN-US> are <i>algebraic types</i>
+(<a href="CleanRep.2.2_7.htm#_5.1_Defining_Algebraic">see 5.1</a>) which are predefined for
+reasons of efficiency and con­ve­nience: </span><span class=clean><span
+lang=EN-US>Int</span></span><span lang=EN-US> </span><span
+lang=EN-US>(for 32 bits integer values), </span><span class=clean><span
+lang=EN-US>Real</span></span><span lang=EN-US> </span><span
+lang=EN-US>(for 64 bit double precision floating point values), </span><span
+class=clean><span lang=EN-US>Char</span></span><span lang=EN-US> </span><span
+lang=EN-US>(for 8 bits ASCII </span><span
+lang=EN-US> character values) and </span><span class=clean><span lang=EN-US>Bool</span></span><span lang=EN-US> (for 8 bits Boolean values). For pro­gramming convenience spe­cial
+syntax is introduced to denote constant values (data constructors) of these
+prede­fined types. Functions to create and manipu­late objects of basic types
+can be found in the C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>StdEnv</span></span><span lang=EN-US> li­brary (as indi­cated
+below).</span></p>
+
+<p class=par><span lang=EN-US>There is also a special notation to denote a
+string (an unboxed array</span><span
+lang=EN-US> of characters, <a href="#_4.4.1_Creating_Arrays">see 4.4</a>) as
+well as to denote a list of characters (<a href="#_4.2.1_Creating_Lists">see
+4.2.1</a>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BasicType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>Int</span></span><span lang=EN-US> </span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// see </span><span
+  class=clean><span lang=EN-US>StdInt.dcl</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>Real</span></span><span lang=EN-US> </span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// see </span><span
+  class=clean><span lang=EN-US>StdReal.dcl</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>Char</span></span><span lang=EN-US> </span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// see </span><span
+  class=clean><span lang=EN-US>StdChar.dcl</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>Bool</span></span><span class=clean><span lang=EN-US> </span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// see </span><span
+  class=clean><span lang=EN-US>StdBool.dcl</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<h3><a name="_Toc524343551"></a><a name="_Toc311798017"></a><a
+name="_4.1.2_Predefined_Abstract"></a><a name="_4.1.1_Creating_Constant"></a><span
+lang=EN-US>4.1.1 Creating Constant Values of Basic Type</span></h3>
+
+<p class=par><span lang=EN-US>In a graph expression a <i>constant value </i>of <span
+style='display:none'>i.</span>basic type <span style='display:none'>;</span></span><span
+class=clean><span lang=EN-US>Int</span></span><span
+lang=EN-US>, </span><span class=clean><span lang=EN-US>Real</span></span><span
+lang=EN-US>, </span><span class=clean><span lang=EN-US>Bool</span></span><span
+lang=EN-US> </span><span lang=EN-US style='font-size:10.0pt;font-family:Courier;
+display:none'>;</span><span lang=EN-US>or </span><span class=clean><span
+lang=EN-US>Char</span></span><span
+lang=EN-US> can be created. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="97%"
+ style='width:97.74%;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.12%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BasicValue</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>IntDenotation</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.12%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RealDenotation</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.12%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BoolDenotation</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.12%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharDenotation</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>IntDenotation</span><span lang=EN-US>;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[Sign]{Digit}+</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// decimal
+  number</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[Sign]</span><span
+  class=cleanb><span lang=EN-US>0</span></span><span lang=EN-US>{OctDigit}+</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// octal
+  number</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>[Sign]</span><span
+  class=cleanb><span lang=PT-BR>0x</span></span><span lang=PT-BR>{HexDigit}+</span><span
+  lang=PT-BR> </span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>//
+  hexadecimal number</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>Sign</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>+</span></span><span lang=PT-BR> |</span><span class=cleanb><span
+  lang=PT-BR> -</span></span><span lang=PT-BR> </span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>RealDenotation</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>[Sign]{Digit}+</span><span
+  class=cleanb><span lang=PT-BR>.</span></span><span lang=PT-BR>{Digit}+[</span><span
+  class=cleanb><span lang=PT-BR>E</span></span><span lang=PT-BR>[Sign]{Digit}+]</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BoolDenotation</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>True</span></span><span
+  lang=EN-US> | </span><span class=cleanb><span lang=EN-US>False</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharDenotation</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharDel  
+  AnyChar/</span><span lang=EN-US>~CharDel       CharDel</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharsDenotation</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharDel  
+  {AnyChar/</span><span lang=EN-US>~CharDel}+  CharDel</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AnyChar</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>IdChar |
+  ReservedChar | Special</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ReservedChar</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="39%" colspan=2 valign=top style='width:39.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  )  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  {  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  }  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  [  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  ]  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  ;  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  ,  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  .</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Special</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>\n  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  \r  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  \f  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  \b</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// new­line,return,formf,backspace</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>\t  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  \\  </span></span><span lang=EN-US>|</span><span class=cleanb><span
+  lang=EN-US>  \</span></span><span lang=EN-US>CharDel</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>//
+  tab,backslash,character delete</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>\</span></span><span lang=EN-US>StringDel</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// string
+  delete</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>\</span></span><span lang=EN-US>{OctDigit}+</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// octal
+  number</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>\x</span></span><span lang=PT-BR>{HexDigit}+</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>//
+  hexadecimal number</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=PT-BR>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>Digit</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>0  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  1  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  2  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  3  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  4  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  5  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  6  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  7  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  8  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  9</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>OctDigit</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>0  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  1  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  2  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  3  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  4  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  5  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  6  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  7</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>HexDigit</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>0  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  1  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  2  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  3  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  4  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  5  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  6  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  7  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  8  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  9</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>A  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  B  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  C  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  D  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  E  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  F</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>a  </span></span><span lang=PT-BR>|</span><span class=cleanb><span
+  lang=PT-BR>  b</span><span lang=EN-US>  </span></span><span lang=EN-US>|</span><span
+  class=cleanb><span lang=EN-US>  </span></span><span class=cleanb><span
+  lang=PT-BR>c</span><span lang=EN-US>  </span></span><span lang=EN-US>|</span><span
+  class=cleanb><span lang=EN-US>  </span></span><span class=cleanb><span
+  lang=PT-BR>d</span><span lang=EN-US>  </span></span><span lang=EN-US>|</span><span
+  class=cleanb><span lang=EN-US>  </span></span><span class=cleanb><span
+  lang=PT-BR>e</span><span lang=EN-US>  </span></span><span lang=EN-US>|</span><span
+  class=cleanb><span lang=EN-US>  </span></span><span class=cleanb><span
+  lang=PT-BR>f</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=PT-BR>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharDel</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>'</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>StringDel</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>&quot;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of denotations.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Integer (decimal):        </span><span
+class=clean><span lang=EN-US>0</span></span><span lang=EN-US>|1|2|…|8|9|10| …
+|-1|-2| …</span></p>
+
+<p class=ex><span lang=EN-US>Integer (octal):          00|01|02|…|07|010| …
+|-01|-02| …</span></p>
+
+<p class=ex><span lang=EN-US>Integer (hexadecimal):    0x0|0x1|0x2|…|0x8|0x9|0xA|0xB
+… </span><span lang=PT-BR>|-0x1|-0x2| …  </span></p>
+
+<p class=ex><span lang=PT-BR>Real:                     0.0|1.5|0.314E10| …</span></p>
+
+<p class=ex><span lang=EN-US>Boolean:                  True | False</span></p>
+
+<p class=ex><span lang=EN-US>Character:                'a'|'b'|…|'A'|'B'|…</span></p>
+
+<p class=ex><span lang=EN-US>String:                   &quot;&quot; | &quot;Rinus&quot;|&quot;Marko&quot;|…</span></p>
+
+<p class=ex><span lang=EN-US>List of characters:       ['Rinus']|['Marko']|…</span></p>
+
+<h3><a name="_Toc524343552"></a><a name="_Toc311798018"></a><a
+name="_4.1.3_List_Types"></a><a name="_4.2_Lists"></a><a
+name="_4.1.2_Patterns_of"></a><span lang=EN-US>4.1.2 Patterns of Basic Type</span></h3>
+
+<p class=par><span lang=EN-US>A <i>constant value</i></span><span
+lang=EN-US> of predefined<i> basic type </i></span><span class=clean><span lang=EN-US>Int</span></span><span
+lang=EN-US>, </span><span class=clean><span lang=EN-US>Real</span></span><span
+lang=EN-US>, </span><span class=clean><span lang=EN-US>Bool</span></span><span
+lang=EN-US> or </span><span class=clean><span lang=EN-US>Char</span></span><span
+lang=EN-US> </span><span
+lang=EN-US>(</span><a href="#_4.1_Predefined_Types"><span lang=EN-US>see 4.1</span></a><span
+lang=EN-US>) can be speci­fied as pat­tern.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BasicValuePattern</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BasicValue</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US> The denotation of such a value must obey the syntactic description
+given in above.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Use of Integer values in a pattern.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>nfib:: Int -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>nfib 0 = 1</span></p>
+
+<p class=ex><span lang=PT-BR>nfib 1 = 1</span></p>
+
+<p class=ex><span lang=PT-BR>nfib n = 1 + nfib (n-1) * nfib (n-2)</span></p>
+
+<h2><a name="_Toc311798019"></a><a name="_4.2_Lists_1"></a><span lang=EN-US>4.2    List</span><span
+lang=EN-US>s</span></h2>
+
+<p class=par><span
+lang=EN-US>A <i>list</i> </span><span
+lang=EN-US> is an algebraic data type predefined just for programming
+convenience. A list can contain an <i>in­fi­nite number</i> of elements. All
+elements must be of the <i>same type</i>. Lists are very often used in func­tional
+languages and therefore the usual syntactic sugar is provided for the creation
+and ma­ni­pu­lation of lists (dot-dot expressions, list comprehensions) while
+there is also special syntax for a <i>list of characters</i>.</span></p>
+
+<p class=par><span lang=EN-US>Lists can be lazy (default), and optionally be
+defined as head strict, spine strict, strict (both head and spine strict), head
+strict unboxed, and strict unboxed. Lazy, strict and unboxed lists are all ob­jects
+of <i>different</i> type. All these different types of lists have different
+time and space properties (<a href="CleanRep.2.2_12.htm#_10.1.3_Space_Consumption">see 10.1.3</a>).
+Because these lists are of different type, conversion functions are needed to
+change e.g. a lazy list to a strict list. Functions defined on one type of a
+list cannot be applied to another type of list. However, one can define
+overloaded functions that can be used on any list: lazy, strict as well as on
+unboxed lists.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><a name="_Toc524343553"></a><a
+  name="_4.1.4_Tuple_Types"></a><span lang=EN-US>ListType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[</span></span><span lang=EN-US>[ListKind] Type [SpineStrictness]</span><span
+  class=cleanb><span lang=EN-US>]</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ListKind</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// head
+  strict list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>#</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// head
+  strict, unboxed list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SpineStrictness</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// tail
+  (spine) strict list</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>All elements of a list must be of the <i>same type</i>. </span></p>
+
+<h3><a name="_Toc311798020"></a><a name="_4.2.1_Creating_Lists"></a><span
+lang=EN-US>4.2.1 Creating Lists</span></h3>
+
+<p class=par><span lang=EN-US>Because lists are very convenient and very
+frequently used data structures, there are several syntactical con­structs in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> for creating lists, including <span style='display:none'>ib.</span><i>dot-dot
+expression</i><span style='display:none'>;</span><i> </i>and <i>ZF-expression</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US>. Since C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+is a lazy functional language, the default list in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+is a <i>lazy</i> list. However, in some cases <i>strict</i> <i>lists</i>, <i>spine
+strict</i> <i>lists</i> and <i>unboxed</i> <i>lists</i> can be more convenient
+and more efficient.<span style='display:none'>ib.generator:list;</span></span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>List</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ListDenotation</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DotDotexpression</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ZF-expression</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US> All elements of a list must be of the same type.</span></p>
+
+<h4><span lang=EN-US>         <a name="_Toc311798021">Lazy Lists</a></span></h4>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ListDenotation</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[</span></span><span lang=EN-US>[ListKind] [{LGraphExpr}-list [</span><span
+  class=cleanb><span lang=EN-US>:</span></span><span lang=EN-US> GraphExpr]]
+  [SpineStrictness] </span><span class=cleanb><span lang=EN-US>]</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LGraphExpr</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphExpr</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharsDenotation</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharsDenotation</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharDel
+  {AnyChar/</span><span lang=EN-US>~CharDel}+ CharDel</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharDel</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>'</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>One way to create a list is by explicit
+enumeration of the list elements. Lists are constructed by adding one or more
+elements to an existing list. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Various ways to define a lazy list with the
+integer elements </span><span lang=EN-US style='font-family:Courier'>1,3,5,7,9</span><span
+lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>[1:[3:[5:[7:[9:[]]]]]]</span></p>
+
+<p class=ex><span lang=EN-US>[1:3:5:7:9:[]]</span></p>
+
+<p class=ex><span lang=EN-US>[1,3,5,7,9]</span></p>
+
+<p class=ex><span lang=EN-US>[1:[3,5,7,9]]</span></p>
+
+<p class=ex><span lang=EN-US>[1,3,5:[7,9]]</span></p>
+
+<p class=par><span lang=EN-US>A special nota­tion is pro­vided for the
+frequently used <i>list of characters</i>.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Various ways to define a lazy list with the
+characters '</span><span lang=EN-US style='font-family:Courier'>a</span><span
+lang=EN-US>', '</span><span lang=EN-US style='font-family:Courier'>b</span><span
+lang=EN-US>' and '</span><span lang=EN-US style='font-family:Courier'>c</span><span
+lang=EN-US>'.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>['a':['b':['c':[]]]]</span></p>
+
+<p class=ex><span lang=EN-US>['a','b','c']</span></p>
+
+<p class=ex><span lang=EN-US>['abc']</span></p>
+
+<p class=ex><span lang=EN-US>['ab','c']    </span></p>
+
+<h4><a name="_Strict_,_Unboxed"></a><span lang=EN-US>         <a
+name="_Toc311798022">Strict , Unboxed and Overloaded Lists</a></span></h4>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ListKind</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// head
+  strict list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>#</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// unboxed
+  list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>|</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>//
+  overloaded list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SpineStrictness</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// spine
+  strict list</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>In C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> <i>any</i> data
+structure can be made (partially) strict or unboxed (</span><a
+href="CleanRep.2.2_12.htm#_5.1_Annotations_to"><span lang=EN-US>see 10.1</span></a><span
+lang=EN-US>). This has consequences for the time and space behavior of the data
+structure. </span></p>
+
+<p class=par><span lang=EN-US>For instance, <i>lazy lists</i> are very
+convenient (nothing is evaluated unless it is really needed for the
+computation, one can deal with infinite data structures), but they can be
+inefficient as well if actually always all lists elements are evaluated sooner
+or later. <i>Strict list</i> are often more efficient, but one has to be
+certain not to trigger a not used infinite computation. <i>Spine strict lists</i>
+can be more efficient as well, but one cannot handle infinite lists in this
+way. Unboxed lists are head strict. The difference with a strict list is that
+the representation of an <i>unboxed list</i> is more compact: instead of a
+pointer to the lists element the list element itself is stored in the list.
+However, unboxed lists have as disadvantage that they can only be used in
+certain cases: they can only contain elements of basic type, records and
+tuples. It does not make sense to offer unboxing for arbitrary types: boxing
+saves space, but not if Cons nodes are copied often: the lists elements are
+copied as well while otherwise the contents could remain shared using the
+element pointer instead. </span></p>
+
+<p class=par><span lang=EN-US>In terms of efficiency it can make quite a
+difference (e.g. strict lists can sometimes be 6 times faster) which kind of
+list is actually used. But, it is in general not decidable which kind of list
+is best to use. This depends on how a list is used in a program. A wrong choice
+might turn a program from useful to useless (too inefficient), from terminating
+to non-terminating.</span></p>
+
+<p class=par><span lang=EN-US>Because lists are so frequently used, special
+syntax is provided to make it easier for a programmer to change from one type
+of list to another, just by changing the kind of brackets used. One can define
+a list of which the <i>head</i> element is strict but the spine is lazy
+(indicated by </span><span class=clean><span lang=EN-US>[! ]</span></span><span
+lang=EN-US>), a list of which the <i>spine</i> is strict but the head element
+is lazy (indicated by </span><span class=clean><span lang=EN-US>[ !]</span></span><span
+lang=EN-US>) and a completely evaluated list (indicated by </span><span
+class=clean><span lang=EN-US>[! !]</span></span><span lang=EN-US>). One can
+have an unboxed list with a strict head element (indicated by </span><span
+class=clean><span lang=EN-US>[# ]</span></span><span lang=EN-US>) and a
+completely evaluated unboxed list of which in addition the spine is strict as
+well (indicated by </span><span class=clean><span lang=EN-US>[# !]</span></span><span
+lang=EN-US>). </span></p>
+
+<p class=par><span lang=EN-US>Note that all these different lists are of
+different type and consequently these lists cannot be mixed and unified with
+each other. With conversion functions offered in the C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+libraries it is possible to convert one list type into another. It is also
+possible to define an overloaded list and overloaded functions that work on <i>any</i>
+list (see hereafter).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Various types of lists.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>[  fac 10 : expression  ]                   </span><span
+class=cleancom><span lang=EN-US>// lazy list</span></span></p>
+
+<p class=ex><span lang=EN-US>[! fac 10 : expression  ]                   </span><span
+class=cleancom><span lang=EN-US>// head strict list</span></span></p>
+
+<p class=ex><span lang=EN-US>[! fac 10 : expression !]                   </span><span
+class=cleancom><span lang=EN-US>// head strict and tail strict list</span></span></p>
+
+<p class=ex><span lang=EN-US>[# fac 10 : expression  ]                   </span><span
+class=cleancom><span lang=EN-US>// head strict list, unboxed</span></span></p>
+
+<p class=ex><span lang=EN-US>[# fac 10 : expression !]                   </span><span
+class=cleancom><span lang=EN-US>// head strict and tail strict list, unboxed</span></span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Unboxed data structures can only contain elements of basic type,
+records and arrays. </span></p>
+
+<p class=par><span lang=EN-US>One can create an <i>overloaded</i> list that
+will fit on any type of list (lazy, strict or unboxed).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an overloaded list.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>[| fac 10 : expression ]                    </span><span
+class=cleancom><span lang=EN-US>// overloaded list</span></span></p>
+
+<p class=par><span lang=EN-US>Other ways to create lists are via </span><a
+href="#_DotDot_Expressions"><span lang=EN-US style='color:windowtext;
+text-decoration:none'>dot-dot expressions</span></a><span lang=EN-US> and </span><a
+href="#_List_Comprehensions"><span lang=EN-US style='color:windowtext;
+text-decoration:none'>list comprehensions</span></a><span lang=EN-US>.</span></p>
+
+<h4><a name="_DotDot_Expressions"></a><span lang=EN-US>         <a
+name="_Toc311798023">DotDot Expressions</a></span></h4>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DotDotexpression</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[</span></span><span lang=EN-US>[ListKind] GraphExpr [</span><span
+  class=cleanb><span lang=EN-US>,</span></span><span lang=EN-US>GraphExpr]</span><span
+  class=cleanb><span lang=EN-US>..</span></span><span lang=EN-US>[GraphExpr]
+  [SpineStrictness] </span><span class=cleanb><span lang=EN-US>]</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>With a dot-dot expression the list elements can
+be enumerated by giving the first element (</span><span class=clean><span
+lang=EN-US>n1</span></span><span lang=EN-US>), an op­tional second element (</span><span
+class=clean><span lang=EN-US>n2</span></span><span lang=EN-US>) and an optional
+last element (</span><span class=clean><span lang=EN-US>e</span></span><span
+lang=EN-US>). </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Alternative ways to define a list a dot dot
+expression.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>[1,3..9]                                        </span><span
+class=cleancom><span lang=EN-US>// [1,3,5,7,9]</span></span></p>
+
+<p class=ex><span lang=EN-US>[1..9]                                          </span><span
+class=cleancom><span lang=EN-US>// [1,2,3,4,5,6,7,8,9]</span></span></p>
+
+<p class=ex><span lang=EN-US>[1..]                                           </span><span
+class=cleancom><span lang=EN-US>// [1,2,3,4,5 and so on…</span></span></p>
+
+<p class=ex><span lang=EN-US>['a'..'c']                                      </span><span
+class=cleancom><span lang=EN-US>// ['abc']</span></span></p>
+
+<p class=par><span lang=EN-US>The generated list is in general calculated as
+follows:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>from_then_to:: !a !a !a -&gt; .[a] | Enum a</span></p>
+
+<p class=ex><span lang=EN-US>from_then_to n1 n2 e</span></p>
+
+<p class=ex><span lang=PT-BR>| n1 &lt;= n2   = _from_by_to n1 (n2-n1) e</span></p>
+
+<p class=ex><span lang=PT-BR>             </span><span lang=EN-US>=
+_from_by_down_to n1 (n2-n1) e</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    from_by_to n s e</span></p>
+
+<p class=ex><span lang=EN-US>    </span><span lang=PT-BR>| n&lt;=e   = [n :
+_from_by_to (n+s) s e]</span></p>
+
+<p class=ex><span lang=PT-BR>             </span><span lang=EN-US>= []</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    from_by_down_to n s e</span></p>
+
+<p class=ex><span lang=EN-US>    | n&gt;=e   = [n : _from_by_down_to (n+s) s e]</span></p>
+
+<p class=ex><span lang=EN-US>             = []</span></p>
+
+<p class=par><span lang=EN-US>The step size is </span><span class=clean><span
+lang=EN-US>one</span></span><span lang=EN-US> by default. If no last element is
+specified an infinite list is generated. </span></p>
+
+<p class=par><span lang=EN-US>With a dot-dot expression one can also define a
+lazy list, a strict list, an unboxed list or an overloaded list.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Different types of lists (lazy, strict, unboxed
+and overloaded can be defined with a dot dot expression as well.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>[  1,3..9  ]                            </span><span
+class=cleancom><span lang=EN-US>// a lazy list</span></span></p>
+
+<p class=ex><span lang=EN-US>[! 1,3..9  ]                            </span><span
+class=cleancom><span lang=EN-US>// a head strict list</span></span></p>
+
+<p class=ex><span lang=EN-US>[! 1,3..9 !]                            </span><span
+class=cleancom><span lang=EN-US>// a strict list (head and spine)</span></span></p>
+
+<p class=ex><span lang=EN-US>[# 1,3..9  ]                            </span><span
+class=cleancom><span lang=EN-US>// a head strict list, unboxed</span></span></p>
+
+<p class=ex><span lang=EN-US>[# 1,3..9 !]                            </span><span
+class=cleancom><span lang=EN-US>// a strict list (head and spine), unboxed</span></span></p>
+
+<p class=ex><span lang=EN-US>[| 1,3..9  ]                            </span><span
+class=cleancom><span lang=EN-US>// an overloaded list</span></span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Dot-dot expression can only be used if one imports </span><span
+class=clean><span lang=EN-US>StdEnum</span></span><span lang=EN-US> from the
+standard library.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Dot-dot expressions are predefined on objects of type </span><span
+class=clean><span lang=EN-US>Int</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>Real </span></span><span lang=EN-US>and </span><span
+class=clean><span lang=EN-US>Char</span></span><span lang=EN-US>, but dot-dots
+can also be applied to any user defined data structure for which the class
+enumeration type</span><span
+lang=EN-US> has been instanti­ated (see C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>s
+Standard Environment).</span></p>
+
+<h4><a name="_List_Comprehensions"></a><span lang=EN-US>         <a
+name="_Toc311798024">List Comprehensions</a></span></h4>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ZF-expression</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="73%" colspan=2 valign=top style='width:73.28%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[</span></span><span lang=EN-US>[ListKind] GraphExpr </span><span
+  class=cleanb><span lang=EN-US>\\</span></span><span lang=EN-US>
+  {Qualifier}-list [SpineStrictness]</span><span class=cleanb><span lang=EN-US>]</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Qualifier</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="73%" colspan=2 valign=top style='width:73.28%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Generators {
+  </span><span class=cleanb><span lang=EN-US>,</span></span><span lang=EN-US> </span><span
+  class=cleankw><span lang=EN-US>let</span></span><span lang=EN-US> </span><span
+  class=clean><b><span lang=EN-US style='color:#3366FF'>{</span></b></span><span
+  lang=EN-US> {LocalDef}+ </span><span class=cleankw><span lang=EN-US
+  style='color:#3366FF'>}</span></span><span lang=EN-US> } {</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US>Guard}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Generators</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{Generator}-list</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Generator {</span><span
+  class=cleanb><span lang=EN-US>&amp;</span></span><span lang=EN-US> Generator}</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Generator</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selector </span><span
+  class=cleanb><span lang=EN-US>&lt;-</span></span><span lang=EN-US> ListExpr</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// select
+  from a lazy list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selector </span><span
+  class=cleanb><span lang=EN-US>&lt;|-</span></span><span lang=EN-US> ListExpr</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// select
+  from an overloaded list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selector </span><span
+  class=cleanb><span lang=EN-US>&lt;-:</span></span><span lang=EN-US> ArrayExpr</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// select
+  from an array</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selector</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackPattern</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// for brack
+  patterns </span><a href="CleanRep.2.2_5.htm#_3.2_Patterns"><span lang=EN-US>see 3.2</span></a></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ListExpr</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphExpr</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayExpr</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphExpr</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Guard</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BooleanExpr</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BooleanExpr</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphExpr</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ListKind</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// head
+  strict list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>#</span></span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// unboxed
+  list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>|</span></span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>//
+  overloaded list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SpineStrictness</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// spine
+  strict list</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>With a list generator called a ZF-expression one
+can construct a list composed from elements drawn from other lists or arrays.
+With a <i>list</i> <i>genera­tor</i></span><span
+lang=EN-US> one can draw elements from lazy list. The symbol '</span><span
+class=clean><span lang=EN-US>&lt;-</span></span><span lang=EN-US>' is used to
+draw elements from a lazy list, the symbol '</span><span class=clean><span
+lang=EN-US>&lt;|-</span></span><span lang=EN-US>' can be used to draw elements
+from any (lazy, strict, unboxed) list. With an <i>array genera­tor</i></span><span
+lang=EN-US> (use symbol '</span><span class=clean><span lang=EN-US>&lt;-:</span></span><span
+lang=EN-US>') one can draw elements from any array.</span><span
+lang=EN-US> One can define several generators in a row separated by a comma.
+The last generator in such a sequence will vary first. One can also define
+several genera­tors in a row separated by a '</span><span class=clean><span
+lang=EN-US>&amp;</span></span><span lang=EN-US>'. All genera­tors in such a
+sequence will vary at the same time but the drawing of el­ements will stop as
+soon of one the generators is exhausted. This construct can be used instead of
+the zip-functions that are com­monly used. <i>Selectors</i> are simple patterns
+to iden­tify parts of a graph ex­pression. They are ex­plained in </span><a
+href="CleanRep.2.2_5.htm#_Selectors"><span lang=EN-US>Section 3.6</span></a><span lang=EN-US>.
+Only those lists produced by a generator that match the specified selector are
+taken into account. Guards can be used as filter in the usual way. </span><span lang=EN-US> </span></p>
+
+<p class=par><span lang=EN-US>The scope of the selector variables introduced on
+the left-hand side of a generator is such that the vari­ables can be used in
+the guards and other generators that follow. All variables introduced in this
+way can be used in the expression before the </span><span class=clean><span
+lang=EN-US>\\ </span></span><span lang=EN-US>(see the picture below).</span></p>
+
+<p class=exb><span lang=EN-US> </span></p>
+
+<p class=ex><span style='position:absolute;z-index:251659776;margin-left:6px;
+margin-top:10px;width:331px;height:67px'><img width=331 height=67
+src="CleanRep.2.2_files/image031.gif"></span><span style='position:absolute;
+z-index:251658752;margin-left:12px;margin-top:13px;width:312px;height:59px'><img
+width=312 height=59 src="CleanRep.2.2_files/image032.gif"></span><span
+lang=EN-US><br>
+[ expression \\  selector  &lt;- expression</span></p>
+
+<p class=ex><span lang=EN-US>             |   guard</span></p>
+
+<p class=ex><span lang=EN-US>             ,   selector  &lt;- expression</span></p>
+
+<p class=ex><span lang=EN-US>             |   guard</span></p>
+
+<p class=ex><span lang=EN-US>]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>ZF-expression:</span></p>
+
+<p class=exth><span lang=EN-US style='font-family:Courier'>expr1</span><span
+lang=EN-US> yields </span><span lang=EN-US style='font-family:Courier'>[(0,0),
+(0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2), (3,0), (3,1), (3,2)]</span><span
+lang=EN-US> </span></p>
+
+<p class=exth><span lang=EN-US style='font-family:Courier'>expr2</span><span
+lang=EN-US> yields </span><span lang=EN-US style='font-family:Courier'>[(0,0),
+(1,1), (2,2)]</span><span lang=EN-US>. </span></p>
+
+<p class=exth><span lang=EN-US style='font-family:Courier'>expr3</span><span
+lang=EN-US> yields </span><span lang=EN-US style='font-family:Courier'>[(0,0),
+(1,0), (1,1), (2,0), (2,1), (2,2), (3,0), (3,1), (3,2), (3,3)]</span><span
+lang=EN-US>)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>expr1 = [(x,y) \\ x &lt;- [0..3] , y &lt;- [0..2]]</span></p>
+
+<p class=ex><span lang=EN-US>expr2 = [(x,y) \\ x &lt;- [0..3] &amp; y &lt;-
+[0..2]]</span></p>
+
+<p class=ex><span lang=EN-US>expr3 = [(x,y) \\ x &lt;- [0..3] , y &lt;- [0..x]]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>ZF-expression: a well-know sort.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>sort:: [a] -&gt; [a] | Ord a  </span></p>
+
+<p class=ex><span lang=EN-US>sort []      = []</span></p>
+
+<p class=ex><span lang=EN-US>sort [p:ps]  = sort [x \\ x&lt;-ps | x&lt;=p] ++
+[p] ++ sort [x \\ x&lt;-ps | x&gt;p]</span></p>
+
+<p class=exb><b><span lang=EN-US style='font-size:10.0pt;font-family:"CG Times","serif"'>&nbsp;</span></b></p>
+
+<p class=exth><span lang=EN-US>ZF-expression sorting a strict (head and tail
+strict) list. </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>ssort:: [!a!] -&gt; [!a!] | Ord a  </span></p>
+
+<p class=ex><span lang=EN-US>ssort [!!]       = [!!]</span></p>
+
+<p class=ex><span lang=EN-US>ssort [!p:ps!]   = ssort [!x \\ x&lt;|-ps
+|x&lt;=p!] ++ [!p!] ++ ssort [!x \\ x &lt;|-ps | x&gt;p!]</span></p>
+
+<p class=exb><b><span lang=EN-US style='font-size:10.0pt;font-family:"CG Times","serif"'>&nbsp;</span></b></p>
+
+<p class=exth><span lang=EN-US>Overloaded ZF-expression sorting any list (lazy,
+strict or unboxed). </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>gsort:: (l a) -&gt; (l a) | Ord a  &amp; List l a</span></p>
+
+<p class=ex><span lang=EN-US>gsort [|]        = [|]</span></p>
+
+<p class=ex><span lang=EN-US>gsort [|p:ps]    = gsort [|x \\ x&lt;|-ps |
+x&lt;=p] ++ [|p] ++ gsort [|x \\ x &lt;|-ps | x&gt;p]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>ZF-expression: converting an array into a list.</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>ArrayA = {1,2,3,4,5}</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>ListA:: [a]</span></p>
+
+<p class=ex><span lang=PT-BR>ListA = [a \\ a &lt;-: ArrayA]</span></p>
+
+<p class=par><a name="_4.2.1_List_Patterns"></a><span lang=EN-US>Local
+definitions can be introduced in a ZF expression after generator(s) using </span><span
+class=cleanb><span lang=EN-US>,</span></span><span lang=EN-US> </span><span
+class=cleankw><span lang=EN-US>let</span></span><span lang=EN-US> :</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Qualifier</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb><span lang=EN-US>=</span></p>
+  </td>
+  <td width="73%" valign=top style='width:73.3%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Generators {
+  </span><span class=cleanb><span lang=EN-US>,</span></span><span lang=EN-US> </span><span
+  class=cleankw><span lang=EN-US>let</span></span><span lang=EN-US> </span><span
+  class=clean><b><span lang=EN-US style='color:#3366FF'>{</span></b></span><span
+  lang=EN-US> {LocalDef}+ </span><span class=cleankw><span lang=EN-US
+  style='color:#3366FF'>}</span></span><span lang=EN-US> } {</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US>Guard}</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>The vari­ables introduced in this way can be used
+in the guard and local definitions, other qualifiers that follow, and the
+expression before the </span><span class=clean><span lang=EN-US>\\</span></span><span
+lang=EN-US>.</span></p>
+
+<h3><a name="_Toc311798025"><span lang=EN-US>4.2.1 List Patterns</span></a></h3>
+
+<p class=par><span lang=EN-US>An object of the predefined algebraic type <i>list</i></span><span lang=EN-US>  can be specified as pattern in a function, case expression or list
+generator.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ListPattern</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="73%" colspan=2 valign=top style='width:73.28%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[</span></span><span lang=EN-US>[ListKind][{LGraphPattern}-list [</span><span
+  class=cleanb><span lang=EN-US>:</span></span><span lang=EN-US> GraphPattern]]
+  [SpineStrictness]</span><span class=cleanb><span lang=EN-US>]</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LGraphPattern</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphPattern</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharsDenotation</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ListKind</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// head
+  strict list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>#</span></span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// unboxed
+  head strict list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>|</span></span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// overloaded
+  list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SpineStrictness</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// spine
+  strict list</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>Notice that only simple list patterns can be
+specified (one cannot use a dot-dot expression or list comprehension to define
+a list pattern).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Use of list patterns, use of guards, use of
+variables to identify patterns and sub-patterns; </span><span class=clean><span
+lang=EN-US>merge </span></span><span lang=EN-US>merges two (sorted) lazy lists
+into one (sorted) list.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>merge:: [Int] [Int] -&gt; [Int]</span></p>
+
+<p class=ex><span lang=EN-US>merge f []   = f</span></p>
+
+<p class=ex><span lang=EN-US>merge [] s   = s</span></p>
+
+<p class=ex><span lang=EN-US>merge f=:[x:xs] s=:[y:ys]</span></p>
+
+<p class=ex><span lang=EN-US>| x&lt;y        = [x:merge xs s]</span></p>
+
+<p class=ex><span lang=EN-US>| x==y       = merge f ys</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise  = [y:merge f ys]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span class=clean><span lang=EN-US>merge_u</span></span><span
+lang=EN-US> merges two (sorted) head strict unboxed lists into one strict
+unboxed (sorted) list.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex>merge_u:: [#Int] [#Int] -&gt; [#Int]</p>
+
+<p class=ex>merge_u f [#] = f</p>
+
+<p class=ex>merge_u [#] s = s</p>
+
+<p class=ex>merge_u f=:[#x:xs] s=:[#y:ys]</p>
+
+<p class=ex>| x&lt;y         = [#x:merge_u xs s]</p>
+
+<p class=ex><span lang=EN-US>| x==y        = merge_u f ys</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise   = [#y:merge_u f ys]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span class=clean><span lang=EN-US>merge_l</span></span><span
+lang=EN-US> merges two (sorted) lists into one (sorted) list. Any list (lazy,
+strict or unboxed) can be merged, but both lists have to be the same (both
+lazy, strict, head strict, tail strict or unboxed)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>merge_l:: (l a)(l a) -&gt; (l a) | List l a</span></p>
+
+<p class=ex><span lang=EN-US>merge_l f [|] = f</span></p>
+
+<p class=ex><span lang=EN-US>merge_l [|] s = s</span></p>
+
+<p class=ex><span lang=EN-US>merge_l f=:[|x:xs] s=:[|y:ys]</span></p>
+
+<p class=ex><span lang=EN-US>| x&lt;y         = [|x:merge_l xs s]</span></p>
+
+<p class=ex><span lang=EN-US>| x==y        = merge_l f ys</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise   = [|y:merge_l f ys]</span></p>
+
+<h2><a name="_Toc311798026"></a><a name="_4.3_Tuples"></a><span lang=EN-US>4.3    Tuple</span><span
+lang=EN-US>s</span></h2>
+
+<p class=par><span
+lang=EN-US>A <i>tuple</i> </span><span
+lang=EN-US> is an algebraic data type predefined for reasons of programming
+conve­nience and effi­ciency. Tuples have as advantage that they allow bundling
+a <i>finite number</i> of objects of <i>arbitrary</i> <i>type</i> into a new
+object with­out being forced to define a new algebraic type for such a new
+object. This is in particular handy for functions that return several val­ues.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TupleType </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span lang=EN-US>[Strict] Type</span><span
+  class=cleanb><span lang=EN-US>,</span></span><span lang=EN-US>{[Strict]
+  Type}-list</span><span class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><a name="_4.1.5_Array_Types"></a><a
+  name="_4.3.1_Creating_Tuples"></a><span lang=EN-US>Strict</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<h3><a name="_Toc524343554"></a><a name="_Toc311798027"><span lang=EN-US>4.3.1 Creating
+Tuples</span></a></h3>
+
+<p class=par><i><span
+lang=EN-US>Tuples</span></i><span lang=EN-US> can be created that can be used
+to combine different (sub-)graphs into one data structure with­out being forced
+to define a new type for this combination. The elements of a tuple need <i>not</i>
+be of the same type. Tuples are in particular handy for functions that return
+multiple results.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Tuple</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span lang=EN-US>GraphExpr</span><span
+  class=cleanb><span lang=EN-US>,</span></span><span lang=EN-US>{GraphExpr}-list</span><span
+  class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a Tuple of type </span><span
+class=clean><span lang=EN-US>(String,Int,[Char])</span></span><span lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>(&quot;this is a tuple with&quot;,3,['elements'])</span></p>
+
+<p class=par><a name="_4.3.2_Tuple_Patterns"></a><span lang=EN-US>One can turn
+a lazy tuple element into a strict one by putting strictness annotations in the
+correspond­ing type instance on the tuple ele­ments that one would like to make
+strict. When the cor­respond­ing tuple is put into a strict context the tuple
+and the strict annotated tuple elements will be evaluated. As usual one has to
+take care that these elements do not represent an infinite computation. </span></p>
+
+<p class=par><span lang=EN-US>Strict and lazy tuples are regarded to be of
+different type. <i>However, unlike is the case with any other data structure,
+the compiler will automatically convert strict tuples into lazy ones, and the
+other way around. </i>This is done for programming convenience. Due to the
+complexity of this automatic transfor­mation, the conversion is done for tuples
+only! For the programmer it means that he can freely mix tuples with strict and
+lazy tuple elements. The type system will not complain when a strict tuple is
+offered while a lazy tuple is required. The compiler will automatically insert
+code to convert non-strict tuple elements into a strict version and backwards
+when­ever this is needed. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a complex number as tuple type with
+strict components.</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>::Complex :== (!Real,!Real)</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>(+) </span><span class=cleankw><span lang=PT-BR>infixl</span></span><span
+lang=PT-BR> 6:: !Complex !Complex -&gt; Complex</span></p>
+
+<p class=ex><span lang=PT-BR>(+) (r1,i1) (r2,i2) = (r1+r2,i1+i2)</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>which is equivalent to</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>(+) </span><span class=cleankw><span lang=PT-BR>infixl</span></span><span
+lang=PT-BR> 6:: !(!Real,!Real) !(!Real,!Real) -&gt; (!Real,!Real)</span></p>
+
+<p class=ex><span lang=PT-BR>(+) (r1,i1) (r2,i2) = (r1+r2,i1+i2)</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>when for instance G is defined as</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>G:: Int -&gt; (Real,Real)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>than the following application is approved by
+the type system:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start = G 1 + G 2</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<h3><a name="_Toc311798028"><span lang=EN-US>4.3.2 Tuple Patterns</span></a></h3>
+
+<p class=par><span lang=EN-US>An object of the predefined algebraic type <i>tuple</i></span><span lang=EN-US> can be specified as pattern in a function, case expression or list
+generator.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TuplePattern</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>(GraphPattern,{GraphPattern}-list)</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of the use of a pattern match on Tuples
+to access components of a Complex number.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: complex :== (Real,Real)         </span><span
+class=cleancom><span lang=EN-US>// complex is defined as type synonym for
+(real,Real)</span></span></p>
+
+<p class=ex><span class=cleancom><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span lang=EN-US>realpart:: Complex -&gt; Real</span></p>
+
+<p class=ex><span lang=EN-US>realpart (re,_) = re               </span><span
+class=cleancom><span lang=EN-US>// selecting the real part of a Complex number</span></span></p>
+
+<p class=ex><span class=cleancom><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span lang=EN-US>imagpart:: Complex -&gt; Real</span></p>
+
+<p class=ex><span lang=EN-US>imagpart (_,im) = im               </span><span
+class=cleancom><span lang=EN-US>// selecting the imaginary part of a Complex
+number</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<h2><a name="_Toc311798029"></a><a name="_4.4_Arrays"></a><span lang=EN-US>4.4    Arrays</span></h2>
+
+<p class=par><span
+lang=EN-US>An <i>array</i> </span><span
+lang=EN-US> is an algebraic data type predefined for reasons of efficiency.
+Arrays contain a <i>finite num­ber</i> of elements that all have to be of the <i>same
+type</i>. An array has as property that its ele­ments can be ac­cessed via <i>indexing</i>
+in <i>constant time</i>. An <i>array index</i> </span><span
+lang=EN-US> must be an integer value between </span><span class=clean><span
+lang=EN-US>0</span></span><span lang=EN-US> and the number of el­ements of the
+array-</span><span class=clean><span lang=EN-US>1</span></span><span
+lang=EN-US>. Destructive update of array ele­ments is possible thanks to unique­ness
+typ­ing. For pro­gramming con­venience special syntax is provided for the cre­a­tion,
+se­lec­tion and updating of ar­ray elements (array comprehensions) while there
+is also special syntax for <i>strings</i> (i.e. unboxed ar­rays of characters).
+Arrays have as disad­vantage that their use increases the possi­bility of a
+run-time error (indices that might get out-of-range). </span></p>
+
+<p class=par><span lang=EN-US>To obtain optimal efficiency in time and space,
+arrays are implemented different depending on the concrete type of the array
+elements. By default an array is implemented as a <i>lazy array </i>(type </span><span
+class=clean><span lang=EN-US>{a}</span></span><span lang=EN-US>), i.e. an array
+consists of a contiguous block of memory containing pointers to the array
+elements. The same re­presentation is chosen if <i>strict arrays</i> (define
+its type as </span><span class=clean><span lang=EN-US>{!a}</span></span><span
+lang=EN-US>) are being used. The difference is that <i>all</i> elements of a
+strict array will be evaluated if the array is evaluated. It makes no sense to
+make a distinction between  head strictness and tail strictness for arrays as
+is the case for lists. As usual one has to take care that the strict elements
+do not represent an infinite computation. </span></p>
+
+<p class=par><span lang=EN-US>For ele­ments of basic type, record type and
+tuple type an <i>unboxed array</i> (define its type as </span><span
+class=clean><span lang=EN-US>{#a}</span></span><span lang=EN-US>) can be used.
+In that latter case the pointers are replaced by the array elements themselves.
+Lazy, strict and unboxed arrays are considered to be ob­jects of different
+type. However, most predefined operations on arrays are overloaded such that
+they can be used on lazy, on strict as well as on unboxed ar­rays.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><a name="_Toc524343555"></a><a
+  name="_4.1.6_Arrow_Types"></a><span lang=EN-US>ArrayType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span><span lang=EN-US>[ArrayKind] Type</span><span
+  class=cleanb><span lang=EN-US>}</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayKind</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// strict
+  array</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>#</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// unboxed
+  array</span></p>
+  </td>
+ </tr>
+</table>
+
+<h3><a name="_Toc311798030"></a><a name="_4.4.1_Creating_Arrays"></a><span
+lang=EN-US>4.4.1 Creating Arrays and Selection of field Elements</span></h3>
+
+<p class=par><span lang=EN-US>An <i>array</i></span><span
+lang=EN-US> is a tuple/record-like data structure in which <i>all</i> elements
+are of the <i>same</i> type. Instead of se­lection by position or field name
+the elements of an array can be selected very efficiently in <i>con­stant time</i>
+by indexing</span><span
+lang=EN-US>. The update of arrays is done destructively in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> and therefore arrays have to be uni­que (</span><a
+href="CleanRep.2.2_11.htm#_Uniqueness_Typing"><span lang=EN-US>see Chapter 9</span></a><span
+lang=EN-US>) if one wants to use this feature. Arrays are very useful if time
+and space con­sumption is becoming very critical (C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+arrays are implemented very efficiently). If efficiency is not a big issue we
+recommend <i>not</i> to use arrays but to use lists instead: lists induce a
+much better pro­gramming style. Lists are more flexible and less error prone:
+array elements can only be accessed via in­dices and if you make a calculation
+error, indices may point outside the array bounds. This is detected, but only
+at run-time. In C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US>, array indices al­ways start with 0.
+More di­mensional arrays (e.g. a ma­trix) can be defined as an ar­ray of
+arrays.</span></p>
+
+<p class=par><span lang=EN-US>For efficiency reasons, arrays are available of
+several types: there are <i>lazy arrays</i> (type </span><span class=clean><span
+lang=EN-US>{a}</span></span><span lang=EN-US>), <i>strict arrays</i> (type </span><span
+class=clean><span lang=EN-US>{!a}</span></span><span lang=EN-US>) and <i>unboxed
+arrays</i> (e.g. type </span><span class=clean><span lang=EN-US>{#Int}</span></span><span
+lang=EN-US>). All these arrays are conside­red to be of <i>different</i> type.
+By using the overloading mechanism (type constructor classes) one can still
+define (overloaded) functions that work on any of these arrays.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Array</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayDenotation</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayUpdate</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US> All elements of an array need to be of same type.</span></p>
+
+<h4><span lang=EN-US>         <a name="_Toc311798031">Simple Array</a></span></h4>
+
+<p class=par><span lang=EN-US>A new array can be created in a number of ways. A
+direct way is to simply <i>list</i> the<i> array elements</i>. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayDenotation</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span><span lang=EN-US>{GraphExpr}-list</span><span
+  class=cleanb><span lang=EN-US>}</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>StringDenotation</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>StringDenotation</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>StringDel{AnyChar/</span><span lang=EN-US>~StringDel}StringDel</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>StringDel</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>&quot;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>By default a <i>lazy</i> array will be created.
+Arrays are created <i>uni­que</i> (the </span><span class=clean><span
+lang=EN-US>*</span></span><span lang=EN-US> or. attribute in front of the type,
+see Chapter 4) to make destructive updates possible.</span></p>
+
+<p class=par><span lang=EN-US>A lazy array is a box with pointers pointing to
+the array elements. One can also create a strict array (explicitly define its
+type as </span><span class=clean><span lang=EN-US>{!Int}</span></span><span
+lang=EN-US>), which will have the property that the elements to which the ar­ray
+box points will always be evaluated. One can furthermore create an unboxed
+array (explicitly define its type as </span><span class=clean><span lang=EN-US>{#Int}</span></span><span
+lang=EN-US>), which will have the property that the evaluated elements (which
+have to be of basic value) are stored directly in the array box itself. Clearly
+the last one is the most efficient representa­tion (</span><a
+href="CleanRep.2.2_12.htm#_Annotations_and_Directives"><span lang=EN-US>see also Chapter 10</span></a><span
+lang=EN-US>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Creating a lazy array, strict and unboxed unique
+array of integers with elements 1,3,5,7,9.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyLazyArray:: .{Int}</span></p>
+
+<p class=ex><span lang=EN-US>MyLazyArray = {1,3,5,7,9}</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyStrictArray:: .{!Int}</span></p>
+
+<p class=ex><span lang=EN-US>MyStrictArray = {1,3,5,7,9}</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyUnboxedArray:: .{#Int}</span></p>
+
+<p class=ex><span lang=EN-US>MyUnboxedArray = {1,3,5,7,9}</span></p>
+
+<p class=par><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Creating a two dimensional array, in this case a
+unique array of unique arrays of unboxed integers.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MatrixA:: {.{#Int}}</span></p>
+
+<p class=ex><span lang=EN-US>MatrixA = {{1,2,3,4},{5,6,7,8}}</span></p>
+
+<p class=par><span lang=EN-US>To make it possible to use operators such as
+array selection on any of these arrays (of actually dif­ferent type) a multi
+parameter type constructor class has been defined (in </span><span class=clean><span
+lang=EN-US>StdArray</span></span><span lang=EN-US>) which expresses that “some
+kind of array structure is created”. The compiler will therefore deduce the
+following general type:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Array :: .(a Int)| Array a Int</span></p>
+
+<p class=ex><span lang=EN-US>Array = {1,3,5,7,9}</span></p>
+
+<p class=par><span lang=EN-US>A <i>string</i> is predefined type which
+equivalent to an <i>unboxed</i> <i>array of characters</i> </span><span
+class=clean><span lang=EN-US>{#Char}</span></span><span lang=EN-US>. Notice
+that this array is <i>not</i> unique, such that a destructive update of a
+string is <i>not</i> allowed. There is special syntax to denote strings. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Some ways to define a string, i.e. an unboxed
+array of character.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>&quot;abc&quot;</span></p>
+
+<p class=ex><span lang=EN-US>{'a','b','c'}</span></p>
+
+<p class=par><span lang=EN-US>There are a number of handy functions for the
+creation and manipulation of arrays prede­fined in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'>'</span><span lang=EN-US>s
+Standard Environment. These functions are overloaded to be able to deal with
+any type of array. The class restrictions for these functions express that “an
+array structure is requi­red” contai­n­ing “an ar­ray element”.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Type of some predefined functions on </span><span
+lang=EN-US style='font-family:Courier'>Arrays</span><span lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>createArray  :: !Int e -&gt;.(a e) | Array a e            
+</span><span class=cleancom><span lang=EN-US>// size arg1, a.[i] = arg2</span></span></p>
+
+<p class=ex><span lang=EN-US>size         :: (a e) -&gt; Int | Array a                  </span><span
+class=cleancom><span lang=EN-US>// number of elements in array</span></span></p>
+
+<h4><span lang=EN-US>         <a name="_Toc311798032">Array Update and Array
+Comprehensions</a></span></h4>
+
+<p class=par><span lang=EN-US>It is also possible to construct a new array out
+of an existing one (a <i>functional</i> <i>array</i> <i>up­date</i></span><span
+lang=EN-US>). </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayUpdate</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span><span lang=EN-US> ArrayExpr </span><span
+  class=cleanb><span lang=EN-US>&amp;</span></span><span lang=EN-US>
+  [{ArrayIndex {Selection} </span><span class=cleanb><span lang=EN-US>=</span></span><span
+  lang=EN-US> GraphExpr}-list] [</span><span class=cleanb><span lang=EN-US>\\</span></span><span
+  lang=EN-US> {Qualifier}-list]</span><span class=cleanb><span lang=EN-US>}</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span><span lang=EN-US>[ArrayExpr </span><span
+  class=cleanb><span lang=EN-US>&amp;</span></span><span lang=EN-US>] GraphExpr
+  </span><span class=cleanb><span lang=EN-US>\\</span></span><span lang=EN-US>
+  {Qualifier}-list</span><span class=cleanb><span lang=EN-US>}</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selection</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span><span lang=EN-US>FieldName</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span><span lang=EN-US>ArrayIndex</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayExpr</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphExpr</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>Left from the </span><span class=clean><span
+lang=EN-US>&amp;</span></span><span lang=EN-US> (</span><span class=clean><span
+lang=EN-US>a &amp; [i]</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>= v</span></span><span lang=EN-US> is pronounced as: array </span><span
+class=clean><span lang=EN-US>a</span></span><span lang=EN-US> with for </span><span
+class=clean><span lang=EN-US>a.[i] </span></span><span lang=EN-US>the value </span><span
+class=clean><span lang=EN-US>v</span></span><span lang=EN-US>) the old array
+has to be speci­fied which has to be of unique type to make destructive
+updating possible. On the right from the </span><span class=clean><span
+lang=EN-US>&amp;</span></span><span lang=EN-US> those ar­ray elements are
+listed in which the new array dif­fers from the old one. One can change any
+element of the array or any field or array element of a record or array stored
+in the array. The </span><span class=clean><span lang=EN-US>&amp;</span></span><span
+lang=EN-US>-operator is strict in its ar­guments.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>An array expression must be of type array.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The array expression to the left of the update operator ‘</span><span
+lang=EN-US style='font-family:Courier'>&amp;</span><span lang=EN-US>’ should
+yield an ob­ject of type unique ar­ray.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>An array index</span><span
+lang=EN-US> must be an integer value between </span><span lang=EN-US
+style='font-family:Courier'>0 </span><span lang=EN-US>and the number of
+elements of the array-</span><span lang=EN-US style='font-family:Courier'>1</span><span
+lang=EN-US>. An index out of this range will result in a <i>run-time</i> error.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Unboxed arrays can only be of basic type, record type or array type.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><i><span
+lang=EN-US>A unique array of any type created by an overloaded function cannot
+be converted to a non-unique ar­ray.</span></i></p>
+
+<p class=par><i><span lang=EN-US>Important</span></i><span lang=EN-US>: For
+reasons of efficiency we have defined the updates only on arrays which are of <i>uni­que</i>
+type (</span><span class=clean><span lang=EN-US>*{…}</span></span><span
+lang=EN-US>), such that the update can always be done <i>de­structively</i> (!)
+which is se­mantically sound be­cause the original unique array is known not to
+be used any­more.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Creating an array with the integer elements
+1,3,5,7,9 using the update operator.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>{CreateArray 5 0 &amp; [0] = 1, [1] = 3, [2] = 5,
+[3] = 7, [4] = 9}</span></p>
+
+<p class=ex><span lang=EN-US>{CreateArray 5 0 &amp; [1] = 3, [0] = 1, [3] = 7,
+[4] = 9, [2] = 5}</span></p>
+
+<p class=par><span lang=EN-US>One can use an <i>array comprehension</i></span><span
+lang=EN-US> or a <i>list comprehension</i> (</span><a
+href="#_List_Comprehensions"><span lang=EN-US>see 4.2.1</span></a><span
+lang=EN-US>) to list these ele­ments com­pactly in the same spirit as with an
+list comprehension.</span></p>
+
+<p class=par><span lang=EN-US>Array comprehensions can be used in combination
+with the update operator. Used in combination with the update operator the
+original uniquely typed array is updated destructively. The combina­tion of
+array comprehensions and update operator makes it possible to selectively
+update array el­ements on a high level of abstraction. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Creating an array with the integer elements 1,3,5,7,9
+using the update operator in combination with ar­ray and list comprehensions.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>{CreateArray 5 0 &amp; [i] = 2*i+1 \\ i &lt;-
+[0..4]}</span></p>
+
+<p class=ex><span lang=EN-US>{CreateArray 5 0 &amp; [i] = elem \\ elem &lt;-:
+{1,3,5,7,9} &amp; i &lt;- [0..4]}</span></p>
+
+<p class=ex><span lang=EN-US>{CreateArray 5 0 &amp; elem \\ elem &lt;-:
+{1,3,5,7,9}}</span></p>
+
+<p class=par><span lang=EN-US>Array comprehensions used without update operator
+automatically generate a whole new array. The size of this new array will be
+equal to the size of the first array or list gene­rator from which el­ements
+are drawn. Drawn elements that are rejec­ted by a corresponding guard result in
+an un­defined ar­ray ele­ment on the corresponding posi­tion.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Creating an array with the integer elements
+1,3,5,7,9 using array and list comprehensions.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>{elem \\ elem &lt;-: {1,3,5,7,9}}</span></p>
+
+<p class=ex><span lang=EN-US>{elem \\ elem &lt;-  [1,3,5,7,9]}</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Array creation, selection, update). The most
+general types have been defined. One can of course always restrict to a more
+specific type.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MkArray:: !Int (Int -&gt; e) -&gt;.(a e) | Array a
+e    </span></p>
+
+<p class=ex><span lang=EN-US>MkArray i f = {f j \\ j &lt;- [0..i-1]}</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>SetArray:: *(a e) Int e -&gt;.(a e) | Array a e</span></p>
+
+<p class=ex><span lang=EN-US>SetArray a i v = {a &amp; [i] = v}</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>CA:: Int e -&gt;.(a e) | Array a e</span></p>
+
+<p class=ex><span lang=PT-BR>CA i e = createArray i e</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>InvPerm:: {Int} -&gt;.{Int}</span></p>
+
+<p class=ex><span lang=PT-BR>InvPerm a = {CA (size a) 0 &amp; [a.[i]] = i \\ i
+&lt;- [0..maxindex a]}</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>ScaleArray:: e (a e) -&gt;.(a e) | Array a e &amp;
+Arith e</span></p>
+
+<p class=ex><span lang=PT-BR>ScaleArray x a = {x * e \\ e &lt;-: a}</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>MapArray:: (a -&gt; b) (ar a) -&gt;.(ar b) | Array
+ar a &amp; Array ar b </span></p>
+
+<p class=ex><span lang=PT-BR>MapArray f a = {f e \\ e &lt;-: a}</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>inner:: (a e) (a e) -&gt;.(a e) | Array a e &amp;
+Arith e</span></p>
+
+<p class=ex><span lang=EN-US>inner v w </span></p>
+
+<p class=ex><span lang=EN-US>| size v == size w    = {vi * wi \\ vi &lt;-: v
+&amp; wi &lt;-: w}</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise           = abort &quot;cannot take
+inner product&quot;</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>ToArray:: [e] -&gt;.(a e) | Array a e</span></p>
+
+<p class=ex><span lang=PT-BR>ToArray list = {e \\ e &lt;- list}</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>ToList:: (a e) -&gt;.[e] | Array a e</span></p>
+
+<p class=ex><span lang=EN-US>ToList array = [e \\ e &lt;-: array]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of operations on 2 dimensional arrays
+generating new arrays.</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>maxindex n :== size n - 1</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>Adj:: {{#Int}} -&gt;.{.{#Int}}</span></p>
+
+<p class=ex><span lang=EN-US>Adj ma = {{ma.[i,j] \\ i &lt;- rowindex} \\ j
+&lt;- colindex}</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>    where</span></span></p>
+
+<p class=ex><span lang=EN-US>    rowindex = [0..maxindex ma]</span></p>
+
+<p class=ex><span lang=EN-US>    colindex = [0..maxindex ma.[0]]</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    Multiply:: {{#Int}} {{#Int}} -&gt;.{.{#Int}}</span></p>
+
+<p class=ex><span lang=EN-US>    Multiply a b =   {  {sum [a.[i,j]*b.[j,k] \\ j
+&lt;- colindex] \\ k &lt;- rowindex}</span></p>
+
+<p class=ex><span lang=EN-US>                     \\ i &lt;- rowindex </span></p>
+
+<p class=ex><span lang=EN-US>                     }</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>    where</span></span></p>
+
+<p class=ex><span lang=EN-US>        rowindex = [0..maxindex a]</span></p>
+
+<p class=ex><span lang=EN-US>        colindex = [0..maxindex a.[0]]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Updating unique arrays using a unique array
+selection.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyArray:: .{#Real}</span></p>
+
+<p class=ex><span lang=EN-US>MyArray = {1.5,2.3,3.4}</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>ScaleArrayElem:: *{#Real} Int Real -&gt; .{#Real}</span></p>
+
+<p class=ex><span lang=PT-BR>ScaleArrayElem ar i factor</span></p>
+
+<p class=ex><span lang=PT-BR># (elem,ar) = ar![i]</span></p>
+
+<p class=ex><span lang=PT-BR>= {ar &amp; [i] = elem*factor}</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Scale2DArrayElem:: {*{#Real}} (Int,Int) Real -&gt;
+{.{#Real}}</span></p>
+
+<p class=ex><span lang=PT-BR>Scale2DArrayElem ar (i,j) factor</span></p>
+
+<p class=ex><span lang=PT-BR># (elem,ar)       = ar![i].[j]</span></p>
+
+<p class=ex><span lang=EN-US>= {ar &amp; [i].[j]   = elem*factor}</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Scale2DArrayElem2:: {*{#Real}} (Int,Int) Real
+-&gt; {.{#Real}}</span></p>
+
+<p class=ex><span lang=PT-BR>Scale2DArrayElem2 ar (i,j) factor</span></p>
+
+<p class=ex><span lang=PT-BR># (elem,ar)       = ar![i,j]</span></p>
+
+<p class=ex><span lang=EN-US>= {ar &amp; [i,j]     = elem*factor}</span></p>
+
+<h4><a name="_Selection_of_an"></a><span lang=EN-US>         <a
+name="_Toc311798033">Selection of an Array Element</a></span></h4>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArraySelection</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayExpr</span><span
+  class=cleanb><span lang=EN-US>.</span></span><span lang=EN-US> ArrayIndex
+  {Selection}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayExpr</span><span
+  class=cleanb><span lang=EN-US>!</span></span><span lang=EN-US> ArrayIndex
+  {Selection}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayIndex</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[</span></span><span lang=EN-US>{IntegerExpr}-list</span><span
+  class=cleanb><span lang=EN-US>]</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>IntegerExpr</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphExpr</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selection</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span><span lang=EN-US> FieldName</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span><span lang=EN-US> ArrayIndex</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>With an <i>array selection</i></span><span
+lang=EN-US> (using the ‘</span><span class=clean><span lang=EN-US>.</span></span><span
+lang=EN-US>’ symbol) one can select an array element. When an object </span><span
+class=clean><span lang=EN-US>a</span></span><span lang=EN-US> is of type </span><span
+class=clean><span lang=EN-US>Array</span></span><span lang=EN-US>, the i</span><sup><span
+lang=EN-US style='font-size:10.0pt'>th</span></sup><span lang=EN-US> el­e­ment
+can be selected (computed) via </span><span class=clean><span lang=EN-US>a.[i]</span></span><span
+lang=EN-US>. Array selection is left-associa­tive: </span><span class=clean><span
+lang=EN-US>a.[i,j,k]</span></span><span lang=EN-US> means </span><span
+class=clean><span lang=EN-US>((a.[i]).[j]).[k]</span></span><span lang=EN-US>.
+A “unique” selection using the ‘</span><span class=clean><span lang=EN-US>!</span></span><span
+lang=EN-US>’ symbol returns a tuple containing the demanded array element <i>and</i>
+the original array. This type of array selection can be very handy for destructively
+updating of uniquely typed arrays with values that depend on the current
+contents of the array. Array se­lection binds more tightly (priority </span><span
+class=clean><span lang=EN-US>11</span></span><span lang=EN-US>) than
+application (priority </span><span class=clean><span lang=EN-US>10</span></span><span
+lang=EN-US>).</span></p>
+
+<h3><a name="_Toc311798034"></a><a name="_4.4.2_Array_Patterns"></a><span
+lang=EN-US>4.4.2 Array Patterns</span></h3>
+
+<p class=par><span lang=EN-US>An object of type <i>array</i></span><span lang=EN-US> can be specified as pattern. Notice that only simple array pat­terns
+can be specified on the left-hand side (one cannot use array comprehensions).
+Only those array ele­ments which contents one would like to use in the
+right-hand side need to be mentioned in the pat­tern.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrayPattern</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span><span lang=EN-US>{GraphPattern}-list</span><span
+  class=cleanb><span lang=EN-US>}</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span><span lang=EN-US>{ArrayIndex </span><span
+  class=cleanb><span lang=EN-US>=</span></span><span lang=EN-US> Variable}-list</span><span
+  class=cleanb><span lang=EN-US>}</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>StringDenotation</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>All array elements of an array need to be of same type.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>An array <span style='display:none'>.i</span> i<span
+style='display:none'>.i</span>ndex<span style='display:none'>;</span> must be
+an integer value between </span><span lang=EN-US style='font-family:Courier'>0 </span><span
+lang=EN-US>and the number of elements of the array-</span><span lang=EN-US
+style='font-family:Courier'>1</span><span lang=EN-US>. Ac­cessing an array with
+an index out of this range will result in a <i>run-time</i> error.</span></p>
+
+<p class=par><span lang=EN-US>It is allowed in the pattern to use an index
+expression in terms of the other formal arguments (of type </span><span
+class=clean><span lang=EN-US>Int</span></span><span lang=EN-US>) passed to the
+function to make a flexible array access possible.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Use of array patterns.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Swap:: !Int !Int !*(a e) -&gt;.(a e) | Array a e</span></p>
+
+<p class=ex><span lang=EN-US>Swap i j a=:{[i]=ai,[j]=aj} = {a &amp;
+[i]=aj,[j]=ai}</span></p>
+
+<h2><a name="_Toc311798035"></a><a name="_4.5_Arrow_Types"></a><a
+name="_4.5_Predefined_Type"></a><span lang=EN-US>4.5    Predefined Type
+Constructors</span></h2>
+
+<p class=par><span lang=EN-US>Predefi­ned types can also be used in curried
+way. To make this possible a type constructor has been predefined for all
+predefined types of higher order kind</span><span class=clean><span lang=EN-US>
+</span></span><span lang=EN-US>(</span><a href="CleanRep.2.2_7.htm#_5.1.2_Using_Higher"><span
+lang=EN-US>see also 5.1.2</span></a><span lang=EN-US>). The kind </span><span
+class=clean><span lang=EN-US>X</span></span><span lang=EN-US> stands for any
+so-called <i>first-order </i>type: a type expecting no further arguments ((</span><span
+class=clean><span lang=EN-US>Int</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>Bool</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>[Int]</span></span><span lang=EN-US>, etcetera).
+All function arguments are of kind </span><span class=clean><span lang=EN-US>X</span></span><span
+lang=EN-US>. The kind </span><span class=clean><span lang=EN-US>X -&gt; X</span></span><span
+lang=EN-US> stands for a type that can be applied to a (first-order) type,
+which then yields another first-order type, </span><span class=clean><span
+lang=EN-US>X -&gt; X -&gt; X</span></span><span lang=EN-US> expects two type
+arguments, and so on.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Int, Bool, [Int], Tree [Int]   :: X</span></p>
+
+<p class=ex><span lang=EN-US>[], Tree, (,) Int, (-&gt;) a, {}  :: X -&gt; X</span></p>
+
+<p class=ex><span lang=EN-US>(,), (-&gt;)                      :: X -&gt; X
+-&gt; X</span></p>
+
+<p class=ex><span lang=EN-US>(,,)                           :: X -&gt; X -&gt;
+X -&gt; X</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>PredefinedTypeConstructor</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[]</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// list type
+  constructor</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[! ]</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// head
+  strict list type constructor</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[ !]</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// tail
+  strict list type constructor</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[!!]</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// strict
+  list type constructor</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[#]</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// unboxed
+  head strict list type</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[#!]</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// unboxed
+  strict list type</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span lang=EN-US>{</span><span class=cleanb><span
+  lang=EN-US>,</span></span><span lang=EN-US>}+</span><span class=cleanb><span
+  lang=EN-US>)</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// tuple
+  type constructor (arity &gt;= 2)</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{}</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// lazy
+  array type constructor</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{!}</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// strict
+  array type constructor</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{#}</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// unboxed
+  array type constructor</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(-&gt;)</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// arrow
+  type constructor</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>So, all predefined types can be written down in
+prefix notation as well, as follows:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>[] a         is equivalent with [a]</span></p>
+
+<p class=ex><span lang=EN-US>[! ] a       is equivalent with [!a]</span></p>
+
+<p class=ex><span lang=EN-US>[ !] a       is equivalent with [a!]</span></p>
+
+<p class=ex><span lang=EN-US>[!!] a       is equivalent with [!a!]</span></p>
+
+<p class=ex><span lang=EN-US>[# ] a       is equivalent with [#a]</span></p>
+
+<p class=ex><span lang=EN-US>[#!] a       is equivalent with [#a!]</span></p>
+
+<p class=ex><span lang=EN-US>(,) a b      is equivalent with (a,b)</span></p>
+
+<p class=ex><span lang=EN-US>(,,) a b c   is equivalent with (a,b,c) and so on
+for n-tuples </span></p>
+
+<p class=ex><span lang=EN-US>{} a         is equivalent with {a}</span></p>
+
+<p class=ex><span lang=EN-US>{!} a        is equivalent with {!a}</span></p>
+
+<p class=ex><span lang=EN-US>{#} a        is equivalent with {#a}</span></p>
+
+<p class=ex><span lang=EN-US>(-&gt;) a b     is equivalent with (a -&gt; b)</span></p>
+
+<h2><a name="_Toc311798036"><span lang=EN-US>4.6    Arrow Types</span></a></h2>
+
+<p class=par><span
+lang=EN-US>The <i>arrow type</i> </span><span
+lang=EN-US> is a predefined type constructor used to indicate <i>function
+object</i></span><i><span
+lang=EN-US>s </span></i><span lang=EN-US>(these functions have at least arity
+one). </span><span
+lang=EN-US>One can use the Cartesian product (uncurried version) to denote the
+function type (<a href="CleanRep.2.2_5.htm#_3.7_Typing_Functions_1">see 3.7</a>) to obtain a com­pact
+no­ta­tion. Curried functions appli­cations and types are automatically
+converted to their uncurried equiva­lent versions.</span></p>
+
+<p class=exb><span lang=EN-US> </span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ArrowType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span lang=EN-US>Type </span><span class=cleanb><span
+  lang=EN-US>-&gt;</span></span><span lang=EN-US> Type</span><span
+  class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an arrow type.</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>((a b -&gt; c) [a] [b] -&gt; [c])</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>being equivalent with:</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>((a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt;
+[c])</span></p>
+
+<h2><a name="_Toc524343556"></a><a name="_Toc311798037"></a><a
+name="_4.2_Defining_New"></a><a name="_4.6_Predefined_Abstract"></a><span
+lang=EN-US>4.7    Predefined Abstract Types</span></h2>
+
+<p class=par><i><span
+lang=EN-US>Abstract data types</span></i><span lang=EN-US> are types of which
+the actual def­ini­tion is hid­den (</span><a href="CleanRep.2.2_7.htm#_5.4_Defining_Abstract"><span
+lang=EN-US>see 5.4</span></a><span lang=EN-US>). In C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+the types </span><span class=clean><span lang=EN-US>World</span></span><span
+lang=EN-US style='font-family:Courier;display:none'>  and</span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>File</span></span><span
+lang=EN-US> are <i>predefined abstract data types</i>. They are recognised by
+the compiler and treated specially, either for effi­ciency or because they play
+a special role in the lan­guage. Since the ac­tual defini­tion is hidden it is
+not possible to denotate constant val­ues of these prede­fined abstract ty­pes.
+There are functions predefined in the C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+li­brary for the creation and manipu­la­tion of these predefined ab­stract data
+types. Some func­tions work (only) on unique objects. </span></p>
+
+<p class=par><span lang=EN-US>An object of type </span><span class=clean><span
+lang=EN-US>*World</span></span><span lang=EN-US> (</span><span class=clean><span
+lang=EN-US>*</span></span><span lang=EN-US> indicates that the world is unique)
+is automatically created when a pro­gram is started. This object is optionally
+given as argument to the </span><span class=clean><span lang=EN-US>Start</span></span><span
+lang=EN-US> function (</span><a href="CleanRep.2.2_4.htm#_2.3.1_The_Main"><span lang=EN-US>see
+2.3</span></a><span lang=EN-US>). With this object effi­cient in­terfacing with
+the outside world (which is indeed unique) is pos­sible.</span></p>
+
+<p class=par><span lang=EN-US>An object of type </span><span class=clean><span
+lang=EN-US>File</span></span><span lang=EN-US style='font-family:Courier;
+display:none'>   </span><span lang=EN-US> or </span><span class=clean><span
+lang=EN-US>*File</span></span><span lang=EN-US> (unique </span><span
+class=clean><span lang=EN-US>File</span></span><span lang=EN-US>) can be
+created by means of the functions defined in </span><span class=clean><span
+lang=EN-US>Std­Fi­leIO</span></span><span lang=EN-US> (see C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>s Standard Library). It makes direct manipulation of persistent data
+possible. The type </span><span class=clean><span lang=EN-US>File</span></span><span
+lang=EN-US> is pre­de­fined for rea­sons of efficiency: C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>File</span></span><span
+lang=EN-US>s are directly coupled to concrete files.</span></p>
+
+<p class=par><span lang=EN-US>The type String is a predefined synonym type that
+is predefined for convenience. The type is synonym for an unboxed array of
+characters </span><span class=clean><span lang=EN-US>{#Char}</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>PredefType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>World</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// see </span><span
+  class=clean><span lang=EN-US>StdWorld.dcl</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>File</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// see </span><span
+  class=clean><span lang=EN-US>StdFileIO.dcl</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>&nbsp;</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>String</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// synonym
+  for {#Char}</span></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+</body>
+</html>

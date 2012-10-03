@@ -1,0 +1,1563 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection3>
+
+<p class=Newchapter><span lang=EN-US><br>
+    <img width=200 height=97 src="CleanRep.2.2_files/image001.jpg">                   Version
+2.1</span></p>
+
+<p class=Newchapter><span lang=EN-US>                                Language
+Report</span><span lang=EN-US style='font-size:22.0pt'><br>
+<br>
+</span></p>
+
+<h1><a name="_Preface_1"></a><span lang=EN-US>                                                 <a
+name="_Toc311797960">Preface</a></span></h1>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="50%" valign=bottom style='width:50.32%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>•</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_Introduction">Introduction</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>•</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_More_Information_on">More Information on Clean</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>•</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_About_this_Language">About this Language Report</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>•</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_Some_Remarks_on">Some Remarks on the Clean Syntax</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>•</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_Notational_Conventions_Used">Notational Conventions
+    Used in this Report</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="49%" valign=top style='width:49.68%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>•</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_How_to_Obtain">How to Obtain Clean</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>•</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_Current_State_of">Current State of the Clean System</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>•</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_Copyright,_Authors_and">Copyright, Authors and
+    Credits</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>•</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_Final_Remarks">Final Remarks</a></span></p>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>&nbsp;</span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<h2><a name="_Toc311797961"></a><a name="_Toc524343475"></a><a
+name="_Introduction"></a><span lang=EN-US>Introduction</span></h2>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> is a practical appli­cable
+general-purpose lazy pure functio­nal pro­gram­ming language suited for the
+development of real world appli­ca­tions.</span></p>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> has many features among
+which some very special ones. </span></p>
+
+<p class=par><span lang=EN-US>Functional languages are usually im­plemented
+using graph-rewriting techniques. C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> has explicit graph
+rewrit­ing<i> se­mantics</i>; one can explicitly define the <i>sharing</i> of<i>
+structures</i> (<i>cyclic structures</i> as well) in the language (Barendregt
+et al., 1987; Sleep et al., 1993, Eekelen et al., 1997). This provides a better
+framework for controlling the time space behavior of functional programs. </span></p>
+
+<p class=par><span lang=EN-US>Of par­ticular im­por­tance for practical use is
+C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>’s Unique­ness Type System (Barendsen and Smetsers, 1993a) en­abling
+the in­corpo­ration of de­structive up­da­tes of arbi­trary ob­jects within a
+pure functional framework and the cre­ation of direct inter­faces with the out­side
+world. </span></p>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US>’s “unique” features have
+made it possible to predefine (in C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>) a sophisticated
+and efficient I/O library (Achten and Plasmeijer, 1992 &amp; 1995). The C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> Object I/O library</span><span
+lang=EN-US> enables a C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> program­mer to <i>specify
+interactive window based I/O applications</i> on a very high level of
+abstraction. One can define callback functions and I/O components with
+arbitrary local states thus providing an object-oriented style of programming
+(Achten, 1996; Achten and Plasmeijer, 1997). The library forms a platform inde­pendent
+inter­face to window-based systems: one can port window based I/O ap­plicati­ons
+written in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> to different platforms (we support Mac and PC) without mo­dification
+of source code. </span></p>
+
+<p class=par><span lang=EN-US>Although C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+is <i>by default</i> a <i>lazy language</i> one can smoothly turn it into a <i>strict
+lan­guage</i> to ob­tain opti­mal time/space behavior: <i>functions</i> can be
+defined <i>lazy</i> as well as <i>(par­tially)</i> <i>strict</i> in their argu­ments;
+any (recursive) <i>data structure</i> can be defined <i>lazy </i>as well as <i>(partially)
+strict</i> in any of its ar­guments.</span></p>
+
+<p class=par><span lang=EN-US>The rich type system of C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'> 1.3</span><span lang=EN-US>
+(offering high-order types, polymorph types, type classes, uniqueness types,
+existentially quantified types, algebraic types, abstract types, synonym types,
+record types, arrays, lists) is extended with <i>multi parameter type
+constructor classes</i> and <i>universally quantified types</i> (currently
+limited to rank 2, rank n is in preparation). Furthermore, arrays and lists are
+better integrated in the language. Strict, spine-strict, unboxed and overloaded
+lists are predefined in the language. </span></p>
+
+<p class=par><a name="OLE_LINK2"><span lang=EN-US>C</span></a><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+now offers a hybrid type system with both static and dynamic typing. An object
+(expression) of static type can be changed into an object of dynamic type (a “</span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>”) and
+backwards. One can read a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> written by another C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> program with one
+function call. A </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> can contain data as well as (unevaluated) functions. This means
+that one can very easy transfer data as well as code (!) from one C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> application to another in a <i>type safe</i> manner enabling <i>mobile
+code</i> and <i>persistent storage</i> of an expression. This technique involves
+just-in-time code generation, dynamic linking and dynamic type unification.</span></p>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> offers support for
+generic programming using an extension of the class overloading mechanism. One
+can define functions like equality, </span><span class=clean><span lang=EN-US>map</span></span><span
+lang=EN-US>, </span><span class=clean><span lang=EN-US>foldr</span></span><span
+lang=EN-US> and the like in a generic way such that these functions are
+available for any (user defined) data structure. The generic functions are very
+flexible since they not only work on types of kind star but also on higher
+order kinds.</span></p>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> (Brus <i>et al.</i>,
+1987; Nöcker <i>et al.</i>,</span><i><span lang=EN-US style='font-size:14.0pt'>
+</span></i><span lang=EN-US>1991; Plasmeijer and Van Eekelen, 1993) is not only
+well known for its many features but also for its fast compiler produc­ing very
+efficient code (Smetsers <i>et al.</i>, 1991). The new C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0 compiler is written in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'>. </span><span lang=EN-US>The
+C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> compiler is one of the fastest in the world and it produces very
+good code. For example, the compiler can compile itself from scratch within a
+minute.</span></p>
+
+<p class=par><span lang=EN-US>The C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> 2.0 system
+includes lots of tools and libraries, all written in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+of course. Included is an IDE (Integrated Development Environment), a dedicated
+text editor, a project manager, a code generator generating native code (the
+only piece of software written in C), a static linker, a dynamic linker, a
+proof system (Sparkle), a test system (GAST), a heap profiler, a time profiler,
+and lots of libraries.</span></p>
+
+<p class=par><span lang=EN-US>People already fa­miliar with other functional
+programming languages (such as Haskell; (Hudak et al., 1992), Gofer</span><span lang=EN-US>/Hugs</span><span lang=EN-US> (Jones, 1993), Miranda</span><span lang=EN-US> (Turner, 1985) and SML</span><span lang=EN-US> (Harper et al.,
+1986)) will have no diffi­culty to pro­gram in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>.
+We hope that you will enjoy C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US>’s rich collection of fea­tures,
+C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>’s compilation speed and the qual­ity of the pro­duced code (we ge­ne­rate
+native code for all plat­forms we support). C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+runs on a PC (Windows 2000, ‘98, ’95, WindowsNT). There are also versions
+running on the Mac and Linux. </span></p>
+
+<p class=par><span lang=EN-US>Research on C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+started in 1984 (the Dutch Parallel Machine Project) in which we had to good
+idea to focuss on compilation techniques for classical computer architectures.
+Many new concepts came out of the research of the C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+team (see below). These ideas are not only incorporated in our own system, many
+of them have also been adopted by other languages like Haskell and Mercury.</span></p>
+
+<h2><a name="_Toc524343476"></a><a name="_More_Information_on"></a><span
+lang=EN-US>         <a name="_Toc311797962">More Information on Clean</a></span></h2>
+
+<p class=par align=left style='text-align:left'><span lang=EN-US>A tutorial
+teaching how to program in C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> can be found on our web
+pages.<br>
+See <a href="http://wiki.clean.cs.ru.nl/Functional_Programming_in_Clean">http://wiki.clean.cs.ru.nl/Functional_Programming_in_Clean</a>.
+</span></p>
+
+<p class=par><span lang=EN-US>Information about the libraries (including the
+I/O library) that are avail­able for C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> can also be found
+on the web, surf to <a href="http://wiki.clean.cs.ru.nl/Libraries">http://wiki.clean.cs.ru.nl/Libraries</a>.</span></p>
+
+<p class=par><span lang=EN-US>There is a manual teaching the use of the Object
+I/O library. It includes many examples showing you how to write interactive
+window based programs.</span></p>
+
+<p class=al><span lang=EN-US>See <a
+href="http://clean.cs.ru.nl/download/supported/ObjectIO.1.2/doc/tutorial.pdf">http://clean.cs.ru.nl/download/supported/ObjectIO.1.2/doc/tutorial.pdf</a>.</span></p>
+
+<p class=par><span lang=EN-US>The basic concepts behind C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> (albeit of one of the very first versions, namely C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 0.8) as well as an explanation of the basic im­plemen­tation tech­niques
+used can be found in Plasmeijer and Van Eekelen (Adisson-We­sley, 1993). </span></p>
+
+<p class=al align=left style='text-align:left'><span lang=EN-US>The book is out
+of print, but copies can found on <a
+href="http://wiki.clean.cs.ru.nl/Functional_Programming_and_Parallel_Graph_Rewriting">http://wiki.clean.cs.ru.nl/Functional_Programming_and_Parallel_Graph_Rewriting</a></span></p>
+
+<p class=par><span lang=EN-US>There are many papers on the concepts introduced
+by the C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> group (such as <i>term graph rewrit­ing </i>(Barendregt <i>et al.,</i>
+1987), <i>lazy copying</i> (van Eekelen <i>et al.</i>, 1991), <i>abstract
+reduction</i> (Nöcker, 1993), <i>unique­ness ty­p­ing</i> (Barendsen and Smet­sers,
+1993, 1996), C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US>’s<i> I/O concept </i>(Achten, 1996
+&amp; 1997), <i>Lazy Copying</i> for Concurrent<i> </i>C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> (Kesseler, 1991 &amp; 1996), Type dependent Functions for Dynamics
+(Pil, 1999), I/O of Dynamics (Vervoort, 2001), a Typed Operating System (van
+Weelden, 2001). For the most recent information on papers (<a
+href="http://wiki.clean.cs.ru.nl/Publications">http://wiki.clean.cs.ru.nl/Publications</a>)
+and general information about C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> (<a
+href="http://clean.cs.ru.nl/">http://clean.cs.ru.nl</a>) please check our web
+pages. </span></p>
+
+<h2><a name="_Toc524343477"></a><a name="_About_this_Language"></a><span
+lang=EN-US>         <a name="_Toc311797963">About this Language Report</a></span></h2>
+
+<p class=par><span lang=EN-US>In this report the syntax and semantics of C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> version 2.0 are explained. We always give a motiva­tion <i>why</i>
+we have included a certain feature. Although the re­port is not in­tended as
+introduction into the language, we did our best to make it as readable as
+possible. Nevertheless, one sometimes has to work through several sections
+spread all over the report. We have included links where possible to support
+browsing through the manual.</span></p>
+
+<p class=par><span lang=EN-US>At several places in this report context free
+syntax fragments of C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> are given. We sometimes repeat
+fragments that are also given elsewhere just to make the description clearer
+(e.g. in the uniqueness typing chapter we repeat parts of the syntax for the
+classical types). We hope that this is not confusing. The complete collec­tion
+of con­text free grammar rules is summarized in Ap­pendix A.</span></p>
+
+<h2><a name="_Toc524343478"></a><a name="_Some_Remarks_on"></a><span
+lang=EN-US>         <a name="_Toc311797964">Some Remarks on the Clean Syntax</a></span></h2>
+
+<p class=par><span lang=EN-US>The syntax of C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+is similar to the one used in most other modern functional lan­gua­ges.
+However, there are a couple of small syntactic differences we want to point out
+here for people who don’t like to read lan­guage reports.</span></p>
+
+<p class=par><span lang=EN-US>In C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> the arity of a
+function is reflected in its type. When a function is defined its uncurried
+type is specified! To avoid any con­fusion we want to explicitly state here
+that in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> there is no restric­tion whatsoever on the cur­ried use of
+functions. However, we don’t feel a need to express this in every type.
+Actually, the way we express types of functions more clearly reflects the way
+curried functions are in­ternally treated.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>E.g., the standard map function (arity 2) is specified
+in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> as follows:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>map::(a -&gt; b) [a] -&gt; [b]</span></p>
+
+<p class=ex><span lang=EN-US>map f []      = []</span></p>
+
+<p class=ex><span lang=EN-US>map f [x:xs]  = [f x:map f xs]</span></p>
+
+<p class=par><span lang=EN-US>Each predefined structure such as a list, a
+tuple, a record or array has its own kind of brackets: lazy lists are <i>always</i>
+de­notated with square brackets </span><span class=clean><span lang=EN-US>[…]</span></span><span
+lang=EN-US>, strict lists are de­notated by </span><span class=clean><span
+lang=EN-US>[! …]</span></span><span lang=EN-US>, spine strict lists by </span><span
+class=clean><span lang=EN-US>[… !]</span></span><span lang=EN-US>, overloaded
+lists by </span><span class=clean><span lang=EN-US>[|… ]</span></span><span
+lang=EN-US> , unboxed lists by </span><span class=clean><span lang=EN-US>[#…].</span></span><span
+lang=EN-US> For tuples the usual parentheses are used </span><span class=clean><span
+lang=EN-US>(…,…)</span></span><span lang=EN-US>, curly braces are used for
+records (indexed by field name) as well as for arrays (indexed by number).</span></p>
+
+<p class=par><span lang=EN-US>In types funny symbols can appear like., </span><span
+class=clean><span lang=EN-US>u:</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>*</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>!</span></span><span lang=EN-US> which can be
+ignored and left out if one is not inte­r­ested in uniqueness typing or
+strictness.</span></p>
+
+<p class=par><span lang=EN-US>There are only a few keywords in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> leading to a heavily overloaded use of </span><span class=clean><span
+lang=EN-US>: </span></span><span lang=EN-US>and </span><span class=clean><span
+lang=EN-US>=</span></span><span lang=EN-US> symbols:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>function::argstype -&gt; restype           /</span><span
+class=cleancom><span lang=EN-US>/ type specification of a function</span></span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>function pattern </span></p>
+
+<p class=ex><span lang=EN-US>| guard = rhs                           </span><span
+class=cleancom><span lang=EN-US>// definition of a function</span></span></p>
+
+<p class=exb><span class=cleancom><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span lang=EN-US>selector = graph                        </span><span
+class=cleancom><span lang=EN-US>// definition of a constant/CAF/graph</span></span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>function args :== rhs                   </span><span
+class=cleancom><span lang=EN-US>// definition of a macro</span></span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Type args = typedef                   </span><span
+class=cleancom><span lang=EN-US>// an algebraic data type definition</span></span></p>
+
+<p class=ex><span lang=EN-US>::Type args :== typedef                 </span><span
+class=cleancom><span lang=EN-US>// a type synonym definition</span></span></p>
+
+<p class=ex><span lang=EN-US>::Type args                             /</span><span
+class=cleancom><span lang=EN-US>/ an abstract type definition</span></span></p>
+
+<p class=par><span lang=EN-US>As is common in modern functional languages,
+there is a layout rule in C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;
+text-transform:uppercase'> (</span><span lang=EN-US><a href="CleanRep.2.2_4.htm#_2.3.3_Begin_and">see
+2.3</a></span><span lang=EN-US style='font-size:10.0pt;text-transform:uppercase'>)</span><span
+lang=EN-US>. For reasons of portability it is assumed that a tab space is set
+to 4 white spaces and that a non-pro­portional font is used.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Function definition in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+making use of the layout rule.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>primes:: [Int]</span></p>
+
+<p class=ex><span lang=EN-US>primes = sieve [2..]</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=PT-BR>     sieve:: [Int] -&gt; [Int]</span></p>
+
+<p class=ex><span lang=PT-BR>     sieve [pr:r]  = [pr:sieve (filter pr r)]</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>     filter:: Int [Int] -&gt; [Int]</span></p>
+
+<p class=ex><span lang=PT-BR>     filter pr [n:r]</span></p>
+
+<p class=ex><span lang=PT-BR>     | n mod pr == 0   = filter pr r</span></p>
+
+<p class=ex><span lang=PT-BR>     | otherwise       = [n:filter pr r]</span></p>
+
+<h2><a name="_Toc524343479"></a><a name="_Notational_Conventions_Used"></a><span
+lang=EN-US>         <a name="_Toc311797965">Notational Conventions Used in this
+Report</a></span></h2>
+
+<p class=par><span lang=EN-US>The following <i>notational conven­tions </i>are
+used in this report. Text is printed in Microsoft Sans Serif 9pts,</span></p>
+
+<p class=syntaxb><span lang=EN-US>the context free syntax descriptions are
+given in  Microsoft Sans Serif 9pts,</span></p>
+
+<p class=ex><span lang=EN-US>exam­ples of C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+programs are given in Courier New 9pts,</span></p>
+
+<p class=lopal><span lang=EN-US>&#x2005;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Semantic restrictions are always given in a bulleted list-of-points.
+When these restrictions are not obeyed they will almost always result in a
+compile-time error. In very few cases the re­stric­tions can only be detected
+at run-time (array index out-of-range, partial function called out­side the do­main).</span></p>
+
+<p class=par><span lang=EN-US>The following notational conventions are used in
+the context-free syntax descriptions:</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>[notion]</span></p>
+  </td>
+  <td width="85%" valign=top style='width:85.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>means
+  that the presence of notion is optional</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>{notion}</span></p>
+  </td>
+  <td width="85%" valign=top style='width:85.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>means
+  that notion can occur zero or more times</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>{notion}+</span></p>
+  </td>
+  <td width="85%" valign=top style='width:85.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>means
+  that notion occurs at least once</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>{notion}<i>-lis</i></span></p>
+  </td>
+  <td width="85%" valign=top style='width:85.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>means
+  one or more occurrences of notion separated by comma’s</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span class=cleanb><span lang=EN-US>terminals</span></span></p>
+  </td>
+  <td width="85%" valign=top style='width:85.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>are
+  printed in </span><span class=cleanb><span lang=EN-US>9 pts courier</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span class=cleankw><span lang=EN-US>keywords</span></span></p>
+  </td>
+  <td width="85%" valign=top style='width:85.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>are
+  printed in </span><span class=cleankw><span lang=EN-US>9 pts courier</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span class=clean><span lang=EN-US>terminals</span></span></p>
+  </td>
+  <td width="85%" valign=top style='width:85.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>that
+  can be left out in layout mode are printed in </span><span class=clean><b><span
+  lang=EN-US style='color:blue'>9 pts courier</span></b></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>~</span></p>
+  </td>
+  <td width="85%" valign=top style='width:85.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>is
+  used for concatenation of notions</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>{notion}/</span><span
+  lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>~str</span></p>
+  </td>
+  <td width="85%" valign=top style='width:85.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=exb><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>means
+  the longest expression not containing the string str</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>All C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> examples given in
+this report assume that the layout dependent mode has been chosen which means
+that redundant semi-colons and curly braces are left out (<a
+href="CleanRep.2.2_4.htm#_2.3.3_Begin_and">see 2.3.3</a>).</span></p>
+
+<h2><a name="_Toc524343480"></a><a name="_How_to_Obtain"></a><span lang=EN-US>         <a
+name="_Toc311797966">How to Obtain Clean</a></span><span lang=EN-US> </span></h2>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> and the I</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'>ntegrated</span><span
+lang=EN-US> D</span><span lang=EN-US style='font-size:10.0pt;text-transform:
+uppercase'>evelopment</span><span lang=EN-US> E</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'>nvironment</span><span
+lang=EN-US> (IDE) can be used free of charge. They can be obtained</span></p>
+
+<p class=lop><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;via World Wide Web (<i><a
+href="http://clean.cs.ru.nl/">http://clean.cs.ru.nl</a></i>) or</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;via ftp (<i><a
+href="ftp://ftp.cs.ru.nl/pub/Clean">ftp://ftp.cs.ru.nl</a></i> in directory <i>pub/Clean</i>).
+</span></p>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> is available on several
+platforms. Please check our WWW-pages regularly to see the latest news. New
+versions of C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> in general ap­pear first on W</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'>indows</span><span
+lang=EN-US> and later on M</span><span lang=EN-US style='font-size:10.0pt;
+text-transform:uppercase'>ac </span><span lang=EN-US>systems. Versions for
+Linux platforms appear less frequently.</span></p>
+
+<h2><a name="_Toc524343481"></a><a name="_Current_State_of"></a><span
+lang=EN-US>         <a name="_Toc311797967">Current State of the Clean System</a></span></h2>
+
+<p class=par><span class=cleanb><span lang=EN-US>Release 2.1 (November 2002). </span></span></p>
+
+<p class=par><span lang=EN-US>Compared with the previous version the following
+changes have been made. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Experimental features of the previous version, such as dynamics (<a
+href="CleanRep.2.2_10.htm#_Dynamics">see Chapter 8</a>), generics (<a href="CleanRep.2.2_9.htm#_Generic_Programming">see
+Chapter 7</a>) and strict-lists (<a href="CleanRep.2.2_6.htm#_Strict_,_Unboxed">see 4.2</a>) have
+been improved and further incorporated in the language.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Many bugs, most of which appeared in the new features, have been
+removed.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The quality of the generated code has been improved.</span></p>
+
+<p class=par><span class=cleanb><span lang=EN-US>Release 2.0 (November 2001). </span></span></p>
+
+<p class=par><span lang=EN-US>There are <i>many</i> changes compared to the
+previous release (C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> 1.3.x). We have added many new features
+in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> 2.0 </span><span
+lang=EN-US>we hope you will like. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0 has multi-parameter type constructor classes. <a
+href="CleanRep.2.2_8.htm#_6.4_Type_Constructor">See Section 6.4</a>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0 has universally quantified data types and functions (rank 2).
+See Section <a href="CleanRep.2.2_5.htm#_4.4_Typing_Overloaded">3.7.4</a> and <a
+href="CleanRep.2.2_7.htm#_5.1.4_Defining_Algebraic">5.1.4</a>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The explicit import mechanism has been refined. One can now more
+precisely address what to import and what not. <a
+href="CleanRep.2.2_4.htm#_2.5.1_Explicit_Imports">See 2.5.1</a>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Cyclic depedencies between definition modules are allowed. This
+makes it easier to define implementations modules that share definitions. <a
+href="CleanRep.2.2_4.htm#_2.5.1_Explicit_Imports">See 2.5.1</a>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Definitions in a definition module need not to be repeated in the
+corresponding implementation module anymore. <a href="CleanRep.2.2_4.htm#_2.4_Definition_Modules">See
+2.4</a>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Due to multi-parameter type constructor classes a better
+incorporation of the type Array could be made. <a href="CleanRep.2.2_6.htm#_4.4_Arrays">See 4.4</a>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0 offers an hybrid type system: one can have statically and
+dynamically typed objects (<b>Dynamics</b>). A statically typed expression can
+be changed into a dynamically typed one and backwards. The type of a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> can be
+inspected via a pattern match, one can ensure that </span><span class=clean><span
+lang=EN-US>Dynamics</span></span><span lang=EN-US> fit together by using
+run-time type unification, one can store a </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US> into a file with one function
+call or read a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> stored by another C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> application. </span><span
+class=clean><span lang=EN-US>Dynamics</span></span><span lang=EN-US> can be
+used to store and retrieve information without the need for writing parsers, it
+can be used to exchange data and code (!) between applications in a type safe
+manner. </span><span class=clean><span lang=EN-US>Dynamics</span></span><span
+lang=EN-US> make it easy to create mobile code, create plug-ins or create a
+persistent store. The C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> run-time system has been
+extended to support dynamic type checking, dynamic type unification, lazy
+dynamic linking and just-in-time code generation (<a href="CleanRep.2.2_10.htm#_Dynamics">See
+Chapter 8</a>).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>There is special syntax and support for strict and unboxed lists.
+One can easily change from lazy to strict and backwards. Overloaded functions
+can be defined which work for any list (lazy, strict or unboxed). <a
+href="CleanRep.2.2_6.htm#_4.2_Lists_1">See 4.2</a>.One can write functions like </span><span
+class=clean><span lang=EN-US>==</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>map</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>foldr</span></span><span lang=EN-US> in a generic
+way. The <b>generic functions</b> one can define can work on higher order
+kinds. With kind indexed functions one can indicated which kind is actually
+mend (<a href="CleanRep.2.2_9.htm#_Generic_Programming">see Chapter 7</a>). A generic definition
+can be specialized for a certain concrete type. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> system has been changed and extended: a
+new version of the C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> IDE, a new version of the
+run-time-system, and a dynamic linker is included. <a href="CleanRep.2.2_10.htm#_8.3_Type_Safe">See
+8.3</a>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0 comes with an integrated proof system (Sparkle), all written in
+C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> of course. See <a href="http://www.cs.kun.nl/Sparkle">http://www.cs.kun.nl/Sparkle</a>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0 is open source. All source code will be made available on the
+net. </span></p>
+
+<p class=par><span lang=EN-US>We have also removed things:</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>We do not longer support annotations for concurrent evaluations ({P}
+and {I} annotations. However, we are working on a library that will support
+distributed evaluation of C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> expressions using
+Dynamics (see Van Weelden and Plasmeijer, 2002).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>There is no <i>strict let-before</i> expression (</span><span
+class=clean><span lang=EN-US>let!</span></span><span lang=EN-US>) anymore in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>2.x. You still can enforce strict evaluation using the strict hash
+let (#!). </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>One cannot specify default instances anymore that could be used to
+disambiguate possible ambiguous internal overloading. Disambiguating can be
+done by explicitely specifying the required type. </span></p>
+
+<p class=par><span lang=EN-US>There is also some bad news: </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Due to all these changes C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> 2.0 is <i>not</i>
+upwards compatible with C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> 1.3.x. Many things are
+the same but there are small differences as well. So, one has to put some
+effort in porting a C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> 1.3.x application to C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0. The most important syntactical differences are described
+below. Note that we do no longer support C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> 1.3.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;text-transform:
+uppercase'> 1.3</span><span lang=EN-US> compiler is written in C. The C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> 2.0 </span><span
+lang=EN-US>compiler has been rewritten from scratch in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'>. </span><span
+lang=EN-US>The internal structure of the new compiler is a better than the old
+one, but the new compiler has become a bit slower than the previous C version as
+well. Large programs will take about 1.7 times as much time to compile (which
+is still pretty impressive for a lazy functional language).</span></p>
+
+<h3><span lang=EN-US>         <a name="_Toc311797968">Syntactic differences
+between Clean 1.3 and Clean 2.0</a></span></h3>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;
+text-transform:uppercase'> </span><span lang=EN-US>2.x is not downward
+compatible with C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;text-transform:
+uppercase'> </span><span lang=EN-US>1.3.x. Probably you have to change your
+1.3.x sources to get them through the C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'> </span><span lang=EN-US>2.x
+compiler.</span></p>
+
+<h4><span lang=EN-US>         <a name="_Toc311797969">Differences in Expression
+Syntax</a></span></h4>
+
+<p class=par><span lang=EN-US>There is no <i>strict let-before</i> expression (</span><span
+class=clean><span lang=EN-US>let!</span></span><span lang=EN-US>) anymore in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>2.x. You still can enforce strict evaluation using the strict hash
+let (#!).</span></p>
+
+<h4><span lang=EN-US>         <a name="_Toc311797970">Differences in the Type
+System</a></span></h4>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>For <i>multiparameter type</i> classes a small change in the syntax
+for instance definitions was necessary. In C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'> </span><span lang=EN-US>1.3.x
+it was assumed that every instance definition only has one type argument. So in
+the following 1.3.x instance definition</span></p>
+
+<p class=exb><span lang=EN-US>     </span></p>
+
+<p class=ex><span lang=EN-US>     instance c T1 T2</span></p>
+
+<p class=lop><span lang=EN-US>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;the type </span><span class=clean><span
+lang=EN-US>(T1 T2)</span></span><span lang=EN-US> was meant (the type </span><span
+class=clean><span lang=EN-US>T1</span></span><span lang=EN-US> with the
+argument </span><span class=clean><span lang=EN-US>T2</span></span><span
+lang=EN-US>). This should be written in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'> </span><span lang=EN-US>2.x
+as</span></p>
+
+<p class=exb><span lang=EN-US>     </span></p>
+
+<p class=ex><span lang=EN-US>     instance c (T1 T2)</span></p>
+
+<p class=lop><span lang=EN-US>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;otherwise </span><span class=clean><span
+lang=EN-US>T1</span></span><span lang=EN-US> and </span><span class=clean><span
+lang=EN-US>T2</span></span><span lang=EN-US> will be interpreted as two types.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The <i>type </i></span><span class=clean><i><span lang=EN-US>Array</span></i></span><span
+lang=EN-US> has changed. In C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;
+text-transform:uppercase'> </span><span lang=EN-US>2.x the </span><span
+class=clean><span lang=EN-US>Array</span></span><span lang=EN-US> class has
+become a multiparameter class, whose first argument type is the array and whose
+second argument type is the array element (see ??). Therefore a 1.3 definition
+like</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>     MkArray:: !Int (Int -&gt; e) -&gt;.(a e) |
+Array a &amp; ArrayElem e </span></p>
+
+<p class=ex><span lang=EN-US>     MkArray i f = {f j \\ j &lt;- [0..i-1]}</span></p>
+
+<p class=lop><span lang=EN-US>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;becomes in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'> </span><span lang=EN-US>2.x:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>     MkArray:: !Int (Int -&gt; e) -&gt;.(a e) |
+Array a e    </span></p>
+
+<p class=ex><span lang=EN-US>     MkArray i f = {f j \\ j &lt;- [0..i-1]}</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>There is a difference in <i>resolving overloading</i>. Consider the
+following code:</span></p>
+
+<p class=exb><span lang=EN-US>     </span></p>
+
+<p class=ex><span lang=EN-US>     class c a :: a -&gt; a</span></p>
+
+<p class=ex><span lang=EN-US>     </span></p>
+
+<p class=ex><span lang=EN-US>     instance c [Int]</span></p>
+
+<p class=ex><span lang=EN-US>       where</span></p>
+
+<p class=ex><span lang=EN-US>         c [1] = [2]</span></p>
+
+<p class=ex><span lang=EN-US>     </span></p>
+
+<p class=ex><span lang=EN-US>     f [x:xs]</span></p>
+
+<p class=ex><span lang=EN-US>       = c xs</span></p>
+
+<p class=lop><span lang=EN-US>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Although this is accepted by C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>1.3.x, C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;text-transform:
+uppercase'> </span><span lang=EN-US>2.x will complain: &quot;Overloading error
+[...,..,f]: c no instance available of type [a].&quot; The C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>2.x compiler applies no type unification after resolving
+overloading. So </span><span class=clean><span lang=EN-US>c</span></span><span
+lang=EN-US> is in function</span><span class=clean><span lang=EN-US> f</span></span><span
+lang=EN-US> applied to a list with a polymorph element type (</span><span
+class=clean><span lang=EN-US>[a</span></span><span lang=EN-US>]). And this is
+considered to be different from the instance type </span><span class=clean><span
+lang=EN-US>[Int]</span></span><span lang=EN-US>. If you give f the type </span><span
+class=clean><span lang=EN-US>[Int] -&gt; [Int]</span></span><span lang=EN-US>
+the upper code will be accepted.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>2.x handles <i>uniqueness attributes in type synonyms</i> different
+than C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>1.3.x. Consider the following definitions:</span></p>
+
+<p class=exb><span lang=EN-US>  </span></p>
+
+<p class=ex><span lang=EN-US>     :: ListList a :== [[a]]</span></p>
+
+<p class=ex><span lang=EN-US>  </span></p>
+
+<p class=ex><span lang=EN-US>     f :: *(ListList *{Int}) -&gt; *{Int}</span></p>
+
+<p class=ex><span lang=EN-US>     f [[a]] = { a &amp; [0]=0 }</span></p>
+
+<p class=ex><span lang=EN-US>  </span></p>
+
+<p class=nloplop><span lang=EN-US>        In C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'> </span><span lang=EN-US>1.3.x
+the </span><span class=clean><span lang=EN-US>ListList</span></span><span
+lang=EN-US> type synonym was expanded to</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>     f :: *[*[*{Int}]] -&gt; *{Int}</span></p>
+
+<p class=lop><span lang=EN-US>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;which is correct in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>1.3.x. However, C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;
+text-transform:uppercase'> </span><span lang=EN-US>2.x expands it to</span></p>
+
+<p class=exb><span lang=EN-US>  </span></p>
+
+<p class=ex><span lang=EN-US>     f :: *[[*{Int}]] -&gt; *{Int}</span></p>
+
+<p class=lop><span lang=EN-US>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;This yields a uniqueness error in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>2.x because the inner list is shared but contains a unique object.
+This problem happens only with type synonyms that have attributes
+&quot;inbetween&quot;. An &quot;inbetween&quot; attribute is neither the
+&quot;root&quot; attribute nor the attribute of an actual argument. E.g. with
+the upper type synonym, the formal argument &quot;</span><span class=clean><span
+lang=EN-US>a</span></span><span lang=EN-US>&quot; is substituted with </span><span
+class=clean><span lang=EN-US>*{Int}</span></span><span lang=EN-US>. Note that
+also the &quot;</span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>&quot; is substituted for &quot;</span><span class=clean><span
+lang=EN-US>a</span></span><span lang=EN-US>&quot;. Because we wrote </span><span
+class=clean><span lang=EN-US>*(ListList ...)</span></span><span lang=EN-US> the
+root attribute is &quot;</span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>&quot;. The result of expanding </span><span class=clean><span
+lang=EN-US>*(ListList *{Int})</span></span><span lang=EN-US> is </span><span
+class=clean><span lang=EN-US>*[u:[*{Int]]</span></span><span lang=EN-US>.
+&quot;</span><span class=clean><span lang=EN-US>u</span></span><span
+lang=EN-US>&quot; is an attribute &quot;inbetween&quot; because it is neither
+the root attribute nor the attribute of a formal argument. Such attributes are
+made _non_unique_ in C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;
+text-transform:uppercase'> </span><span lang=EN-US>2.x and this is why the
+upper code is not accepted. The code will be accepted if you redefine </span><span
+class=clean><span lang=EN-US>ListList</span></span><span lang=EN-US> to </span></p>
+
+<p class=exb><span lang=EN-US>  </span></p>
+
+<p class=ex><span lang=EN-US>     :: ListList a :== [*[a]]</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><i><span
+lang=EN-US>Anonymous uniqueness attributes in type contexts</span></i><span
+lang=EN-US> are not allowed in C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;
+text-transform:uppercase'> </span><span lang=EN-US>2.x. So in the following
+function type   simply remove the point.</span></p>
+
+<p class=exb><span lang=EN-US>     </span></p>
+
+<p class=ex><span lang=EN-US>     f :: a | myClass .a</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The </span><span class=clean><span lang=EN-US>String</span></span><span
+lang=EN-US> type has become a <i>predefined type</i>. As a consequence you
+cannot import this type explicitly anymore. So:</span></p>
+
+<p class=exb><span lang=EN-US>    </span></p>
+
+<p class=ex><span lang=EN-US>     from StdString import :: String</span></p>
+
+<p class=lop><span lang=EN-US>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;is not valid.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>There was a bug in the uniqueness typing system of C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> 1.3</span><span
+lang=EN-US>: Records or data constructors could have existentially quantified
+variables, whose uniqueness attribute did _not_ propagate. This bug has been
+solved in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>2.x. As a consequence, the 2.x compiler might complain about your
+program where the 1.3.x compiler was happy. The problem might occur when you
+use the object I/O library and you use objects with a uniquely attributed local
+state. Now the object becomes unique as well and may not be shared anymore.</span></p>
+
+<h4><span lang=EN-US>         <a name="_Toc311797971">Differences in the Module
+System</a></span></h4>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The syntax and semantics of <i>explicit import statements</i> has
+been completely revised. With C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;
+text-transform:uppercase'> </span><span lang=EN-US>2.x it is possible to
+discriminate the different namespaces in import statements. In C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>1.3.x the following statement</span></p>
+
+<p class=exb><span lang=EN-US>  </span></p>
+
+<p class=ex><span lang=EN-US>    </span><span class=cleankw><span lang=EN-US>from</span></span><span
+lang=EN-US> m </span><span class=cleankw><span lang=EN-US>import</span></span><span
+lang=EN-US> F</span></p>
+
+<p class=lop><span lang=EN-US>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;could have caused the import of a <i>function</i>
+</span><span class=clean><span lang=EN-US>F</span></span><span lang=EN-US>
+together with a <i>type</i> </span><span class=clean><span lang=EN-US>F</span></span><span
+lang=EN-US> and a <i>class</i> </span><span class=clean><span lang=EN-US>F</span></span><span
+lang=EN-US> with all its instances from m. In C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'> </span><span lang=EN-US>2.x
+one can precisely describe from which name space one wants to import (<a
+href="CleanRep.2.2_4.htm#_2.5.2_Implicit_Imports">see 2.5.2</a>). For example, the following
+import statement</span></p>
+
+<p class=exb><span lang=EN-US>  </span></p>
+
+<p class=ex><span lang=EN-US>    </span><span class=cleankw><span lang=EN-US>from</span></span><span
+lang=EN-US> m </span><span class=cleankw><span lang=EN-US>import</span></span><span
+lang=EN-US>  F, </span></p>
+
+<p class=ex><span lang=EN-US>                   :: T1, :: T2(..), :: T3(C1,
+C2), :: T4{..}, :: T5{field1, field2},</span></p>
+
+<p class=ex><span lang=EN-US>                   </span><span class=cleankw><span
+lang=EN-US>class</span></span><span lang=EN-US> C1, </span><span class=cleankw><span
+lang=EN-US>class</span></span><span lang=EN-US> C2(..), </span><span
+class=cleankw><span lang=EN-US>class</span></span><span lang=EN-US> C3(mem1,
+mem2)</span></p>
+
+<p class=lop><span lang=EN-US>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;causes the following declarations to
+be imported: the <i>function</i> or <i>macro</i> </span><span class=clean><span
+lang=EN-US>F</span></span><span lang=EN-US>, the <i>type</i> </span><span
+class=clean><span lang=EN-US>T1</span></span><span lang=EN-US>, the <i>algebraic</i>
+<i>type</i> </span><span class=clean><span lang=EN-US>T2</span></span><span
+lang=EN-US> with <i>all</i> it's constructors that are exported by </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US>, the <i>algebraic
+type </i></span><span class=clean><span lang=EN-US>T3</span></span><span
+lang=EN-US> with it's constructors </span><span class=clean><span lang=EN-US>C1</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>C2</span></span><span
+lang=EN-US>, the <i>record type </i></span><span class=clean><span lang=EN-US>T4</span></span><span
+lang=EN-US> with <i>all</i> it's fields that are exported by </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US>, the <i>record
+type </i></span><span class=clean><span lang=EN-US>T5</span></span><span
+lang=EN-US> with it's fields </span><span class=clean><span lang=EN-US>field1</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>field2</span></span><span
+lang=EN-US>, the <i>class</i> </span><span class=clean><span lang=EN-US>C1</span></span><span
+lang=EN-US>, the <i>class</i> </span><span class=clean><span lang=EN-US>C2</span></span><span
+lang=EN-US> with all it's members that are exported by m</span><span
+class=clean><span lang=EN-US>,</span></span><span lang=EN-US> the class</span><span
+class=clean><span lang=EN-US> C3</span></span><span lang=EN-US> with it's
+members </span><span class=clean><span lang=EN-US>mem1</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>mem2</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=lop><span lang=EN-US>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;There is a tool called
+&quot;coclPort&quot; that is able to automatically convert C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US style='font-size:10.0pt;text-transform:uppercase'> </span><span
+lang=EN-US>sources with 1.3.x import syntax to sources with 2.x syntax.</span></p>
+
+<p class=par><span class=cleanb><span lang=EN-US>Previous Releases.</span></span><i><span
+lang=EN-US> </span></i><span lang=EN-US>The first release of C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> was publicly available in 1987 and had version number 0.5 (we
+thought half of the work was done, </span><span class=clean><span lang=EN-US>;-)</span></span><span
+lang=EN-US>). At that time, C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> was only thought as an
+intermediate language. Many releases followed. One of them was version 0.8
+which is used in the Plasmeijer &amp; Van Eekelen Bible (Adisson-Wesley, 1993).
+Version 1.0 was the first mature version of C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>.</span></p>
+
+<h2><a name="_Toc524343482"></a><a name="_Copyright,_Authors_and"></a><span
+lang=EN-US>         <a name="_Toc311797972">Copyright, Authors and Credits</a></span></h2>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;
+text-transform:uppercase'>,</span><span lang=EN-US> C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> D<span
+style='text-transform:uppercase'>evelopment</span> S<span style='text-transform:
+uppercase'>ystem</span>, copyright 1987 - 2001, H<span style='text-transform:
+uppercase'>ilt</span> B.V.</span><span
+lang=EN-US>, the Netherlands.</span></p>
+
+<p class=par><span lang=EN-US>H<span style='text-transform:uppercase'>ilt</span>
+is a Dutch company owned by the C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> team founded to ensure
+excellent technical support for commercial environments. H<span
+style='text-transform:uppercase'>ilt</span> furthermore educates in functional
+programming and develops commercial applications using C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>. </span></p>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> is a spin-off of the
+research performed by the Software Technology re­search group, Nijmegen
+Institute for Information and Computing Sciences (NIII), at the U<span
+style='text-transform:uppercase'>ni­versity</span> <span style='text-transform:
+uppercase'>of</span> N<span style='text-transform:uppercase'>ijmegen</span>
+under the super­vision of prof. dr. ir. Rinus Plasmeijer.</span></p>
+
+<p class=par><i><span lang=EN-US>The C</span></i><i><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+System 2.0 is developed by:</span></i></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Peter
+  Achten:</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Object
+  I/O library</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Artem
+  Alimarine</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Support
+  for Generic Programming </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Diederik
+  van Arkel</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>C</span><span
+  lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+  lang=EN-US> Integrated Development Environment for Windows and Mac</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Port
+  of Object I/O library to the Mac</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>John
+  van Groningen:</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Code
+  generators (Mac (Motorola, PowerPC), PC (Intel), Sun (Sparc)), </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>C</span><span
+  lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+  lang=EN-US> compiler, Low level interfaces, all machine wizarding.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Marco
+  Pil</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Dynamics</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Maarten
+  de Mol</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Sparkle,
+  the integrated proof system</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Sjaak
+  Smetsers:</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>C</span><span
+  lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+  lang=EN-US> compiler design,</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>All
+  type systems (including uniqueness typing and type classes), </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Ron
+  Wichers Schreur:</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>C</span><span
+  lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+  lang=EN-US> Compiler, Testing, </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>C</span><span
+  lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+  lang=EN-US> distribution on the net.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Martijn
+  Vervoort</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Dynamics,
+  dynamic linker</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Martin
+  Wierich</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>C</span><span
+  lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+  lang=EN-US> compiler</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Marko
+  van Eekelen:</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>C</span><span
+  lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+  lang=EN-US> semantics</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="25%" valign=top style='width:25.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Rinus
+  Plasmeijer:</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=lopal style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Overall
+  language design and implementation supervision</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=lopal><span lang=EN-US>.</span></p>
+
+<p class=par><i><span lang=EN-US>Special thanks to the following people:</span></i></p>
+
+<p class=par><span lang=EN-US>Christ Aarts, Steffen van Bakel, Erik Barendsen,
+Henk Barendregt, Pieter Hartel, Marco Kesseler, Hans Koetsier, Pieter Koopman,
+Eric Nöcker, Leon Pillich, Ronan Sleep and all the C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+users who helped us to get a bet­ter system.</span></p>
+
+<p class=par><i><span lang=EN-US>Many thanks to the following sponsors:</span></i></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;the Dutch Technology Foundation
+(STW);</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;the Dutch Foundation for Scientific
+Research (NWO);</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;the International Academic Center for
+Informatics (IACI);</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Kropman B.V., Installation
+Techniques, Nijmegen, The Netherlands;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Hitachi Advanced Research
+Laboratories, Japan;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;the Dutch Ministry of Science and
+Education (the Parallel Reduction Machine project (1984-1987)) who initiated
+the C</span><span lang=EN-US style='font-size:10.0pt;text-transform:uppercase'>oncurrent</span><span
+lang=EN-US> C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> research;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Esprit Basic Research Action (project
+3074, SemaGraph: the Semantics and Pragmatics of Graph Rewriting (1989-1991));</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Esprit Basic Research Action (SemaGraph
+II working group 3646 (1992-1995)); </span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Esprit Parallel Computing Action
+(project 4106, (1990-1991));</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Esprit II (TIP-M project area II.3.2,
+Tropics: TRansparent Object-oriented Parallel Information Com­puting System
+(1989-1990)).</span></p>
+
+<p class=par><i><span lang=EN-US>A system like C</span></i><i><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+cannot be produced without an enormous investment in time, effort and money. We
+would therefore like to thank all commercial C</span></i><i><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+users who are decent enough to pay the license royalties.</span></i></p>
+
+<h2><a name="_Toc524343483"></a><a name="_Final_Remarks"></a><span lang=EN-US>         <a
+name="_Toc311797973">Final Remarks</a></span></h2>
+
+<p class=par><i><span lang=EN-US>We hope that </span></i><span lang=EN-US>C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><i><span
+lang=EN-US> indeed enables you to program your applications in a con­venient
+and effi­cient way. We will continue to improve the language and the system. We
+greatly appreciate your com­ments and suggestions for further improvements.</span></i></p>
+
+<p class=par align=right style='margin-top:0cm;text-align:right'><i>November
+2002</i></p>
+
+<p class=par style='margin-top:0cm'><i>&nbsp;</i></p>
+
+<p class=par align=left style='margin-top:0cm;text-align:left'><i>Rinus
+Plasmeijer and Marko van Eekelen</i></p>
+
+<p class=par style='margin-top:0cm'>&nbsp;</p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="80%"
+ style='width:80.0%;border-collapse:collapse'>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>Affiliation:</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><b><span lang=EN-US>Department of
+  Software Technology</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><b><span lang=EN-US>&nbsp;</span></b></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><b><span lang=EN-US>&nbsp;</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'>Mail address:</p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'>University of Nijmegen,</p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'>&nbsp;</p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'>Toernooiveld 1,</p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'>&nbsp;</p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'>6525 ED Nijmegen,</p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'>&nbsp;</p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>The Netherlands.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>e-mail:</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US><a
+  href="mailto:rinus@cs.ru.nl">rinus@cs.ru.nl</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US><a
+  href="mailto:marko@cs.ru.nl">marko@cs.ru.nl</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>Phone:</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>+31 24 3652644</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>Fax:</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>+31 24 3652525</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>C</span><span
+  lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+  lang=EN-US> on internet:</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US><a
+  href="http://www.cs.kun.nl/~clean">http://clean.cs.ru.nl</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>C</span><span
+  lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+  lang=EN-US> on ftp:</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US><a
+  href="ftp://ftp.cs.ru.nl/pub/Clean">ftp://ftp.cs.ru.nl</a> in pub/Clean</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>Questions about C</span><span
+  lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+  lang=EN-US>:</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US><a
+  href="mailto:clean@cs.ru.nl">clean@cs.ru.nl</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="30%" valign=top style='width:30.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US>Subscription mailing
+  list::</span></p>
+  </td>
+  <td width="70%" valign=top style='width:70.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=par style='margin-top:0cm'><span lang=EN-US><a
+  href="mailto:clean@cs.ru.nl">clean@cs.ru.nl</a>, subject:: subscribe</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par style='margin-top:0cm'><span lang=EN-US>&nbsp;</span></p>
+
+</div>
+
+</body>
+</html>

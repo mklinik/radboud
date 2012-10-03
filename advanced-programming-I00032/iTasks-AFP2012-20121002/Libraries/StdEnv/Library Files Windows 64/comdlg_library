@@ -1,0 +1,5 @@
+comdlg32.dll
+PrintDlgA
+GetSaveFileNameA
+GetOpenFileNameA
+CommDlgExtendedError

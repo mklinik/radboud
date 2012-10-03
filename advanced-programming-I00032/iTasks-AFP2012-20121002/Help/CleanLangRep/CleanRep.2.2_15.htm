@@ -1,0 +1,1874 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection16>
+
+<p class=Heading1Chapter><span style='position:absolute;z-index:251671040;
+left:0px;margin-left:38px;margin-top:19px;width:200px;height:97px'><img
+width=200 height=97 src="CleanRep.2.2_files/image001.jpg"></span><a
+name="_Toc311798130"></a><span lang=EN-GB style='font-size:12.0pt;font-family:
+"New York","serif"'><br>
+</span><span lang=EN-US>Appendix B<a name="_Toc524343615"><br>
+Lexical Structure</a></span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="45%" valign=bottom style='width:45.0%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;border-collapse:collapse'>
+   <tr>
+    <td width="10%" valign=top style='width:10.0%;background:#9999FF;
+    padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>B.1</span></p>
+    </td>
+    <td width="90%" valign=top style='width:90.0%;background:#9999FF;
+    padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US><a href="#_B.1_Lexical_Program">Lexical Program Structure</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="10%" valign=top style='width:10.0%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>B.2</span></p>
+    </td>
+    <td width="90%" valign=top style='width:90.0%;background:#9999FF;
+    padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US><a href="#_B.2_Comments">Comments</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="55%" valign=top style='width:55.0%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="8%" valign=top style='width:8.0%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>B.3</span></p>
+    </td>
+    <td width="92%" valign=top style='width:92.0%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US><a href="#_B.3_Reserved_Keywords">Reserved Keywords and Symbols</a></span></p>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>&nbsp;</span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>In this appendix the lexical structure of C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> is given. It describes the kind of tokens recognised by the scan­ner/parser.
+In particular it summarizes the keywords, symbols and characters which have a
+spe­cial meaning in the language. </span></p>
+
+<h2><a name="_Toc311798131"></a><a name="_Toc524343616"></a><a
+name="_B.1_Lexical_Program"></a><span lang=EN-US>B.1   Lexical Program
+Structure</span></h2>
+
+<p class=par><span lang=EN-US>In this Section the lexical structure of C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> is given. It describes the kind of tokens recognised by the scan­ner/parser.
+In particular it summarizes the keywords, symbols and characters which have a
+special meaning in the language. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LexProgram</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{ Lexeme |
+  {Whitespace}+ }</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Lexeme</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ReservedKeywordOrSymbol</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_B.3_Reserved_Keywords">see Section B.3</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ReservedChar</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.9_Denotations">see Section A.9</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Literal</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Identifier</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Identifier</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.8_Names">see A.8</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UpperCaseId</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.8_Names">see A.8</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunnyId</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.8_Names">see A.8</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Literal</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>IntDenotation</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.9_Denotations">see A.9</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RealDenotation</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.9_Denotations">see A.9</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BoolDenotation</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.9_Denotations">see A.9</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharDenotation</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.9_Denotations">see A.9</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CharsDenotation</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.9_Denotations">see A.9</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>StringDenotation</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.9_Denotations">see A.9</a></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Whitespace</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>space</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// a space
+  character</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>tab</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>// a
+  horizontal tab</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>newline</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// a newline
+  char</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>formfeed</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// a formfeed</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>verttab</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// a
+  vertical tab</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Comment</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_B.2_Comments">see Section B.2</a></span></p>
+  </td>
+ </tr>
+</table>
+
+<h2><a name="_Toc311798132"></a><a name="_Toc524343617"></a><a
+name="_B.2_Comments"></a><span lang=EN-US>B.2   Comments</span></h2>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Comment</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><b><span lang=EN-US>// </span></b><span
+  lang=EN-US>AnythingTillNL newline</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><b><span lang=EN-US>/*</span></b><span
+  lang=EN-US> AnythingTill/* Comment AnythingTill*/<b> */</b></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// comments
+  may be nested</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><b><span lang=EN-US>/*</span></b><span
+  lang=EN-US> AnythingTill*/ <b>*/</b></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AnythingTillNL</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{AnyChar/</span><span lang=EN-US>~newline}</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// no
+  newline</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AnythingTill/*</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{AnyChar/</span><span lang=EN-US>~/*}</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// no
+  &quot;/*&quot;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AnythingTill*/</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{AnyChar/</span><span lang=EN-US>~*/}</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// no
+  &quot;*/&quot;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AnyChar</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>IdChar</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_14.htm#_A.8_Names">see A.8</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ReservedChar</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Special</span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<h2><a name="_Toc311798133"></a><a name="_Toc524343618"></a><a
+name="_B.3_Reserved_Keywords"></a><span lang=EN-US>B.3   Reserved Keywords and
+Symbols</span></h2>
+
+<p class=par><span lang=EN-US>Below the keywords and symbols are listed which
+have a special meaning in the language. Some sym­bols only have a special
+meaning in a certain context. Outside this context they can be freely used if
+they are not a reserved character (<a href="CleanRep.2.2_14.htm#_A.9_Denotations">see A.9</a>). In
+the com­ment it is indicated for which context (name space</span><span lang=EN-US>) the symbol is predefined. </span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ReservedKeywordOrSymbol</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in all
+  contexts:</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>/*</span></span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  comment block</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>*/</span></span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// end of
+  comment block</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>//</span></span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// rest of
+  line is comment</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  a type definition</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>:==</span></span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in a type
+  synonym or macro definition</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>=</span></span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in a
+  function, graph, alg type, rec field, case, lambda</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>=:</span></span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// labeling
+  a graph definition</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>=&gt;</span></span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in a
+  function definition</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US style='color:#3366FF'>;</span></span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// end of a
+  definition (if no layout rule)</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.48%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.94%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="25%" valign=top style='width:25.3%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>foreign</span></span></p>
+  </td>
+  <td width="46%" valign=top style='width:46.28%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  foreign export</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in
+  global  definitions:</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>from</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  symbol list for imports</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>definition</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  definition module</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>implementation</span></span><span lang=EN-US> </span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  implementation module</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>import</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  import list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>module</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in module
+  header</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>system</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  system module</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in
+  function  definitions:</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>-&gt;</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in a case
+  expression, lambda ab­straction </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  a list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>:</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// cons node</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>]</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// end of a
+  list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>\\</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  list or array comprehension</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>&lt;-</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// list gen.
+  in list or array comprehen­sion</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>&lt;-:</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// array
+  gen. in list or array compre­hension</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  a record or array, begin of a scope</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>}</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// end of a
+  record or array, end of a scope</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// a record
+  or array selector</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// a record
+  or array selector (for unique objects)</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>&amp;</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// an update
+  of a record or array, zipping gener. </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>case</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  case expression</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>code</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin
+  code block in a syst impl. mo­dule</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>if</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  a conditional expression</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>in</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// end of
+  (strict) let expression</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>let</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  let expression</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>#</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  let expression (for a guard)</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>#!</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  strict let expression (for a guard)</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>of</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in case
+  expression</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>where</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  local def of a function alter­native</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>with</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  local def in a rule alternative</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in type
+  specification</span><span lang=EN-US>s:</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// strict
+  type</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>//
+  uniqueness type variable</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>#</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// unboxed
+  type</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>*</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// unique
+  type</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>:</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in a
+  uniqueness type variable definition</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>-&gt;</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// function
+  type constructor</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[],[!],[!!],[#],[#!]</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// lazy
+  list, head strict, strict, unboxed, unboxed strict</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>&nbsp;</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>[|]</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>//
+  overloaded list</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(,),(,,),(,,,),…</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// tuple
+  type constructors</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{},{!},{#}</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// lazy, strict,
+  unboxed array type constr.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>infix</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// infix
+  indication in operator definition</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>infixl</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// infix
+  left indication in operator defini­tion</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>infixr</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// infix
+  right indication in operator defini­tion</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>Bool</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// type
+  Boolean</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>Char</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// type
+  character</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>File</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// type file</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>Int</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// type
+  integer</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>Real</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// type real</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>World</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// type
+  world</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in class 
+  definitions:</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>export</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// to reveal
+  which class instances there are </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>class</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// begin of
+  type class definition</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>derive</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// derive
+  instance of generic function</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>special</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// to create
+  a specialized instance</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="26%" valign=top style='width:26.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>instance</span></span></p>
+  </td>
+  <td width="47%" valign=top style='width:47.0%;background:#FFCC99;padding:
+  0cm 4.25pt 0cm 4.25pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// def of
+  instance of a type class</span></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+</body>
+</html>

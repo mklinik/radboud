@@ -1,0 +1,1956 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection11>
+
+<p class=Heading1Chapter><span style='position:absolute;z-index:251682304;
+left:0px;margin-left:38px;margin-top:19px;width:200px;height:97px'><img
+width=200 height=97 src="CleanRep.2.2_files/image001.jpg"></span><a
+name="_Toc311798075"></a><span lang=EN-US style='font-size:12.0pt;font-family:
+"New York","serif"'><br>
+</span><span lang=EN-US>Chapter 8<a name="_Dynamics"></a><br>
+Dynamics</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="52%" valign=bottom style='width:52.0%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>8.1</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_8.1_Packing_Expressions"><span lang=EN-US>Packing Expressions into
+    a Dynamic</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>8.2</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_8.2_Unpacking_Dynamics_1"><span lang=EN-US>Unpacking Dynamics Using
+    a Dynamic Pattern Match</span></a></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="48%" valign=top style='width:48.0%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>8.3</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_8.3_Type_Safe"><span lang=EN-US>Type Safe Communication using
+    Dynamics</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>8.4</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_8.4_Architecture_of"><span lang=EN-US>Architecture of the
+    implementation</span></a><span lang=EN-US> </span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>8.5</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_8.5_Semantic_Restrictions"><span lang=EN-US>Semantic Restrictions
+    on Dynamics</span></a></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par align=left style='text-align:left'><span lang=EN-US
+style='color:black'>Dynamics are a new experimental feature of </span><span
+lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>. The concept is easy to understand, but the implementation is not
+so straightforward (see Vervoort and Plasmeijer, 2002). So, it will take some
+time before all bits and pieces are implemented and the system will work
+flawlessly. Please be patient.</span></p>
+
+<p class=par><span lang=EN-US>What can you do with &quot;<span class=clean><span
+style='font-family:"Microsoft Sans Serif","sans-serif"'>Dynamic</span></span>s&quot;?
+With &quot;<span class=clean><span style='font-family:"Microsoft Sans Serif","sans-serif"'>Dynamic</span></span>s&quot;
+it is possible to store and exchange a C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+expression between (different) C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> applications in an easy
+and type-safe way. The expression may contain (unevaluated!) data and
+(unevaluated!) function applications. Here are some examples of its use. </span></p>
+
+<p class=nlopal><span lang=EN-GB style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-GB>Almost all applications <i>store and fetch information to and from
+disk</i> (settings and the like). Traditionally, information written to file
+first has to be converted by the programmer to some (</span><span class=clean><span
+lang=EN-US>String</span></span><span lang=EN-GB>) format. When the file is read
+in again a parser has to be constructed to parse the input and to convert the </span><span
+class=clean><span lang=EN-US>String</span></span><span lang=EN-GB> back to the
+appropriate data structure. With </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-GB>s one can store and retrieve (almost) any </span><span lang=EN-US>C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-GB> data structure </span><span lang=EN-US style='color:black'>in a
+type-safe way</span><span lang=EN-GB> with just one (!) function call. Not only
+data can be saved, but also code (unevaluated functions, higher order
+functions), which is part of the data structure being stored. </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-GB>s make it
+easier to write a <i>persistent application</i>: an application that stores the
+settings in such a way that the next time the user will see everything in the
+same way as the last time the application was used.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Different independently programmed C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+applications, even applications <i>distributed</i> across a network, can easily
+<i>communicate arbitrary expressions</i> that can contain data as well as code
+(unevaluated functions) in a type-safe way. </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>s can be communicated via
+files or via message passing primitives offered by the C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> libraries. The fact that C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> applications can
+communicate code means that a running C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+application can be extended with additional functionality. So,<i> plug-ins</i>
+and <i>mobile code</i> can be realized very easily and everything is<i>
+type-safe</i>. </span></p>
+
+<p class=par><span lang=EN-US>To make all this possible we need some special
+facilities in the C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> language. But, in the C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> run-time system special support is needed as well. This includes <i>dynamic
+type checking</i>, <i>dynamic type unification</i>, <i>dynamic encoding</i> and
+<i>decoding</i> of arbitrary C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> <i>expressions and types</i>,
+<i>dynamic linking</i>, <i>garbage collection</i> of dynamics objects on disk,
+and<i> just-in-time code generation</i>.</span></p>
+
+<p class=par><span lang=EN-US>In C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> 2.0 we have added
+a <i>dynamic type system</i> such that C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+now offers a <i>hybrid type system</i> with both <i>static</i> as well as <i>dynamic
+typing</i>. An object (expression) of static type can be packed into an object
+of dynamic type (a “</span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>”) and backwards. The type of a </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US> can only be checked at
+run-time. An application can also check whether types of several </span><span
+class=clean><span lang=EN-US>Dynamics</span></span><span lang=EN-US> can be
+unified with each other, without a need to know what types are exactly stored
+into a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>. In this way C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> applications can be used
+as control language to manage processes and plug-ins (see Van Weelden and
+Plasmeijer, 2002).</span></p>
+
+<p class=par><span lang=EN-US>In this Chapter we first explain how a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> can be
+constructed (</span><a href="#_8.1_Creating_Dynamics"><span lang=EN-US>see 8.1</span></a><span
+lang=EN-US>). In </span><a href="#_8.2_Unpacking_Dynamics_1"><span lang=EN-US>Section
+8.2</span></a><span lang=EN-US> we explain how the type of a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> can be
+inspected via a pattern match, and how one can ensure that </span><span
+class=clean><span lang=EN-US>Dynamics</span></span><span lang=EN-US> fit
+together by using run-time type unification.</span></p>
+
+<p class=par><span lang=EN-US>We explain in </span><a href="#_8.3_Type_Safe"><span
+lang=EN-US>Section 8.3</span></a><span lang=EN-US> how dynamics can be used to
+realize type safe communication of expressions between independently executing
+applications. In </span><a href="#_8.4_Architecture_of"><span lang=EN-US>Section
+8.4</span></a><span lang=EN-US> we explain the basic architecture of the C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> run-time system that makes this all possible. Semantic restrictions
+and restrictions of the current implementation are summarized in </span><a
+href="#_8.5_Semantic_Restrictions"><span lang=EN-US>Section 8.5</span></a><span
+lang=EN-US>.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<h2><a name="_Toc311798076"></a><a name="_8.1_Creating_Dynamics"></a><a
+name="_8.1_Packing_Expressions"></a><span lang=EN-US>8.1    Packing Expressions
+into a Dynamic</span><span lang=EN-US> </span></h2>
+
+<p class=par><span lang=EN-US>Since C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> is a strongly
+typed language (</span><a href="CleanRep.2.2_7.htm#_Defining_New_Types"><span lang=EN-US>see
+Chapter 5</span></a><span lang=EN-US>), <i>every</i> expression in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> has a <i>static type </i>determined at <i>compile time</i>. The C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> compiler is in general able to infer the static type of any
+expression or any function.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+expressions and their static type:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>3::Int</span></p>
+
+<p class=ex><span lang=EN-US>map::(a -&gt; b) [a] -&gt; [b]</span></p>
+
+<p class=ex><span lang=EN-US>map <a name="OLE_LINK3">((+) 1)</a>::[Int]
+-&gt;[Int]</span></p>
+
+<p class=ex><span lang=EN-US>MoveColorPoint Green::(Real,Real) -&gt; ColorPoint</span></p>
+
+<p class=par><span lang=EN-US>By using the keyword </span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> one can (in principle) change
+<i>any</i> expression of static type </span><span class=clean><span lang=EN-US>::</span></span><span
+lang=EN-US> </span><span lang=EN-US style='font-family:Symbol'>t</span><span
+lang=EN-US> into a dynamically typed object of static type </span><span
+class=clean><span lang=EN-US>::Dynamic</span></span><span lang=EN-US>. Such a
+&quot;dynamic&quot; is an object (a record to be precise) that contains the
+original expression as well as an encoding of the original static type of the
+expression. Both the expression as well as the encoding of its static type, are
+packed into a dynamic. At run-time, the contents of a dynamic (the value of the
+expression as well the encoded type) can be inspected via a dynamic pattern
+match (</span><a href="#_8.2_Unpacking_Dynamics_1"><span lang=EN-US>see 8.2</span></a><span
+lang=EN-US>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DynamicExpression</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>dynamic</span></span><span lang=EN-US> GraphExpr [</span><span
+  class=cleanb><span lang=EN-US>::</span></span><span lang=EN-US> Type]</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example showing how one can pack an expression
+into a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>. Optionally, the static type of the expression one wants to pack
+into a Dynamic can be specified. </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>dynamic</span></span><span
+lang=EN-US> 3</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>dynamic</span></span><span
+lang=EN-US> 3::Int</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>dynamic</span></span><span
+lang=EN-US> map::A.a b:(a-&gt;b) [a] -&gt; [b]</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>dynamic</span></span><span
+lang=EN-US> map::(Int -&gt; Real) [Int] -&gt; [Real]</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>dynamic</span></span><span
+lang=EN-US> map ((+) 1)</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>dynamic</span></span><span
+lang=EN-US> MoveColorPoint Green</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a (constant) function creating a
+dynamic containing an expression of type </span><span class=clean><span
+lang=EN-US>Tree Int</span></span><span lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: Tree a = Node a (Tree a) (Tree a) | Leaf</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyTree::Dynamic</span></p>
+
+<p class=ex><span lang=EN-US>MyTree = </span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> (DoubleTree 1 mytree)</span></p>
+
+<p class=ex><span lang=EN-US>where</span></p>
+
+<p class=ex><span lang=EN-US>    Doubletree rootvalue tree = Node rootvalue
+tree tree</span></p>
+
+<p class=ex><span lang=EN-US> </span></p>
+
+<p class=ex><span lang=EN-US>    mytree = (Node 2 (Node 3 Leaf Leaf) Leaf)</span></p>
+
+<p class=par><span lang=EN-US>Only the compiler is able to combine an
+expression with its type into a dynamic, such that it is guaranteed that the
+encoded type is indeed the type of the corresponding packed expression.
+However, as usual it is allowed to specify a more specific type than the one
+the compiler would infer. The compiler will check the correctness of such a
+(restricted) type specification. Polymorphic types can be stored as well. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>If an expression of polymorphic type is packed into a dynamic one
+needs to explicitly specify the universal quantifiers as well (see the example
+above).</span></p>
+
+<p class=par><span lang=EN-US>In principle (there are a few exceptions), any
+algebraic data type can be packed into a dynamic, including basic types,
+function types, user defined types, polymorphic types, record types, all types
+of arrays, all types of lists, and existentially quantified types. The system
+can deal with synonym types as well. Restrictions hold for packing abstract
+data types, uniqueness types and overloaded functions, see the sub-sections
+below.</span></p>
+
+<p class=par><span lang=EN-US>The static type of the object created with the
+keyword &quot;dynamic&quot; is the predefined type </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>. Since all objects created in
+this way are of type </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>, the compiler is in general not able anymore to determine the
+static type hidden in the </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> and it cannot check its type consistency anymore. The type stored
+into a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> has to be checked at run-time (</span><a
+href="#_8.2_Unpacking_Dynamics_1"><span lang=EN-US>see 8.2</span></a><span
+lang=EN-US> and </span><a href="#_8.3_Type_Safe"><span lang=EN-US>8.3</span></a><span
+lang=EN-US>).</span></p>
+
+<h3><a name="_Toc311798077"></a><a name="_8.1.1_Static_Context"></a><a
+name="_8.1.1_Packing_Abstract"></a><span lang=EN-US>8.1.1 Packing Abstract Data
+Types</span></h3>
+
+<p class=par><span lang=EN-US>Certain types simply cannot be packed into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> for
+fundamental reasons. Examples are objects of abstract predefined type that have
+a special meaning in the real world, such as objects of type </span><span
+class=clean><span lang=EN-US>World</span></span><span lang=EN-US> and of type </span><span
+class=clean><span lang=EN-US>File</span></span><span lang=EN-US>. It is not
+sound to pack objects of these types into a <span class=clean><span
+style='font-family:"Microsoft Sans Serif","sans-serif"'>Dynamic</span></span>,
+because their real world counterpart cannot be packed and stored. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Abstract data types that have a meaning in the real world (such as </span><span
+class=clean><span lang=EN-US>World</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>File</span></span><span lang=EN-US>) cannot be
+packed into </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=par><span lang=EN-US>A compile time error message will be given in
+those cases were the compiler refuses to pack an expression into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>.</span></p>
+
+<p class=par><span lang=EN-US>In the current implementation there are
+additional restrictions on the kind of types that can be packed into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. Currently
+it is not possible to pack any abstract data type into a dynamic at all. The
+reason is that the test on equality of abstract types is not easy: it does not
+seem to be enough to test the equality of the definitions of the types
+involved. We should also test whether the operations defined on these abstract
+data types are exactly the same. The most straightforward way to do this would
+be to require that abstract data types are coming from the same module
+(repository).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Expressions containing objects of abstract data type cannot be
+packed into a Dynamic. We are working on this. Check the latest version of the </span><span
+class=clean><span lang=EN-US>Clean</span></span><span lang=EN-US> system.</span></p>
+
+<h3><a name="_Toc311798078"><span lang=EN-US>8.1.2 Packing Overloaded Functions</span></a></h3>
+
+<p class=par><span class=cleankw><span lang=EN-US>Not yet implemented:</span></span><span
+lang=EN-US> Overloaded functions can also be packed into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. In that
+case the corresponding type classes (</span><a href="CleanRep.2.2_8.htm#_6.1_Type_Classes"><span
+lang=EN-US>see 6.1</span></a><span lang=EN-US>) are packed as additional
+dictionary argument of the function into the </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>. When the </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> is unpacked
+in a pattern match, the same type classes have to be defined in the receiving
+function, otherwise the pattern match will fail (</span><a
+href="#_8.2.2_Unpacking_of"><span lang=EN-US>see 8.2.2</span></a><span
+lang=EN-US>).  </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: storing an overloaded function into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>OverloadedDynamic:: Dynamic</span></p>
+
+<p class=ex><span lang=EN-US>OverloadedDynamic = </span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> plus :: A.a:a a -&gt; a | + a</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    plus:: a a -&gt; a | + a</span></p>
+
+<p class=ex><span lang=EN-US>    plus x y = x + y</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Currently, when an overloaded function is packed into a dynamic, one
+explicitly has to specify the type, including the forall quantifier and the
+class context.</span></p>
+
+<h3><a name="_Toc311798079"><span lang=EN-US>8.1.3 Packing Expressions of
+Unique Type</span></a></h3>
+
+<p class=par><span class=cleankw><span lang=EN-US>Not yet implemented:</span></span><span
+lang=EN-US> Expressions of unique type (</span><a href="CleanRep.2.2_11.htm#_Uniqueness_Typing"><span
+lang=EN-US>see Chapter 9</span></a><span lang=EN-US>) can also be packed into a
+<span class=clean><span style='font-family:"Microsoft Sans Serif","sans-serif"'>Dynamic</span></span>.
+However, the run-time system cannot deal with uniqueness type variables or with
+coercion statements (attribute variable inequalities). One can only use the
+type attribute &quot;</span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>&quot;. Furthermore, one has to explicitly define the desired
+unicity in the type of the expression to be packed into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. Otherwise
+the unicity properties of the packed expression will not be stored. As usual,
+the compiler will check whether the specified type (including the uniqueness
+type attributes) of the packed expression is correct.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: packing a function into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> that can
+write a character to a unique file.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyDynamic:: Dynamic</span></p>
+
+<p class=ex><span lang=EN-US>MyDynamic = </span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> fwritec :: Char *File -&gt;
+*File</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Uniqueness type variables and coercion statements cannot be part of
+a type packed into a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Uniqueness type attributes are only taken into account if they are
+explicitly specified in the type of the packed dynamic.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><a name="_8.2_Unpacking_Dynamics"></a><span lang=EN-US>Counter
+Example: </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>s cannot deal with uniqueness type variables or with attribute
+variable inequalities.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyDynamic:: Dynamic</span></p>
+
+<p class=ex><span lang=EN-US>MyDynamic = </span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> append :: [.a] u:[.a] -&gt;
+v:[.a]        , [u&lt;=v]</span></p>
+
+<h3><a name="_Toc311798080"><span lang=EN-US>8.1.4 Packing Arguments of Unknown
+Type</span></a></h3>
+
+<p class=par><span lang=EN-US>The compiler is not in all cases capable to infer
+the concrete type to be assigned to a </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>. For instance, when a
+polymorphic function is defined it is in general unknown what the type of the
+actual argument will be. If it is polymorphic, it can be of any type. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>An argument of polymorphic type cannot be packed into a <span
+class=clean><span style='font-family:"Microsoft Sans Serif","sans-serif"'>Dynamic</span></span>.
+</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Counter Example of a function creating a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. Arguments
+of polymorphic type cannot be packed into a </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>WrongCreateDynamic:: t -&gt; Dynamic</span></p>
+
+<p class=ex><span lang=EN-US>WrongCreateDynamic any = </span><span
+class=cleankw><span lang=EN-US>dynamic</span></span><span lang=EN-US> any</span></p>
+
+<p class=par><span lang=EN-US>If one wants to define a function that can wrap
+an arbitrary argument into a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>, not only the value, but also the concrete static type of that
+argument has to be passed to the function. For efficiency reasons, we of course
+do not want to pass the types of all arguments to all functions. Therefore, we
+have to know which of the arguments might be packed into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. A special
+class context restriction is used to express this. So, instead of a <i>polymorphic</i>
+function one has to define an <i>overloaded</i> function (</span><a
+href="CleanRep.2.2_8.htm#_Overloading"><span lang=EN-US>see Chapter 6</span></a><span lang=EN-US>).
+The class </span><span class=clean><span lang=EN-US>TC</span></span><span
+lang=EN-US> (for </span><span class=clean><span lang=EN-US>T</span></span><span
+lang=EN-US>ype </span><span class=clean><span lang=EN-US>C</span></span><span
+lang=EN-US>ode) is predefined and an instance of this class is required
+whenever an argument of unknown type is packed into a dynamic. The compiler
+will automatically generate an appropriate instance of the TC when needed.</span></p>
+
+<p class=exb><span lang=EN-US> </span></p>
+
+<p class=exth><span lang=EN-US>Example of an overloaded function that can wrap
+an argument of arbitrary type into a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>CreateDynamic:: t -&gt; Dynamic | TC t</span></p>
+
+<p class=ex><span lang=EN-US>CreateDynamic any = </span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> any</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyTree:: Dynamic</span></p>
+
+<p class=ex><span lang=EN-US>MyTree = CreateDynamic (Node 2 (Node 3 Leaf Leaf)
+Leaf)</span></p>
+
+<h3><a name="_Toc311798081"><span lang=EN-US>8.1.5 Using Dynamic Typing to
+Defeat the Static Type System</span></a></h3>
+
+<p class=par><span lang=EN-US>Dynamic typing can also be used to do things the
+static type system would forbid. For instance, lists require that all lists
+elements are of the same type. Since all dynamic expressions are of type </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>, one can
+combine objects of static different type into a list by turning them into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: three ways to pack objects of different
+type into a list. The first method is to define a new type in which all types
+one likes to pack into a list are summarized with an appropriate constructor to
+distinguish them. For unpacking one can make a case distinction on the
+different constructors in a pattern match. Everything is nice statically typed
+but one can only pack and unpack the types that are mentioned in the wrapper
+type.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: WrapperType = I Int | R Real | C Char</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyWrapperList = [I 1, R 3.14, C 'a']</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The next way to pack objects of different types
+is by defining a list structure using an existential type (</span><a
+href="CleanRep.2.2_7.htm#_Defining_Algebraic_Data"><span lang=EN-US>see 5.1.3</span></a><span
+lang=EN-US>). Any type can be packed now but the disadvantage is that there is
+no simple way to distinguish the elements and unpack them once they are packed.
+</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: ExstList = E.a: Cons a ExstList | Nil</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyExstList = Cons 1 (Cons 3.14 (Cons 'a' Nil)</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The third way is to wrap the values into a
+Dynamic. Any type can be packed and via a pattern match one can unwrap them as
+well. It is very inefficient though and one can only unwrap a value by
+explicitly naming the type in the pattern match (</span><a
+href="#_8.2_Unpacking_Dynamics_1"><span lang=EN-US>see 8.2</span></a><span
+lang=EN-US>).</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyDynamicList = [</span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> 1, </span><span
+class=cleankw><span lang=EN-US>dynamic</span></span><span lang=EN-US> 3.14, </span><span
+class=cleankw><span lang=EN-US>dynamic</span></span><span lang=EN-US> 'a'] </span></p>
+
+<p class=par><span lang=EN-US>It is possible to write C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+programs in which all arguments are dynamically typed. You can do it, but it is
+not a good thing to do: programs with dynamics are less reliable (run-time type
+errors might occur) and much more inefficient. </span><span class=clean><span
+lang=EN-US>Dynamics</span></span><span lang=EN-US> should be used for the
+purpose they are designed for: type-safe storage, retrieval, and communication
+of arbitrary expressions between (independent) applications.</span></p>
+
+<h2><a name="_Toc311798082"></a><a name="_8.2_Unpacking_Dynamics_1"></a><span
+lang=EN-US>8.2    Unpacking Dynamics Using a Dynamic Pattern Match</span></h2>
+
+<p class=par><span lang=EN-US>When a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is created (see above), its static type is the type </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. The
+compiler is in general not able anymore to determine what the original type was
+of the expression that is packed into a </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>. The only way to figure that
+out is at run-time (that why it is called a </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>), by inspecting the dynamic
+via a pattern match (</span><a href="CleanRep.2.2_5.htm#_3.2_Patterns"><span lang=EN-US>see 3.2</span></a><span
+lang=EN-US>) or a case construct (</span><a href="CleanRep.2.2_5.htm#_3.4.10_Case_Expression"><span
+lang=EN-US>see 3.4.2</span></a><span lang=EN-US>). With a pattern match on a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> one cannot
+only inspect the <i>value</i> of the expression that was packed into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>, but also
+its original <i>type</i>. So, with </span><span class=clean><span lang=EN-US>Dynamics</span></span><span
+lang=EN-US> run-time type checking and dynamic type unification is possible in
+C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> with all the advantages (more expressions can be typed) and
+disadvantages (type checking may fail at run-time) of a dynamic type system.
+The programmer has to take care of handling the case in which the pattern match
+fails due to a non-matching dynamic type.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DynamicPattern</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span lang=EN-US>GraphPattern </span><span
+  class=cleanb><span lang=EN-US>::</span></span><span lang=EN-US> DynamicType</span><span
+  class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DynamicType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{
+  DynPatternType}+</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DynPatternType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Type</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypePatternVariable</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>OverloadedTypePatternVariable</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypePatternVariable</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Variable</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>OverloadedTypeVariable</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Variable</span><span
+  class=cleankw><span lang=EN-US>^</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>Any expression that can be packed into a dynamic
+can also be unpacked using a dynamic pattern match. With a pattern match on </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>s a case
+distinction can be made on the contents of the </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>. If the actual </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> matches the
+type <i>and</i> the value specified in the pattern, the corresponding function
+alternative is chosen. Since it is known in that case that the </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> matches the
+specified type, this knowledge is used by the static type system: dynamics of
+known type can be handled as ordinary expressions in the body of the function.
+In this way dynamics can be converted back to ordinary statically typed expressions
+again. The static type checker will use the knowledge to check the type
+consistency in the body of the corresponding function alternative.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: Use of a dynamic pattern match to check
+whether a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is of a specific predefined type. The first alternative of the
+function </span><span class=clean><span lang=EN-US>transform</span></span><span
+lang=EN-US> matches if the </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> contains the </span><span class=clean><span lang=EN-US>Int</span></span><span
+lang=EN-US>eger of value </span><span class=clean><span lang=EN-US>0</span></span><span
+lang=EN-US>. The second alternative is chosen if the </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US> contains any Integer (other
+than </span><span class=clean><span lang=EN-US>0)</span></span><span
+lang=EN-US>. The third alternative demands a function from </span><span
+class=clean><span lang=EN-US>[Int]</span></span><span lang=EN-US> to </span><span
+class=clean><span lang=EN-US>[Int]</span></span><span lang=EN-US>. The next
+alternative is chosen if the </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is a pair of two </span><span class=clean><span lang=EN-US>[Int]</span></span><span
+lang=EN-US>. If none of the alternatives match, the last alternative is chosen.
+The program will yield an empty list in that case.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>transform :: Dynamic -&gt; [Int]</span></p>
+
+<p class=ex><span lang=EN-US>transform (0 :: Int)               = []</span></p>
+
+<p class=ex><span lang=EN-US>transform (n :: Int)               = [n]</span></p>
+
+<p class=ex><span lang=EN-US>transform (f :: [Int]-&gt;[Int])      = f [1..100]</span></p>
+
+<p class=ex><span lang=EN-US>transform ((x,y) :: ([Int],[Int])) = x ++ y</span></p>
+
+<p class=ex><span lang=EN-US>transform other                    = []</span></p>
+
+<p class=par><span lang=EN-US>Warning: when defining a pattern match on
+Dynamics, one should always be aware that the pattern match might fail. So, we
+advise you to <i>always </i>include an alternative that can handle non-matching
+dynamics. The application will otherwise abort with an error message that none
+of the function alternatives matched.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: use of a dynamic pattern match to check
+whether a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is of a specific user defined algebraic data type. If the </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> contains a </span><span
+class=clean><span lang=EN-US>Tree </span></span><span lang=EN-US>of </span><span
+class=clean><span lang=EN-US>Int</span></span><span lang=EN-US>, the function </span><span
+class=clean><span lang=EN-US>CountDynamicLeafs</span></span><span lang=EN-US>
+will count the number of leafs in this tree. Otherwise </span><span
+class=clean><span lang=EN-US>CountDynamicLeafs</span></span><span lang=EN-US> 
+will return 0.   </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: Tree a = Node a (Tree a) (Tree a) | Leaf</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>CountDynamicLeafs :: Dynamic -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>CountDynamicLeafs (tree :: Tree Int)  = countleafs
+tree</span></p>
+
+<p class=ex><span lang=EN-US>CountDynamicLeafs other               = 0</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    countleafs :: (Tree Int) -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>    countleafs  tree = count tree 0</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>    where</span></span></p>
+
+<p class=ex><span lang=EN-US>        count:: (Tree a) Int -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>        count Leaf nleafs              = nleafs +
+1</span></p>
+
+<p class=ex><span lang=EN-US>        count (Node left right) nleafs = count
+left (count right nleafs)</span></p>
+
+<p class=ex><span lang=EN-US> </span></p>
+
+<p class=ex><span lang=EN-US>MyTree :: Dynamic</span></p>
+
+<p class=ex><span lang=EN-US>MyTree = </span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> (Node 1 (Node 2 (Node 3 Leaf
+Leaf) Leaf) (Node 4 Leaf Leaf))</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start :: Int</span></p>
+
+<p class=ex><span lang=EN-US>Start = CountDynamicLeafs MyTree</span></p>
+
+<p class=exb><a name="OLE_LINK6"><span lang=EN-US>&nbsp;</span></a></p>
+
+<p class=exth><span lang=EN-US>Example: use of a dynamic pattern match to check
+whether a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is a polymorphic function (the identity function in this case).</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>TestId :: Dynamic a -&gt; a</span></p>
+
+<p class=ex><span lang=EN-US>TestId (id :: A.b: b -&gt; b) x = id x</span></p>
+
+<p class=ex><span lang=EN-US>TestId else x                = x</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>To avoid confusion with type pattern variables (</span><a
+href="#_8.2.4_Checking_and_1"><span lang=EN-US>see 8.2.4</span></a><span
+lang=EN-US> and </span><a href="#_8.2.5_Checking_and"><span lang=EN-US>8.2.5</span></a><span
+lang=EN-US>), polymorphic type variables have to be explicitly introduced with
+the forall quantifier (</span><span class=clean><span lang=EN-US>A.</span></span><span
+lang=EN-US>). </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Quantifiers are only allowed on the outermost level (Rank 1).</span></p>
+
+<p class=par><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>s can be created by functions in other modules or even come from
+other (totally different) </span><span class=clean><span lang=EN-US>Clean</span></span><span
+lang=EN-US> applications (</span><a href="#_8.3_Type_Safe"><span lang=EN-US>see
+8.3</span></a><span lang=EN-US>). It is therefore possible that in a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> a type with
+a certain name is stored, yet this type might have a type definition which is
+(slightly or totally) different from the type known in the matching function.
+So, the context in which a dynamic is packed might be totally different from
+the context in which the dynamic is unpacked via a pattern match. Hence, it is
+not enough that matching type constructors have identical names; they should
+also have exactly the same type definition. If not, the match will fail.</span></p>
+
+<p class=par><span lang=EN-US>Two types are considered to be equal if and only
+if all the type definitions (type constructors, data constructors, class
+definitions) are syntactically identical modulo the names of type variables
+(alpha conversion is allowed). Type equivalence of type constructors is automatically
+checked by the </span><span class=clean><span lang=EN-US>Clean</span></span><span
+lang=EN-US> run-time system, even if these types are defined in totally
+different </span><span class=clean><span lang=EN-US>Clean</span></span><span
+lang=EN-US> applications. To make this possible, we had to change the
+architecture of the </span><span class=clean><span lang=EN-US>Clean</span></span><span
+lang=EN-US> run-time system (</span><a href="#_8.4_Architecture_of"><span
+lang=EN-US>see 8.4</span></a><span lang=EN-US>).</span></p>
+
+<p class=par><span lang=EN-US>So, when a pattern match on a dynamic takes
+place, the following things are checked in the indicated order (case constructs
+are handled in a similar way):</span></p>
+
+<p class=par style='margin-left:21.25pt;text-indent:-18.0pt'><span lang=EN-US>1)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>All the type constructors (either of basic type, predefined or user
+defined) specified in a dynamic pattern will be compared with the name of the
+corresponding actual type constructors stored in the dynamics. If corresponding
+type constructors have different names, the pattern match fails and the next
+alternative is tried.</span></p>
+
+<p class=par style='margin-left:21.25pt;text-indent:-18.0pt'><span lang=EN-US>2)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>If in the pattern match, corresponding type’s constructors have the
+same name, the run-time system will check whether their type definitions (their
+type might have been defined in different </span><span class=clean><span
+lang=EN-US>Clean</span></span><span lang=EN-US> applications or different </span><span
+class=clean><span lang=EN-US>Clean</span></span><span lang=EN-US> modules) are
+the same as well. The system knows where to find these type definitions (</span><a
+href="#_8.3_Type_Safe"><span lang=EN-US>see 8.3</span></a><span lang=EN-US> and</span><a
+href="#_8.4_Architecture_of"><span lang=EN-US> 8.4</span></a><span lang=EN-US>).
+If the definitions are not the same, the types are considered to be different.
+The pattern match fails and the next alternative is tried.</span></p>
+
+<p class=par style='margin-left:21.25pt;text-indent:-18.0pt'><span lang=EN-US>3)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>If the types are the same, the actual data constructors (constant
+values) are compared with the data constructors specified in the patterns, as
+usual in a standard pattern match (</span><a href="CleanRep.2.2_5.htm#_3.2_Patterns"><span
+lang=EN-US>see 3.2</span></a><span lang=EN-US>) without dynamics. If all the
+specified constants match the actual values, the match is successful and the
+corresponding function alternative is chosen. Otherwise, the pattern match
+fails and the next alternative is tried.</span></p>
+
+<p class=par><span lang=EN-US>In the current implementation there are
+additional restrictions on the kind of types that can be packed into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span class=clean><span
+lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'> </span></span><span
+lang=EN-US>and therefore also be unpacked from a </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span class=clean><span lang=EN-US
+style='font-family:"Microsoft Sans Serif","sans-serif"'> (</span></span><a
+href="#_8.2.1_Unpacking_Abstract"><span lang=EN-US>see 8.2.1</span></a><span
+class=clean><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>,
+</span></span><a href="#_8.2.2_Unpacking_of"><span lang=EN-US>8.2.2</span></a><span
+class=clean><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>,
+and </span></span><a href="#_8.2.3_Unpacking_Expressions"><span lang=EN-US>8.2.3</span></a><span
+class=clean><span lang=EN-US style='font-family:"Microsoft Sans Serif","sans-serif"'>)</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=par><span lang=EN-US>In a dynamic pattern match one can explicitly
+specify to match on a certain type constructors (e.g. </span><span class=clean><span
+lang=EN-US>Tree Int</span></span><span lang=EN-US>). One can also use a type
+pattern variable (</span><a href="#_8.2.4_Checking_and_1"><span lang=EN-US>see
+8.2.4</span></a><span lang=EN-US>) to specify a type scheme with which the
+actual type has to be unified. By using overloaded variables (</span><a
+href="#_8.2.5_Checking_and_1"><span lang=EN-US>see 8.2.5</span></a><span
+lang=EN-US>) defined in the type of the function, the static context in which a
+function is used can have influence on the kind of dynamic that is accepted.
+So, there are two special types of variables that can occur in a type pattern:
+type pattern variables and overloaded type pattern variables. </span></p>
+
+<h3><a name="_Toc311798083"></a><a name="_8.2.1_Unpacking_Abstract"></a><span
+lang=EN-US>8.2.1 Unpacking Abstract Data Types</span></h3>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>It is not yet possible to pack or unpack an abstract data type. We
+are working on this. Check the latest version of the <span class=clean><span
+style='font-family:"Microsoft Sans Serif","sans-serif"'>Clean</span></span>
+system. </span><a href="#_8.1.1_Static_Context"><span lang=EN-US
+style='color:windowtext;text-decoration:none'>See also 8.1.1</span></a><span
+lang=EN-US>.</span></p>
+
+<h3><a name="_Toc311798084"></a><a name="_8.2.2_Unpacking_of"></a><span
+lang=EN-US>8.2.2 Unpacking of Overloaded Functions</span></h3>
+
+<p class=par><span class=cleankw><span lang=EN-US>Not yet implemented:</span></span><span
+lang=EN-US> One can specify a class restriction in the type in a dynamic pattern
+match. The system will check whether the actual dynamic contains a function
+that is indeed overloaded with exactly the same class context restriction as
+specified in the pattern. Two class definitions are regarded to be equal if all
+involved class definitions are syntactically equal, modulo alpha conversion of
+the type variables. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>One is obligated for overloaded type variables to introduce them via
+the forall quantifier in the pattern, to avoid confusion with type pattern
+variables (see </span><a href="#_8.2.4_Checking_and"><span lang=EN-US>8.2.4</span></a><span
+lang=EN-US> and </span><a href="#_8.2.5_Checking_and"><span lang=EN-US>8.2.5</span></a><span
+lang=EN-US>). </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Quantifiers are only allowed on the outermost level.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: Unpacking of an overloaded function.
+The pattern match will only be successful if the dynamic contains a function
+overloaded in </span><span class=clean><span lang=EN-US>+</span></span><span
+lang=EN-US>. The corresponding class definitions will be checked: the
+definition of the class </span><span class=clean><span lang=EN-US>+</span></span><span
+lang=EN-US> has to be the same as the class </span><span class=clean><span
+lang=EN-US>+</span></span><span lang=EN-US> known in the context where the
+dynamic has been created. Due to the application of </span><span class=clean><span
+lang=EN-US>plus 2 3</span></span><span lang=EN-US>, the type checker will
+require an instance for </span><span class=clean><span lang=EN-US>+</span></span><span
+lang=EN-US> on integer values. </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>CheckDynamic:: Dynamic -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>CheckDynamic (plus :: A.a : a a -&gt; a | + a) =
+plus 2 3</span></p>
+
+<p class=ex><span lang=EN-US>CheckDynamic else                           = 0</span></p>
+
+<h3><a name="_Toc311798085"></a><a name="_8.2.3_Unpacking_Expressions"></a><span
+lang=EN-US>8.2.3 Unpacking Expressions of Unique Type</span></h3>
+
+<p class=par><span class=cleankw><span lang=EN-US>Not yet implemented:</span></span><span
+class=clean><span lang=EN-US> </span></span><span lang=EN-US>Expressions of
+unique type (</span><a href="CleanRep.2.2_11.htm#_Uniqueness_Typing"><span lang=EN-US>see Chapter
+9</span></a><span lang=EN-US>) can also be unpacked via a dynamic pattern
+match. However, the run-time system cannot deal with uniqueness type variables
+or with coercion statements (attribute variable inequalities). One can only use
+the type attribute &quot;</span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>&quot;. The match will only be successful if the specified types
+match and all type attributes also match. No coercion from unique to non-unique
+or the other way around will take place.  </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: Unpacking a function that can write a
+character to a unique file.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>WriteCharDynamic:: Dynamic Char *File -&gt; *File</span></p>
+
+<p class=ex><span lang=EN-US>WriteCharDynamic (fwc :: Char *File -&gt; *File)
+char myfile = fwc char myfile</span></p>
+
+<p class=ex><span lang=EN-US>WriteCharDynamic else char
+myfile                         = myfile</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Uniqueness type variables and coercion statements cannot be used in
+a dynamic pattern match.</span></p>
+
+<p class=nlopal><a name="_8.2.4_Checking_and"></a><span lang=EN-US
+style='font-size:12.0pt;font-family:"Times New Roman";color:#FFCC99'><img src="square_8.png" />
+</span><span style="margin-left:16px"></span><span lang=EN-US>The
+type attributes of the formal argument and the actual argument have to be
+exactly the same. No coercion from unique to non-unique or the other way around
+will take place.</span></p>
+
+<h3><a name="_Toc311798086"></a><a name="_8.2.4_Checking_and_1"></a><span
+lang=EN-US>8.2.4 Checking and Unifying Types Schemes using Type Pattern
+Variables</span></h3>
+
+<p class=par><span lang=EN-US>In an ordinary pattern match one can use <i>data
+constructors</i> (to test whether an argument is of a <i>specific value</i>)
+and <i>variables</i> (which match on <i>any concrete value</i> in the domain).
+Similarly, in a pattern match on a dynamic type one can use<i> type
+constructors</i> (to test whether a dynamic contains an expression of a <i>specific
+type</i>) and <i>type pattern variables</i> (which match on <i>any</i> <i>type</i>).
+However, there are differences between ordinary variables and type pattern
+variables as well. All ordinary variable symbols introduced at the left-hand
+side of a function definition must have differ­ent names (</span><a
+href="CleanRep.2.2_5.htm#_3.2_Patterns"><span lang=EN-US>see 3.2</span></a><span lang=EN-US>).
+But, the same type variable symbol can be used several times in the left-hand
+side (and, of course, also in the right-hand side) of a function definition.
+Type pattern variables have the function alternative as scope and can appear in
+a pattern as well as in the right-hand side of a function in the context of a
+dynamic type.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypePatternVariable</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Variable</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>Each time the <i>same</i> type variable is used
+in the left-hand side, the pattern matching mechanism will try to <i>unify</i>
+the type variable with the concrete type stored in the dynamic. If the same
+type variable is used several times on the left hand-side, the most general
+unifier is determined that matches on <i>all</i> corresponding types in the
+dynamics. If no general unifier can be found, the match will fail. As usual, of
+all corresponding type constructors it will be checked whether they are indeed
+the same: the corresponding type definitions have to be equivalent (</span><a
+href="#_8.2_Unpacking_Dynamics_1"><span lang=EN-US>see 8.2</span></a><span
+lang=EN-US>). Type equivalence of matching type constructors is automatically
+checked by the </span><span class=clean><span lang=EN-US>Clean</span></span><span
+lang=EN-US> run-time system, even if these types are defined in different </span><span
+class=clean><span lang=EN-US>Clean</span></span><span lang=EN-US> applications.</span></p>
+
+<p class=par><span lang=EN-US>Type pattern variables are very handy. They can
+be used to check for certain type schemes or to check the internal type
+consistency between different <span class=clean><span style='font-family:"Microsoft Sans Serif","sans-serif"'>Dynamic</span></span>s,
+while the checking function does not exactly has to know which concrete types
+are actually stored in a dynamic. One can make use of type pattern variables to
+manage and control plug-ins in a flexible way (see 8.3).  </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The function </span><span class=clean><span
+lang=EN-US>dynApply</span></span><span lang=EN-US> has two arguments of type </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> and yields
+a value of type </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> as well. The first </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> has to contain a function unifiable with type </span><span
+class=clean><span lang=EN-US>(a -&gt; b)</span></span><span lang=EN-US>, the
+second argument has to be <i>unifiable</i> with the argument type </span><span
+class=clean><span lang=EN-US>a</span></span><span lang=EN-US> the function is
+expecting. In this way we can ensure that it is type technically safe to apply
+the function to the argument, without exactly knowing what the actual types
+are. The result will have the statically unknown type </span><span class=clean><span
+lang=EN-US>b</span></span><span lang=EN-US>, but, by packing this result into a
+Dynamic again, the static type system is happy: it is a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. If the
+dynamics types cannot be unified, it is not type safe to apply the function to
+the argument, and the next alternative of </span><span class=clean><span
+lang=EN-US>dynApply</span></span><span lang=EN-US> is chosen. It yields an
+error message stored into a dynamic.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>dynApply :: Dynamic Dynamic -&gt; Dynamic </span></p>
+
+<p class=ex><span lang=EN-US>dynApply (f :: a -&gt; b) (x :: a)    = dynamic (f
+x :: b)</span></p>
+
+<p class=ex><span lang=EN-US>dynApply  df            dx         = dynamic
+(&quot;cannot apply &quot;,df,&quot; to &quot;,dx)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start = dynApply (</span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> (map ((+) 1)) (</span><span
+class=cleankw><span lang=EN-US>dynamic</span></span><span lang=EN-US> [1..10]) </span></p>
+
+<p class=par><span lang=EN-US>Type pattern variables behave similar as
+existentially quantified type variables (</span><a
+href="CleanRep.2.2_7.htm#_Defining_Algebraic_Data"><span lang=EN-US>see 5.1.3</span></a><span
+lang=EN-US>). It is statically impossible to determine what the actual type of
+a type pattern variable is. So, in the static type system one cannot define an
+expression which type is depending on the value of a type pattern variable. The
+static type system cannot deal with it, since it does no know its value.
+However, an expression which type is depending on the type assigned to a type
+pattern variable can be packed into a dynamic again, because this is done at
+run-time. See the </span><span class=clean><span lang=EN-US>dynAppy</span></span><span
+lang=EN-US> example above.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>It is not allowed to create an expression which static type is
+depending on the value of a type pattern variable. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><a name="_8.2.5_Checking_and"></a><span lang=EN-US>Counter
+Example: It is not possible to let a static type depend on the value of a type
+pattern variable. The actual value of the type </span><span class=clean><span
+lang=EN-US>b</span></span><span lang=EN-US> in </span><span class=clean><span
+lang=EN-US>WrongDynApply</span></span><span lang=EN-US>  is unknown at
+run-time. This example will result into a type error. See </span><a
+href="#_8.2.5_Checking_and_1"><span lang=EN-US>8.2.5</span></a><span
+lang=EN-US> for a legal variant of this function.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>WrongDynApply :: Dynamic Dynamic -&gt; ??? </span></p>
+
+<p class=ex><span lang=EN-US>WrongDynApply (f :: a -&gt; b) (x :: a)  = f x</span></p>
+
+<p class=ex><span lang=EN-US>WrongDynApply df            dx         = abort
+&quot;cannot perform the dyanmic application&quot;</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start = WrongDynApply (</span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> (map ((+) 1)) (</span><span
+class=cleankw><span lang=EN-US>dynamic</span></span><span lang=EN-US> [1..10])
+++ [11..99]</span></p>
+
+<p class=par><a name="_8.2.5_Checking_and_1"></a><span lang=EN-US>Note: don't
+confuse type pattern variables with the other variables that can appear in a
+dynamic type to indicate polymorphic or overloaded functions or constructors.
+The latter are introduced via a quantifier in the type. </span><a
+href="#_8.2.5_Checking_and_2"><span lang=EN-US>See also 8.2.5</span></a><span
+lang=EN-US>.</span></p>
+
+<h3><a name="_Toc311798087"></a><a name="_8.2.5_Checking_and_2"></a><span
+lang=EN-US>8.2.5 Checking and Unifying Unknown Types using Overloaded Type
+Variables</span></h3>
+
+<p class=par><span lang=EN-US>In a dynamic pattern match one can explicitly
+state what type of a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is demanded. But it is also possible to let the static context in
+which a function is used impose restrictions on the Dynamic to be accepted.
+This can be realized by using <i>overloaded type variables </i>in a dynamic
+pattern. Such an overloaded type variable has to be introduced in the type of
+the function itself and the variable should have the predefined type class </span><span
+class=clean><span lang=EN-US>TC</span></span><span lang=EN-US> (</span><a
+href="#_8.1.1_Static_Context"><span lang=EN-US>see 8.1.1</span></a><span
+lang=EN-US>) as context restriction. This makes it possible to let the
+overloading mechanism determine what the demanded type of a Dynamic has to be
+(the &quot;type dependent functions&quot; as introduced by Marco Pil, 1999). By
+using such an overloaded type variable in a dynamic pattern, the type assigned
+by the static overloading mechanism to this variable is used as specification
+of the required type in the dynamic pattern match. The carrot symbol (</span><span
+class=clean><span lang=EN-US>^</span></span><span lang=EN-US>) is used as
+suffix of a type pattern variable in a dynamic pattern match to indicate that
+an overloaded type variable is used, instead of a type pattern variable.
+Overloaded type variables have the whole function definition as scope,
+including the type of the function itself. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>OverloadedTypeVariable</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Variable</span><span
+  class=cleankw><span lang=EN-US>^</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>An overloaded type pattern variable has to be introduced in the type
+definition of the function. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The predefined type class </span><span class=clean><span lang=EN-US>TC</span></span><span
+lang=EN-US> (</span><a href="#_8.1.1_Static_Context"><span lang=EN-US>see 8.1.1</span></a><span
+lang=EN-US>) has to be specified as context restriction on the global type
+pattern variable.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>As is usual with overloading (</span><a
+href="CleanRep.2.2_8.htm#_6.6_Internal_Overloading"><span lang=EN-US>see 6.6</span></a><span
+lang=EN-US>), in some cases the compiler is not able to resolve overloading,
+e.g. due to internally ambiguously overloading.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: The function </span><span class=clean><span
+lang=EN-US>Start</span></span><span lang=EN-US> appends </span><span
+class=clean><span lang=EN-US>[11..99]</span></span><span lang=EN-US> to the
+result of </span><span class=clean><span lang=EN-US>FlexDynApply</span></span><span
+lang=EN-US>. So, it is clear that </span><span class=clean><span lang=EN-US>FlexDynApply</span></span><span
+lang=EN-US> will have to deliver a </span><span class=clean><span lang=EN-US>[Int]</span></span><span
+lang=EN-US> to the function </span><span class=clean><span lang=EN-US>Start</span></span><span
+lang=EN-US>. The additional context restriction </span><span class=clean><span
+lang=EN-US>TC b</span></span><span lang=EN-US> turns </span><span class=clean><span
+lang=EN-US>FlexDynApply </span></span><span lang=EN-US>into an overloaded
+function in </span><span class=clean><span lang=EN-US>b</span></span><span
+lang=EN-US>. The function FlexDynApply will not deliver <i>some </i>dynamic
+type </span><span class=clean><span lang=EN-US>b</span></span><span lang=EN-US>,
+but <i>the</i> static type </span><span class=clean><span lang=EN-US>b</span></span><span
+lang=EN-US> that is demanded by the context applying FlexDynApply. The
+overloading mechanism will automatically pass as additional parameter
+information about the static type </span><span class=clean><span lang=EN-US>b</span></span><span
+lang=EN-US> that is required by the context. This type is then used to check
+the actual type of the dynamic in the dynamic pattern match </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>FlexDynApply :: Dynamic Dynamic -&gt; b | TC b</span></p>
+
+<p class=ex><span lang=EN-US>FlexDynApply (f :: a -&gt; b^) (x :: a)   = f x</span></p>
+
+<p class=ex><span lang=EN-US>FlexDynApply df            dx          = abort
+&quot;cannot perform the dyanmic application&quot;</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start = FlexDynApply (</span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> (map ((+) 1)) (</span><span
+class=cleankw><span lang=EN-US>dynamic</span></span><span lang=EN-US> [1..10])
+++ [11..99]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: The function </span><span class=clean><span
+lang=EN-US>lookup</span></span><span lang=EN-US> will look up a value of a
+certain type </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> in its lists of </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>s. The type it will search for depends on the context in which the
+function </span><span class=clean><span lang=EN-US>lookup</span></span><span
+lang=EN-US> is used. In </span><span class=clean><span lang=EN-US>Start</span></span><span
+lang=EN-US> the </span><span class=clean><span lang=EN-US>lookup</span></span><span
+lang=EN-US> function is used twice. In the first case an integer value is
+demanded (due to </span><span class=clean><span lang=EN-US>+ 5</span></span><span
+lang=EN-US>), in the second case a real value (due to </span><span class=clean><span
+lang=EN-US>+ 2.5</span></span><span lang=EN-US>) is required. The program will
+be aborted if a value of the required type cannot be found in the list.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>lookup :: [Dynamic] -&gt; a  | TC a</span></p>
+
+<p class=ex><span lang=EN-US>lookup [(x :: a^):xs] = x</span></p>
+
+<p class=ex><span lang=EN-US>lookup [x:xs]         = lookup xs</span></p>
+
+<p class=ex><span lang=EN-US>lookup []             = abort ”dynamic type error”</span></p>
+
+<p class=ex><span lang=EN-US> </span></p>
+
+<p class=ex><span lang=EN-US>Start = (lookup DynamicList + 5, lookup
+DynamicList + 2.5)  </span><span class=cleancom><span lang=EN-US>// result will
+be (6,5.64)</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>DynamicList = [</span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> 1, </span><span
+class=cleankw><span lang=EN-US>dynamic</span></span><span lang=EN-US> 3.14, </span><span
+class=cleankw><span lang=EN-US>dynamic</span></span><span lang=EN-US> 'a']</span></p>
+
+<p class=par><a name="_8.3_Type_Safe"></a><span lang=EN-US>Note: don't confuse
+overloaded type variables with type pattern variables or the other variables
+that can appear in a dynamic type to indicate polymorphic or overloaded
+functions or constructors. The latter are introduced via a quantifier in the
+type.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: the following artificial example the
+kinds of type variables that can be used in a dynamic pattern are shown. In the
+first alternative a type variable </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> is used (introduced by the forall quantifier). This alternative
+only matches on a polymorphic function. In the second alternative an overloaded
+type variable is used (indicated by </span><span class=clean><span lang=EN-US>a^</span></span><span
+lang=EN-US>) referring to the overloaded type variable </span><span
+class=clean><span lang=EN-US>a | TC a</span></span><span lang=EN-US> introduced
+in the function body. It will match on a function of the same type as the
+actual type of the second argument of AllSortsOfVariables. The last alternative
+uses type pattern variables </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>b</span></span><span
+lang=EN-US>. It matches on any function type, although this function is not
+used.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><a name="OLE_LINK4"><span lang=EN-US>AllSortsOfVariables </span></a><span
+lang=EN-US>:: Dynamic  a -&gt; a | TC a</span></p>
+
+<p class=ex><span lang=EN-US>AllSortsOfVariables (id::A.a : (a -&gt; a)) x  =
+id x</span></p>
+
+<p class=ex><span lang=EN-US>AllSortsOfVariables (f::a^ -&gt; a^)        x  = f
+x</span></p>
+
+<p class=ex><span lang=EN-US>AllSortsOfVariables (f::a -&gt; b)          x  = x</span></p>
+
+<h2><a name="_Toc311798088"><span lang=EN-US>8.3    Type Safe Communication
+using Dynamics</span></a><span lang=EN-US> </span></h2>
+
+<p class=par><span lang=EN-US>As explained in the introduction of this Chapter,
+the most important practical use </span><span class=clean><span lang=EN-US>of
+Dynamic</span></span><span lang=EN-US>s is enabling type safe communication of
+data and code between different (distributed) C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+applications. When a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is stored or communicated it will be encoded (serialized) to a
+string. So, in principle almost any communication media can be used to
+communicate </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>s. In this section we only explain how to store and retrieve a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> from a </span><span
+class=clean><span lang=EN-US>File</span></span><span lang=EN-US>. It is also
+possible to communicate a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> directly via a channel or via send / receive communication
+primitives. The actual possibilities are depending on the facilities offered by
+C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> libraries. This is outside the scope of this C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> language report.</span></p>
+
+<p class=par><span lang=EN-US>If a C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> application stores
+a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> into a </span><span class=clean><span lang=EN-US>File</span></span><span
+lang=EN-US> <i>any</i> other (totally different) C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+application can read the Dynamic from it. Since a </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US> can contain data as well as
+code (unevaluated function applications), this means that any part of one C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> program can be plugged into another. Since C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> is using compiled code, this has a high impact on the run-time
+system (</span><a href="#_8.4_Architecture_of"><span lang=EN-US>see 8.4</span></a><span
+lang=EN-US>).</span></p>
+
+<p class=par><span lang=EN-US>One can read and write a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> with just <i>one</i>
+function call. In the C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> library </span><span
+class=clean><span lang=EN-US>StdDynamic</span></span><span lang=EN-US> the
+functions </span><span class=clean><span lang=EN-US>readDynamic</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>writeDynamic</span></span><span
+lang=EN-US> are predefined. As usual in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>,
+uniqueness typing is used for performing I/O (</span><a
+href="CleanRep.2.2_11.htm#_4.5.1_Basic_Ideas"><span lang=EN-US>see 9.1</span></a><span lang=EN-US>).
+When a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is written, the whole expression (the graph expression and its
+static type) is encoded symbolically to a </span><span class=clean><span
+lang=EN-US>String</span></span><span lang=EN-US> and stored on disk. When a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> is read, it
+is read in lazily. Only when the evaluation of the </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US> is demanded (which can only
+happen after a successful pattern match), the </span><span class=clean><span
+lang=EN-US>String</span></span><span lang=EN-US> is decoded back to a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. If new
+function definitions have to be plugged in, this will be done automatically (</span><a
+href="#_8.4_Architecture_of"><span lang=EN-US>see 8.4</span></a><span
+lang=EN-US>). This lazy reading is also done for </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>s stored into a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. So, a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> can only be
+plugged in if its type is approved in a </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US> pattern match.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Standard functions for reading and writing of a
+Dynamic. </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>definition</span></span><span
+lang=EN-US> </span><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> StdDynamic</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>...</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>writeDynamic :: Dynamic String *World -&gt;
+*(Bool,*World)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>readDynamic :: String *World -&gt; *(Bool,
+Dynamic, *World)</span></p>
+
+<p class=par><span lang=EN-US>The use of </span><span class=clean><span
+lang=EN-US>Dynamics</span></span><span lang=EN-US> is shown in the examples
+below. Each example is a complete C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> application.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+application writing a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> containing a value of type </span><span class=clean><span
+lang=EN-US>Tree</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>Int</span></span><span lang=EN-US> to a </span><span class=clean><span
+lang=EN-US>File</span></span><span lang=EN-US> named </span><span class=clean><span
+lang=EN-US>DynTreeValue</span></span><span lang=EN-US>. This example shows that
+data can be stored to disk using the C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> function </span><span
+class=clean><span lang=EN-US>writeDynamic</span></span><span lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> TreeValue</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>import</span></span><span
+lang=EN-US> StdDynamic, StdEnv</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: Tree a = Node a (Tree a) (Tree a) | Leaf</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start world</span></p>
+
+<p class=ex><span lang=EN-US># (ok,world) = writeDynamic &quot;</span><span
+class=clean><span lang=EN-US>DynTreeValue</span></span><span lang=EN-US>&quot;
+MyTree world</span></p>
+
+<p class=ex><span lang=EN-US>| not ok     = abort &quot;could not write MyTree
+to file named </span><span class=clean><span lang=EN-US>DynTreeValue</span></span><span
+lang=EN-US>&quot;</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise  = world</span></p>
+
+<p class=ex><span lang=EN-US>where </span></p>
+
+<p class=ex><span lang=EN-US>    MyTree::Dynamic</span></p>
+
+<p class=ex><span lang=EN-US>    MyTree = </span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> (Node 1 mytree mytree)</span></p>
+
+<p class=ex><span lang=EN-US>    where</span></p>
+
+<p class=ex><span lang=EN-US>        mytree = (Node 2 (Node 3 Leaf Leaf) Leaf)</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of another C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+application writing a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> containing the function </span><span class=clean><span lang=EN-US>countleafs</span></span><span
+lang=EN-US> to a File named CountsLeafsinTrees. This function can count the
+numbers of leafs in a </span><span class=clean><span lang=EN-US>Tree</span></span><span
+lang=EN-US> and is of type </span><span class=clean><span lang=EN-US>(Tree Int)
+-&gt; Int</span></span><span lang=EN-US>. This examples shows that code (in
+this case the function </span><span class=clean><span lang=EN-US>CountLeafs</span></span><span
+lang=EN-US>) can be stored on disk as well, just using </span><span
+class=clean><span lang=EN-US>WriteDynamic</span></span><span lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> CountLeafs</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>import</span></span><span
+lang=EN-US> StdDynamic, StdEnv</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: Tree a = Node a (Tree a) (Tree a) | Leaf</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start world</span></p>
+
+<p class=ex><span lang=EN-US># (ok,world) = writeDynamic
+&quot;CountsLeafsinTrees&quot; CountLeafs world</span></p>
+
+<p class=ex><span lang=EN-US>| not ok     = abort &quot;could not write
+dynamic&quot;</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise  = world</span></p>
+
+<p class=ex><span lang=EN-US>where  </span></p>
+
+<p class=ex><span lang=EN-US>    CountLeafs = </span><span class=cleankw><span
+lang=EN-US>dynamic</span></span><span lang=EN-US> countleafs </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    countleafs:: (Tree Int) -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>    countleafs  tree = count tree 0</span></p>
+
+<p class=ex><span lang=EN-US>    where</span></p>
+
+<p class=ex><span lang=EN-US>        count:: (Tree a) Int -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>        count Leaf nleafs               = nleafs +
+1</span></p>
+
+<p class=ex><span lang=EN-US>        count (Node left right) nleafs  = count
+left (count right nleafs) </span></p>
+
+<p class=ex><span lang=EN-US>        count else                      = abort
+&quot;count does not match&quot;</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The third C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+application reads in the file </span><span class=clean><span lang=EN-US>TreeValue</span></span><span
+lang=EN-US> containing a </span><span class=clean><span lang=EN-US>Tree Int </span></span><span
+lang=EN-US>and the function </span><span class=clean><span lang=EN-US>countleafs</span></span><span
+lang=EN-US> (a plugin) that can counts the number of Leafs in a </span><span
+class=clean><span lang=EN-US>Tree</span></span><span lang=EN-US>. So, new
+functionality is added to the running application Apply. By using the function </span><span
+class=clean><span lang=EN-US>dynapply</span></span><span lang=EN-US> the new
+plugged in function </span><span class=clean><span lang=EN-US>countleafs</span></span><span
+lang=EN-US> is applied to the tree that has been read in as well. The
+application </span><span class=clean><span lang=EN-US>Apply</span></span><span
+lang=EN-US> itself has a function to count the number of nodes and applies this
+function on the tree read in.</span></p>
+
+<p class=exth><span lang=EN-US>Note that this application will only work if all
+the type </span><span class=clean><span lang=EN-US>Tree</span></span><span
+lang=EN-US>s defined in the different applications are exactly the same (module
+the names for the type variables used).</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> Apply</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>import</span></span><span
+lang=EN-US> StdDynamic, StdEnv</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: Tree a = Node a (Tree a) (Tree a) | Leaf</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start world</span></p>
+
+<p class=ex><span lang=EN-US># (ok,countleafs,world)   = read
+&quot;CountsLeafsinTrees&quot; world</span></p>
+
+<p class=ex><span lang=EN-US>| not ok                  = abort (&quot;could not
+read CountsLeafsinTrees&quot;)</span></p>
+
+<p class=ex><span lang=EN-US># (ok,treevalue,world)    = read
+&quot;TreeValue&quot; world</span></p>
+
+<p class=ex><span lang=EN-US>| not ok                  = abort (&quot;could not
+read TreeValue&quot;)</span></p>
+
+<p class=ex><span lang=EN-US>| otherwise  =   (    countnodes (</span><span
+class=cleankw><span lang=EN-US>case</span></span><span lang=EN-US> treevalue </span><span
+class=cleankw><span lang=EN-US>of</span></span><span lang=EN-US> (v::(Tree
+Int))= v) 0</span></p>
+
+<p class=ex><span lang=EN-US>                 ,    dynapply countleafs
+treevalue</span></p>
+
+<p class=ex><span lang=EN-US>                 )</span></p>
+
+<p class=ex><span lang=EN-US>where</span></p>
+
+<p class=ex><span lang=EN-US>    dynapply :: Dynamic Dynamic -&gt; Dynamic</span></p>
+
+<p class=ex><span lang=EN-US>    dynapply (f::a -&gt; b) (v::a)  = dynamic (f
+v)</span></p>
+
+<p class=ex><span lang=EN-US>    dynapply df          dv     = dynamic
+&quot;incorrectly typed dynamic application&quot;</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    countnodes Leaf nnodes              = nnodes</span></p>
+
+<p class=ex><span lang=EN-US>    countnodes (Node left right) nnodes =
+countnodes left (countnodes right (nnodes+1))</span></p>
+
+<h2><a name="_Toc311798089"></a><a name="_8.4_Architecture_of"></a><span
+lang=EN-US>8.4    Architecture of the implementation</span></h2>
+
+<p class=par><span lang=EN-US>From the examples above we learn that a </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> stored on
+disk can contain data as well as code (unevaluated functions and function
+applications). How is this information stored into a file and how is a running
+C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> application extended with new data and new functionality? To
+understand this one has to know a little bit more about how a C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> application is generated.</span></p>
+
+<h3><span lang=EN-US>         <a name="_Toc311798090">Implementation of
+Dynamics</a></span></h3>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> applications are not
+interpreted via an interpreter. Executables are generated using compiled
+machine code. Storing a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> into disk and retrieving it again from disk cannot simply be done
+by (re) interpretation of C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> source code.</span></p>
+
+<p class=par><span lang=EN-US style='font-size:10.0pt'>&nbsp;</span></p>
+
+<p class=par>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=128 height=11></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=391 height=176 src="CleanRep.2.2_files/image035.gif"></td>
+ </tr>
+</table>
+
+<span lang=EN-US style='font-size:10.0pt'>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US style='font-size:10.0pt'>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US style='font-size:10.0pt'>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US style='font-size:10.0pt'>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US style='font-size:10.0pt'>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US>&nbsp;</span></p>
+
+<br clear=ALL>
+
+<p class=par><span lang=EN-US>The C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> compiler (written
+in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>) compiles C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> implementation modules
+(.icl and .dcl files) to machine independent abc-code (.abc files). The C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> definition modules are used to check the type consistency between
+the separately programmed C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> modules. The abc-code
+contains machine instructions for a virtual abstract machine, the abc-machine
+(see </span><a
+href="http://www.cs.kun.nl/~clean/Manuals/Addison__Wesley_book/addison__wesley_book.html"><span
+lang=EN-US>Plasmeijer and van van Eekelen</span></a><span lang=EN-US>, 1993).
+The abc-code is a kind of platform independent byte code specially designed for
+C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>. The Code Generator (the one and only application in the Clean
+system which is written in C) translates the abc-code into platform dependent
+symbolic machine code (.obj files under Windows). The code generator can
+generate code for different platforms such as for Intel (Windows, Linux),
+Motorola (Mac) and Sparc (Unix) processors. The Static Linker (written in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>) links all the object modules of one C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> program
+together into a click able executable application (.exe file under Windows).
+The compilation scheme described above can be used even if Dynamics are
+internally used in an application. But, as soon as </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>s are communicated to </span><span
+class=clean><span lang=EN-US>File</span></span><span lang=EN-US> or
+communicated to another program, a different run-time support is needed and the
+traditional compilation scheme is changed to prepare this. </span></p>
+
+<p class=par>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=110 height=8></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=514 height=285 src="CleanRep.2.2_files/image036.gif"></td>
+ </tr>
+</table>
+
+<span lang=EN-US>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US style='font-size:10.0pt'>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US style='font-size:10.0pt'>&nbsp;</span></p>
+
+<p class=par><span lang=EN-US style='font-size:10.0pt'>&nbsp;</span></p>
+
+<br clear=ALL>
+
+<p class=par><span lang=EN-US>In the changed compilation scheme, the static
+linker not only generates an application (actually, currently it is a .bat
+file), but it also generates two additional files. One is called the code
+repository (.lib file). All object codes of your application are collected
+here. The other file (.typ file) is a repository that contains all type
+definitions. The repositories serve as a database which is accessed by the
+Dynamic Linker. Whenever an (other) running application needs code for a plug
+in or a type that has to be checked, the Dynamic Linker will look it up in the
+appropriate repository. Each time a C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> program is recompiled,
+new repositories are created. Repositories should not be removed by hand
+because it might make the </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>s stored on disk unreadable. A special garbage collector is provided
+that can remove unused repositories.</span></p>
+
+<p class=par><span lang=EN-US>When a C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> application doing
+dynamic I/O is started, a special linker (the Dynamic Linker, written in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>) is started with it as well (if it is not already running). The
+Dynamic Linker is a server application on the computer. It will serve all
+running C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> programs that read or write </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US>s. The Dynamic Linker will
+construct the application or plug-in at run-time in the same way as the Static
+Linker would do at compile-time for a conventional C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+program. There is no efficiency penalty once the code is linked in. </span></p>
+
+<p class=par><span lang=EN-US>When a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is written to disk using the function </span><span class=clean><span
+lang=EN-US>writeDynamic</span></span><span lang=EN-US>, two (!) files are
+created: a .dyn file and a .sysdyn file. The .sysdyn file contains the actual
+information: a String encoding of the dynamic. This sysdyn file is used by the
+Dynamic Linker and should not be touched by the user because it might make the </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>s stored on
+disk unreadable. The special garbage collector provided will also remove unused
+.sysdyn files.</span></p>
+
+<p class=par><span lang=EN-US>The user may only touch and use the .dyn file
+that contains references to the actual dynamic stored in the .sysdyn file. The
+.dyn file can be seen as a &quot;typed&quot; file. It can be handled like any
+other user file. It can be renamed, moved or deleted without any danger. </span></p>
+
+<p class=par><span lang=EN-US>When a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is written to a file, an encoding of the graph and its type are written
+to disk. The graph is encoded in such a way that sharing will be maintained
+when the graph is read in again. The stored graph may contain unevaluated
+functions. In a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> on disk, functions are represented by symbolic pointers to the
+corresponding code repositories.  The types stored in a Dynamic on disk point
+to the corresponding type definitions stored in the type repositories.</span></p>
+
+<p class=par><i><span lang=EN-US>No plug-in will be plugged in unless its type
+is approved. </span></i><span lang=EN-US>When a </span><span class=clean><span
+lang=EN-US>Dynamic</span></span><span lang=EN-US> stored on disk is read in by
+an (other) application, first only a pointer to the stored </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US> is used in
+the C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> program. To use a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> in an application one first has to examine it in a pattern match.
+In the pattern match the type of the </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> is unified with a specified type or with the type of another </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>s. If the
+run-time type unification is successful, the Dynamic Linker will check whether
+all type definitions of the types involved are identical as well. This type
+information is fetched from the corresponding type repository when needed. If
+the types are identical and the conventional pattern match succeeds as well,
+the corresponding function body can be evaluated. Only when the evaluation of
+the stored Dynamic is demanded, the graph encoded in the Dynamic on disk is
+reconstructed as far as needed (</span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US>s nested in a </span><span class=clean><span lang=EN-US>Dynamic</span></span><span
+lang=EN-US> are reconstructed lazily). The Dynamic Linker links in the code
+corresponding to the unevaluated functions stored in the </span><span
+class=clean><span lang=EN-US>Dynamic</span></span><span lang=EN-US>. It is
+fetched from the code repository and plugged in the running (!) application. In
+some cases the Dynamic Linker will ask the Code Generator to generate new code
+(just-in-time code generation) to construct the required image. The Dynamic
+Linker has to ensure that identical data types defined in different
+applications are linked in such a way that they are indeed considered to be of
+the same type at run-time.</span></p>
+
+<h2><a name="_Toc311798091"></a><a name="_8.5_Semantic_Restrictions"></a><span
+lang=EN-US>8.5    Semantic Restrictions on Dynamics</span></h2>
+
+<p class=par><span lang=EN-US>Dynamics are an experimental feature of C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0. In the current version there are still many restrictions and
+limitations. </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The following types cannot be packed/unpacked: abstract data types,
+uniqueness types, overloaded types. We are working on it.</span></p>
+
+<p class=par align=left style='text-align:left'><span lang=EN-US
+style='color:black'>&nbsp;</span></p>
+
+<p class=par align=left style='text-align:left'><span lang=EN-US
+style='color:black'>&nbsp;</span></p>
+
+<p class=par align=left style='text-align:left'><span lang=EN-US
+style='color:black'>&nbsp;</span></p>
+
+<p class=par align=left style='text-align:left'><span lang=EN-US
+style='font-family:"Times New Roman","serif";color:black;display:none'>&nbsp;</span></p>
+
+<p class=par align=left style='text-align:left'><span lang=EN-US
+style='font-family:"Times New Roman","serif";color:black;display:none'>&nbsp;</span></p>
+
+<p class=par align=left style='text-align:left'><span lang=EN-US
+style='font-family:"Times New Roman","serif";color:black;display:none'>&nbsp;</span></p>
+
+</div>
+
+</body>
+</html>
