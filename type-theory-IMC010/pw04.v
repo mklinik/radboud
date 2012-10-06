@@ -165,9 +165,11 @@ Fixpoint plus2 (n m : nat) {struct m} : nat :=
    define multiplication with recursion in the first argument
    use "Eval compute" to test your definition *)
 
-Fixpoint mul (n m : nat) {struct n} : nat := (*! term *)
-(* complete the definition ! *)
-  .
+Fixpoint mul (n m : nat) {struct n} : nat :=
+  match n with
+  | 0   => 0
+  | S p => m + (mul p m)
+  end.
 
 
 Eval compute in (mul 2 2).
@@ -178,8 +180,12 @@ Eval compute in (mul 2 3).
    prove the following lemma *)
 Lemma mul_n_O : forall n : nat, mul n 0 = 0.
 Proof.
-(*! proof *)
+intro.
+induction n.
+simpl.
+reflexivity.
 
+apply IHn.
 Qed.
 
 
@@ -191,8 +197,11 @@ Print bool.
    give a definition of a function "negation"
    for negation on booleans *)
 
-Definition negation (b : bool) : bool := (*! term *)
-  .
+Definition negation (b : bool) : bool :=
+  match b with
+  | true => false
+  | false => true
+  end.
 
 
 (* exercise 4:
@@ -200,14 +209,21 @@ Definition negation (b : bool) : bool := (*! term *)
 
 Lemma forbool : forall b: bool, negation (negation b) = b.
 Proof.
-(*! proof *)
-
+apply bool_ind.
+simpl.
+reflexivity.
+simpl.
+reflexivity.
 Qed.
 
 Lemma aboutneg : forall b : bool, b = true \/ negation b = true.
 Proof.
-(*! proof *)
-
+apply bool_ind.
+left.
+reflexivity.
+right.
+simpl.
+reflexivity.
 Qed.
 
 
@@ -229,8 +245,11 @@ Check (cons 0 (cons 1 nil)).
    that takes as input a natlist and gives back as output its length
    Test the function on different inputs. *)
 
-Fixpoint length (l : natlist) : nat := (*! term *)
-  .
+Fixpoint length (l : natlist) : nat :=
+  match l with
+  | nil => 0
+  | (cons _ xs) => plus 1 (length xs)
+  end.
 
 
 Eval compute in (length nil).
@@ -246,8 +265,11 @@ Eval compute in (length (cons 0 (cons 1 nil))).
    Use inducion in the first argument.
    Test the function on different inputs. *)
 
-Fixpoint append (l k : natlist) {struct l} : natlist := (*! term *)
-  .
+Fixpoint append (l k : natlist) {struct l} : natlist :=
+  match l with
+  | nil => k
+  | (cons x xs) => cons x (append xs k)
+  end.
 
 Eval compute in (append (cons 0 nil) nil).
 Eval compute in (append (cons 0 nil) (cons 0 nil)).
@@ -275,8 +297,17 @@ Qed.
 Lemma length_append :
  forall k l : natlist, length (append k l) = plus (length k) (length l).
 Proof.
-(*! proof *)
-
+intro k.
+intro l.
+elim k.
+simpl.
+reflexivity.
+simpl.
+intro.
+intro.
+intro.
+rewrite H.
+reflexivity.
 Qed.
 
 
@@ -286,8 +317,14 @@ Qed.
 Lemma append_assoc :
   forall k l m : natlist, append (append k l) m = append k (append l m).
 Proof.
-(*! proof *)
-
+intros.
+elim k.
+simpl.
+reflexivity.
+intros.
+simpl.
+rewrite H.
+reflexivity.
 Qed.
 
 
@@ -307,8 +344,19 @@ Lemma reverse_append :
   forall l k : natlist,
   reverse (append l k) = append (reverse k) (reverse l).
 Proof.
-(*! proof *)
+intros.
+elim l.
+simpl.
+rewrite append_nil.
+reflexivity.
 
+intro n.
+intro ns.
+intro H.
+simpl.
+rewrite H.
+rewrite append_assoc.
+reflexivity.
 Qed.
 (*
 vim: filetype=coq
