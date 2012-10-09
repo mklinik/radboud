@@ -4,6 +4,7 @@
 \usepackage{amssymb}
 \usepackage{bussproofs}
 \usepackage{parskip}
+\usepackage{fullpage}
 \begin{document}
 
 \def\arr{\rightarrow}
@@ -202,5 +203,92 @@ detour. The normal form of this term is
 \begin{equation*}
   \lam x:A . \lam y:A . x
 \end{equation*}
+
+\section*{Exercise 6}
+
+Show that the following formulas are tautologies:
+
+a. $((\neg A \arr A) \arr A) \arr \neg \neg A \arr A$
+\begin{prooftree}
+\AxiomC{$[(\neg A \arr A) \arr A^x]$}
+
+\AxiomC{$[\neg \neg A^y]$}
+\AxiomC{$[\neg A^z]$}
+\RightLabel{\scriptsize $E\arr$}
+\BinaryInfC{$False$}
+\RightLabel{\scriptsize falsum}
+\UnaryInfC{$A$}
+\RightLabel{\scriptsize $I[z]\arr$}
+\UnaryInfC{$\neg A \arr A$}
+\RightLabel{\scriptsize $E\arr$}
+\BinaryInfC{$A$}
+\RightLabel{\scriptsize $I[y]\arr$}
+\UnaryInfC{$\neg \neg A \arr A$}
+\RightLabel{\scriptsize $I[x]\arr$}
+\UnaryInfC{$((\neg A \arr A) \arr A) \arr \neg \neg A \arr A$}
+\end{prooftree}
+
+b. $\neg \neg (((A \arr B) \arr A) \arr A)$
+
+\begin{prooftree}
+\AxiomC{$[\neg (((A \arr B) \arr A) \arr A^x]$}
+\AxiomC{$[(A \arr B) \arr A^y]$}
+\AxiomC{$[\neg (((A \arr B) \arr A) \arr A^x]$}
+
+\AxiomC{$[A^z]$}
+\RightLabel{\scriptsize $I[w]\arr$}
+\UnaryInfC{$(((A \arr B) \arr A) \arr A$}
+\RightLabel{\scriptsize $E\arr$}
+\BinaryInfC{$False$}
+\RightLabel{\scriptsize falsum}
+\UnaryInfC{$B$}
+\RightLabel{\scriptsize $I[z]\arr$}
+\UnaryInfC{$A \arr B$}
+\RightLabel{\scriptsize $E\arr$}
+\BinaryInfC{$A$}
+\RightLabel{\scriptsize $I[y]\arr$}
+\UnaryInfC{$(((A \arr B) \arr A) \arr A$}
+\BinaryInfC{$False$}
+\RightLabel{\scriptsize $I[x]\arr$}
+\UnaryInfC{$\neg \neg (((A \arr B) \arr A) \arr A)$}
+\end{prooftree}
+
+c. and so on
+
+d.
+
+\section*{Exercise 7}
+
+Replace in the following terms the ?’s by simple types, such that we obtain
+typable $\lam$-terms.
+
+a. $\lam x:A. \lam y:B. x$
+
+b. $\lam x :A \arr B. \lam y :A.(x y)$
+
+c. $\lam x:A \arr A \arr B. \lam y:A. x y y$
+
+d. $\lam x:A \arr A. \lam y:A. x (x y)$
+
+e. $\lam x:A \arr B. \lam y:C \arr A. \lam z:C. x (y z)$
+
+f. $\lam x:B. \lam y:(A \arr B) \arr C. \lam z:D. y (\lam u:A. x)$
+
+g. $\lam x :B. \lam y :(B \arr C \arr D). \lam z :C. (\lam u :A. y) x z$
+
+h. $\lam x :?. \lam y :?. x ((\lam z :?. y)y)$ not possible. The term y y cannot be typed in $\lam_{\arr}$
+
+i. $\lam x:B. \lam y:B \arr C. \lam z:C \arr D. z ((\lam u:A. y) x)$
+
+\section*{Exercise 8}
+Give four different closed normal forms of type $(A \arr A) \arr A \arr A$
+
+$\lam f : (A \arr A) . \lam x : A . x $
+
+$\lam f : (A \arr A) . \lam x : A . f x$
+
+$\lam f : (A \arr A) . \lam x : A . f (f x)$
+
+$\lam f : (A \arr A) . \lam x : A . f (f (f x))$
 
 \end{document}

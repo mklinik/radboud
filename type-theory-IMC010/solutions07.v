@@ -1,4 +1,6 @@
-Parameter A B C : Set.
+Section exercisesOneToFive.
+
+Variable A B C : Set.
 
 
 Definition oneB' :=
@@ -114,3 +116,34 @@ Definition fourB :=
   fun (x : (A -> B) -> C -> D) (y : C) (z : B)
   => x (fun w:A => z) y.
 Check fourB.
+
+End exercisesOneToFive.
+
+Section exerciseSix.
+
+Variable A B : Prop.
+
+Lemma sixA : (((not A) -> A) -> A) -> not (not A) -> A.
+Proof.
+unfold not.
+intro x.
+intro y.
+apply x.
+intro z.
+elimtype False.
+apply y.
+exact z.
+Qed.
+
+Lemma sixB : not (not (((A -> B) -> A) -> A)).
+unfold not.
+intro x.
+apply x.
+intro y.
+apply y.
+intro z.
+elimtype False.
+apply x.
+intro.
+exact z.
+Qed.
