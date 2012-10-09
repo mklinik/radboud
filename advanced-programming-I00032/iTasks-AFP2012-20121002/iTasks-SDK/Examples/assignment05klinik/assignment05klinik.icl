@@ -4,37 +4,35 @@ import iTasks
 import StdMisc
 
 enterInt :: Task Int
-enterInt = enterInformation "enter one integer" []
-
-viewInt :: String Int -> Task Int
-viewInt name value = viewInformation name [] value
-
-enterInts :: Task [Int]
-enterInts = enterInformation "enter some integers" []
-
-viewInts` :: String (TaskValue [Int]) -> Task [Int]
-viewInts` name NoValue = viewInformation name [] []
-viewInts` name (Value value _) = viewInformation name [] value
+enterInt = enterInformation "Please enter an integer" []
 
 viewInts :: String [Int] -> Task [Int]
 viewInts name value = viewInformation name [] value
 
-updateInts :: (TaskValue [Int]) -> Task [Int]
-updateInts NoValue = enterInts
-updateInts (Value ints _) = updateInformation "enter some integers" [] ints
+chooseTask = enterChoice "Please choose one of the exercises"
+  /* For some reason, radiobuttons don't work. I always get the combo box. */
+  [ChooseWith ChooseFromRadioButtons fst]
+  [ ("reallyAllTasks", reallyAllTasksDemo >>| rootTask)
+  , ("n-person chat (fixed)", rootTask)
+  , ("n-person chat (dynamic)", rootTask)
+  ] @ snd
 
 Start :: *World -> *World
-Start world = startEngine theTask world
-  where
-    theTask = reallyAllTasks [enterInt, enterInt, enterInt] >>= viewInts "blah"
+Start world = startEngine rootTask world
+
+rootTask :: Task [YellowUnicorn]
+rootTask = chooseTask >>= id
+
+reallyAllTasksDemo = reallyAllTasks [enterInt, enterInt, enterInt] >>=
+  viewInts "And now for something completely different."
 
 reallyAllTasks :: [Task a] -> Task [a] | iTask a
 reallyAllTasks tasks = parallel Void [(Embedded, const t) \\ t <- tasks]
     @ (map snd) // discard TaskTimes
-    @? res
+    @? secretAlienTechnology
   where
-    res :: (TaskValue ([TaskValue a])) -> TaskValue [a]
-    res x = join (fmap (foldl (liftA2 (flip cons)) (Value [] Stable)) x)
+    secretAlienTechnology :: (TaskValue ([TaskValue a])) -> TaskValue [a]
+    secretAlienTechnology x = join (fmap (foldl (liftA2 (flip cons)) (Value [] Stable)) x)
     /* In case the above line gives you a headache (it sure gives me one) here
      * is what it does, from inside to outside. As TaskValue is just a fancy
      * Maybe, let's talk about Maybe for this explanation.
@@ -75,3 +73,5 @@ instance Applicative TaskValue where
 
 liftA2 :: (a b -> c) (f a) (f b) -> f c | Applicative f
 liftA2 f x y = f <$> x <*> y
+
+:: YellowUnicorn = YellowUnicorn // it's getting late.
