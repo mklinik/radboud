@@ -6,21 +6,17 @@ Parameters A B C : Prop.
 (* exercise 1 *)
 (* complete the following simply typed lambda terms *)
 
-Definition prop1 := (*! term *)
-(* fun (x : ?) (y : ?) (z : ?) => x z (y z). *)
-  .
+Definition prop1 :=
+  fun (x : A -> B -> C) (y : A -> B) (z : A) => x z (y z).
 
-Definition prop2 := (*! term *)
-(* fun (x : ?) (y : ?) (z : ?) => x (y z) z. *)
-  .
+Definition prop2 :=
+  fun (x : B -> A -> C) (y : A -> B) (z : A) => x (y z) z.
 
-Definition prop3 := (*! term *)
-(* fun (x : ?) (y : ?) => x (fun z : A => y) y. *)
-  .
+Definition prop3 :=
+  fun (x : (A -> A) -> A -> A) (y : A) => x (fun z : A => y) y.
 
-Definition prop4 := (*! term *)
-(* fun (x : ?) (y : ?) (z : ?) => x (y x) (z x). *)
-  .
+Definition prop4 :=
+  fun (x : A -> B -> C) (y : (A -> B -> C) -> A) (z : (A -> B -> C) -> B) => x (y x) (z x).
 
 End proplogic.
 
