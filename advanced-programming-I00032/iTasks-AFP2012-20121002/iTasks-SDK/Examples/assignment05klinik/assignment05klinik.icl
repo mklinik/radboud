@@ -14,13 +14,24 @@ chooseTask = enterChoice "Please choose one of the exercises"
   [ChooseWith ChooseFromRadioButtons fst]
   [ ("allTasks", allTasksDemo >>| rootTask)
   , ("reallyAllTasks", reallyAllTasksDemo >>| rootTask)
-  , ("showAllUsers", showAllUsers >>| rootTask)
+  , ("2-person chat", bogusLogin rootTask)
   , ("n-person chat (fixed)", rootTask)
   , ("n-person chat (dynamic)", rootTask)
   ] @ snd
 
-showAllUsers :: Task [User]
-showAllUsers = return []
+bogusLogin c =
+  enterInformation "Enter a username" []
+    >>* [WithResult (Action "Login") always (performBogusAuthentication c)]
+
+performBogusAuthentication :: (Task a) String -> Task a | iTask a
+performBogusAuthentication c username
+    = authenticateUser (Username username) (Password "") >>=
+        \mbUser -> case mbUser of
+          Just user   = workAs user c
+          Nothing     = createUser ({ credentials = { username = Username username
+                                                    , password = Password "" }
+                                    , title = Nothing
+                                    , roles = [] } ) >>| performBogusAuthentication c username
 
 Start :: *World -> *World
 Start world = startEngine rootTask world
