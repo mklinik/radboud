@@ -12,16 +12,24 @@ viewInts name value = viewInformation name [] value
 chooseTask = enterChoice "Please choose one of the exercises"
   /* For some reason, radiobuttons don't work. I always get the combo box. */
   [ChooseWith ChooseFromRadioButtons fst]
-  [ ("reallyAllTasks", reallyAllTasksDemo >>| rootTask)
+  [ ("allTasks", allTasksDemo >>| rootTask)
+  , ("reallyAllTasks", reallyAllTasksDemo >>| rootTask)
+  , ("showAllUsers", showAllUsers >>| rootTask)
   , ("n-person chat (fixed)", rootTask)
   , ("n-person chat (dynamic)", rootTask)
   ] @ snd
 
+showAllUsers :: Task [User]
+showAllUsers = return []
+
 Start :: *World -> *World
 Start world = startEngine rootTask world
 
-rootTask :: Task [YellowUnicorn]
+rootTask :: Task Void
 rootTask = chooseTask >>= id
+
+allTasksDemo = allTasks [enterInt, enterInt, enterInt] >>=
+  viewInts "Not all values may be present."
 
 reallyAllTasksDemo = reallyAllTasks [enterInt, enterInt, enterInt] >>=
   viewInts "And now for something completely different."
@@ -73,5 +81,3 @@ instance Applicative TaskValue where
 
 liftA2 :: (a b -> c) (f a) (f b) -> f c | Applicative f
 liftA2 f x y = f <$> x <*> y
-
-:: YellowUnicorn = YellowUnicorn // it's getting late.
