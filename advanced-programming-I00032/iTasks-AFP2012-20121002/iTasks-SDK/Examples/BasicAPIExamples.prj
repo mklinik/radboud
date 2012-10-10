@@ -56,20 +56,6 @@ MainModule
 		Fusion:	False
 OtherModules
 	Module
-		Name:	StdCleanTypes
-		Dir:	{Application}\Libraries\Dynamics
-		Compiler
-			NeverMemoryProfile:	False
-			NeverTimeProfile:	False
-			StrictnessAnalysis:	True
-			ListTypes:	StrictExportTypes
-			ListAttributes:	True
-			Warnings:	True
-			Verbose:	True
-			ReadableABC:	False
-			ReuseUniqueNodes:	True
-			Fusion:	False
-	Module
 		Name:	StdDynamic
 		Dir:	{Application}\Libraries\Dynamics
 		Compiler
