@@ -9,35 +9,116 @@ enterInt = enterInformation "Please enter an integer" []
 viewInts :: String [Int] -> Task [Int]
 viewInts name value = viewInformation name [] value
 
-chooseTask = enterChoice "Please choose one of the exercises"
-  /* For some reason, radiobuttons don't work. I always get the combo box. */
-  [ChooseWith ChooseFromRadioButtons fst]
-  [ ("allTasks", allTasksDemo >>| rootTask)
-  , ("reallyAllTasks", reallyAllTasksDemo >>| rootTask)
-  , ("2-person chat", bogusLogin rootTask)
-  , ("n-person chat (fixed)", rootTask)
-  , ("n-person chat (dynamic)", rootTask)
-  ] @ snd
+chat :: Task Void
+chat =          get currentUser
+    >>= \me ->    enterSharedChoice "Select someone to chat with:" [] users
+    >>= \you ->   withShared ("","") (duoChat me you)
+where
+  duoChat me you notes
+    = chat you toView fromView notes
+      -||-
+      (you @: chat me (toView o switch) (\a v -> switch (fromView a v)) notes)
 
-bogusLogin c =
-  enterInformation "Enter a username" []
-    >>* [WithResult (Action "Login") always (performBogusAuthentication c)]
+  chat who toView fromView notes
+    =       updateSharedInformation ("Chat with " <+++ who) [UpdateWith toView fromView] notes
+      >>*   [OnAction (Action "Stop") always (const (return Void))]
 
-performBogusAuthentication :: (Task a) String -> Task a | iTask a
-performBogusAuthentication c username
-    = authenticateUser (Username username) (Password "") >>=
-        \mbUser -> case mbUser of
-          Just user   = workAs user c
-          Nothing     = createUser ({ credentials = { username = Username username
-                                                    , password = Password "" }
-                                    , title = Nothing
-                                    , roles = [] } ) >>| performBogusAuthentication c username
+  toView   (me,you)               = (Display you, Note me)
+  fromView _ (Display you, Note me)   = (me,you)
+
+  switch (me,you) = (you,me)
+
+pickUser :: [User] [User] -> Task User
+pickUser toPickFrom alreadyPicked =
+  enterChoice "Please select a user to chat with" [] toPickFrom
+  -||
+  viewInformation "Already picked fellas: " [] (map toString alreadyPicked)
+
+pickUsers :: [User] [User] -> Task [User]
+pickUsers toPickFrom alreadyPicked =
+      pickUser toPickFrom alreadyPicked
+  >>* [ OnAction (Action "Add another user") hasValue
+          (\(Value v _) -> pickUsers (filter ((=!=) v) toPickFrom) [v:alreadyPicked])
+      , OnAction ActionOk always (\v -> return $ maybeValue alreadyPicked ((flip cons) alreadyPicked) v)
+      ]
+
+n_chat :: Task Void
+n_chat = get currentUser
+  >>= \me -> get users >>= \users -> pickUsers (filter ((=!=) me) users) [me]
+  >>= \fellas -> withShared [(toString u, "") \\ u <- fellas] (fixedMultiChat fellas)
+  >>| return Void
+
+//fixedMultiChat :: [User] (Shared [(User, String)]) -> Task Void
+fixedMultiChat fellas notes =
+  parallel "chat control center" [ makeChatTaskForUser u \\ u <- fellas ]
+where
+  //makeChatTaskForUser :: User -> (ParallelTaskType, ParallelTask Void)
+  makeChatTaskForUser (u=:(AuthenticatedUser userId _ _)) =
+    ( Detached { ManagementMeta
+                  | title=Just $ userId +++ "'s n-person chat"
+                  , worker=(UserWithId userId)
+                  , role=Nothing
+                  , startAt=Nothing
+                  , completeBefore=Nothing
+                  , notifyAt=Nothing
+                  , priority=NormalPriority
+                  }
+     , (const $ updateSharedInformation (userId +++ "'s n-person chat")
+                                        [UpdateWith (toView $ toString u) (fromView $ toString u)] notes)
+     )
+
+  toView thisUserId notes = (me, Display notes)
+    where
+      me = lookup thisUserId notes
+  fromView thisUserId _ (Nothing, Display notes) = [("something went", "damn wrong")]
+  fromView thisUserId _ (Just me, Display notes) = update thisUserId (const me) notes
+
+  //toView thisUserId notes = update thisUserId (Left o Note o unEither) notes
+  //fromView thisUserId _ notes = update thisUserId (Right o Display o unEither) notes
+
+unEither :: (Either (Note) (Display String)) -> String
+unEither (Left (Note x)) = x
+unEither (Right (Display x)) = x
+
+lookup :: key [(key, value)] -> Maybe value | gEq{|*|} key
+lookup _ [] = Nothing
+lookup key [(k, v):xs]
+  | key === k = Just v
+  | otherwise = lookup key xs
+
+update :: key (value -> value) [(key, value)] -> [(key, value)] | gEq{|*|} key
+update _ _ [] = []
+update key f [x=:(k, v):xs]
+  | key === k = [(key, f v) : xs]
+  | otherwise       = [x : update key f xs]
+
+basicAPIExamples :: [Workflow]
+basicAPIExamples =
+  [ workflow "reallyAllTasks" "show a demo of the reallyAllTasks combinator" reallyAllTasksDemo
+  , workflow "2-person chat" "chat with another person" chat
+  , workflow "multi-person chat, fixed" "chat with other persons" n_chat
+  , workflow "Manage users" "Manage system users..." manageUsers
+  ]
 
 Start :: *World -> *World
-Start world = startEngine rootTask world
+Start world = startEngine (browseExamples basicAPIExamples) world
+where
+  browseExamples examples = forever (
+      (viewTitle "iTasks Example Collection"
+    ||-
+      enterInformation ("Login","Enter your credentials and login or press continue to remain anonymous") [])
+    >>* [WithResult (Action "Login") (const True) (browseAuthenticated examples)
+      ,Always (Action "Continue") (browseAnonymous examples)
+      ])
 
-rootTask :: Task Void
-rootTask = chooseTask >>= id
+  browseAuthenticated examples {Credentials|username,password}
+    = authenticateUser username password
+    >>= \mbUser -> case mbUser of
+      Just user   = workAs user (manageWorklist examples)
+      Nothing   = viewInformation (Title "Login failed") [] "Your username or password is incorrect" >>| return Void
+
+  browseAnonymous examples
+    = manageWorklist examples
 
 allTasksDemo = allTasks [enterInt, enterInt, enterInt] >>=
   viewInts "Not all values may be present."
@@ -68,6 +149,13 @@ reallyAllTasks tasks = parallel Void [(Embedded, const t) \\ t <- tasks]
 
 always = const True
 
+hasValue (Value _ _) = True
+hasValue _ = False
+
+maybeValue :: b (a -> b) (TaskValue a) -> b
+maybeValue _ f (Value v _) = f v
+maybeValue b _ _ = b
+
 cons x xs = [x:xs]
 
 flip f x y = f y x
@@ -92,3 +180,11 @@ instance Applicative TaskValue where
 
 liftA2 :: (a b -> c) (f a) (f b) -> f c | Applicative f
 liftA2 f x y = f <$> x <*> y
+
+($) infixr 0 :: (a -> b) a -> b
+($) f a = f a
+
+replicate :: Int a -> [a]
+replicate num elem
+  | num <= 0 = []
+  | otherwise = [elem:replicate (num - 1) elem]
