@@ -89,16 +89,24 @@ lookup key [(k, v):xs]
 update :: key (value -> value) [(key, value)] -> [(key, value)] | gEq{|*|} key
 update _ _ [] = []
 update key f [x=:(k, v):xs]
-  | key === k = [(key, f v) : xs]
-  | otherwise       = [x : update key f xs]
+  | key === k = [(k, f v) : xs]
+  | otherwise = [x : update key f xs]
 
 basicAPIExamples :: [Workflow]
 basicAPIExamples =
   [ workflow "reallyAllTasks" "show a demo of the reallyAllTasks combinator" reallyAllTasksDemo
   , workflow "2-person chat" "chat with another person" chat
   , workflow "multi-person chat, fixed" "chat with other persons" n_chat
+  , workflow "update and show" "update and show a shared value" updateAndShow
   , workflow "Manage users" "Manage system users..." manageUsers
   ]
+
+updateAndShow :: Task Int
+updateAndShow = withShared 10 blah
+  where
+    blah s = updateSharedInformation "update" [] s
+             -||
+             viewSharedInformation "view" [] s
 
 Start :: *World -> *World
 Start world = startEngine (browseExamples basicAPIExamples) world
