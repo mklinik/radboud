@@ -45,14 +45,13 @@ pickUsers toPickFrom alreadyPicked =
 n_chat :: Task Void
 n_chat = get currentUser
   >>= \me -> get users >>= \users -> pickUsers (filter ((=!=) me) users) [me]
-  >>= \fellas -> withShared [(toString u, "") \\ u <- fellas] (fixedMultiChat fellas)
+  >>= \fellas -> fixedMultiChat fellas
   >>| return Void
 
-//fixedMultiChat :: [User] (Shared [(User, String)]) -> Task Void
-fixedMultiChat fellas notes =
+fixedMultiChat fellas =
   parallel "chat control center" [ makeChatTaskForUser u \\ u <- fellas ]
 where
-  //makeChatTaskForUser :: User -> (ParallelTaskType, ParallelTask Void)
+  makeChatTaskForUser :: User -> (ParallelTaskType, ParallelTask String)
   makeChatTaskForUser (u=:(AuthenticatedUser userId _ _)) =
     ( Detached { ManagementMeta
                   | title=Just $ userId +++ "'s n-person chat"
@@ -63,18 +62,17 @@ where
                   , notifyAt=Nothing
                   , priority=NormalPriority
                   }
-     , (const $ updateSharedInformation (userId +++ "'s n-person chat")
-                                        [UpdateWith (toView $ toString u) (fromView $ toString u)] notes)
+     , (\taskList -> enterString
+                     -||
+                     viewSharedInformation "what other people (including you) say:"
+                       [ViewWith (\taskList -> map (\item -> item.TaskListItem.value) taskList.TaskList.items)] taskList
+       )
      )
 
-  toView thisUserId notes = (me, Display notes)
-    where
-      me = lookup thisUserId notes
-  fromView thisUserId _ (Nothing, Display notes) = [("something went", "damn wrong")]
-  fromView thisUserId _ (Just me, Display notes) = update thisUserId (const me) notes
+  enterString :: Task String
+  enterString = enterInformation "say something" []
 
-  //toView thisUserId notes = update thisUserId (Left o Note o unEither) notes
-  //fromView thisUserId _ notes = update thisUserId (Right o Display o unEither) notes
+derive class iTask TaskList, TaskListId
 
 unEither :: (Either (Note) (Display String)) -> String
 unEither (Left (Note x)) = x
