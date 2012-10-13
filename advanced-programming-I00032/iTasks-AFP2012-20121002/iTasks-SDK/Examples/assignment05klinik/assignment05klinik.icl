@@ -42,18 +42,20 @@ pickUsers toPickFrom alreadyPicked =
       , OnAction ActionOk always (\v -> return $ maybeValue alreadyPicked ((flip cons) alreadyPicked) v)
       ]
 
-n_chat :: ([User] String -> (Task a)) -> Task a | iTask a
+:: Notes :==  [(String, String)]
+
+n_chat :: ([User] String (Shared Notes) -> (Task a)) -> Task a | iTask a
 n_chat chat =
   ( enterInformation "please enter a channel name" []
     -&&-
     (get currentUser >>= \me -> get users >>= \users -> pickUsers (filter ((=!=) me) users) [me])
   )
-  >>= \(channelName, fellas) -> chat fellas channelName
+  >>= \(channelName, fellas) -> withShared [(toString u, "") \\ u <- fellas] (chat fellas channelName)
 
-fixedMultiChat fellas channelName =
+fixedMultiChat fellas channelName notes =
   parallel (channelName +++ ": chat control center") [ makeChatTaskForUser u \\ u <- fellas ]
 where
-  makeChatTaskForUser :: User -> (ParallelTaskType, ParallelTask String)
+  makeChatTaskForUser :: User -> (ParallelTaskType, ParallelTask Notes)
   makeChatTaskForUser (u=:(AuthenticatedUser userId _ _)) =
     ( Detached { ManagementMeta
                   | title=Just $ userId +++ "@" +++ channelName
@@ -64,42 +66,13 @@ where
                   , notifyAt=Nothing
                   , priority=NormalPriority
                   }
-     , (\taskList -> enterString
-                     -||
-                     viewSharedInformation "what other people (including you) say:"
-                       [ViewWith (\taskList -> map (\item -> item.TaskListItem.value) taskList.TaskList.items)] taskList
+     , (const $ (enterInformation "say something" [] @> (updateNotes u, notes))
+                ||-
+                viewSharedInformation "what everybody says:" [ViewWith Display] notes
        )
      )
-
-  enterString :: Task String
-  enterString = enterInformation "say something" []
-
-
-dynamicMultiChat fellas channelName =
-  parallel (channelName +++ ": chat control center") [ makeChatTaskForUser u \\ u <- fellas ]
-where
-  makeChatTaskForUser :: User -> (ParallelTaskType, ParallelTask String)
-  makeChatTaskForUser (u=:(AuthenticatedUser userId _ _)) =
-    ( Detached { ManagementMeta
-                  | title=Just $ userId +++ "@" +++ channelName
-                  , worker=(UserWithId userId)
-                  , role=Nothing
-                  , startAt=Nothing
-                  , completeBefore=Nothing
-                  , notifyAt=Nothing
-                  , priority=NormalPriority
-                  }
-     , (\taskList -> enterString
-                     -||
-                     viewSharedInformation "what other people (including you) say:"
-                       [ViewWith (\taskList -> map (\item -> item.TaskListItem.value) taskList.TaskList.items)] taskList
-       )
-     )
-
-  enterString :: Task String
-  enterString = enterInformation "say something" []
-
-derive class iTask TaskList, TaskListId
+  updateNotes :: User (TaskValue (Maybe String)) [(String, String)] -> (Maybe [(String, String)])
+  updateNotes u val notes = Just $ update (toString u) (const $ maybe "" id $ maybeValue Nothing id val) notes
 
 unEither :: (Either (Note) (Display String)) -> String
 unEither (Left (Note x)) = x
@@ -122,7 +95,7 @@ basicAPIExamples =
   [ workflow "reallyAllTasks" "show a demo of the reallyAllTasks combinator" reallyAllTasksDemo
   , workflow "2-person chat" "chat with another person" chat
   , workflow "multi-person chat, fixed" "chat with other persons" (n_chat fixedMultiChat)
-  , workflow "multi-person chat, dynamic" "chat with other persons" (n_chat dynamicMultiChat)
+  //, workflow "multi-person chat, dynamic" "chat with other persons" (n_chat dynamicMultiChat)
   , workflow "update and show" "update and show a shared value" updateAndShow
   , workflow "Manage users" "Manage system users..." manageUsers
   ]
