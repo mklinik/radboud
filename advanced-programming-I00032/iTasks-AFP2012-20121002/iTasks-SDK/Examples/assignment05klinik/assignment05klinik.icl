@@ -72,7 +72,7 @@ where
        )
      )
   updateNotes :: User (TaskValue (Maybe String)) [(String, String)] -> (Maybe [(String, String)])
-  updateNotes u val notes = Just $ update (toString u) (const $ maybe "" id $ maybeValue Nothing id val) notes
+  updateNotes u val notes = Just $ update (toString u) (maybe "" id $ maybeValue Nothing id val) notes
 
 unEither :: (Either (Note) (Display String)) -> String
 unEither (Left (Note x)) = x
@@ -84,11 +84,11 @@ lookup key [(k, v):xs]
   | key === k = Just v
   | otherwise = lookup key xs
 
-update :: key (value -> value) [(key, value)] -> [(key, value)] | gEq{|*|} key
+update :: key value [(key, value)] -> [(key, value)] | gEq{|*|} key
 update _ _ [] = []
-update key f [x=:(k, v):xs]
-  | key === k = [(k, f v) : xs]
-  | otherwise = [x : update key f xs]
+update key newValue [x=:(k, v):xs]
+  | key === k = [(k, newValue) : xs]
+  | otherwise = [x : update key newValue xs]
 
 basicAPIExamples :: [Workflow]
 basicAPIExamples =
