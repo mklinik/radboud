@@ -43,18 +43,21 @@ pickUsers toPickFrom alreadyPicked =
       ]
 
 n_chat :: Task Void
-n_chat = get currentUser
-  >>= \me -> get users >>= \users -> pickUsers (filter ((=!=) me) users) [me]
-  >>= \fellas -> fixedMultiChat fellas
+n_chat =
+  ( enterInformation "please enter a channel name" []
+    -&&-
+    (get currentUser >>= \me -> get users >>= \users -> pickUsers (filter ((=!=) me) users) [me])
+  )
+  >>= \(channelName, fellas) -> fixedMultiChat fellas channelName
   >>| return Void
 
-fixedMultiChat fellas =
-  parallel "chat control center" [ makeChatTaskForUser u \\ u <- fellas ]
+fixedMultiChat fellas channelName =
+  parallel (channelName +++ ": chat control center") [ makeChatTaskForUser u \\ u <- fellas ]
 where
   makeChatTaskForUser :: User -> (ParallelTaskType, ParallelTask String)
   makeChatTaskForUser (u=:(AuthenticatedUser userId _ _)) =
     ( Detached { ManagementMeta
-                  | title=Just $ userId +++ "'s n-person chat"
+                  | title=Just $ userId +++ "@" +++ channelName
                   , worker=(UserWithId userId)
                   , role=Nothing
                   , startAt=Nothing
