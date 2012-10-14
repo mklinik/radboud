@@ -50,7 +50,7 @@ makeChatTaskForUser channelName notes (u=:(AuthenticatedUser userId _ _)) =
    , (\tl ->  (enterInformation "say something" [] @> (updateNotes u, notes))
               ||-
               viewSharedInformation "what everybody says:" [ViewWith Display] notes
-              >>= \_ -> return Void)
+              >>| return Void)
    )
 where
   updateNotes :: User (TaskValue (Maybe String)) [(String, String)] -> (Maybe [(String, String)])
