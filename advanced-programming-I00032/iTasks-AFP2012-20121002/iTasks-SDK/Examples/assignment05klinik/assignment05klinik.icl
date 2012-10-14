@@ -52,6 +52,8 @@ fixedMultiChat =
 
 fixedMultiChatImpl fellas channelName notes =
   parallel (channelName +++ ": chat control center") [ makeChatTaskForUser channelName notes u \\ u <- fellas ]
+  -||
+  viewInformation "Nothing to see here." [] "Please select the appropriate task above."
 
 
 // This function is used by both fixed and flexo chat.
