@@ -96,17 +96,6 @@ isUserWithId :: User UserId -> Bool
 isUserWithId (AuthenticatedUser userId _ _) givenId = userId === givenId
 isUserWithId _ _ = False
 
-
-unEither :: (Either (Note) (Display String)) -> String
-unEither (Left (Note x)) = x
-unEither (Right (Display x)) = x
-
-lookup :: key [(key, value)] -> Maybe value | gEq{|*|} key
-lookup _ [] = Nothing
-lookup key [(k, v):xs]
-  | key === k = Just v
-  | otherwise = lookup key xs
-
 updateAssoc :: key value [(key, value)] -> [(key, value)] | gEq{|*|} key
 updateAssoc _ _ [] = []
 updateAssoc key newValue [x=:(k, v):xs]
@@ -118,7 +107,6 @@ basicAPIExamples =
   [ workflow "reallyAllTasks" "show a demo of the reallyAllTasks combinator" reallyAllTasksDemo
   , workflow "multi-person chat, fixed" "chat with other persons" (n_chat fixedMultiChat)
   , workflow "multi-person chat, dynamic" "chat with other persons" (flexoMultiChat)
-  , workflow "update and show" "update and show a shared value" updateAndShow
   , workflow "pick user 1" "pick user 1" $
       get users >>= \us -> enterChoice "pick one" [] us >>= viewInformation "you picked: " []
   , workflow "pick user 2" "pick user 2" $
@@ -129,13 +117,6 @@ basicAPIExamples =
       return [1, 2, 3] >>=        enterChoice "pick one" []    >>= viewInformation "you picked: " []
   , workflow "Manage users" "Manage system users..." manageUsers
   ]
-
-updateAndShow :: Task Int
-updateAndShow = withShared 10 blah
-  where
-    blah s = updateSharedInformation "update" [] s
-             -||
-             viewSharedInformation "view" [] s
 
 Start :: *World -> *World
 Start world = startEngine (browseExamples basicAPIExamples) world
@@ -220,8 +201,3 @@ liftA2 f x y = f <$> x <*> y
 
 ($) infixr 0 :: (a -> b) a -> b
 ($) f a = f a
-
-replicate :: Int a -> [a]
-replicate num elem
-  | num <= 0 = []
-  | otherwise = [elem:replicate (num - 1) elem]
