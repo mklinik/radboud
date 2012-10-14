@@ -9,25 +9,6 @@ enterInt = enterInformation "Please enter an integer" []
 viewInts :: String [Int] -> Task [Int]
 viewInts name value = viewInformation name [] value
 
-chat :: Task Void
-chat =          get currentUser
-    >>= \me ->    enterSharedChoice "Select someone to chat with:" [] users
-    >>= \you ->   withShared ("","") (duoChat me you)
-where
-  duoChat me you notes
-    = chat you toView fromView notes
-      -||-
-      (you @: chat me (toView o switch) (\a v -> switch (fromView a v)) notes)
-
-  chat who toView fromView notes
-    =       updateSharedInformation ("Chat with " <+++ who) [UpdateWith toView fromView] notes
-      >>*   [OnAction (Action "Stop") always (const (return Void))]
-
-  toView   (me,you)               = (Display you, Note me)
-  fromView _ (Display you, Note me)   = (me,you)
-
-  switch (me,you) = (you,me)
-
 pickUser :: [User] [User] -> Task User
 pickUser toPickFrom alreadyPicked =
   enterChoice "Please select a user to chat with" [] toPickFrom
@@ -135,7 +116,6 @@ updateAssoc key newValue [x=:(k, v):xs]
 basicAPIExamples :: [Workflow]
 basicAPIExamples =
   [ workflow "reallyAllTasks" "show a demo of the reallyAllTasks combinator" reallyAllTasksDemo
-  , workflow "2-person chat" "chat with another person" chat
   , workflow "multi-person chat, fixed" "chat with other persons" (n_chat fixedMultiChat)
   , workflow "multi-person chat, dynamic" "chat with other persons" (flexoMultiChat)
   , workflow "update and show" "update and show a shared value" updateAndShow
