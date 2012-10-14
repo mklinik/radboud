@@ -177,7 +177,8 @@ assignment05klinik =
 
 
   // Side note: there is a difference when enterChoice is used in a lambda or
-  // directly.  If used directly, there is no "Continue" button.
+  // directly.  If used directly, there is no "Continue" button.  Is this the
+  // intent?
   , workflow "pick user 1" "pick user 1" pickUser1
   , workflow "pick user 2" "pick user 2" pickUser2
   , workflow "pick int 1" "pick int 1" pickInt1
