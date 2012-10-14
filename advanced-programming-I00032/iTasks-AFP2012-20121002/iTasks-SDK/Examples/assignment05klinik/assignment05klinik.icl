@@ -2,29 +2,31 @@ module assignment05klinik
 
 import iTasks
 
-enterInt :: Task Int
-enterInt = enterInformation "Please enter an integer" []
+/* === Exercise 1: reallyAllTasks === */
 
-viewInts :: String [Int] -> Task [Int]
-viewInts name value = viewInformation name [] value
+reallyAllTasks :: [Task a] -> Task [a] | iTask a
+reallyAllTasks tasks = parallel Void [(Embedded, const t) \\ t <- tasks]
+    @ (map snd) // discard TaskTimes
+    @? secretAlienTechnology
+  where
+    secretAlienTechnology :: (TaskValue ([TaskValue a])) -> TaskValue [a]
+    secretAlienTechnology x = join (fmap (foldl (liftA2 (flip cons)) (Value [] Stable)) x)
+    /* In case the above line gives you a headache (it sure gives me one) here
+     * is what it does, from inside to outside. As TaskValue is just a fancy
+     * Maybe, let's talk about Maybe for this explanation.
+     *  - foldl with the lifted list constructor turns [Maybe a] into
+     *    Maybe [a], such that if any element is Nothing, the final result is
+     *    Nothing.
+     *  - because the list of Maybes is inside another Maybe, we must fmap
+     *    the left-fold.
+     *  - this leaves us with Maybe (Maybe [a]) which we flatten into Maybe [a]
+     *    using the monadic vleeshamer also known as "join".
+     * Never mind that TaskValue is probably not a proper Monad or Applicative,
+     * but this way of thinking helps.
+     */
 
 
-pickUser :: [User] [User] -> Task User
-pickUser toPickFrom alreadyPicked =
-  enterChoice "Please select a user to chat with" [] toPickFrom
-  -||
-  viewInformation "Already picked fellas: " [] (map toString alreadyPicked)
-
-// Continue picking users until the Ok butten gets clicked.
-// The Ok button can always be clicked, regardless of the current selection.
-pickUsers :: [User] [User] -> Task [User]
-pickUsers toPickFrom alreadyPicked =
-      pickUser toPickFrom alreadyPicked
-  >>* [ OnAction (Action "Add another user") hasValue
-          (\(Value v _) -> pickUsers (filter ((=!=) v) toPickFrom) [v:alreadyPicked])
-      , OnAction ActionOk always (\v -> return $ maybeValue alreadyPicked ((flip cons) alreadyPicked) v)
-      ]
-
+/* === Exercise 2.1: fixed multi-user chat === */
 
 // The shared data structure for both fixed and flexo multi-user chat: an
 // association list which has as key the stringified User, and as value the
@@ -46,9 +48,9 @@ fixedMultiChat =
     -&&-
     (get currentUser >>= \me -> get users >>= \users -> pickUsers (filter ((=!=) me) users) [me])
   )
-  >>= \(channelName, fellas) -> withShared [(toString u, "") \\ u <- fellas] (fixedMultiChatParallel fellas channelName)
+  >>= \(channelName, fellas) -> withShared [(toString u, "") \\ u <- fellas] (fixedMultiChatImpl fellas channelName)
 
-fixedMultiChatParallel fellas channelName notes =
+fixedMultiChatImpl fellas channelName notes =
   parallel (channelName +++ ": chat control center") [ makeChatTaskForUser channelName notes u \\ u <- fellas ]
 
 
@@ -73,6 +75,25 @@ where
   updateNotes :: User (TaskValue (Maybe String)) [(String, String)] -> (Maybe [(String, String)])
   updateNotes u val notes = Just $ updateAssoc (toString u) (maybe "" id $ maybeValue Nothing id val) notes
 
+
+pickUser :: [User] [User] -> Task User
+pickUser toPickFrom alreadyPicked =
+  enterChoice "Please select a user to chat with" [] toPickFrom
+  -||
+  viewInformation "Already picked fellas: " [] (map toString alreadyPicked)
+
+// Continue picking users until the Ok butten gets clicked.
+// The Ok button can always be clicked, regardless of the current selection.
+pickUsers :: [User] [User] -> Task [User]
+pickUsers toPickFrom alreadyPicked =
+      pickUser toPickFrom alreadyPicked
+  >>* [ OnAction (Action "Add another user") hasValue
+          (\(Value v _) -> pickUsers (filter ((=!=) v) toPickFrom) [v:alreadyPicked])
+      , OnAction ActionOk always (\v -> return $ maybeValue alreadyPicked ((flip cons) alreadyPicked) v)
+      ]
+
+
+/* === Exercise 2.2: dynamic multi-user chat === */
 
 // How the flexo chat works: One user, say A, creates the channel. A is the
 // only one who can add and remove users to/from the channel.  Initially, there
@@ -114,6 +135,7 @@ where
         ]
     >>| controlCenter channelName notes taskList // re-spawn control center
 
+
 // Yields all TaskIds of the given TaskListItems which are detached tasks assigned to the given user.
 onlyDetachedTasksForUser :: User [TaskListItem a] -> [TaskId]
 onlyDetachedTasksForUser _ [] = []
@@ -123,17 +145,20 @@ onlyDetachedTasksForUser user [{TaskListItem | taskId, managementMeta}:rest] =
       case worker of
         UserWithId userId =
           if (isUserWithId user userId)
-             [taskId:onlyDetachedTasksForUser user rest]
+             [taskId:meh]
              meh
         = meh
     = meh
 where
   meh = onlyDetachedTasksForUser user rest
 
+
 isUserWithId :: User UserId -> Bool
 isUserWithId (AuthenticatedUser userId _ _) givenId = userId === givenId
 isUserWithId _ _ = False
 
+
+/* === Blurb: The inevitable boilerplate and helper functions === */
 
 // replaces a value in an association list with a new value
 updateAssoc :: key value [(key, value)] -> [(key, value)] | gEq{|*|} key
@@ -151,7 +176,7 @@ assignment05klinik =
   , workflow "Manage users" "Manage system users..." manageUsers
 
 
-  // Side note: there is a difference between using enterChoice in a lambda or
+  // Side note: there is a difference when enterChoice is used in a lambda or
   // directly.  If used directly, there is no "Continue" button.
   , workflow "pick user 1" "pick user 1" pickUser1
   , workflow "pick user 2" "pick user 2" pickUser2
@@ -188,27 +213,12 @@ where
 reallyAllTasksDemo = reallyAllTasks [enterInt, enterInt, enterInt] >>=
   viewInts "And now for something completely different."
 
+enterInt :: Task Int
+enterInt = enterInformation "Please enter an integer" []
 
-reallyAllTasks :: [Task a] -> Task [a] | iTask a
-reallyAllTasks tasks = parallel Void [(Embedded, const t) \\ t <- tasks]
-    @ (map snd) // discard TaskTimes
-    @? secretAlienTechnology
-  where
-    secretAlienTechnology :: (TaskValue ([TaskValue a])) -> TaskValue [a]
-    secretAlienTechnology x = join (fmap (foldl (liftA2 (flip cons)) (Value [] Stable)) x)
-    /* In case the above line gives you a headache (it sure gives me one) here
-     * is what it does, from inside to outside. As TaskValue is just a fancy
-     * Maybe, let's talk about Maybe for this explanation.
-     *  - foldl with the lifted list constructor turns [Maybe a] into
-     *    Maybe [a], such that if any element is Nothing, the final result is
-     *    Nothing.
-     *  - because the list of Maybes is inside another Maybe, we must fmap
-     *    the left-fold.
-     *  - this leaves us with Maybe (Maybe [a]) which we flatten into Maybe [a]
-     *    using the monadic vleeshamer also known as "join".
-     * Never mind that TaskValue is probably not a proper Monad or Applicative,
-     * but this way of thinking helps.
-     */
+viewInts :: String [Int] -> Task [Int]
+viewInts name value = viewInformation name [] value
+
 
 always = const True
 
