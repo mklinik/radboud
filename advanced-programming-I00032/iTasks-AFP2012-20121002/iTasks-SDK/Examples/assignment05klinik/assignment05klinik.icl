@@ -76,14 +76,45 @@ where
   updateNotes u val notes = Just $ updateAssoc (toString u) (maybe "" id $ maybeValue Nothing id val) notes
 
 flexoMultiChat =
-  withShared [] (\notes -> parallel "flexoMultiChat" [(Embedded, controlCenter notes Nothing)])
+  withShared [] (\notes -> parallel "flexoMultiChat" [(Embedded, controlCenter notes)])
 where
-  controlCenter :: (Shared Notes) (Maybe TaskId) (SharedTaskList Void) -> Task Void
-  controlCenter notes mId taskList =
-        get users >>= \us -> enterChoice "Please select a user to add" [] us
-    >>= \user -> update (cons (toString user, "")) notes
-    >>| (uncurry appendTask) (makeChatTaskForUser "testChannel" notes user) taskList
-    >>= \id -> controlCenter notes (Just id) taskList
+  controlCenter :: (Shared Notes) (SharedTaskList Void) -> Task Void
+  controlCenter notes taskList =
+        get users >>= \us -> enterChoice "Please select a user" [] us
+    >>* [ OnAction (Action "Add user") hasValue $
+                // add a new entry in the shared association list
+                \(Value user _) -> update (cons (toString user, "")) notes
+            // spawn a new chat task
+            >>| (uncurry appendTask) (makeChatTaskForUser "testChannel" notes user) taskList
+            >>| return Void
+        , OnAction (Action "Kick user") hasValue $
+                // remove all entries for this user from the shared association list
+                \(Value user _) -> update (filter (((=!=) (toString user)) o fst)) notes
+            // remove all tasks for this user from the task list
+            >>| get (taskListMeta taskList) @ onlyDetachedTasksForUser user @ map (\id -> removeTask id taskList)
+            >>= sequence ""
+            >>| return Void
+        ]
+    >>| controlCenter notes taskList // re-spawn control center
+
+// Yields all TaskIds of the given TaskListItems which are detached tasks assigned to the given user.
+onlyDetachedTasksForUser :: User [TaskListItem a] -> [TaskId]
+onlyDetachedTasksForUser _ [] = []
+onlyDetachedTasksForUser user [{TaskListItem | taskId, managementMeta}:rest] =
+  case managementMeta of
+    Just {ManagementMeta | worker} =
+      case worker of
+        UserWithId userId =
+          if (isUserWithId user userId)
+             [taskId:onlyDetachedTasksForUser user rest]
+             (onlyDetachedTasksForUser user rest)
+        = onlyDetachedTasksForUser user rest
+    = onlyDetachedTasksForUser user rest
+
+isUserWithId :: User UserId -> Bool
+isUserWithId (AuthenticatedUser userId _ _) givenId = userId === givenId
+isUserWithId _ _ = False
+
 
 unEither :: (Either (Note) (Display String)) -> String
 unEither (Left (Note x)) = x
