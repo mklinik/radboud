@@ -53,26 +53,37 @@ n_chat chat =
   >>= \(channelName, fellas) -> withShared [(toString u, "") \\ u <- fellas] (chat fellas channelName)
 
 fixedMultiChat fellas channelName notes =
-  parallel (channelName +++ ": chat control center") [ makeChatTaskForUser u \\ u <- fellas ]
+  parallel (channelName +++ ": chat control center") [ makeChatTaskForUser channelName notes u \\ u <- fellas ]
+
+makeChatTaskForUser :: String (Shared Notes) User -> (ParallelTaskType, ParallelTask Void)
+makeChatTaskForUser channelName notes (u=:(AuthenticatedUser userId _ _)) =
+  ( Detached { ManagementMeta
+                | title=Just $ userId +++ "@" +++ channelName
+                , worker=(UserWithId userId)
+                , role=Nothing
+                , startAt=Nothing
+                , completeBefore=Nothing
+                , notifyAt=Nothing
+                , priority=NormalPriority
+                }
+   , (\tl ->  (enterInformation "say something" [] @> (updateNotes u, notes))
+              ||-
+              viewSharedInformation "what everybody says:" [ViewWith Display] notes
+              >>= \_ -> return Void)
+   )
 where
-  makeChatTaskForUser :: User -> (ParallelTaskType, ParallelTask Notes)
-  makeChatTaskForUser (u=:(AuthenticatedUser userId _ _)) =
-    ( Detached { ManagementMeta
-                  | title=Just $ userId +++ "@" +++ channelName
-                  , worker=(UserWithId userId)
-                  , role=Nothing
-                  , startAt=Nothing
-                  , completeBefore=Nothing
-                  , notifyAt=Nothing
-                  , priority=NormalPriority
-                  }
-     , (const $ (enterInformation "say something" [] @> (updateNotes u, notes))
-                ||-
-                viewSharedInformation "what everybody says:" [ViewWith Display] notes
-       )
-     )
   updateNotes :: User (TaskValue (Maybe String)) [(String, String)] -> (Maybe [(String, String)])
-  updateNotes u val notes = Just $ update (toString u) (maybe "" id $ maybeValue Nothing id val) notes
+  updateNotes u val notes = Just $ updateAssoc (toString u) (maybe "" id $ maybeValue Nothing id val) notes
+
+flexoMultiChat =
+  withShared [] (\notes -> parallel "flexoMultiChat" [(Embedded, controlCenter notes Nothing)])
+where
+  controlCenter :: (Shared Notes) (Maybe TaskId) (SharedTaskList Void) -> Task Void
+  controlCenter notes mId taskList =
+        get users >>= \us -> enterChoice "Please select a user to add" [] us
+    >>= \user -> update (cons (toString user, "")) notes
+    >>| (uncurry appendTask) (makeChatTaskForUser "testChannel" notes user) taskList
+    >>= \id -> controlCenter notes (Just id) taskList
 
 unEither :: (Either (Note) (Display String)) -> String
 unEither (Left (Note x)) = x
@@ -84,19 +95,27 @@ lookup key [(k, v):xs]
   | key === k = Just v
   | otherwise = lookup key xs
 
-update :: key value [(key, value)] -> [(key, value)] | gEq{|*|} key
-update _ _ [] = []
-update key newValue [x=:(k, v):xs]
+updateAssoc :: key value [(key, value)] -> [(key, value)] | gEq{|*|} key
+updateAssoc _ _ [] = []
+updateAssoc key newValue [x=:(k, v):xs]
   | key === k = [(k, newValue) : xs]
-  | otherwise = [x : update key newValue xs]
+  | otherwise = [x : updateAssoc key newValue xs]
 
 basicAPIExamples :: [Workflow]
 basicAPIExamples =
   [ workflow "reallyAllTasks" "show a demo of the reallyAllTasks combinator" reallyAllTasksDemo
   , workflow "2-person chat" "chat with another person" chat
   , workflow "multi-person chat, fixed" "chat with other persons" (n_chat fixedMultiChat)
-  //, workflow "multi-person chat, dynamic" "chat with other persons" (n_chat dynamicMultiChat)
+  , workflow "multi-person chat, dynamic" "chat with other persons" (flexoMultiChat)
   , workflow "update and show" "update and show a shared value" updateAndShow
+  , workflow "pick user 1" "pick user 1" $
+      get users >>= \us -> enterChoice "pick one" [] us >>= viewInformation "you picked: " []
+  , workflow "pick user 2" "pick user 2" $
+      get users >>=        enterChoice "pick one" []    >>= viewInformation "you picked: " []
+  , workflow "pick int 1" "pick int 1" $
+      return [1, 2, 3] >>= \us -> enterChoice "pick one" [] us >>= viewInformation "you picked: " []
+  , workflow "pick int 2" "pick int 2" $
+      return [1, 2, 3] >>=        enterChoice "pick one" []    >>= viewInformation "you picked: " []
   , workflow "Manage users" "Manage system users..." manageUsers
   ]
 
