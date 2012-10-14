@@ -9,6 +9,7 @@ enterInt = enterInformation "Please enter an integer" []
 viewInts :: String [Int] -> Task [Int]
 viewInts name value = viewInformation name [] value
 
+
 pickUser :: [User] [User] -> Task User
 pickUser toPickFrom alreadyPicked =
   enterChoice "Please select a user to chat with" [] toPickFrom
@@ -25,16 +26,17 @@ pickUsers toPickFrom alreadyPicked =
 
 :: Notes :==  [(String, String)]
 
-n_chat :: ([User] String (Shared Notes) -> (Task a)) -> Task a | iTask a
-n_chat chat =
+
+fixedMultiChat =
   ( enterInformation "please enter a channel name" []
     -&&-
     (get currentUser >>= \me -> get users >>= \users -> pickUsers (filter ((=!=) me) users) [me])
   )
-  >>= \(channelName, fellas) -> withShared [(toString u, "") \\ u <- fellas] (chat fellas channelName)
+  >>= \(channelName, fellas) -> withShared [(toString u, "") \\ u <- fellas] (fixedMultiChatParallel fellas channelName)
 
-fixedMultiChat fellas channelName notes =
+fixedMultiChatParallel fellas channelName notes =
   parallel (channelName +++ ": chat control center") [ makeChatTaskForUser channelName notes u \\ u <- fellas ]
+
 
 makeChatTaskForUser :: String (Shared Notes) User -> (ParallelTaskType, ParallelTask Void)
 makeChatTaskForUser channelName notes (u=:(AuthenticatedUser userId _ _)) =
@@ -47,7 +49,7 @@ makeChatTaskForUser channelName notes (u=:(AuthenticatedUser userId _ _)) =
                 , notifyAt=Nothing
                 , priority=NormalPriority
                 }
-   , (\tl ->  (enterInformation "say something" [] @> (updateNotes u, notes))
+   , (const $ (enterInformation "say something" [] @> (updateNotes u, notes))
               ||-
               viewSharedInformation "what everybody says:" [ViewWith Display] notes
               >>| return Void)
@@ -55,6 +57,7 @@ makeChatTaskForUser channelName notes (u=:(AuthenticatedUser userId _ _)) =
 where
   updateNotes :: User (TaskValue (Maybe String)) [(String, String)] -> (Maybe [(String, String)])
   updateNotes u val notes = Just $ updateAssoc (toString u) (maybe "" id $ maybeValue Nothing id val) notes
+
 
 flexoMultiChat =
   withShared [] (\notes -> parallel "flexoMultiChat" [(Embedded, controlCenter notes)])
@@ -96,16 +99,18 @@ isUserWithId :: User UserId -> Bool
 isUserWithId (AuthenticatedUser userId _ _) givenId = userId === givenId
 isUserWithId _ _ = False
 
+
 updateAssoc :: key value [(key, value)] -> [(key, value)] | gEq{|*|} key
 updateAssoc _ _ [] = []
 updateAssoc key newValue [x=:(k, v):xs]
   | key === k = [(k, newValue) : xs]
   | otherwise = [x : updateAssoc key newValue xs]
 
+
 assignment05klinik :: [Workflow]
 assignment05klinik =
   [ workflow "reallyAllTasks" "show a demo of the reallyAllTasks combinator" reallyAllTasksDemo
-  , workflow "multi-person chat, fixed" "chat with other persons" (n_chat fixedMultiChat)
+  , workflow "multi-person chat, fixed" "chat with other persons" (fixedMultiChat)
   , workflow "multi-person chat, dynamic" "chat with other persons" (flexoMultiChat)
   , workflow "pick user 1" "pick user 1" $
       get users >>= \us -> enterChoice "pick one" [] us >>= viewInformation "you picked: " []
@@ -117,6 +122,7 @@ assignment05klinik =
       return [1, 2, 3] >>=        enterChoice "pick one" []    >>= viewInformation "you picked: " []
   , workflow "Manage users" "Manage system users..." manageUsers
   ]
+
 
 Start :: *World -> *World
 Start world = startEngine (browseExamples assignment05klinik) world
@@ -138,11 +144,14 @@ where
   browseAnonymous examples
     = manageWorklist examples
 
+
 allTasksDemo = allTasks [enterInt, enterInt, enterInt] >>=
   viewInts "Not all values may be present."
 
+
 reallyAllTasksDemo = reallyAllTasks [enterInt, enterInt, enterInt] >>=
   viewInts "And now for something completely different."
+
 
 reallyAllTasks :: [Task a] -> Task [a] | iTask a
 reallyAllTasks tasks = parallel Void [(Embedded, const t) \\ t <- tasks]
