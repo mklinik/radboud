@@ -102,8 +102,8 @@ updateAssoc key newValue [x=:(k, v):xs]
   | key === k = [(k, newValue) : xs]
   | otherwise = [x : updateAssoc key newValue xs]
 
-basicAPIExamples :: [Workflow]
-basicAPIExamples =
+assignment05klinik :: [Workflow]
+assignment05klinik =
   [ workflow "reallyAllTasks" "show a demo of the reallyAllTasks combinator" reallyAllTasksDemo
   , workflow "multi-person chat, fixed" "chat with other persons" (n_chat fixedMultiChat)
   , workflow "multi-person chat, dynamic" "chat with other persons" (flexoMultiChat)
@@ -119,7 +119,7 @@ basicAPIExamples =
   ]
 
 Start :: *World -> *World
-Start world = startEngine (browseExamples basicAPIExamples) world
+Start world = startEngine (browseExamples assignment05klinik) world
 where
   browseExamples examples = forever (
       (viewTitle "iTasks Example Collection"
