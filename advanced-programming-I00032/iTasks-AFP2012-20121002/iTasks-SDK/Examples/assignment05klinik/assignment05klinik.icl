@@ -24,6 +24,10 @@ pickUsers toPickFrom alreadyPicked =
       , OnAction ActionOk always (\v -> return $ maybeValue alreadyPicked ((flip cons) alreadyPicked) v)
       ]
 
+
+// The shared data structure for both fixed and flexo multi-user chat: an
+// association list which has as key the stringified User, and as value the
+// text which the user has typed in the chat.
 :: Notes :==  [(String, String)]
 
 
@@ -66,17 +70,17 @@ where
   controlCenter notes taskList =
         get users >>= \us -> enterChoice "Please select a user" [] us
     >>* [ OnAction (Action "Add user") hasValue $
-                // add a new entry in the shared association list
-                \(Value user _) -> update (cons (toString user, "")) notes
+            // add a new entry to the shared association list
+            \(Value user _) -> update (cons (toString user, "")) notes
             // spawn a new chat task
             >>| (uncurry appendTask) (makeChatTaskForUser "testChannel" notes user) taskList
             >>| return Void
         , OnAction (Action "Kick user") hasValue $
-                // remove all entries for this user from the shared association list
-                \(Value user _) -> update (filter (((=!=) (toString user)) o fst)) notes
+            // remove all entries for this user from the shared association list
+            \(Value user _) -> update (filter (((=!=) (toString user)) o fst)) notes
             // remove all tasks for this user from the task list
             >>| get (taskListMeta taskList) @ onlyDetachedTasksForUser user @ map (\id -> removeTask id taskList)
-            >>= sequence ""
+            >>= sequence "" // do it!
             >>| return Void
         ]
     >>| controlCenter notes taskList // re-spawn control center
@@ -91,15 +95,18 @@ onlyDetachedTasksForUser user [{TaskListItem | taskId, managementMeta}:rest] =
         UserWithId userId =
           if (isUserWithId user userId)
              [taskId:onlyDetachedTasksForUser user rest]
-             (onlyDetachedTasksForUser user rest)
-        = onlyDetachedTasksForUser user rest
-    = onlyDetachedTasksForUser user rest
+             meh
+        = meh
+    = meh
+where
+  meh = onlyDetachedTasksForUser user rest
 
 isUserWithId :: User UserId -> Bool
 isUserWithId (AuthenticatedUser userId _ _) givenId = userId === givenId
 isUserWithId _ _ = False
 
 
+// replaces a value in an association list with a new value
 updateAssoc :: key value [(key, value)] -> [(key, value)] | gEq{|*|} key
 updateAssoc _ _ [] = []
 updateAssoc key newValue [x=:(k, v):xs]
@@ -110,8 +117,10 @@ updateAssoc key newValue [x=:(k, v):xs]
 assignment05klinik :: [Workflow]
 assignment05klinik =
   [ workflow "reallyAllTasks" "show a demo of the reallyAllTasks combinator" reallyAllTasksDemo
-  , workflow "multi-person chat, fixed" "chat with other persons" (fixedMultiChat)
-  , workflow "multi-person chat, dynamic" "chat with other persons" (flexoMultiChat)
+  , workflow "multi-person chat, fixed" "chat with other persons" fixedMultiChat
+  , workflow "multi-person chat, dynamic" "chat with other persons" flexoMultiChat
+  , workflow "Manage users" "Manage system users..." manageUsers
+
   , workflow "pick user 1" "pick user 1" $
       get users >>= \us -> enterChoice "pick one" [] us >>= viewInformation "you picked: " []
   , workflow "pick user 2" "pick user 2" $
@@ -120,7 +129,6 @@ assignment05klinik =
       return [1, 2, 3] >>= \us -> enterChoice "pick one" [] us >>= viewInformation "you picked: " []
   , workflow "pick int 2" "pick int 2" $
       return [1, 2, 3] >>=        enterChoice "pick one" []    >>= viewInformation "you picked: " []
-  , workflow "Manage users" "Manage system users..." manageUsers
   ]
 
 
@@ -143,10 +151,6 @@ where
 
   browseAnonymous examples
     = manageWorklist examples
-
-
-allTasksDemo = allTasks [enterInt, enterInt, enterInt] >>=
-  viewInts "Not all values may be present."
 
 
 reallyAllTasksDemo = reallyAllTasks [enterInt, enterInt, enterInt] >>=
