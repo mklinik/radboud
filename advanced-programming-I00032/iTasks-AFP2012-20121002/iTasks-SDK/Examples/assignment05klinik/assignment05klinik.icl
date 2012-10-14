@@ -1,7 +1,6 @@
 module assignment05klinik
 
 import iTasks
-import StdMisc
 
 enterInt :: Task Int
 enterInt = enterInformation "Please enter an integer" []
