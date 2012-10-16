@@ -1,6 +1,7 @@
 implementation module unitTest
 
 import StdEnv, gast
+import StdListExtensions
 
 /* === Exercise 1.1: Custom tests === */
 
@@ -11,7 +12,22 @@ testPred1 s p x =
            (["Error in testPred1 ",s,": predicate doesn't hold for ",show1 x,".\n":c { a & fail = a.fail+1}])
 
 testPredL :: String (x -> Bool) [x] -> TestFun | genShow {| * |} x
-testPredL s p xs = foldl (`) (\a c -> c a) (map (testPred1 s p) xs)
+testPredL s p xs = sequenceTests (map (testPred1 s p) xs)
+
+sequenceTests = foldl (`) (\a c -> c a)
+
+/* === Exercise 1.2: Generic tests === */
+
+class testPred a :: [String] a -> TestFun
+instance testPred Bool where
+  testPred ss b =
+    \a c. if b
+       (c { a & succ = a.succ+1 })
+       (intersperse " " (reverse ss) ++ [": predicate doesn't hold.\n":c { a & fail = a.fail+1}])
+
+instance testPred (a -> b) | ggen{|*|} a & genShow{|*|} a & testPred b
+where
+  testPred ss f = sequenceTests [testPred [(show1 a):ss] (f a) \\ a <- take 100 (ggen{|*|} 1 aStream)]
 
 :: UnitTest
  =  { fail :: Int

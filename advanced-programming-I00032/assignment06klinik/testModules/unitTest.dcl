@@ -16,3 +16,7 @@ testOp      :: String x (x x->Bool) x -> TestFun | genShow{|*|} x
 
 testPred1 :: String (x -> Bool) x -> TestFun | genShow {| * |} x
 testPredL :: String (x -> Bool) [x] -> TestFun | genShow {| * |} x
+
+class testPred a :: [String] a -> TestFun
+instance testPred Bool
+instance testPred (a -> b) | ggen{|*|} a & genShow{|*|} a & testPred b
