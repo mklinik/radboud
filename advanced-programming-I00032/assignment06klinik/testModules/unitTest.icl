@@ -16,6 +16,7 @@ testPredL s p xs = sequenceTests (map (testPred1 s p) xs)
 
 sequenceTests = foldl (`) (\a c -> c a)
 
+
 /* === Exercise 1.2: Generic tests === */
 
 class testPred a :: [String] a -> TestFun
