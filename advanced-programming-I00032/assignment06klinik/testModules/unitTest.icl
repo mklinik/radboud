@@ -3,47 +3,47 @@ implementation module unitTest
 import StdEnv, gast
 
 :: UnitTest
- =	{ fail :: Int
-	, succ :: Int
-	}
+ =  { fail :: Int
+    , succ :: Int
+    }
 
 :: TestFun :== UnitTest -> (UnitTest->[String]) -> [String]
 
 doTest :: TestFun -> [String]
 doTest f = f { fail = 0, succ = 0 } report
 where
-	report :: UnitTest -> [String]
-	report {fail,succ} = ["\nFinished testing: ",toString (fail+succ)," tests executed, ",toString fail," failures, and ",toString succ," successes.\n"]
+    report :: UnitTest -> [String]
+    report {fail,succ} = ["\nFinished testing: ",toString (fail+succ)," tests executed, ",toString fail," failures, and ",toString succ," successes.\n"]
 
 testEqual :: String x x -> TestFun | gEq{|*|}, genShow{|*|} x
 testEqual s x y
-	= \a c. if (x === y)
-				(c { a & succ = a.succ+1 })
-				(["Error in testEqual ",s,": expected ",show1 x," obtained ",show1 y,".\n":c { a & fail = a.fail+1}])
+    = \a c. if (x === y)
+                (c { a & succ = a.succ+1 })
+                (["Error in testEqual ",s,": expected ",show1 x," obtained ",show1 y,".\n":c { a & fail = a.fail+1}])
 
 testUnEqual :: String x x -> TestFun | gEq{|*|}, genShow{|*|} x
 testUnEqual s x y
  = \a c. if (x =!= y)
-			(c { a & succ = a.succ+1 })
-			["Error in testUnEqual ",s,": expected ",show1 x," obtained ",show1 y,".\n": c { a & fail = a.fail+1}]
+            (c { a & succ = a.succ+1 })
+            ["Error in testUnEqual ",s,": expected ",show1 x," obtained ",show1 y,".\n": c { a & fail = a.fail+1}]
 
 testLess :: String x x -> TestFun | gLess{|*|}, genShow{|*|} x
 testLess s x y
  = \a c. if (x -<- y)
-			(c { a & succ = a.succ+1 })
-			["Error in testLess ",s,": not (",show1 x," less ",show1 y,").\n": c { a & fail = a.fail+1}]
+            (c { a & succ = a.succ+1 })
+            ["Error in testLess ",s,": not (",show1 x," less ",show1 y,").\n": c { a & fail = a.fail+1}]
 
 testLessEQ :: String x x -> TestFun | gLess{|*|}, genShow{|*|} x
 testLessEQ s x y
  = \a c. if (x -<= y)
-			(c { a & succ = a.succ+1 })
-			["Error in testLessEQ ",s,": not (",show1 x," lessEq ",show1 y,").\n": c { a & fail = a.fail+1}]
+            (c { a & succ = a.succ+1 })
+            ["Error in testLessEQ ",s,": not (",show1 x," lessEq ",show1 y,").\n": c { a & fail = a.fail+1}]
 
 testOp :: String x (x x->Bool) x -> TestFun | genShow{|*|} x
 testOp s x op y
  = \a c. if (op x y)
-			(c { a & succ = a.succ+1 })
-			["Error in testOp ",s,": not (",show1 x," ",thunk_name_to_string op,"(",thunk_to_module_name_string op,") ",show1 y,").\n": c { a & fail = a.fail+1}]
+            (c { a & succ = a.succ+1 })
+            ["Error in testOp ",s,": not (",show1 x," ",thunk_name_to_string op,"(",thunk_to_module_name_string op,") ",show1 y,").\n": c { a & fail = a.fail+1}]
 
 (`) infixl 0 :: TestFun TestFun -> TestFun
 (`) t1 t2 = \state cont.t1 state (\state2.t2 state2 cont)
