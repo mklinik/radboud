@@ -2,6 +2,17 @@ implementation module unitTest
 
 import StdEnv, gast
 
+/* === Exercise 1.1: Custom tests === */
+
+testPred1 :: String (x -> Bool) x -> TestFun | genShow {| * |} x
+testPred1 s p x =
+  \a c. if (p x)
+           (c { a & succ = a.succ+1 })
+           (["Error in testPred1 ",s,": predicate doesn't hold for ",show1 x,".\n":c { a & fail = a.fail+1}])
+
+testPredL :: String (x -> Bool) [x] -> TestFun | genShow {| * |} x
+testPredL s p xs = foldl (`) (\a c -> c a) (map (testPred1 s p) xs)
+
 :: UnitTest
  =  { fail :: Int
     , succ :: Int
