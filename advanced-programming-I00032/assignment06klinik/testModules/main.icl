@@ -3,22 +3,21 @@ module main
 import unitTest
 import Rat
 
-pPlusRat :: Rat Rat -> Bool
-pPlusRat x y = y + x == x + y
-
-pRatPlusZeroEqualsItself :: Rat -> Bool
-pRatPlusZeroEqualsItself x = x + zero == x
+pRatPlusZeroIsItself :: Rat -> Bool
+pRatPlusZeroIsItself x = x + zero == x
 
 pRatMinusItselfIsZero :: Rat -> Bool
 pRatMinusItselfIsZero x = x - x == zero
 
+pRatTimesOneIsItself :: Rat -> Bool
+pRatTimesOneIsItself x = x * one == x
+
 pRatDividedByItselfIsOne :: Rat -> Bool
 pRatDividedByItselfIsOne x = x / x == one
 
-
 Start = doTest
-  ( testPred ["pPlusRat"] pPlusRat
-  ` testPred ["pRatPlusZeroEqualsItself"] pRatPlusZeroEqualsItself
+  ( testPred ["pRatPlusZeroIsItself"] pRatPlusZeroIsItself
   ` testPred ["pRatMinusItselfIsZero"] pRatMinusItselfIsZero
+  ` testPred ["pRatTimesOneIsItself"] pRatTimesOneIsItself
   ` testPred ["pRatDividedByItselfIsOne"] pRatDividedByItselfIsOne
   )
