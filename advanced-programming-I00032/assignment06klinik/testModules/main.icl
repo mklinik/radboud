@@ -15,9 +15,13 @@ pRatTimesOneIsItself x = x * one == x
 pRatDividedByItselfIsOne :: Rat -> Bool
 pRatDividedByItselfIsOne x = x / x == one
 
+pRatPowMinusOneIsTheInverse :: Rat -> Bool
+pRatPowMinusOneIsTheInverse x = x ^ (toRat (-1)) == inv x
+
 Start = doTest
   ( testPred ["pRatPlusZeroIsItself"] pRatPlusZeroIsItself
   ` testPred ["pRatMinusItselfIsZero"] pRatMinusItselfIsZero
   ` testPred ["pRatTimesOneIsItself"] pRatTimesOneIsItself
   ` testPred ["pRatDividedByItselfIsOne"] pRatDividedByItselfIsOne
+  ` testPred ["pRatPowMinusOneIsTheInverse"] pRatPowMinusOneIsTheInverse
   )
