@@ -20,7 +20,7 @@ mkRat n d = simplify {n=n,d=d}
 simplify :: !Rat -> Rat // normalisation, e.g. (2/-4) -> (-1/2).
 simplify r=:{n,d}
 	| d == zero	= abort "attempt to divide by 0 in simplifying a Rat"
-	| n == one	= one
+	//| n == one	= one
 	| n == zero	= zero
 	#! g = gcd n d
 	| g==1
@@ -42,11 +42,11 @@ instance toString Rat where toString {n,d} = toString n + if (d == 1) "" ("/" + 
 instance toInt Rat where toInt {n,d} = n/d
 instance toReal Rat where toReal {n,d} = toReal n/toReal d
 instance == Rat where (==) x y = x === y
-instance + Rat where (+) x y = mkRat (x.n*y.d+y.n*x.d) (x.d*y.d)
+instance + Rat where (+) x y = mkRat (x.n * y.d + y.n * x.d) (x.d * y.d)
 instance * Rat where (*) x y = mkRat (x.n*y.n) (x.d*y.d)
 instance / Rat where (/) x y = mkRat (x.n*y.d) (x.d*y.d)
-instance - Rat where (-) x y = mkRat (x.n*y.d+y.n*x.d) (x.d*y.d)
-instance < Rat where (<) x y = y.n*x.d < y.d*x.n
+instance - Rat where (-) x y = mkRat (x.n * y.d - y.n * x.d) (x.d * y.d)
+instance < Rat where (<) x y = y.n * x.d < y.d * x.n
 instance ^ Rat 
 where
 	(^) x y=:{n,d}
