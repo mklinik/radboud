@@ -42,14 +42,14 @@ vendingMachineModel s ButtonOk = [ Pt [] s // we allow the identity transition i
                                  : makePurchaseModel s
                                  ]
 
-sumCoins :: [Coin] -> Int
-sumCoins coins = foldl (\sum (Coin v) -> sum + v) 0 coins
-
 checkChange :: ModelState [Output] -> [ModelState]
 checkChange s [(Change coins)]
   | (sumCoins coins) == s.ModelState.balance = [{ ModelState | s & balance = 0 }]
   = []
 checkChange _ _ = []
+
+sumCoins :: [Coin] -> Int
+sumCoins coins = foldl (\sum (Coin v) -> sum + v) 0 coins
 
 makePurchaseModel :: ModelState -> [Trans Output ModelState]
 makePurchaseModel s =
@@ -70,6 +70,13 @@ makePurchaseModel s =
     = meh
 where
   meh = [Pt [] s]
+
+/* === Implementation of the vending machine === */
+
+// In my implementation, it is possible to make multiple purchases when the
+// balance is sufficient.  To get the change back, the user has to explicitly
+// press the Return button.  That is because I hate vending machines that
+// return your change after each purchase.
 
 :: MachineState =
   { balance :: Int
@@ -151,7 +158,7 @@ implStartState =
 
 // Initially, we only have one item of each kind in stock.
 // Interestingly, when we pre-load two items of each kind, the case that the
-// same item is purchased thrice (is this even a word?) never happens.
+// same item is purchased thrice never happens.
 theStock =
   [ { product = CaffeinatedBeverage
     , id = (Digit 0, Digit 0)
@@ -169,6 +176,8 @@ theStock =
     , quantity = 1
     }
   ]
+
+/* === testing of the vending machine implementation against the model === */
 
 Start world =
   testConfSM
