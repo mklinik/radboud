@@ -10,7 +10,7 @@ import gast
   | D Digit // one of the digits on the screen
   | ButtonReset // cancel selection of product
   | ButtonOk // purchase selected product
-  | Return  // cancel purchase and return all money
+  | ButtonReturn  // cancel purchase and return all money
 
 :: Output = Change Coin | Product Product
 
@@ -34,7 +34,7 @@ import gast
 
 vendingMachineModel :: ModelState Input -> [Trans Output ModelState]
 vendingMachineModel s (C (Coin coin)) = [Pt [] { ModelState | s & balance = s.ModelState.balance + coin }]
-vendingMachineModel s Return = [Pt [Change (Coin s.ModelState.balance)] { ModelState | s & balance = 0 }]
+vendingMachineModel s ButtonReturn = [Pt [Change (Coin s.ModelState.balance)] { ModelState | s & balance = 0 }]
 vendingMachineModel s (D digit) = [Pt [] { ModelState | s & digitsEntered = enterDigit digit s.ModelState.digitsEntered }]
 vendingMachineModel s ButtonReset = [Pt [] { ModelState | s & digitsEntered = (Nothing, Nothing) }]
 vendingMachineModel s ButtonOk = makePurchaseModel s
@@ -81,7 +81,7 @@ ggen{|Coin|} n r = randomize (map Coin [5, 10, 20, 50, 100, 200]) r 10 (const []
 
 vendingMachine :: MachineState Input -> ([Output], MachineState)
 vendingMachine s (C (Coin coin)) = ([], { MachineState | s & balance = s.MachineState.balance + coin })
-vendingMachine s Return          = ([Change (Coin s.MachineState.balance)], { MachineState | s & balance = 0 })
+vendingMachine s ButtonReturn    = ([Change (Coin s.MachineState.balance)], { MachineState | s & balance = 0 })
 vendingMachine s (D digit)       = ([], { MachineState | s & digitsEntered = enterDigit digit s.MachineState.digitsEntered })
 vendingMachine s ButtonReset     = ([], { MachineState | s & digitsEntered = (Nothing, Nothing) })
 vendingMachine s ButtonOk        = makePurchase s
@@ -139,7 +139,7 @@ theStock =
 
 Start world =
   testConfSM
-    [Ntests 10] // test options
+    [/*Ntests 10*/] // test options
     vendingMachineModel // specification
     { ModelState // spec start state
     | stock = theStock
