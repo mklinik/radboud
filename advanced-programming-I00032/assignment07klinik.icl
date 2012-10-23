@@ -99,8 +99,11 @@ vendingMachine s (D digit)       = ([], { MachineState | s & digitsEntered = ent
 vendingMachine s ButtonReset     = ([], { MachineState | s & digitsEntered = (Nothing, Nothing) })
 vendingMachine s ButtonOk        = makePurchase s
 
-// Note that makeChange may keep money if it is not possible to break the
-// amount down to coins. Our tests make sure that this never happens!
+// makeChange returns all the change as one big fat custom coin of exactly that
+// amount, because tracking the machine's coins and giving exact change is
+// HARD.  The case where the machine doesn't spit out a product because of
+// insufficient change is already covered by the one non-deterministic case of
+// the model, so this wouldn't even be interesting from a testing standpoint.
 makeChange :: Int -> [Coin]
 makeChange amount = [Coin amount]
 
