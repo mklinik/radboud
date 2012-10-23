@@ -15,8 +15,9 @@ import gast
 :: Output = Change Coin | Product Product
 
 :: ModelState =
-  { stock :: [StockProduct]
-  , balance :: Int
+  { balance :: Int
+  , digitsEntered :: (Maybe Digit, Maybe Digit)
+  , stock :: [StockProduct]
   }
 
 :: StockProduct =
@@ -34,7 +35,9 @@ import gast
 vendingMachineModel :: ModelState Input -> [Trans Output ModelState]
 vendingMachineModel s (C (Coin coin)) = [Pt [] { ModelState | s & balance = s.ModelState.balance + coin }]
 vendingMachineModel s Return = [Pt [Change (Coin s.ModelState.balance)] { ModelState | s & balance = 0 }]
-vendingMachineModel s _ = [Pt [] s] // everything else is WTF?
+vendingMachineModel s (D digit) = [Pt [] { ModelState | s & digitsEntered = enterDigit digit s.ModelState.digitsEntered }]
+vendingMachineModel s ButtonReset = [Pt [] { ModelState | s & digitsEntered = (Nothing, Nothing) }]
+vendingMachineModel s _ = [] // everything else is WTF?
 
 :: MachineState =
   { balance :: Int
@@ -48,7 +51,7 @@ enterDigit d (Just d1, Nothing) = (Just d1, Just d) // enter the second digit
 enterDigit _ x = x // cannot enter more than two digits
 
 derive genShow MachineState, ModelState, Input, Output, Digit, Coin, Product, StockProduct, Maybe
-derive gEq ModelState, Output, Product, Coin, StockProduct, Digit
+derive gEq ModelState, Output, Product, Coin, StockProduct, Digit, Maybe
 derive ggen Input
 derive bimap []
 
@@ -58,13 +61,13 @@ ggen{|Coin|} n r = randomize (map Coin [5, 10, 20, 50, 100, 200]) r 10 (const []
 vendingMachine :: MachineState Input -> ([Output], MachineState)
 vendingMachine s (C (Coin coin)) = ([], { MachineState | s & balance = s.MachineState.balance + coin })
 vendingMachine s Return          = ([Change (Coin s.MachineState.balance)], { MachineState | s & balance = 0 })
-vendingMachine s (D digit)       = ([], { MachineState | s & digitsEntered = enterDigit digit s.digitsEntered })
+vendingMachine s (D digit)       = ([], { MachineState | s & digitsEntered = enterDigit digit s.MachineState.digitsEntered })
 vendingMachine s ButtonReset     = ([], { MachineState | s & digitsEntered = (Nothing, Nothing) })
 vendingMachine s ButtonOk        = makePurchase s
 
 makePurchase :: MachineState -> ([Output], MachineState)
 makePurchase s =
-  case s.digitsEntered of
+  case s.MachineState.digitsEntered of
     // if the user has actually entered two digits ...
     (Just d1, Just d2) = case lookupProduct (d1, d2) s.MachineState.stock of
       // ... and these digits correspond to a product in stock ...
@@ -89,10 +92,11 @@ lookupProduct id [p:ps] = if (p.id === id) (Just p) (lookupProduct id ps)
 (step) infixl :: ([Output], MachineState) Input -> ([Output], MachineState)
 (step) (_, s) i = vendingMachine s i
 
-Start = vendingMachine implStartState (D (Digit 4)) step (D (Digit 2)) step (C (Coin 5)) step ButtonOk
+Start2 = vendingMachine implStartState (D (Digit 4)) step (D (Digit 2)) step (C (Coin 5)) step ButtonOk
 
 implStartState =
-  { balance = 0
+  { MachineState
+  | balance = 0
   , digitsEntered = (Nothing, Nothing)
   , stock = theStock
   }
@@ -112,15 +116,16 @@ theStock =
     }
   ]
 
-Start2 world =
+Start world =
   testConfSM
     [Ntests 10] // test options
     vendingMachineModel // specification
-    { ModelState | stock = theStock, balance = 0 } // spec start state
+    { ModelState // spec start state
+    | stock = theStock
+    , balance = 0
+    , digitsEntered = (Nothing, Nothing)
+    }
     vendingMachine // implementation
-    implStartState // impl start state
+    implStartState // implementation start state
     (const implStartState) // reset function
-    world // world
-
-// vendingMachine { balance = 0 } (C (Coin 20))
-
+    world
