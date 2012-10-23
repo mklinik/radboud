@@ -37,7 +37,28 @@ vendingMachineModel s (C (Coin coin)) = [Pt [] { ModelState | s & balance = s.Mo
 vendingMachineModel s Return = [Pt [Change (Coin s.ModelState.balance)] { ModelState | s & balance = 0 }]
 vendingMachineModel s (D digit) = [Pt [] { ModelState | s & digitsEntered = enterDigit digit s.ModelState.digitsEntered }]
 vendingMachineModel s ButtonReset = [Pt [] { ModelState | s & digitsEntered = (Nothing, Nothing) }]
+vendingMachineModel s ButtonOk = makePurchaseModel s
 vendingMachineModel s _ = [] // everything else is WTF?
+
+makePurchaseModel :: ModelState -> [Trans Output ModelState]
+makePurchaseModel s =
+  case s.ModelState.digitsEntered of
+    // if the user has actually entered two digits ...
+    (Just d1, Just d2) = case lookupProduct (d1, d2) s.ModelState.stock of
+      // ... and these digits correspond to a product in stock ...
+      (Just stockProduct) = if (s.ModelState.balance >= stockProduct.price)
+        // ... and the user has inserted enough money
+        [Pt [Product stockProduct.product] // then: return the product,
+          { ModelState | s
+          & balance = s.ModelState.balance - stockProduct.price // reduce the balance,
+          , digitsEntered = (Nothing, Nothing) // and clear the entered digits
+          }
+        ]
+        meh
+      = meh
+    = meh
+where
+  meh = [Pt [] s]
 
 :: MachineState =
   { balance :: Int
