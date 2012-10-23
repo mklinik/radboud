@@ -130,6 +130,9 @@ implStartState =
   , stock = theStock
   }
 
+// Initially, we only have one item of each kind in stock.
+// Interestingly, when we pre-load two items of each kind, the case that the
+// same item is purchased thrice (is this even a word?) never happens.
 theStock =
   [ { product = CaffeinatedBeverage
     , id = (Digit 0, Digit 0)
