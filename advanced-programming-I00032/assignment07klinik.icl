@@ -38,8 +38,9 @@ vendingMachineModel s (C (Coin coin)) = [Pt [] { ModelState | s & balance = s.Mo
 vendingMachineModel s ButtonReturn = [Pt [Change (Coin s.ModelState.balance)] { ModelState | s & balance = 0 }]
 vendingMachineModel s (D digit) = [Pt [] { ModelState | s & digitsEntered = enterDigit digit s.ModelState.digitsEntered }]
 vendingMachineModel s ButtonReset = [Pt [] { ModelState | s & digitsEntered = (Nothing, Nothing) }]
-vendingMachineModel s ButtonOk = makePurchaseModel s
-vendingMachineModel s _ = [] // everything else is WTF?
+vendingMachineModel s ButtonOk = [ Pt [] s // we allow the identity transition in case the item is out of stock
+                                 : makePurchaseModel s
+                                 ]
 
 makePurchaseModel :: ModelState -> [Trans Output ModelState]
 makePurchaseModel s =
