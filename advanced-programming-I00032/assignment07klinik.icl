@@ -12,7 +12,7 @@ import gast
   | ButtonOk // purchase selected product
   | ButtonReturn  // cancel purchase and return all money
 
-:: Output = Change Coin | Product Product
+:: Output = Change [Coin] | Product Product
 
 :: ModelState =
   { balance :: Int
@@ -35,12 +35,21 @@ import gast
 
 vendingMachineModel :: ModelState Input -> [Trans Output ModelState]
 vendingMachineModel s (C (Coin coin)) = [Pt [] { ModelState | s & balance = s.ModelState.balance + coin }]
-vendingMachineModel s ButtonReturn = [Pt [Change (Coin s.ModelState.balance)] { ModelState | s & balance = 0 }]
+vendingMachineModel s ButtonReturn = [Ft (checkChange s)]
 vendingMachineModel s (D digit) = [Pt [] { ModelState | s & digitsEntered = enterDigit digit s.ModelState.digitsEntered }]
 vendingMachineModel s ButtonReset = [Pt [] { ModelState | s & digitsEntered = (Nothing, Nothing) }]
 vendingMachineModel s ButtonOk = [ Pt [] s // we allow the identity transition in case the item is out of stock
                                  : makePurchaseModel s
                                  ]
+
+sumCoins :: [Coin] -> Int
+sumCoins coins = foldl (\sum (Coin v) -> sum + v) 0 coins
+
+checkChange :: ModelState [Output] -> [ModelState]
+checkChange s [(Change coins)]
+  | (sumCoins coins) == s.ModelState.balance = [{ ModelState | s & balance = 0 }]
+  = []
+checkChange _ _ = []
 
 makePurchaseModel :: ModelState -> [Trans Output ModelState]
 makePurchaseModel s =
@@ -78,15 +87,22 @@ derive gEq ModelState, Output, Product, Coin, StockProduct, Digit, Maybe
 derive ggen Input
 derive bimap []
 
+coinSizes = [5, 10, 20, 50, 100, 200]
+
 ggen{|Digit|} n r = randomize (map Digit [0..9]) r 10 (const [])
-ggen{|Coin|} n r = randomize (map Coin [5, 10, 20, 50, 100, 200]) r 10 (const [])
+ggen{|Coin|} n r = randomize (map Coin coinSizes) r 10 (const [])
 
 vendingMachine :: MachineState Input -> ([Output], MachineState)
 vendingMachine s (C (Coin coin)) = ([], { MachineState | s & balance = s.MachineState.balance + coin })
-vendingMachine s ButtonReturn    = ([Change (Coin s.MachineState.balance)], { MachineState | s & balance = 0 })
+vendingMachine s ButtonReturn    = ([Change (makeChange s.MachineState.balance)], { MachineState | s & balance = 0 })
 vendingMachine s (D digit)       = ([], { MachineState | s & digitsEntered = enterDigit digit s.MachineState.digitsEntered })
 vendingMachine s ButtonReset     = ([], { MachineState | s & digitsEntered = (Nothing, Nothing) })
 vendingMachine s ButtonOk        = makePurchase s
+
+// Note that makeChange may keep money if it is not possible to break the
+// amount down to coins. Our tests make sure that this never happens!
+makeChange :: Int -> [Coin]
+makeChange amount = [Coin amount]
 
 makePurchase :: MachineState -> ([Output], MachineState)
 makePurchase s =
