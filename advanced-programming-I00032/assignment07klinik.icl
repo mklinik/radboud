@@ -24,6 +24,7 @@ import gast
   { product :: Product // this product
   , id :: (Digit, Digit) // which digits it's assigned to
   , price :: Int // how much it costs
+  , quantity :: Int // how much items are in stock
   }
 
 
@@ -92,12 +93,14 @@ makePurchase s =
     // if the user has actually entered two digits ...
     (Just d1, Just d2) = case lookupProduct (d1, d2) s.MachineState.stock of
       // ... and these digits correspond to a product in stock ...
-      (Just stockProduct) = if (s.MachineState.balance >= stockProduct.price)
-        // ... and the user has inserted enough money
+      (Just stockProduct) = if (s.MachineState.balance >= stockProduct.price && stockProduct.quantity > 0)
+        // ... and the user has inserted enough money, and there is at least one such product in stock
         ([Product stockProduct.product] // then: return the product,
         , { MachineState | s
           & balance = s.MachineState.balance - stockProduct.price // reduce the balance,
-          , digitsEntered = (Nothing, Nothing) // and clear the entered digits
+          , digitsEntered = (Nothing, Nothing) // clear the entered digits,
+            // and reduce the quantity of this item by one
+          , stock = updateStock (d1, d2) (\p -> { p & quantity = p.quantity - 1}) s.MachineState.stock
           }
         )
         meh
@@ -109,6 +112,10 @@ where
 lookupProduct :: (Digit, Digit) [StockProduct] -> Maybe StockProduct
 lookupProduct _ [] = Nothing
 lookupProduct id [p:ps] = if (p.id === id) (Just p) (lookupProduct id ps)
+
+updateStock :: (Digit, Digit) (StockProduct -> StockProduct) [StockProduct] -> [StockProduct]
+updateStock _ _ [] = []
+updateStock id f [p:ps] = if (p.id === id) [f p : ps] [p : updateStock id f ps]
 
 (step) infixl :: ([Output], MachineState) Input -> ([Output], MachineState)
 (step) (_, s) i = vendingMachine s i
@@ -126,14 +133,17 @@ theStock =
   [ { product = CaffeinatedBeverage
     , id = (Digit 0, Digit 0)
     , price = 85
+    , quantity = 1
     }
   , { product = EnergyBar
     , id = (Digit 1, Digit 8)
     , price = 120
+    , quantity = 1
     }
   , { product = Apple
     , id = (Digit 4, Digit 2)
     , price = 5
+    , quantity = 1
     }
   ]
 
