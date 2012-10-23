@@ -40,8 +40,11 @@ vendingMachineModel s _ = [Pt [] s] // everything else is WTF?
 
 derive genShow MachineState, ModelState, Input, Output, Digit, Coin, Product, AvailableProduct
 derive gEq ModelState, Output, Product, Coin, AvailableProduct, Digit
-derive ggen Input, Coin, Digit
+derive ggen Input
 derive bimap []
+
+ggen{|Digit|} n r = randomize (map Digit [0..9]) r 10 (const [])
+ggen{|Coin|} n r = randomize (map Coin [5, 10, 20, 50, 100, 200]) r 10 (const [])
 
 vendingMachine :: MachineState Input -> ([Output], MachineState)
 vendingMachine s (C (Coin coin)) = ([], { s & balance = s.balance + coin })
