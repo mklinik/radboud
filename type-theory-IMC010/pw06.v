@@ -57,6 +57,12 @@ exists (S n).
 reflexivity.
 Qed.
 
+Goal forall n:nat, exists m:nat, m = S n.
+intro.
+exists (S n).
+reflexivity.
+Qed.
+
 (* we see the main part of the extracted program. *)
 Extraction successor.
 
@@ -92,9 +98,18 @@ Extraction "suc" successor.
 
 Theorem predecessor :
   forall n:nat, ~(n=O) -> {m:nat | S m = n}.
+(*  forall n:nat, ~(n=O) -> exists m:nat, S m = n.*)
 Proof.
-(*! proof *)
- 
+unfold not.
+intro n.
+intros.
+induction n.
+elimtype False.
+apply H.
+reflexivity.
+
+exists n.
+reflexivity.
 Qed.
 
 (* extraction of the program *)
@@ -132,8 +147,19 @@ Theorem Mirror :
   forall t : bintree,
   {t' : bintree | Mirrored t t'}.
 Proof.
-(*! proof *)
+intro t.
+induction t.
+exists (leaf n).
+apply Mirrored_leaf.
 
+(* magic happens here *)
+inversion IHt1.
+inversion IHt2.
+
+exists (node x0 x).
+apply Mirrored_node.
+exact H.
+exact H0.
 Qed.
 
 Extraction Mirror.
@@ -150,8 +176,15 @@ end.
 (* ... and prove its correctness *)
 Theorem Mirrored_mirror : forall t : bintree, Mirrored t (mirror t).
 Proof.
-(*! proof *)
+intro t.
+induction t.
+simpl.
+apply Mirrored_leaf.
 
+simpl.
+apply Mirrored_node.
+exact IHt1.
+exact IHt2.
 Qed.
 
 (*  *********************************************** *)
@@ -170,31 +203,39 @@ Inductive natlist : Set :=
 (* specification *)
 (* The following predicate was also in practical work 5. *)
 Inductive sorted : natlist -> Prop :=
+  (* the empty list is sorted *)
 | sorted0 : sorted nil
+  (* the singleton list is sorted *)
 | sorted1 : forall n:nat , sorted (cons n nil)
+  (* if n <= h and [h:t] is sorted, so is [n:h:t] *)
 | sorted2 : forall n h:nat , forall t:natlist ,
             le n h -> sorted (cons h t) -> sorted (cons n (cons h t)).
 
 (* week 5 exercise 11 *)
 Theorem sortednil : sorted nil.
 Proof.
-(*! proof *)
-
+apply sorted0.
 Qed.
 
 (* week 5 exercise 12 *)
 Theorem sortedone : sorted (cons 0 nil).
 Proof.
-(*! proof *)
-
+apply (sorted1 0).
 Qed.
 
 (* week 5 exercise 13 *)
 Theorem sorted_one_two_three :
   sorted (cons 1 (cons 2 (cons 3 nil))).
 Proof.
-(*! proof *)
+apply (sorted2 1 2).
+apply le_S.
+apply le_n.
 
+apply (sorted2 2 3).
+apply le_S.
+apply le_n.
+
+apply (sorted1 3).
 Qed.
 
 (* week 5 exercise 14 *)
@@ -203,8 +244,11 @@ Theorem sorted_tail :
   sorted (cons n l) ->
   sorted l.
 Proof.
-(*! proof *)
-
+intros.
+induction l.
+apply sorted0.
+inversion H.
+exact H4.
 Qed.
 
 
@@ -220,36 +264,35 @@ Inductive Inserted (n : nat) : natlist -> natlist -> Prop :=
 (* exercise 4 *)
 Theorem exercise1_Inserted : Inserted 1 nil (cons 1 nil).
 Proof.
-(*! proof *)
-
+apply Inserted_front.
 Qed.
 
 (* exercise 5 *)
 Theorem exercise2_Inserted : Inserted 1 (cons 1 nil) (cons 1 (cons 1 nil)) .
 Proof.
-(*! proof *)
-
+apply Inserted_cons.
+apply Inserted_front.
 Qed.
 
 (* exercise 6: same theorem but give a different proof *)
 Theorem exercise3_Inserted : Inserted 1 (cons 1 nil) (cons 1 (cons 1 nil)) .
 Proof.
-(*! proof *)
-
+apply Inserted_front.
 Qed.
 
 (* exercise 7 *)
 Theorem exercise4_Inserted : ~ Inserted 1 nil (cons 2 nil).
 Proof.
-(*! proof *)
-
+unfold not.
+intros.
+inversion H.
 Qed.
 
 Inductive Permutation : natlist -> natlist -> Prop :=
   | Permutation_nil : Permutation nil nil
   | Permutation_cons :
-      forall (n : nat) (l l' l'' : natlist),
-      Permutation l l' -> Inserted n l' l'' -> Permutation (cons n l) l''.
+      forall (n : nat) (k l m : natlist),
+      Permutation k l -> Inserted n l m -> Permutation (cons n k) m.
 
 (* exercise 8 *)
 (* Hint: use inversion_clear several times.
@@ -257,8 +300,12 @@ Inductive Permutation : natlist -> natlist -> Prop :=
 Lemma Permutation_neg:
   ~(Permutation (cons 1 (cons 2 nil)) (cons 2 (cons 3 nil))).
 Proof.
-(*! proof *)
-
+unfold not.
+intro.
+inversion_clear H.
+inversion_clear H1.
+inversion_clear H.
+inversion_clear H1.
 Qed.
 
 (* exercise 9 *)
@@ -273,8 +320,16 @@ Qed.
 Lemma Permutation_123:
   Permutation (cons 1 (cons 2 (cons 3 nil))) (cons 3 (cons 2 (cons 1 nil))).
 Proof.
-(*! proof *)
-
+apply Permutation_cons with (cons 3 (cons 2 nil)).
+apply Permutation_cons with (cons 3 nil).
+apply Permutation_cons with nil.
+apply Permutation_nil.
+apply Inserted_front.
+apply Inserted_cons.
+apply Inserted_front.
+apply Inserted_cons.
+apply Inserted_cons.
+apply Inserted_front.
 Qed.
 
 (* exercise 10 *)
@@ -284,8 +339,12 @@ Qed.
 Lemma Permutation_refl :
   forall (l : natlist), Permutation l l.
 Proof.
-(*! proof *)
-
+intro.
+induction l.
+apply Permutation_nil.
+apply Permutation_cons with l.
+apply IHl.
+apply Inserted_front.
 Qed.
 
 (* We use an auxiliary notion.
@@ -306,8 +365,14 @@ Lemma Lowerbound_sorted :
   sorted l ->
   sorted (cons n l).
 Proof.
-(*! proof *)
-
+intros.
+induction l.
+apply sorted1.
+apply sorted2.
+Focus 2.
+exact H0.
+inversion_clear H.
+assumption.
 Qed.
 
 (* In the proof of the lemma sorted_Lowerbound we will use
@@ -322,8 +387,36 @@ Lemma sorted_Lowerbound :
   forall (l : natlist) (n : nat),
   sorted (cons n l) -> Lowerbound n l.
 Proof.
-(*! proof *)
+intros.
+inversion_clear H.
+apply Lowerbound_nil.
+apply Lowerbound_cons.
+exact H0.
+induction t.
+apply Lowerbound_nil.
+inversion_clear H1.
+apply Lowerbound_cons.
+apply le_trans with h.
+exact H0.
+exact H.
 
+apply IHt.
+
+Lemma foo: forall m n:nat, n <= m -> forall l : natlist, sorted (cons m l) -> sorted (cons n l).
+Proof.
+intros.
+inversion_clear H0.
+apply sorted1.
+apply sorted2.
+apply le_trans with m.
+exact H.
+exact H1.
+exact H2.
+Qed.
+
+apply foo with n0.
+exact H.
+exact H2.
 Qed.
 
 (* given *)
