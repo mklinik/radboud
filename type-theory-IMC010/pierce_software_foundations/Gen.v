@@ -224,7 +224,7 @@ _Proof_: Let [m] be a [nat]. We prove by induction on [m] that, for
     0].  There are two cases to consider for [n].  If [n = 0] we are
     done, since this is what we wanted to show.  Otherwise, if [n = S
     n'] for some [n'], we derive a contradiction: by the definition of
-    [double] we would have [n = S (S (double n'))], but this
+    [double] we would have [double n = S (S (double n'))], but this
     contradicts the assumption that [double n = 0].
 
   - Otherwise, suppose [m = S m'] and that [n] is again a number such
