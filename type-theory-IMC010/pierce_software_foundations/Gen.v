@@ -123,7 +123,7 @@ Proof.
        are doing a case analysis on [n], we need a case
        analysis on [m] to keep the two "in sync." *)
     destruct m as [| m'].
-    SCase "m = O". inversion eq.  (* The 0 case is trivial *)
+    SCase "m = O". discriminate. (* inversion eq. *) (* The 0 case is trivial *)
     SCase "m = S m'". 
       (* At this point, since we are in the second
          branch of the [destruct m], the [m'] mentioned
@@ -197,9 +197,9 @@ Proof.
   induction m as [| m'].
   Case "m = O". simpl. intros n eq. destruct n as [| n'].
     SCase "n = O". reflexivity.
-    SCase "n = S n'". inversion eq.
+    SCase "n = S n'". discriminate. (* inversion eq. *)
   Case "m = S m'". intros n eq. destruct n as [| n'].
-    SCase "n = O". inversion eq.
+    SCase "n = O". discriminate. (* inversion eq. *)
     SCase "n = S n'". 
       assert (n' = m') as H.
       SSCase "Proof of assertion". 
@@ -254,7 +254,18 @@ Theorem plus_n_n_injective_take2 : forall n m,
      n + n = m + m ->
      n = m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+induction n.
+Focus 2. destruct m.
+Focus 2. simpl. assert ((n + S n) = (S n + n)) as H. apply plus_comm. rewrite H. simpl.
+assert (m + S m = S m + m) as Hm. apply plus_comm. rewrite Hm. simpl.
+intro eq. inversion eq. apply IHn in H1. rewrite -> H1. reflexivity.
+intro m.
+destruct m.
+reflexivity.
+simpl. discriminate.
+simpl. discriminate.
+Qed.
+
 
 (** Now prove this by induction on [l]. *)
 
@@ -262,7 +273,12 @@ Theorem index_after_last: forall (n : nat) (X : Type) (l : list X),
      length l = n ->
      index (S n) l = None.
 Proof.
-  (* FILL IN HERE *) Admitted.
+induction l. generalize dependent n.
+simpl. destruct n. reflexivity. discriminate.
+generalize dependent n.
+induction n. discriminate. intros. inversion H.
+TOOD: continue here
+
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (index_after_last_informal) *)
