@@ -191,11 +191,10 @@ theStock =
 
 /* transitions preserve validity of model states */
 validity :: ModelState Input -> Property
-validity state input = validModelState state ==> and (map check (vendingMachineModel state input))
+validity state input = validModelState state ==> and (map checkTransition (vendingMachineModel state input))
 where
-  check transition = case transition of
-    Pt _ newState = validModelState newState
-    Ft f = True
+  checkTransition (Pt _ newState) = validModelState newState
+  checkTransition (Ft f) = True
 
 /* determines if a model state is valid, that is:
  *  - balance is >= 0
@@ -223,14 +222,13 @@ where
  *   value of source state + input = value of destination state + output
  */
 fairness :: ModelState Input -> Property
-fairness state input = validModelState state ==> and (map check (vendingMachineModel state input))
+fairness state input = validModelState state ==> and (map checkTransition (vendingMachineModel state input))
 where
-  check transition = case transition of
-    Pt outputs newState = oldTotal == newTotal
-      where
-        oldTotal = state.ModelState.balance + valueOfInput input
-        newTotal = newState.ModelState.balance + sum (map valueOfOutput outputs)
-    Ft f = True
+  checkTransition (Pt outputs newState) = oldTotal == newTotal
+    where
+      oldTotal = state.ModelState.balance + valueOfInput input
+      newTotal = newState.ModelState.balance + sum (map valueOfOutput outputs)
+  checkTransition (Ft f) = True
 
   valueOfOutput (Change coins) = sum (map unCoin coins)
   valueOfOutput (Product _ price) = price
@@ -242,11 +240,10 @@ where
  * stock
  */
 onlyStockProducts :: ModelState Input -> Property
-onlyStockProducts state input = validModelState state ==> and (map check (vendingMachineModel state input))
+onlyStockProducts state input = validModelState state ==> and (map checkTransition (vendingMachineModel state input))
 where
-  check transition = case transition of
-    Pt outputs _ = productsAreInStock outputs
-    Ft f = True
+  checkTransition (Pt outputs _) = productsAreInStock outputs
+  checkTransition (Ft f) = True
   productsAreInStock [(Product p _):rest] = productIsInStock p state.ModelState.stock && (productsAreInStock rest)
   productsAreInStock [_:rest] = productsAreInStock rest
   productsAreInStock [] = True
@@ -254,10 +251,20 @@ where
   productIsInStock product [stock:stocks] = product === stock.product || productIsInStock product stocks
   productIsInStock _ [] = False
 
+/* the Reset button only resets the digits, and leaves the balance untouched */
+resetButton :: ModelState -> Property
+resetButton state = validModelState state ==> and (map checkTransition (vendingMachineModel state ButtonReset))
+where
+  checkTransition (Pt _ newState) =
+          state.ModelState.balance == newState.ModelState.balance
+      &&  newState.ModelState.digitsEntered === (Nothing, Nothing)
+  checkTransition (Ft f) = True
+
 Start world =
   //testSM world
   //testn 5000 fairness
-  testn 5000 onlyStockProducts
+  //testn 5000 onlyStockProducts
+  test resetButton
   //testn 5000 [validity, fairness]
 
 /* === testing of the vending machine implementation against the model === */
