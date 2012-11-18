@@ -4,5 +4,8 @@ CLEAN_FLAGS_GAST=-I ~/clean-2.4/lib/StdLib -I ~/clean-2.4/lib/Gast -I ~/clean-2.
 assignment07klinik: assignment07klinik.icl
 	clm ${CLEAN_FLAGS_GAST} $@ -o $@
 
+assignment08klinik: assignment08klinik.icl
+	clm ${CLEAN_FLAGS_GAST} -b $@ -o $@
+
 %: %.icl
 	clm ${CLEAN_FLAGS} $@ -o $@
