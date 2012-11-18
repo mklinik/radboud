@@ -3,7 +3,7 @@ module assignment08klinik
 import StdEnv
 import gast
 
-/* === Model of the vending machine === */
+/* === Deliverable 1: model of the vending machine === */
 
 :: Input
   = C Coin
@@ -38,12 +38,12 @@ import gast
 unCoin (Coin c) = c
 
 vendingMachineModel :: ModelState Input -> [Trans Output ModelState]
-vendingMachineModel s (C (Coin coin)) = [insertCoin s]
+vendingMachineModel s (C (Coin coin)) = [insertCoin]
   where
-    insertCoin s =
+    insertCoin =
       if (s.ModelState.balance + coin < s.ModelState.balance)
          // don't accept new coins if it would lead to overflow
-         (Pt [Change [(Coin coin)]] s)
+         (Pt [Change [(Coin coin)]] s) // immediately return the original coin
          (Pt [] { ModelState | s & balance = s.ModelState.balance + coin })
 vendingMachineModel s ButtonReturn = [Ft (checkChange s)]
 vendingMachineModel s (D digit) = [Pt [] { ModelState | s & digitsEntered = enterDigit digit s.ModelState.digitsEntered }]
@@ -81,7 +81,7 @@ makePurchaseModel s =
 where
   meh = [Pt [] s]
 
-/* === Implementation of the vending machine === */
+/* === Deliverable 2: implementation of the vending machine === */
 
 // In my implementation, it is possible to make multiple purchases when the
 // balance is sufficient.  To get the change back, the user has to explicitly
@@ -106,9 +106,8 @@ derive bimap []
 
 coinSizes = [5, 10, 20, 50, 100, 200]
 
-/* Only two buttons for digits: 0 and 1. This, combined with three products in
- * stock should give a higher probability for successful purchases to occur in
- * tests.
+/* Only two buttons for digits: 0 and 1. This gives a higher probability for
+ * successful purchases to occur in tests.
  */
 ggen{|Digit|} n r = randomize (map Digit [0..1]) r 10 (const [])
 ggen{|Coin|} n r = randomize (map Coin coinSizes) r 10 (const [])
@@ -167,8 +166,9 @@ implStartState =
   }
 
 // Initially, we only have one item of each kind in stock.
-// When we pre-load two items of each kind, the case that a product is out of
+// When we pre-load more items of each kind, the case that a product is out of
 // stock never happens.
+// Remember: only Digits 0 or 1 are allowed
 theStock =
   [ { product = CaffeinatedBeverage
     , id = (Digit 0, Digit 1)
@@ -187,16 +187,19 @@ theStock =
     }
   ]
 
+
 /* === Properties for testing the model with Gast === */
 
-/* transitions preserve validity of model states */
+
+/* Transitions preserve validity of model states */
 validity :: ModelState Input -> Property
 validity state input = validModelState state ==> and (map checkTransition (vendingMachineModel state input))
 where
   checkTransition (Pt _ newState) = validModelState newState
-  checkTransition (Ft f) = True
+  checkTransition (Ft f) = True // I don't know what to do in this case
 
-/* determines if a model state is valid, that is:
+
+/* Determines if a model state is valid, that is:
  *  - balance is >= 0
  *  - prices of all products are > 0
  *  - quantities of products are >= 0
@@ -218,6 +221,7 @@ where
   validDigits (Nothing, Just _) = False
   validDigits _ = True
 
+
 /* The specification is fair iff for all possible transitions,
  *   value of source state + input = value of destination state + output
  */
@@ -231,12 +235,15 @@ where
   checkTransition (Ft f) = True
 
   valueOfOutput (Change coins) = sum (map unCoin coins)
+  // A product's price is part of the output for exactly this line.  It avoids
+  // having to search the stock for this product.
   valueOfOutput (Product _ price) = price
 
   valueOfInput (C (Coin coin)) = coin
   valueOfInput _ = 0 // only coin inputs have monetary values
 
-/* the model sells (i.e. has as outputs) only products which are actually in
+
+/* The model sells (i.e. has as outputs) only products which are actually in
  * stock
  */
 onlyStockProducts :: ModelState Input -> Property
@@ -251,7 +258,8 @@ where
   productIsInStock product [stock:stocks] = product === stock.product || productIsInStock product stocks
   productIsInStock _ [] = False
 
-/* the Reset button only resets the digits, and leaves the balance untouched */
+
+/* The Reset button only resets the digits, and leaves the balance untouched */
 resetButton :: ModelState -> Property
 resetButton state = validModelState state ==> and (map checkTransition (vendingMachineModel state ButtonReset))
 where
@@ -260,18 +268,19 @@ where
       &&  newState.ModelState.digitsEntered === (Nothing, Nothing)
   checkTransition (Ft f) = True
 
+
 Start world =
   //testSM world
-  //testn 5000 fairness
-  //testn 5000 onlyStockProducts
+  test validity ++
+  test fairness ++
+  test onlyStockProducts ++
   test resetButton
-  //testn 5000 [validity, fairness]
 
 /* === testing of the vending machine implementation against the model === */
 
 testSM world =
   testConfSM
-    [/*Ntests 1000*/] // test options
+    [/*Ntests 1000, */ MkTrace True] // test options
     vendingMachineModel // specification
     { ModelState // spec start state
     | stock = theStock
