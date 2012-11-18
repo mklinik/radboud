@@ -104,7 +104,11 @@ derive bimap []
 
 coinSizes = [5, 10, 20, 50, 100, 200]
 
-ggen{|Digit|} n r = randomize (map Digit [0..9]) r 10 (const [])
+/* Only two buttons for digits: 0 and 1. This, combined with three products in
+ * stock should give a higher probability for successful purchases to occur in
+ * tests.
+ */
+ggen{|Digit|} n r = randomize (map Digit [0..1]) r 10 (const [])
 ggen{|Coin|} n r = randomize (map Coin coinSizes) r 10 (const [])
 
 vendingMachine :: MachineState Input -> ([Output], MachineState)
@@ -169,17 +173,17 @@ implStartState =
 // same item is purchased thrice never happens.
 theStock =
   [ { product = CaffeinatedBeverage
-    , id = (Digit 0, Digit 0)
+    , id = (Digit 0, Digit 1)
     , price = 85
     , quantity = 1
     }
   , { product = EnergyBar
-    , id = (Digit 1, Digit 8)
+    , id = (Digit 1, Digit 0)
     , price = 120
-    , quantity = 1
+    , quantity = 0 // out of stock by default
     }
   , { product = Apple
-    , id = (Digit 4, Digit 2)
+    , id = (Digit 1, Digit 1)
     , price = 5
     , quantity = 1
     }
