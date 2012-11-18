@@ -33,8 +33,16 @@ import gast
 :: Coin = Coin Int
 :: Digit = Digit Int
 
+unCoin (Coin c) = c
+
 vendingMachineModel :: ModelState Input -> [Trans Output ModelState]
-vendingMachineModel s (C (Coin coin)) = [Pt [] { ModelState | s & balance = s.ModelState.balance + coin }]
+vendingMachineModel s (C (Coin coin)) = [insertCoin s]
+  where
+    insertCoin s =
+      if (s.ModelState.balance + coin < s.ModelState.balance)
+         // don't accept new coins if it would lead to overflow
+         (Pt [Change [(Coin coin)]] s)
+         (Pt [] { ModelState | s & balance = s.ModelState.balance + coin })
 vendingMachineModel s ButtonReturn = [Ft (checkChange s)]
 vendingMachineModel s (D digit) = [Pt [] { ModelState | s & digitsEntered = enterDigit digit s.ModelState.digitsEntered }]
 vendingMachineModel s ButtonReset = [Pt [] { ModelState | s & digitsEntered = (Nothing, Nothing) }]
@@ -182,12 +190,19 @@ theStock =
 /* The specification is fair iff for all possible transitions,
  *   value of source state + input = value of destination state + output
  */
-fairness :: ModelState Input -> Bool
-fairness state input = check (vendingMachineModel state input)
+fairness :: ModelState Input -> Property
+fairness state input = validModelState state ==> prop (and (map check (vendingMachineModel state input)))
 where
-  check [] = True
-  check [s:ss] = case s of
-    _ = True
+  check transition = case transition of
+    Pt outputs newState = oldTotal == newTotal
+      where
+        oldTotal = state.ModelState.balance + valueOfInput input
+        newTotal = newState.ModelState.balance + sum (map valueOfOutput outputs)
+    Ft f = True
+  valueOfOutput (Change coins) = sum (map unCoin coins)
+  valueOfOutput _ = 0
+  valueOfInput (C (Coin coin)) = coin
+  valueOfInput _ = 0
 
 /* transitions preserve validity of model states */
 validity :: ModelState Input -> Property
@@ -219,9 +234,7 @@ where
   validDigits (Nothing, Just (Digit _)) = False
   validDigits _ = True
 
-Start world = test validity
-
-// exhaustive hello world
-uncoin (Coin c) = c
-isCoinSize c = isMember c coinSizes
-//Start = test (isCoinSize o uncoin)
+Start world = test
+  [ validity
+  , fairness
+  ]

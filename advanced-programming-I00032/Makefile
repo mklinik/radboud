@@ -5,7 +5,7 @@ assignment07klinik: assignment07klinik.icl
 	clm ${CLEAN_FLAGS_GAST} $@ -o $@
 
 assignment08klinik: assignment08klinik.icl
-	clm ${CLEAN_FLAGS_GAST} -b $@ -o $@
+	clm ${CLEAN_FLAGS_GAST} -h 10M -b $@ -o $@
 
 %: %.icl
 	clm ${CLEAN_FLAGS} $@ -o $@
