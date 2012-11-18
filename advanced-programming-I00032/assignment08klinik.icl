@@ -201,10 +201,12 @@ where
         oldTotal = state.ModelState.balance + valueOfInput input
         newTotal = newState.ModelState.balance + sum (map valueOfOutput outputs)
     Ft f = True
+
   valueOfOutput (Change coins) = sum (map unCoin coins)
   valueOfOutput (Product _ price) = price
+
   valueOfInput (C (Coin coin)) = coin
-  valueOfInput _ = 0
+  valueOfInput _ = 0 // only coin inputs have monetary values
 
 /* transitions preserve validity of model states */
 validity :: ModelState Input -> Property
@@ -237,5 +239,20 @@ where
   validDigits _ = True
 
 Start world =
-  testn 5000 fairness
-  //testn 5000 [validity, fairness ]
+  testSM world
+  //testn 5000 fairness
+  //testn 5000 [[>validity,<] fairness]
+
+testSM world =
+  testConfSM
+    [Ntests 1000] // test options
+    vendingMachineModel // specification
+    { ModelState // spec start state
+    | stock = theStock
+    , balance = 0
+    , digitsEntered = (Nothing, Nothing)
+    }
+    vendingMachine // implementation
+    implStartState // implementation start state
+    (const implStartState) // reset function
+    world
