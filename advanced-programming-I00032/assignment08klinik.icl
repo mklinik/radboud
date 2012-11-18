@@ -12,7 +12,9 @@ import gast
   | ButtonOk // purchase selected product
   | ButtonReturn  // cancel purchase and return all money
 
-:: Output = Change [Coin] | Product Product
+:: Output
+  = Change [Coin]
+  | Product Product Int // for testing, we include how much the product costs
 
 :: ModelState =
   { balance :: Int
@@ -67,7 +69,7 @@ makePurchaseModel s =
       // ... and these digits correspond to a product in stock ...
       (Just stockProduct) = if (s.ModelState.balance >= stockProduct.price)
         // ... and the user has inserted enough money
-        [Pt [Product stockProduct.product] // then: return the product,
+        [Pt [Product stockProduct.product stockProduct.price] // then: return the product,
           { ModelState | s
           & balance = s.ModelState.balance - stockProduct.price // reduce the balance,
           , digitsEntered = (Nothing, Nothing) // and clear the entered digits
@@ -120,9 +122,10 @@ vendingMachine s ButtonOk        = makePurchase s
 
 // makeChange returns all the change as one big fat custom coin of exactly that
 // amount, because tracking the machine's coins and giving exact change is
-// HARD.  The case where the machine doesn't spit out a product because of
-// insufficient change is already covered by the one non-deterministic case of
-// the model, so this wouldn't even be interesting from a testing standpoint.
+// tedious and not very enlightening.  The case where the machine doesn't spit
+// out a product because of insufficient change is already covered by the one
+// non-deterministic case of the model, so this wouldn't even be interesting
+// from a testing standpoint.
 makeChange :: Int -> [Coin]
 makeChange amount = [Coin amount]
 
@@ -134,7 +137,7 @@ makePurchase s =
       // ... and these digits correspond to a product in stock ...
       (Just stockProduct) = if (s.MachineState.balance >= stockProduct.price && stockProduct.quantity > 0)
         // ... and the user has inserted enough money, and there is at least one such product in stock
-        ([Product stockProduct.product] // then: return the product,
+        ([Product stockProduct.product stockProduct.price] // then: return the product,
         , { MachineState | s
           & balance = s.MachineState.balance - stockProduct.price // reduce the balance,
           , digitsEntered = (Nothing, Nothing) // clear the entered digits,
@@ -156,11 +159,6 @@ updateStock :: (Digit, Digit) (StockProduct -> StockProduct) [StockProduct] -> [
 updateStock _ _ [] = []
 updateStock id f [p:ps] = if (p.id === id) [f p : ps] [p : updateStock id f ps]
 
-(step) infixl :: ([Output], MachineState) Input -> ([Output], MachineState)
-(step) (_, s) i = vendingMachine s i
-
-Start2 = vendingMachine implStartState (D (Digit 4)) step (D (Digit 2)) step (C (Coin 5)) step ButtonOk
-
 implStartState =
   { MachineState
   | balance = 0
@@ -169,8 +167,8 @@ implStartState =
   }
 
 // Initially, we only have one item of each kind in stock.
-// Interestingly, when we pre-load two items of each kind, the case that the
-// same item is purchased thrice never happens.
+// When we pre-load two items of each kind, the case that a product is out of
+// stock never happens.
 theStock =
   [ { product = CaffeinatedBeverage
     , id = (Digit 0, Digit 1)
@@ -195,7 +193,7 @@ theStock =
  *   value of source state + input = value of destination state + output
  */
 fairness :: ModelState Input -> Property
-fairness state input = validModelState state ==> prop (and (map check (vendingMachineModel state input)))
+fairness state input = validModelState state ==> and (map check (vendingMachineModel state input))
 where
   check transition = case transition of
     Pt outputs newState = oldTotal == newTotal
@@ -204,7 +202,7 @@ where
         newTotal = newState.ModelState.balance + sum (map valueOfOutput outputs)
     Ft f = True
   valueOfOutput (Change coins) = sum (map unCoin coins)
-  valueOfOutput _ = 0
+  valueOfOutput (Product _ price) = price
   valueOfInput (C (Coin coin)) = coin
   valueOfInput _ = 0
 
@@ -235,10 +233,9 @@ validModelState state =
       , validDigits state.ModelState.digitsEntered
       ]
 where
-  validDigits (Nothing, Just (Digit _)) = False
+  validDigits (Nothing, Just _) = False
   validDigits _ = True
 
-Start world = test
-  [ validity
-  , fairness
-  ]
+Start world =
+  testn 5000 fairness
+  //testn 5000 [validity, fairness ]
