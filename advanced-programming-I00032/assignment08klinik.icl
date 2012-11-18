@@ -187,26 +187,7 @@ theStock =
     }
   ]
 
-/* === testing of the vending machine implementation against the model === */
-
-/* The specification is fair iff for all possible transitions,
- *   value of source state + input = value of destination state + output
- */
-fairness :: ModelState Input -> Property
-fairness state input = validModelState state ==> and (map check (vendingMachineModel state input))
-where
-  check transition = case transition of
-    Pt outputs newState = oldTotal == newTotal
-      where
-        oldTotal = state.ModelState.balance + valueOfInput input
-        newTotal = newState.ModelState.balance + sum (map valueOfOutput outputs)
-    Ft f = True
-
-  valueOfOutput (Change coins) = sum (map unCoin coins)
-  valueOfOutput (Product _ price) = price
-
-  valueOfInput (C (Coin coin)) = coin
-  valueOfInput _ = 0 // only coin inputs have monetary values
+/* === Properties for testing the model with Gast === */
 
 /* transitions preserve validity of model states */
 validity :: ModelState Input -> Property
@@ -238,14 +219,52 @@ where
   validDigits (Nothing, Just _) = False
   validDigits _ = True
 
+/* The specification is fair iff for all possible transitions,
+ *   value of source state + input = value of destination state + output
+ */
+fairness :: ModelState Input -> Property
+fairness state input = validModelState state ==> and (map check (vendingMachineModel state input))
+where
+  check transition = case transition of
+    Pt outputs newState = oldTotal == newTotal
+      where
+        oldTotal = state.ModelState.balance + valueOfInput input
+        newTotal = newState.ModelState.balance + sum (map valueOfOutput outputs)
+    Ft f = True
+
+  valueOfOutput (Change coins) = sum (map unCoin coins)
+  valueOfOutput (Product _ price) = price
+
+  valueOfInput (C (Coin coin)) = coin
+  valueOfInput _ = 0 // only coin inputs have monetary values
+
+/* the model sells (i.e. has as outputs) only products which are actually in
+ * stock
+ */
+onlyStockProducts :: ModelState Input -> Property
+onlyStockProducts state input = validModelState state ==> and (map check (vendingMachineModel state input))
+where
+  check transition = case transition of
+    Pt outputs _ = productsAreInStock outputs
+    Ft f = True
+  productsAreInStock [(Product p _):rest] = productIsInStock p state.ModelState.stock && (productsAreInStock rest)
+  productsAreInStock [_:rest] = productsAreInStock rest
+  productsAreInStock [] = True
+
+  productIsInStock product [stock:stocks] = product === stock.product || productIsInStock product stocks
+  productIsInStock _ [] = False
+
 Start world =
-  testSM world
+  //testSM world
   //testn 5000 fairness
-  //testn 5000 [[>validity,<] fairness]
+  testn 5000 onlyStockProducts
+  //testn 5000 [validity, fairness]
+
+/* === testing of the vending machine implementation against the model === */
 
 testSM world =
   testConfSM
-    [Ntests 1000] // test options
+    [/*Ntests 1000*/] // test options
     vendingMachineModel // specification
     { ModelState // spec start state
     | stock = theStock
