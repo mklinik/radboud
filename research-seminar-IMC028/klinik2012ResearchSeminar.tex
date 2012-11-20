@@ -3,16 +3,57 @@
 %\usepackage[square]{natbib}
 \begin{document}
 
-\title{A Domain for the New Naturals}
+\title{A domain for the New Naturals}
 \author{Markus Klinik}
 \maketitle
 
-%\begin{abstract}
-%blah blah blah
-%\end{abstract}
+\begin{abstract}
+Lorem ipsum.
+\end{abstract}
 
-\cite{Pierce1991} \cite{Gunter1992} \cite{Bird1997} \cite{Mitchell1996}
-\cite{Allison1986} \cite{Capretta2002}
+\section{What are the New Naturals?}
+
+\begin{itemize}
+\item Explain inductive data types, F-algebras.
+\item Give Examples.
+\item Explain coinductive data types, F-coalgebras.
+\item Give Examples.
+\item The New Naturals are the coinductive data type associated with the
+functor $F(X) = 1 + X + X$.
+\end{itemize}
+
+\section{What is a domain?}
+
+\begin{itemize}
+\item A CPO with a least element.
+\end{itemize}
+
+\section{Why do we want a domain for the New Naturals?}
+
+\begin{itemize}
+\item We want to use the New Naturals in a programming language.
+\item We want to be able to reason about this programming language.
+\item One way to reason about a programming language is to give it a
+denotational semantics and then reason about that.
+\item In order to do this, every language construct needs a corresponding
+construct in the domain.
+\end{itemize}
+
+\section{A domain for the New Naturals}
+
+Here be dragons.
+
+\section{Further directions}
+
+\begin{itemize}
+\item Embed the New Naturals into some coinductive PCF.
+\item Analyze if the domain integrates nicely (or at all).
+\end{itemize}
+
+\section{Bibliographic notes}
+
+Lorem ipsum \cite{Pierce1991} \cite{Gunter1992} \cite{Bird1997}
+\cite{Mitchell1996} \cite{Allison1986} \cite{Capretta2002}
 
 \bibliographystyle{plain}
 \bibliography{computer_science}
