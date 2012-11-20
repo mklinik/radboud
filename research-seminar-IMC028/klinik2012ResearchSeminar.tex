@@ -25,18 +25,36 @@ functor $F(X) = 1 + X + X$.
 \section{What is a domain?}
 
 \begin{itemize}
-\item A CPO with a least element.
+\item A domain is a CPO with a least element.
+\item And what is a CPO?  A partial order where every chain has a least upper bound.
+
+\item Finding a domain for the New Naturals means finding a suitable CPO
+together with a mapping from the New Naturals to that CPO.
+
+\item We then need to prove that the given construction is indeed a CPO with
+least element.
+
 \end{itemize}
 
 \section{Why do we want a domain for the New Naturals?}
 
 \begin{itemize}
+
 \item We want to use the New Naturals in a programming language.
+
 \item We want to be able to reason about this programming language.
+
 \item One way to reason about a programming language is to give it a
 denotational semantics and then reason about that.
+
 \item In order to do this, every language construct needs a corresponding
-construct in the domain.
+construct in the denotational semantics.
+
+\item Just because we define something, doesn't mean it exists.  Think halting
+problem, think Russel's paradox. If we manage to let programs denote domains,
+we can apply Tarski's fixed point theorem to be sure that every program has
+indeed a valid denotation.
+
 \end{itemize}
 
 \section{A domain for the New Naturals}
@@ -47,7 +65,10 @@ Here be dragons.
 
 \begin{itemize}
 \item Embed the New Naturals into some coinductive PCF.
-\item Analyze if the domain integrates nicely (or at all).
+\item Analyze if the domain composes nicely (or at all) with the other
+denotations.
+\item Can we generalize the construction of the domain to arbitrary
+F-coalgebras?
 \end{itemize}
 
 \section{Bibliographic notes}
