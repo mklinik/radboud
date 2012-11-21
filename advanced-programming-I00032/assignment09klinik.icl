@@ -98,9 +98,9 @@ evaluatePrimitive :: Prim [Expr] State Funs -> Expr
 
 evaluatePrimitive IF [condition:then:else:_] env funs = E (if (unBool $ E condition env funs) then else) env funs
 
-evaluatePrimitive +. actualParameters env funs = evalAndFold sum           actualParameters env funs
-evaluatePrimitive *. actualParameters env funs = evalAndFold prod          actualParameters env funs
-evaluatePrimitive -. actualParameters env funs = evalAndFold (foldr (-) 0) actualParameters env funs
+evaluatePrimitive +. actualParameters env funs = evalAndFoldInts sum           actualParameters env funs
+evaluatePrimitive *. actualParameters env funs = evalAndFoldInts prod          actualParameters env funs
+evaluatePrimitive -. actualParameters env funs = evalAndFoldInts (foldr (-) 0) actualParameters env funs
 
 evaluatePrimitive <. [x:y:_] env funs = Bool (valueX < valueY)
   where valueX = unInt $ E x env funs
@@ -111,7 +111,7 @@ evaluatePrimitive NOT [b:_] env funs = Bool $ not $ unBool $ E b env funs
 
 // Assume that all actualParameters are integers. Evaluate them, unwrap their
 // value, fold them with the given function, then wrap them again
-evalAndFold fold actualParameters env funs = Int $ fold $ map unInt $ map (\x -> E x env funs) actualParameters
+evalAndFoldInts fold actualParameters env funs = Int $ fold $ map unInt $ map (\x -> E x env funs) actualParameters
 
 
 Ds :: [Def] -> Expr
@@ -137,9 +137,9 @@ Start
   , name "E on Ints is the identity" $ \x -> E (Int x) newEnv newEnv === Int x
   , name "E on Bools is the identity" $ \x -> E (Bool x) newEnv newEnv === Bool x
 
-  , name "E looks up a variable" $ E (Var (VI "x")) (("x" |-> Int 42) newEnv) newEnv === (Int 42)
+  , name "E looks up a variable" $ E (Var (VI "x")) (("x" |-> Int 42) newEnv) newEnv === Int 42
   , name "E looks up and evaluates the function which returns constant 42" $
-      E (Fun (FI "const42")) newEnv (("const42" |-> CONST42) newEnv) === (Int 42)
+      E (Fun (FI "const42")) newEnv (("const42" |-> CONST42) newEnv) === Int 42
 
   , name "id 7 == 7" $ E (Ap (Fun (FI "id")) [Int 7]) newEnv (("id" |-> ID) newEnv) === Int 7
   , name "(+) 3 5 == 8" $ E (Ap (Prim +.) [Int 3, Int 5]) newEnv newEnv === Int 8
