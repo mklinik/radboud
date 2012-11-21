@@ -123,22 +123,22 @@ Ds defs = E (Ap (Fun (FI "Start")) []) newEnv funs
 /* === arithmetic expressions with only constant integers, +, * and - === */
 
 :: ClosedIntegerExpression
-  = SAConst Int
-  | SAAdd ClosedIntegerExpression ClosedIntegerExpression
-  | SASub ClosedIntegerExpression ClosedIntegerExpression
-  | SAMul ClosedIntegerExpression ClosedIntegerExpression
-  | SAIf ClosedBoolExpression ClosedIntegerExpression ClosedIntegerExpression
+  = CIConst Int
+  | CIAdd ClosedIntegerExpression ClosedIntegerExpression
+  | CISub ClosedIntegerExpression ClosedIntegerExpression
+  | CIMul ClosedIntegerExpression ClosedIntegerExpression
+  | CIIf ClosedBoolExpression ClosedIntegerExpression ClosedIntegerExpression
 
 derive ggen ClosedIntegerExpression
 derive genShow ClosedIntegerExpression
 
 // converts a ClosedIntegerExpression to the corresponding expression in our programming language
 closedIEtoExpr :: ClosedIntegerExpression -> Expr
-closedIEtoExpr (SAConst i) = Int i
-closedIEtoExpr (SAAdd lhs rhs) = Infix (closedIEtoExpr lhs) +. (closedIEtoExpr rhs)
-closedIEtoExpr (SASub lhs rhs) = Infix (closedIEtoExpr lhs) -. (closedIEtoExpr rhs)
-closedIEtoExpr (SAMul lhs rhs) = Infix (closedIEtoExpr lhs) *. (closedIEtoExpr rhs)
-closedIEtoExpr (SAIf condition then else) = Ap (Prim IF) [c, t, e]
+closedIEtoExpr (CIConst i) = Int i
+closedIEtoExpr (CIAdd lhs rhs) = Infix (closedIEtoExpr lhs) +. (closedIEtoExpr rhs)
+closedIEtoExpr (CISub lhs rhs) = Infix (closedIEtoExpr lhs) -. (closedIEtoExpr rhs)
+closedIEtoExpr (CIMul lhs rhs) = Infix (closedIEtoExpr lhs) *. (closedIEtoExpr rhs)
+closedIEtoExpr (CIIf condition then else) = Ap (Prim IF) [c, t, e]
   where
     c = closedBEtoExpr condition
     t = closedIEtoExpr then
@@ -146,19 +146,19 @@ closedIEtoExpr (SAIf condition then else) = Ap (Prim IF) [c, t, e]
 
 
 :: ClosedBoolExpression
-  = SBConst Bool
-  | SBSmallerThan ClosedIntegerExpression ClosedIntegerExpression
-  | SBNegation ClosedBoolExpression
-  | SBIf ClosedBoolExpression ClosedBoolExpression ClosedBoolExpression
+  = CBConst Bool
+  | CBSmallerThan ClosedIntegerExpression ClosedIntegerExpression
+  | CBNegation ClosedBoolExpression
+  | CBIf ClosedBoolExpression ClosedBoolExpression ClosedBoolExpression
 
 derive ggen ClosedBoolExpression
 derive genShow ClosedBoolExpression
 
 closedBEtoExpr :: ClosedBoolExpression -> Expr
-closedBEtoExpr (SBConst b) = Bool b
-closedBEtoExpr (SBSmallerThan lhs rhs) = Infix (closedIEtoExpr lhs) <. (closedIEtoExpr rhs)
-closedBEtoExpr (SBNegation e) = Ap (Prim NOT) [closedBEtoExpr e]
-closedBEtoExpr (SBIf condition then else) = Ap (Prim IF) [c, t, e]
+closedBEtoExpr (CBConst b) = Bool b
+closedBEtoExpr (CBSmallerThan lhs rhs) = Infix (closedIEtoExpr lhs) <. (closedIEtoExpr rhs)
+closedBEtoExpr (CBNegation e) = Ap (Prim NOT) [closedBEtoExpr e]
+closedBEtoExpr (CBIf condition then else) = Ap (Prim IF) [c, t, e]
   where
     c = closedBEtoExpr condition
     t = closedBEtoExpr then
