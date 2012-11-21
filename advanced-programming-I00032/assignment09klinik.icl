@@ -114,7 +114,9 @@ evalAndFold fold actualParameters env funs = Int $ fold $ map unInt $ map (\x ->
 
 
 Ds :: [Def] -> Expr
-Ds defs = abort "Ds not proprly defined"  // to be improved
+Ds defs = E (Ap (Fun (FI "Start")) []) newEnv funs
+  where
+    funs = foldl (\env def=:(Def name _ _) -> (name |-> def) env) newEnv defs
 
 /********************** instances of generic functions for gast **********************/
 
@@ -160,11 +162,11 @@ Start
   , prop $ E (Ap (Fun (FI "fac")) [Int 2]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 2
   , prop $ E (Ap (Fun (FI "fac")) [Int 3]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 6
   //, prop $ E (Ap (Fun (FI "twice")) [Fun (FI "inc"),Int 0]) newEnv (("inc" |-> INC) (("twice" |-> TWICE) newEnv)) === Int 3 // higher order
-  //, prop $ Ds [start0  :defs] === Int 42
-  //, prop $ Ds [start1 1:defs] === Int 1
-  //, prop $ Ds [start1 2:defs] === Int 2
-  //, prop $ Ds [start1 3:defs] === Int 6
-  //, prop $ Ds [start1 4:defs] === Int 24
+  , prop $ Ds [start0  :defs] === Int 42
+  , prop $ Ds [start1 1:defs] === Int 1
+  , prop $ Ds [start1 2:defs] === Int 2
+  , prop $ Ds [start1 3:defs] === Int 6
+  , prop $ Ds [start1 4:defs] === Int 24
   ]
 
 start0   = Def "Start" [] (Int 42)
