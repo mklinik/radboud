@@ -119,6 +119,25 @@ Ds defs = E (Ap (Fun (FI "Start")) []) newEnv funs
   where
     funs = foldl (\env def=:(Def name _ _) -> (name |-> def) env) newEnv defs
 
+
+/* === arithmetic expressions with only constant integers, +, * and - === */
+
+:: SimpleArithmeticExpression
+  = Const Int
+  | Add SimpleArithmeticExpression SimpleArithmeticExpression
+  | Sub SimpleArithmeticExpression SimpleArithmeticExpression
+  | Mul SimpleArithmeticExpression SimpleArithmeticExpression
+
+derive ggen SimpleArithmeticExpression
+derive genShow SimpleArithmeticExpression
+
+// converts a SimpleArithmeticExpression to the corresponding expression in our programming language
+simpleAEtoExpr :: SimpleArithmeticExpression -> Expr
+simpleAEtoExpr (Const i) = Int i
+simpleAEtoExpr (Add lhs rhs) = Infix (simpleAEtoExpr lhs) +. (simpleAEtoExpr rhs)
+simpleAEtoExpr (Sub lhs rhs) = Infix (simpleAEtoExpr lhs) -. (simpleAEtoExpr rhs)
+simpleAEtoExpr (Mul lhs rhs) = Infix (simpleAEtoExpr lhs) *. (simpleAEtoExpr rhs)
+
 /********************** instances of generic functions for gast **********************/
 
 derive gEq    Expr, Prim, Def, Var, Fun
@@ -168,7 +187,24 @@ Start
   , prop $ Ds [start1 2:defs] === Int 2
   , prop $ Ds [start1 3:defs] === Int 6
   , prop $ Ds [start1 4:defs] === Int 24
+
+  , name "equivalence of prefix and infix notation for operators" prefixInfixEquivalence
+  , name "evaluation of simple arithmetic expressions always yields an integer value" evalSimpleAEyieldsInt
   ]
+
+prefixInfixEquivalence :: Int Int -> Property
+prefixInfixEquivalence x y = ForEach [+., -., *.]
+  (\prim ->
+    E (Ap (Prim prim) [Int x, Int y]) newEnv newEnv
+    ===
+    E (Infix (Int x) prim (Int y)) newEnv newEnv
+  )
+
+evalSimpleAEyieldsInt :: SimpleArithmeticExpression -> Bool
+evalSimpleAEyieldsInt e =
+  case E (simpleAEtoExpr e) newEnv newEnv of
+    (Int _) = True
+    = False
 
 start0   = Def "Start" [] (Int 42)
 start1 i = Def "Start" [] (Ap (Fun (FI "fac")) [Int i])
