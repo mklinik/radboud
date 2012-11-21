@@ -122,21 +122,47 @@ Ds defs = E (Ap (Fun (FI "Start")) []) newEnv funs
 
 /* === arithmetic expressions with only constant integers, +, * and - === */
 
-:: SimpleArithmeticExpression
-  = Const Int
-  | Add SimpleArithmeticExpression SimpleArithmeticExpression
-  | Sub SimpleArithmeticExpression SimpleArithmeticExpression
-  | Mul SimpleArithmeticExpression SimpleArithmeticExpression
+:: ClosedIntegerExpression
+  = SAConst Int
+  | SAAdd ClosedIntegerExpression ClosedIntegerExpression
+  | SASub ClosedIntegerExpression ClosedIntegerExpression
+  | SAMul ClosedIntegerExpression ClosedIntegerExpression
+  | SAIf ClosedBoolExpression ClosedIntegerExpression ClosedIntegerExpression
 
-derive ggen SimpleArithmeticExpression
-derive genShow SimpleArithmeticExpression
+derive ggen ClosedIntegerExpression
+derive genShow ClosedIntegerExpression
 
-// converts a SimpleArithmeticExpression to the corresponding expression in our programming language
-simpleAEtoExpr :: SimpleArithmeticExpression -> Expr
-simpleAEtoExpr (Const i) = Int i
-simpleAEtoExpr (Add lhs rhs) = Infix (simpleAEtoExpr lhs) +. (simpleAEtoExpr rhs)
-simpleAEtoExpr (Sub lhs rhs) = Infix (simpleAEtoExpr lhs) -. (simpleAEtoExpr rhs)
-simpleAEtoExpr (Mul lhs rhs) = Infix (simpleAEtoExpr lhs) *. (simpleAEtoExpr rhs)
+// converts a ClosedIntegerExpression to the corresponding expression in our programming language
+closedAEtoExpr :: ClosedIntegerExpression -> Expr
+closedAEtoExpr (SAConst i) = Int i
+closedAEtoExpr (SAAdd lhs rhs) = Infix (closedAEtoExpr lhs) +. (closedAEtoExpr rhs)
+closedAEtoExpr (SASub lhs rhs) = Infix (closedAEtoExpr lhs) -. (closedAEtoExpr rhs)
+closedAEtoExpr (SAMul lhs rhs) = Infix (closedAEtoExpr lhs) *. (closedAEtoExpr rhs)
+closedAEtoExpr (SAIf condition then else) = Ap (Prim IF) [c, t, e]
+  where
+    c = closedBEtoExpr condition
+    t = closedAEtoExpr then
+    e = closedAEtoExpr else
+
+
+:: ClosedBoolExpression
+  = SBConst Bool
+  | SBSmallerThan ClosedIntegerExpression ClosedIntegerExpression
+  | SBNegation ClosedBoolExpression
+  | SBIf ClosedBoolExpression ClosedBoolExpression ClosedBoolExpression
+
+derive ggen ClosedBoolExpression
+derive genShow ClosedBoolExpression
+
+closedBEtoExpr :: ClosedBoolExpression -> Expr
+closedBEtoExpr (SBConst b) = Bool b
+closedBEtoExpr (SBSmallerThan lhs rhs) = Infix (closedAEtoExpr lhs) <. (closedAEtoExpr rhs)
+closedBEtoExpr (SBNegation e) = Ap (Prim NOT) [closedBEtoExpr e]
+closedBEtoExpr (SBIf condition then else) = Ap (Prim IF) [c, t, e]
+  where
+    c = closedBEtoExpr condition
+    t = closedBEtoExpr then
+    e = closedBEtoExpr else
 
 /********************** instances of generic functions for gast **********************/
 
@@ -189,7 +215,8 @@ Start
   , prop $ Ds [start1 4:defs] === Int 24
 
   , name "equivalence of prefix and infix notation for operators" prefixInfixEquivalence
-  , name "evaluation of simple arithmetic expressions always yields an integer value" evalSimpleAEyieldsInt
+  , name "evaluation of simple arithmetic expressions always yields an integer value" evalClosedAEyieldsInt
+  , name "evaluation of simple boolean expressions always yields an integer value" evalClosedBEyieldsBool
   ]
 
 prefixInfixEquivalence :: Int Int -> Property
@@ -200,10 +227,16 @@ prefixInfixEquivalence x y = ForEach [+., -., *.]
     E (Infix (Int x) prim (Int y)) newEnv newEnv
   )
 
-evalSimpleAEyieldsInt :: SimpleArithmeticExpression -> Bool
-evalSimpleAEyieldsInt e =
-  case E (simpleAEtoExpr e) newEnv newEnv of
+evalClosedAEyieldsInt :: ClosedIntegerExpression -> Bool
+evalClosedAEyieldsInt e =
+  case E (closedAEtoExpr e) newEnv newEnv of
     (Int _) = True
+    = False
+
+evalClosedBEyieldsBool :: ClosedBoolExpression -> Bool
+evalClosedBEyieldsBool e =
+  case E (closedBEtoExpr e) newEnv newEnv of
+    (Bool _) = True
     = False
 
 start0   = Def "Start" [] (Int 42)
