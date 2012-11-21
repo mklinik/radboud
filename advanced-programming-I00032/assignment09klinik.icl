@@ -120,51 +120,70 @@ Ds defs = E (Ap (Fun (FI "Start")) []) newEnv funs
     funs = foldl (\env def=:(Def name _ _) -> (name |-> def) env) newEnv defs
 
 
-/* === closed expressions of type Int === */
+/* === expressions of type Int === */
 
-:: ClosedIntegerExpression
+:: IntegerExpression
   = CIConst Int
-  | CIAdd ClosedIntegerExpression ClosedIntegerExpression
-  | CISub ClosedIntegerExpression ClosedIntegerExpression
-  | CIMul ClosedIntegerExpression ClosedIntegerExpression
-  | CIIf ClosedBoolExpression ClosedIntegerExpression ClosedIntegerExpression
+  | CIVar Ident
+  | CIAdd IntegerExpression IntegerExpression
+  | CISub IntegerExpression IntegerExpression
+  | CIMul IntegerExpression IntegerExpression
+  | CIIf BoolExpression IntegerExpression IntegerExpression
 
-derive ggen ClosedIntegerExpression
-derive genShow ClosedIntegerExpression
+derive ggen IntegerExpression
+derive genShow IntegerExpression
 
-// converts a ClosedIntegerExpression to the corresponding expression in our programming language
-closedIEtoExpr :: ClosedIntegerExpression -> Expr
-closedIEtoExpr (CIConst i) = Int i
-closedIEtoExpr (CIAdd lhs rhs) = Infix (closedIEtoExpr lhs) +. (closedIEtoExpr rhs)
-closedIEtoExpr (CISub lhs rhs) = Infix (closedIEtoExpr lhs) -. (closedIEtoExpr rhs)
-closedIEtoExpr (CIMul lhs rhs) = Infix (closedIEtoExpr lhs) *. (closedIEtoExpr rhs)
-closedIEtoExpr (CIIf condition then else) = Ap (Prim IF) [c, t, e]
+// converts a IntegerExpression to the corresponding expression in our programming language
+intExprToExpr :: IntegerExpression -> Expr
+intExprToExpr (CIConst i) = Int i
+intExprToExpr (CIVar name) = Var (VI ("i" +++ name)) // prefix name with "i" to avoid name clashes with boolean variables
+intExprToExpr (CIAdd lhs rhs) = Infix (intExprToExpr lhs) +. (intExprToExpr rhs)
+intExprToExpr (CISub lhs rhs) = Infix (intExprToExpr lhs) -. (intExprToExpr rhs)
+intExprToExpr (CIMul lhs rhs) = Infix (intExprToExpr lhs) *. (intExprToExpr rhs)
+intExprToExpr (CIIf condition then else) = Ap (Prim IF) [c, t, e]
   where
-    c = closedBEtoExpr condition
-    t = closedIEtoExpr then
-    e = closedIEtoExpr else
+    c = boolExprToExpr condition
+    t = intExprToExpr then
+    e = intExprToExpr else
 
 
-/* === closed expressions of type Bool === */
+/* === expressions of type Bool === */
 
-:: ClosedBoolExpression
+:: BoolExpression
   = CBConst Bool
-  | CBSmallerThan ClosedIntegerExpression ClosedIntegerExpression
-  | CBNegation ClosedBoolExpression
-  | CBIf ClosedBoolExpression ClosedBoolExpression ClosedBoolExpression
+  | CBVar Ident
+  | CBSmallerThan IntegerExpression IntegerExpression
+  | CBNegation BoolExpression
+  | CBIf BoolExpression BoolExpression BoolExpression
 
-derive ggen ClosedBoolExpression
-derive genShow ClosedBoolExpression
+derive ggen BoolExpression
+derive genShow BoolExpression
 
-closedBEtoExpr :: ClosedBoolExpression -> Expr
-closedBEtoExpr (CBConst b) = Bool b
-closedBEtoExpr (CBSmallerThan lhs rhs) = Infix (closedIEtoExpr lhs) <. (closedIEtoExpr rhs)
-closedBEtoExpr (CBNegation e) = Ap (Prim NOT) [closedBEtoExpr e]
-closedBEtoExpr (CBIf condition then else) = Ap (Prim IF) [c, t, e]
+boolExprToExpr :: BoolExpression -> Expr
+boolExprToExpr (CBConst b) = Bool b
+boolExprToExpr (CBVar name) = Var (VI ("b" +++ name)) // prefix name with "b" to avoid name clashes with int variables
+boolExprToExpr (CBSmallerThan lhs rhs) = Infix (intExprToExpr lhs) <. (intExprToExpr rhs)
+boolExprToExpr (CBNegation e) = Ap (Prim NOT) [boolExprToExpr e]
+boolExprToExpr (CBIf condition then else) = Ap (Prim IF) [c, t, e]
   where
-    c = closedBEtoExpr condition
-    t = closedBEtoExpr then
-    e = closedBEtoExpr else
+    c = boolExprToExpr condition
+    t = boolExprToExpr then
+    e = boolExprToExpr else
+
+// Extracts all free variables from an expression, and generates an environment
+// where they have random values assigned.  Type information is stored in the
+// first character of the variable name. b means boolean, i means integer.
+// We only use it for expressions generated from IntegerExpression and
+// BoolExpression, so some cases won't ever match.
+makeEnvironment :: Expr State -> State
+makeEnvironment (Int   int) env = env
+makeEnvironment (Bool  bool) env = env
+//makeEnvironment (Fun   fun) env = env
+makeEnvironment (Var (VI name)) env = if (name.[0] == 'i') ((name |-> Int 0) env) ((name |-> Bool True) env)
+makeEnvironment (Ap    expr params) env = foldr makeEnvironment env params
+makeEnvironment (Infix lhs prim rhs) env = foldr makeEnvironment env [lhs, rhs]
+//makeEnvironment (Prim  prim) env = env
+//makeEnvironment (Error) env = env
 
 /********************** instances of generic functions for gast **********************/
 
@@ -217,8 +236,8 @@ Start
   , prop $ Ds [start1 4:defs] === Int 24
 
   , name "equivalence of prefix and infix notation for operators" prefixInfixEquivalence
-  , name "evaluation of closed arithmetic expressions always yields an integer value" evalClosedIEyieldsInt
-  , name "evaluation of closed boolean expressions always yields an integer value" evalClosedBEyieldsBool
+  , name "evaluation of closed arithmetic expressions always yields an integer value" evalIEyieldsInt
+  , name "evaluation of closed boolean expressions always yields an integer value" evalBEyieldsBool
   ]
 
 prefixInfixEquivalence :: Int Int -> Property
@@ -229,17 +248,21 @@ prefixInfixEquivalence x y = ForEach [+., -., *.]
     E (Infix (Int x) prim (Int y)) newEnv newEnv
   )
 
-evalClosedIEyieldsInt :: ClosedIntegerExpression -> Bool
-evalClosedIEyieldsInt e =
-  case E (closedIEtoExpr e) newEnv newEnv of
+evalIEyieldsInt :: IntegerExpression -> Bool
+evalIEyieldsInt e =
+  case E expr (makeEnvironment expr newEnv) newEnv of
     (Int _) = True
     = False
+  where
+    expr = intExprToExpr e
 
-evalClosedBEyieldsBool :: ClosedBoolExpression -> Bool
-evalClosedBEyieldsBool e =
-  case E (closedBEtoExpr e) newEnv newEnv of
+evalBEyieldsBool :: BoolExpression -> Bool
+evalBEyieldsBool e =
+  case E expr (makeEnvironment expr newEnv) newEnv of
     (Bool _) = True
     = False
+  where
+    expr = boolExprToExpr e
 
 start0   = Def "Start" [] (Int 42)
 start1 i = Def "Start" [] (Ap (Fun (FI "fac")) [Int i])
