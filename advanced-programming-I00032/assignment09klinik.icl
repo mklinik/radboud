@@ -133,16 +133,16 @@ derive ggen ClosedIntegerExpression
 derive genShow ClosedIntegerExpression
 
 // converts a ClosedIntegerExpression to the corresponding expression in our programming language
-closedAEtoExpr :: ClosedIntegerExpression -> Expr
-closedAEtoExpr (SAConst i) = Int i
-closedAEtoExpr (SAAdd lhs rhs) = Infix (closedAEtoExpr lhs) +. (closedAEtoExpr rhs)
-closedAEtoExpr (SASub lhs rhs) = Infix (closedAEtoExpr lhs) -. (closedAEtoExpr rhs)
-closedAEtoExpr (SAMul lhs rhs) = Infix (closedAEtoExpr lhs) *. (closedAEtoExpr rhs)
-closedAEtoExpr (SAIf condition then else) = Ap (Prim IF) [c, t, e]
+closedIEtoExpr :: ClosedIntegerExpression -> Expr
+closedIEtoExpr (SAConst i) = Int i
+closedIEtoExpr (SAAdd lhs rhs) = Infix (closedIEtoExpr lhs) +. (closedIEtoExpr rhs)
+closedIEtoExpr (SASub lhs rhs) = Infix (closedIEtoExpr lhs) -. (closedIEtoExpr rhs)
+closedIEtoExpr (SAMul lhs rhs) = Infix (closedIEtoExpr lhs) *. (closedIEtoExpr rhs)
+closedIEtoExpr (SAIf condition then else) = Ap (Prim IF) [c, t, e]
   where
     c = closedBEtoExpr condition
-    t = closedAEtoExpr then
-    e = closedAEtoExpr else
+    t = closedIEtoExpr then
+    e = closedIEtoExpr else
 
 
 :: ClosedBoolExpression
@@ -156,7 +156,7 @@ derive genShow ClosedBoolExpression
 
 closedBEtoExpr :: ClosedBoolExpression -> Expr
 closedBEtoExpr (SBConst b) = Bool b
-closedBEtoExpr (SBSmallerThan lhs rhs) = Infix (closedAEtoExpr lhs) <. (closedAEtoExpr rhs)
+closedBEtoExpr (SBSmallerThan lhs rhs) = Infix (closedIEtoExpr lhs) <. (closedIEtoExpr rhs)
 closedBEtoExpr (SBNegation e) = Ap (Prim NOT) [closedBEtoExpr e]
 closedBEtoExpr (SBIf condition then else) = Ap (Prim IF) [c, t, e]
   where
@@ -215,7 +215,7 @@ Start
   , prop $ Ds [start1 4:defs] === Int 24
 
   , name "equivalence of prefix and infix notation for operators" prefixInfixEquivalence
-  , name "evaluation of simple arithmetic expressions always yields an integer value" evalClosedAEyieldsInt
+  , name "evaluation of simple arithmetic expressions always yields an integer value" evalClosedIEyieldsInt
   , name "evaluation of simple boolean expressions always yields an integer value" evalClosedBEyieldsBool
   ]
 
@@ -227,9 +227,9 @@ prefixInfixEquivalence x y = ForEach [+., -., *.]
     E (Infix (Int x) prim (Int y)) newEnv newEnv
   )
 
-evalClosedAEyieldsInt :: ClosedIntegerExpression -> Bool
-evalClosedAEyieldsInt e =
-  case E (closedAEtoExpr e) newEnv newEnv of
+evalClosedIEyieldsInt :: ClosedIntegerExpression -> Bool
+evalClosedIEyieldsInt e =
+  case E (closedIEtoExpr e) newEnv newEnv of
     (Int _) = True
     = False
 
