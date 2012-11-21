@@ -63,7 +63,7 @@ E expr=:(Int i)  _ _ = expr
 E expr=:(Bool b) _ _ = expr
 
 // Just evaluate the function body. Assume that all free variables which occur
-// in the function body are already put in the environment.
+// in the function body have already been put in the environment.
 E (Fun (FI name)) env funs = E (defBody (funs name)) env funs
 
 // Just lookup the value of the identifier. Because we're evaluating function
@@ -71,8 +71,8 @@ E (Fun (FI name)) env funs = E (defBody (funs name)) env funs
 // further.  They are already in normal form.
 E (Var (VI name)) env _ = env name
 
-// Put all arguments in the environment, then evaluate the function body in
-// that new environment.
+// Put all arguments in the environment, then evaluate the function in that new
+// environment.
 E (Ap function=:(Fun (FI functionName)) actualParameters) env funs = E function newEnv funs
   where
     // Put all actual parameters into the environment using the corresponding
@@ -106,6 +106,7 @@ evaluatePrimitive <. [x:y:_] env funs = Bool (valueX < valueY)
   where valueX = unInt $ E x env funs
         valueY = unInt $ E y env funs
 
+// Evaluate, unwrap, modify, wrap
 evaluatePrimitive NOT [b:_] env funs = Bool $ not $ unBool $ E b env funs
 
 // Assume that all actualParameters are integers. Evaluate them, unwrap their
