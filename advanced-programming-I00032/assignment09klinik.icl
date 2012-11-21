@@ -215,8 +215,8 @@ Start
   , prop $ Ds [start1 4:defs] === Int 24
 
   , name "equivalence of prefix and infix notation for operators" prefixInfixEquivalence
-  , name "evaluation of simple arithmetic expressions always yields an integer value" evalClosedIEyieldsInt
-  , name "evaluation of simple boolean expressions always yields an integer value" evalClosedBEyieldsBool
+  , name "evaluation of closed arithmetic expressions always yields an integer value" evalClosedIEyieldsInt
+  , name "evaluation of closed boolean expressions always yields an integer value" evalClosedBEyieldsBool
   ]
 
 prefixInfixEquivalence :: Int Int -> Property
