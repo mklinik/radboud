@@ -23,10 +23,17 @@ import StdEnv, gast
   | Ap    Expr [Expr]
   | Infix Expr Prim Expr
   | Prim  Prim
+  | Error
 
 :: Prim = IF | +. | *. | -. | <. | NOT
 
 :: Def = Def Ident [Var] Expr
+
+defBody (Def _ _ expr) = expr
+defFormalParameters (Def _ params _) = params
+
+unVar :: Var -> Ident
+unVar (VI name) = name
 
 /********************** environments **********************/
 
@@ -43,7 +50,37 @@ newEnv = \v.abort ("No binding for " + v)
 /********************** semantic functions **********************/
 
 E :: Expr State Funs -> Expr
-E expr vars funs = expr // to be improved
+
+// Ints and Bools evaluate to themselves
+E expr=:(Int i)  _ _ = expr
+E expr=:(Bool b) _ _ = expr
+
+// Just evaluate the function body. Assume that all free variables which occur
+// in the function body are already put in the environment.
+E (Fun (FI name)) env funs = E (defBody (funs name)) env funs
+
+// Just lookup the value of the identifier. Because we're evaluating function
+// arguments eagerly, there is no need to evaluate the value of variables any
+// further.  They are already in normal form.
+E (Var (VI name)) env _ = env name
+
+// Put all arguments in the environment, then evaluate the function body in
+// that new environment.
+E (Ap function=:(Fun (FI functionName)) actualParameters) env funs = E function newEnv funs
+  where
+    // Put all actual parameters into the environment using the corresponding
+    // name from the function definition.
+    newEnv = foldr (uncurry (|->)) env namedParameters
+    // Associate each actual parameter with it's corresponding name from the
+    // function definition.  Assume that functions are always applied to the
+    // correct number of arguments. This means that the list of formal
+    // parameters and the list of actual parameters are of the same length.
+    namedParameters :: [(Ident, Expr)]
+    namedParameters = zip2 (map unVar (defFormalParameters (funs functionName))) evaluatedParameters
+    evaluatedParameters = map (\x -> E x env funs) actualParameters
+
+// Everything else evaluates to the Error expression
+E _ _ _ = Error
 
 Ds :: [Def] -> Expr
 Ds defs = abort "Ds not proprly defined"  // to be improved
@@ -59,30 +96,39 @@ derive bimap []
 
 Start
  = test
-  [ ("a" |-> "a") (("b" |-> "b") newEnv) "b" == "b"
-  , ("a" |-> "a") (("b" |-> "b") newEnv) "a" == "a"
-  , ("a" |-> "a") (("a" |-> "b") newEnv) "a" == "a"
-  , E (Ap (Fun (FI "id")) [Int 7]) newEnv (("id" |-> ID) newEnv) === Int 7
-  , E (Ap (Prim +.) [Int 3, Int 5]) newEnv newEnv === Int 8
-  , E (Infix (Int 3) +. (Int 5)) newEnv newEnv === Int 8
-  , E (Ap (Fun (FI "max")) [Int 3, Int 5]) newEnv (("max" |-> MAX) newEnv) === Int 5
-  , E (Ap (Fun (FI "max")) [Int 5, Int 3]) newEnv (("max" |-> MAX) newEnv) === Int 5
-  , E (Ap (Fun (FI "max")) [Int 5, Int 3]) newEnv (("fac" |-> FAC) (("max" |-> MAX) newEnv)) === Int 5
-  , E (Infix (Infix (Int 5) -. (Int 1)) <. (Int 2)) newEnv newEnv === Bool False
-  , E (Ap (Fun (FI "dec")) [Int 3]) newEnv (("dec" |-> DEC) newEnv) === Int 2
-  , E (Ap (Prim +.) [Ap (Prim +.) [Int 3, Int 5], Int 5]) newEnv newEnv === Int 13
-  , E (Ap (Fun (FI "dec")) [Ap (Prim +.) [Int 3, Int 5]]) newEnv (("dec" |-> DEC) newEnv) === Int 7
-  , E (Ap (Fun (FI "count")) [Int 0]) newEnv (("count" |-> COUNT) newEnv) === Int 1
-  , E (Ap (Fun (FI "count")) [Int 1]) newEnv (("count" |-> COUNT) newEnv) === Int 1
-  , E (Ap (Fun (FI "fac")) [Int 1]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 1
-  , E (Ap (Fun (FI "fac")) [Int 2]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 2
-  , E (Ap (Fun (FI "fac")) [Int 3]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 6
-//  , E (Ap (Fun (FI "twice")) [Fun (FI "inc"),Int 0]) newEnv (("inc" |-> INC) (("twice" |-> TWICE) newEnv)) === Int 3 // higher order
-  , Ds [start0  :defs] === Int 42
-  , Ds [start1 1:defs] === Int 1
-  , Ds [start1 2:defs] === Int 2
-  , Ds [start1 3:defs] === Int 6
-  , Ds [start1 4:defs] === Int 24
+  [ name "extract first element" $ ("a" |-> "a") (("b" |-> "b") newEnv) "b" == "b"
+  , name "extract second element" $ ("a" |-> "a") (("b" |-> "b") newEnv) "a" == "a"
+  , name "shadow an element" $ ("a" |-> "a") (("a" |-> "b") newEnv) "a" == "a"
+
+  , name "E on Ints is the identity" $ \x -> E (Int x) newEnv newEnv === Int x
+  , name "E on Bools is the identity" $ \x -> E (Bool x) newEnv newEnv === Bool x
+
+  , name "E looks up a variable" $ E (Var (VI "x")) (("x" |-> Int 42) newEnv) newEnv === (Int 42)
+  , name "E looks up and evaluates the function which returns constant 42" $
+      E (Fun (FI "const42")) newEnv (("const42" |-> CONST42) newEnv) === (Int 42)
+
+  , name "id 7 == 7" $ E (Ap (Fun (FI "id")) [Int 7]) newEnv (("id" |-> ID) newEnv) === Int 7
+  //, name "(+) 3 5 == 8" $ E (Ap (Prim +.) [Int 3, Int 5]) newEnv newEnv === Int 8
+  //, name "3 + 5 == 8" $ E (Infix (Int 3) +. (Int 5)) newEnv newEnv === Int 8
+  //, name "max 3 5 == 5" $ E (Ap (Fun (FI "max")) [Int 3, Int 5]) newEnv (("max" |-> MAX) newEnv) === Int 5
+  //, name "max 5 3 == 5" $ E (Ap (Fun (FI "max")) [Int 5, Int 3]) newEnv (("max" |-> MAX) newEnv) === Int 5
+  //, name "max 5 3 == 5 when fac is also defined" $
+      //E (Ap (Fun (FI "max")) [Int 5, Int 3]) newEnv (("fac" |-> FAC) (("max" |-> MAX) newEnv)) === Int 5
+  //, name "5 - 1 < 2 == False" $ E (Infix (Infix (Int 5) -. (Int 1)) <. (Int 2)) newEnv newEnv === Bool False
+  //, prop $ E (Ap (Fun (FI "dec")) [Int 3]) newEnv (("dec" |-> DEC) newEnv) === Int 2
+  //, prop $ E (Ap (Prim +.) [Ap (Prim +.) [Int 3, Int 5], Int 5]) newEnv newEnv === Int 13
+  //, prop $ E (Ap (Fun (FI "dec")) [Ap (Prim +.) [Int 3, Int 5]]) newEnv (("dec" |-> DEC) newEnv) === Int 7
+  //, prop $ E (Ap (Fun (FI "count")) [Int 0]) newEnv (("count" |-> COUNT) newEnv) === Int 1
+  //, prop $ E (Ap (Fun (FI "count")) [Int 1]) newEnv (("count" |-> COUNT) newEnv) === Int 1
+  //, prop $ E (Ap (Fun (FI "fac")) [Int 1]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 1
+  //, prop $ E (Ap (Fun (FI "fac")) [Int 2]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 2
+  //, prop $ E (Ap (Fun (FI "fac")) [Int 3]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 6
+  ////, E (Ap (Fun (FI "twice")) [Fun (FI "inc"),Int 0]) newEnv (("inc" |-> INC) (("twice" |-> TWICE) newEnv)) === Int 3 // higher order
+  //, prop $ Ds [start0  :defs] === Int 42
+  //, prop $ Ds [start1 1:defs] === Int 1
+  //, prop $ Ds [start1 2:defs] === Int 2
+  //, prop $ Ds [start1 3:defs] === Int 6
+  //, prop $ Ds [start1 4:defs] === Int 24
   ]
 
 start0   = Def "Start" [] (Int 42)
@@ -91,6 +137,7 @@ start1 i = Def "Start" [] (Ap (Fun (FI "fac")) [Int i])
 defs = [ID, DEC, INC, FAC, MAX, COUNT]
 
 
+CONST42 = Def "const42" [(VI "x")] (Int 42)
 ID  = Def "id" [(VI "x")] (Var (VI "x"))
 MAX = Def "max" [(VI "x"),(VI "y")] (Ap (Prim IF) [Ap (Prim <.) [Var (VI "x"),Var (VI "y")],Var (VI "y"),Var (VI "x")])
 DEC = Def "dec" [(VI "x")] (Ap (Prim -.) [Var (VI "x"),Int 1])
@@ -109,3 +156,6 @@ FAC = Def "fac" [(VI "x")] (Ap (Prim IF) [Infix (Var (VI "x")) <. (Int 2)
                   ]
               )
 TWICE = Def "twice" [(VI "f"),(VI "x")] (Ap (Var (VI "f")) [Ap (Var (VI "f")) [Var (VI "x")]]) // this is higher order !!
+
+($) infixr 0 :: (a -> b) a -> b
+($) f a = f a
