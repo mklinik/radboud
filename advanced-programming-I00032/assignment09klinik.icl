@@ -87,6 +87,7 @@ E (Ap function=:(Fun (FI functionName)) actualParameters) env funs = E function 
     evaluatedParameters = map (\x -> E x env funs) actualParameters
 
 E (Ap (Prim primitive) actualParameters) env funs = evaluatePrimitive primitive actualParameters env funs
+E (Infix lhs primitive rhs) env funs = evaluatePrimitive primitive [lhs,rhs] env funs
 
 // Everything else evaluates to the Error expression
 E _ _ _ = Error
@@ -143,22 +144,22 @@ Start
   , name "(-) 3 5 == -2" $ E (Ap (Prim -.) [Int 3, Int 5]) newEnv newEnv === Int (-2)
   , name "NOT True == False" $ E (Ap (Prim NOT) [Bool True]) newEnv newEnv === Bool False
   , name "NOT NOT True == True" $ E (Ap (Prim NOT) [(Ap (Prim NOT) [Bool True])]) newEnv newEnv === Bool True
-  //, name "3 + 5 == 8" $ E (Infix (Int 3) +. (Int 5)) newEnv newEnv === Int 8
+  , name "3 + 5 == 8" $ E (Infix (Int 3) +. (Int 5)) newEnv newEnv === Int 8
   , name "max 3 5 == 5" $ E (Ap (Fun (FI "max")) [Int 3, Int 5]) newEnv (("max" |-> MAX) newEnv) === Int 5
   , name "max 5 3 == 5" $ E (Ap (Fun (FI "max")) [Int 5, Int 3]) newEnv (("max" |-> MAX) newEnv) === Int 5
   , name "max 5 3 == 5 when fac is also defined" $
       E (Ap (Fun (FI "max")) [Int 5, Int 3]) newEnv (("fac" |-> FAC) (("max" |-> MAX) newEnv)) === Int 5
-  //, name "5 - 1 < 2 == False" $ E (Infix (Infix (Int 5) -. (Int 1)) <. (Int 2)) newEnv newEnv === Bool False
+  , name "5 - 1 < 2 == False" $ E (Infix (Infix (Int 5) -. (Int 1)) <. (Int 2)) newEnv newEnv === Bool False
   , name "dec 3 == 2" $ E (Ap (Fun (FI "dec")) [Int 3]) newEnv (("dec" |-> DEC) newEnv) === Int 2
   , name "(+) ((+) 3 5) 5 == 13" $ E (Ap (Prim +.) [Ap (Prim +.) [Int 3, Int 5], Int 5]) newEnv newEnv === Int 13
   , name "dec ((+) 3 5) == 7" $
       E (Ap (Fun (FI "dec")) [Ap (Prim +.) [Int 3, Int 5]]) newEnv (("dec" |-> DEC) newEnv) === Int 7
-  //, prop $ E (Ap (Fun (FI "count")) [Int 0]) newEnv (("count" |-> COUNT) newEnv) === Int 1
-  //, prop $ E (Ap (Fun (FI "count")) [Int 1]) newEnv (("count" |-> COUNT) newEnv) === Int 1
-  //, prop $ E (Ap (Fun (FI "fac")) [Int 1]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 1
-  //, prop $ E (Ap (Fun (FI "fac")) [Int 2]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 2
-  //, prop $ E (Ap (Fun (FI "fac")) [Int 3]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 6
-  ////, E (Ap (Fun (FI "twice")) [Fun (FI "inc"),Int 0]) newEnv (("inc" |-> INC) (("twice" |-> TWICE) newEnv)) === Int 3 // higher order
+  , prop $ E (Ap (Fun (FI "count")) [Int 0]) newEnv (("count" |-> COUNT) newEnv) === Int 1
+  , prop $ E (Ap (Fun (FI "count")) [Int 1]) newEnv (("count" |-> COUNT) newEnv) === Int 1
+  , prop $ E (Ap (Fun (FI "fac")) [Int 1]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 1
+  , prop $ E (Ap (Fun (FI "fac")) [Int 2]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 2
+  , prop $ E (Ap (Fun (FI "fac")) [Int 3]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 6
+  //, prop $ E (Ap (Fun (FI "twice")) [Fun (FI "inc"),Int 0]) newEnv (("inc" |-> INC) (("twice" |-> TWICE) newEnv)) === Int 3 // higher order
   //, prop $ Ds [start0  :defs] === Int 42
   //, prop $ Ds [start1 1:defs] === Int 1
   //, prop $ Ds [start1 2:defs] === Int 2
