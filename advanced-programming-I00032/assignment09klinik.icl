@@ -25,6 +25,13 @@ import StdEnv, gast
   | Prim  Prim
   | Error
 
+// Only use these when you are sure that the expression is indeed of the
+// expected form.
+unInt :: Expr -> Int
+unInt (Int i) = i
+unBool :: Expr -> Bool
+unBool (Bool b) = b
+
 :: Prim = IF | +. | *. | -. | <. | NOT
 
 :: Def = Def Ident [Var] Expr
@@ -79,8 +86,31 @@ E (Ap function=:(Fun (FI functionName)) actualParameters) env funs = E function 
     namedParameters = zip2 (map unVar (defFormalParameters (funs functionName))) evaluatedParameters
     evaluatedParameters = map (\x -> E x env funs) actualParameters
 
+E (Ap (Prim primitive) actualParameters) env funs = evaluatePrimitive primitive actualParameters env funs
+
 // Everything else evaluates to the Error expression
 E _ _ _ = Error
+
+
+// Makes heavy use of the assumption that all terms are well-typed.
+evaluatePrimitive :: Prim [Expr] State Funs -> Expr
+
+evaluatePrimitive IF [condition:then:else:_] env funs = E (if (unBool $ E condition env funs) then else) env funs
+
+evaluatePrimitive +. actualParameters env funs = evalAndFold sum           actualParameters env funs
+evaluatePrimitive *. actualParameters env funs = evalAndFold prod          actualParameters env funs
+evaluatePrimitive -. actualParameters env funs = evalAndFold (foldr (-) 0) actualParameters env funs
+
+evaluatePrimitive <. [x:y:_] env funs = Bool (valueX < valueY)
+  where valueX = unInt $ E x env funs
+        valueY = unInt $ E y env funs
+
+evaluatePrimitive NOT [b:_] env funs = Bool $ not $ unBool $ E b env funs
+
+// Assume that all actualParameters are integers. Evaluate them, unwrap their
+// value, fold them with the given function, then wrap them again
+evalAndFold fold actualParameters env funs = Int $ fold $ map unInt $ map (\x -> E x env funs) actualParameters
+
 
 Ds :: [Def] -> Expr
 Ds defs = abort "Ds not proprly defined"  // to be improved
@@ -108,16 +138,21 @@ Start
       E (Fun (FI "const42")) newEnv (("const42" |-> CONST42) newEnv) === (Int 42)
 
   , name "id 7 == 7" $ E (Ap (Fun (FI "id")) [Int 7]) newEnv (("id" |-> ID) newEnv) === Int 7
-  //, name "(+) 3 5 == 8" $ E (Ap (Prim +.) [Int 3, Int 5]) newEnv newEnv === Int 8
+  , name "(+) 3 5 == 8" $ E (Ap (Prim +.) [Int 3, Int 5]) newEnv newEnv === Int 8
+  , name "(*) 3 5 == 15" $ E (Ap (Prim *.) [Int 3, Int 5]) newEnv newEnv === Int 15
+  , name "(-) 3 5 == -2" $ E (Ap (Prim -.) [Int 3, Int 5]) newEnv newEnv === Int (-2)
+  , name "NOT True == False" $ E (Ap (Prim NOT) [Bool True]) newEnv newEnv === Bool False
+  , name "NOT NOT True == True" $ E (Ap (Prim NOT) [(Ap (Prim NOT) [Bool True])]) newEnv newEnv === Bool True
   //, name "3 + 5 == 8" $ E (Infix (Int 3) +. (Int 5)) newEnv newEnv === Int 8
-  //, name "max 3 5 == 5" $ E (Ap (Fun (FI "max")) [Int 3, Int 5]) newEnv (("max" |-> MAX) newEnv) === Int 5
-  //, name "max 5 3 == 5" $ E (Ap (Fun (FI "max")) [Int 5, Int 3]) newEnv (("max" |-> MAX) newEnv) === Int 5
-  //, name "max 5 3 == 5 when fac is also defined" $
-      //E (Ap (Fun (FI "max")) [Int 5, Int 3]) newEnv (("fac" |-> FAC) (("max" |-> MAX) newEnv)) === Int 5
+  , name "max 3 5 == 5" $ E (Ap (Fun (FI "max")) [Int 3, Int 5]) newEnv (("max" |-> MAX) newEnv) === Int 5
+  , name "max 5 3 == 5" $ E (Ap (Fun (FI "max")) [Int 5, Int 3]) newEnv (("max" |-> MAX) newEnv) === Int 5
+  , name "max 5 3 == 5 when fac is also defined" $
+      E (Ap (Fun (FI "max")) [Int 5, Int 3]) newEnv (("fac" |-> FAC) (("max" |-> MAX) newEnv)) === Int 5
   //, name "5 - 1 < 2 == False" $ E (Infix (Infix (Int 5) -. (Int 1)) <. (Int 2)) newEnv newEnv === Bool False
-  //, prop $ E (Ap (Fun (FI "dec")) [Int 3]) newEnv (("dec" |-> DEC) newEnv) === Int 2
-  //, prop $ E (Ap (Prim +.) [Ap (Prim +.) [Int 3, Int 5], Int 5]) newEnv newEnv === Int 13
-  //, prop $ E (Ap (Fun (FI "dec")) [Ap (Prim +.) [Int 3, Int 5]]) newEnv (("dec" |-> DEC) newEnv) === Int 7
+  , name "dec 3 == 2" $ E (Ap (Fun (FI "dec")) [Int 3]) newEnv (("dec" |-> DEC) newEnv) === Int 2
+  , name "(+) ((+) 3 5) 5 == 13" $ E (Ap (Prim +.) [Ap (Prim +.) [Int 3, Int 5], Int 5]) newEnv newEnv === Int 13
+  , name "dec ((+) 3 5) == 7" $
+      E (Ap (Fun (FI "dec")) [Ap (Prim +.) [Int 3, Int 5]]) newEnv (("dec" |-> DEC) newEnv) === Int 7
   //, prop $ E (Ap (Fun (FI "count")) [Int 0]) newEnv (("count" |-> COUNT) newEnv) === Int 1
   //, prop $ E (Ap (Fun (FI "count")) [Int 1]) newEnv (("count" |-> COUNT) newEnv) === Int 1
   //, prop $ E (Ap (Fun (FI "fac")) [Int 1]) newEnv (("fac" |-> FAC) (("dec" |-> DEC) newEnv)) === Int 1
