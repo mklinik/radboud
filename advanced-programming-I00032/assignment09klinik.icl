@@ -120,7 +120,7 @@ Ds defs = E (Ap (Fun (FI "Start")) []) newEnv funs
     funs = foldl (\env def=:(Def name _ _) -> (name |-> def) env) newEnv defs
 
 
-/* === arithmetic expressions with only constant integers, +, * and - === */
+/* === closed expressions of type Int === */
 
 :: ClosedIntegerExpression
   = CIConst Int
@@ -144,6 +144,8 @@ closedIEtoExpr (CIIf condition then else) = Ap (Prim IF) [c, t, e]
     t = closedIEtoExpr then
     e = closedIEtoExpr else
 
+
+/* === closed expressions of type Bool === */
 
 :: ClosedBoolExpression
   = CBConst Bool
