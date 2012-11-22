@@ -58,10 +58,10 @@ newEnv = \v.abort ("No binding for " + v)
 
 E :: Expr State Funs -> Expr
 
-// Ints and Bools evaluate to themselves
-E expr=:(Int i)  _ _ = expr
-E expr=:(Bool b) _ _ = expr
-E expr=:(Fun _) _ _ = expr
+// Ints, Bools and functions are already in normal form
+E expr=:(Int  _) _ _ = expr
+E expr=:(Bool _) _ _ = expr
+E expr=:(Fun  _) _ _ = expr
 
 // Just lookup the value of the identifier. Because we're evaluating function
 // arguments eagerly, there is no need to evaluate the value of variables any
