@@ -270,7 +270,6 @@ start1 i = Def "Start" [] (Ap (Fun (FI "fac")) [Int i])
 defs = [ID, DEC, INC, FAC, MAX, COUNT]
 
 
-CONST42 = Def "const42" [(VI "x")] (Int 42)
 ID  = Def "id" [(VI "x")] (Var (VI "x"))
 MAX = Def "max" [(VI "x"),(VI "y")] (Ap (Prim IF) [Ap (Prim <.) [Var (VI "x"),Var (VI "y")],Var (VI "y"),Var (VI "x")])
 DEC = Def "dec" [(VI "x")] (Ap (Prim -.) [Var (VI "x"),Int 1])
