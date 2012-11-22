@@ -90,15 +90,29 @@ E (Infix lhs primitive rhs)              env funs = evaluatePrimitive primitive 
 // Everything else evaluates to the Error expression
 E _ _ _ = Error
 
+instance + Expr where
+  (+) (Int x) (Int y) = Int (x + y)
+
+instance * Expr where
+  (*) (Int x) (Int y) = Int (x * y)
+
+instance - Expr where
+  (-) (Int x) (Int y) = Int (x - y)
+
+instance zero Expr where
+  zero = (Int 0)
+
+instance one Expr where
+  one = (Int 1)
 
 // Makes heavy use of the assumption that all terms are well-typed.
 evaluatePrimitive :: Prim [Expr] State Funs -> Expr
 
 evaluatePrimitive IF [condition:then:else:_] env funs = E (if (unBool $ E condition env funs) then else) env funs
 
-evaluatePrimitive +. actualParameters env funs = evalAndFoldInts sum           actualParameters env funs
-evaluatePrimitive *. actualParameters env funs = evalAndFoldInts prod          actualParameters env funs
-evaluatePrimitive -. actualParameters env funs = evalAndFoldInts (foldr (-) 0) actualParameters env funs
+evaluatePrimitive +. actualParameters env funs = sum  (map (\x -> E x env funs) actualParameters)
+evaluatePrimitive *. actualParameters env funs = prod (map (\x -> E x env funs) actualParameters)
+evaluatePrimitive -. actualParameters env funs = foldr (-) zero (map (\x -> E x env funs) actualParameters)
 
 evaluatePrimitive <. [x:y:_] env funs = Bool (valueX < valueY)
   where valueX = unInt $ E x env funs
@@ -106,10 +120,6 @@ evaluatePrimitive <. [x:y:_] env funs = Bool (valueX < valueY)
 
 // Evaluate, unwrap, modify, wrap
 evaluatePrimitive NOT [b:_] env funs = Bool $ not $ unBool $ E b env funs
-
-// Assume that all actualParameters are integers. Evaluate them, unwrap their
-// value, fold them with the given function, then wrap them again
-evalAndFoldInts fold actualParameters env funs = Int $ fold $ map unInt $ map (\x -> E x env funs) actualParameters
 
 
 Ds :: [Def] -> Expr
