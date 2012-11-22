@@ -66,8 +66,8 @@ E expr=:(Fun  _) _ _ = expr
 // further.  They are already in normal form.
 E (Var (VI name)) env _ = env name
 
-// Put all arguments in the environment, then evaluate the function in that new
-// environment.
+// Put all arguments in the environment, then evaluate the function body in
+// that new environment.
 E (Ap (Fun (FI functionName)) actualParameters) env funs = E functionBody newEnv funs
   where
     (Def _ formalParameters functionBody) = funs functionName
@@ -122,7 +122,8 @@ Ds defs = E (Ap (Fun (FI "Start")) []) newEnv funs
     funs = foldl (\env def=:(Def name _ _) -> (name |-> def) env) newEnv defs
 
 
-/* === expressions of type Int === */
+/* === Expressions of type Int === */
+// Used for controlled generation of random programs
 
 :: IntegerExpression
   = CIConst Int
@@ -180,12 +181,10 @@ boolExprToExpr (CBIf condition then else) = Ap (Prim IF) [c, t, e]
 makeEnvironment :: Expr State -> State
 makeEnvironment (Int   int) env = env
 makeEnvironment (Bool  bool) env = env
-//makeEnvironment (Fun   fun) env = env
-makeEnvironment (Var (VI name)) env = if (name.[0] == 'i') ((name |-> Int 0) env) ((name |-> Bool True) env)
+makeEnvironment (Var (VI name)) env =
+  if (name.[0] == 'i') ((name |-> Int 0) env) ((name |-> Bool True) env) // pretty random, eh?
 makeEnvironment (Ap    expr params) env = foldr makeEnvironment env params
 makeEnvironment (Infix lhs prim rhs) env = foldr makeEnvironment env [lhs, rhs]
-//makeEnvironment (Prim  prim) env = env
-//makeEnvironment (Error) env = env
 
 /********************** instances of generic functions for gast **********************/
 
