@@ -237,6 +237,7 @@ Start
   , name "equivalence of prefix and infix notation for operators" prefixInfixEquivalence
   , name "evaluation of arithmetic expressions always yields an integer value" evalIntExprYieldsInt
   , name "evaluation of boolean expressions always yields an integer value" evalBoolExprYieldsBool
+  , name "applying id to functions doesn't change their result value" identityAfterFunction
   ]
 
 prefixInfixEquivalence :: Int Int -> Property
@@ -262,6 +263,22 @@ evalBoolExprYieldsBool e =
     = False
   where
     expr = boolExprToExpr e
+
+// id o f == f
+identityAfterFunction :: Int Int -> Property
+identityAfterFunction x y = ForEach
+  [ (Ap (Fun (FI "id")) [Int x])
+  , (Ap (Fun (FI "max")) [Int x, Int y])
+  , (Ap (Fun (FI "dec")) [Int x])
+  , (Ap (Fun (FI "inc")) [Int x])
+  //, (Ap (Fun (FI "count")) [Int x]) // heap full
+  //, (Ap (Fun (FI "fac")) [Int x]) // stack overflow
+  ]
+  (\ap ->
+    Ds [(Def "Start" [] ap):defs]
+    ===
+    Ds [(Def "Start" [] (Ap (Fun (FI "id")) [ap])):defs]
+  )
 
 start0   = Def "Start" [] (Int 42)
 start1 i = Def "Start" [] (Ap (Fun (FI "fac")) [Int i])
