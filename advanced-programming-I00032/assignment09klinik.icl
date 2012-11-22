@@ -236,8 +236,8 @@ Start
   , prop $ Ds [start1 4:defs] === Int 24
 
   , name "equivalence of prefix and infix notation for operators" prefixInfixEquivalence
-  , name "evaluation of arithmetic expressions always yields an integer value" evalIEyieldsInt
-  , name "evaluation of boolean expressions always yields an integer value" evalBEyieldsBool
+  , name "evaluation of arithmetic expressions always yields an integer value" evalIntExprYieldsInt
+  , name "evaluation of boolean expressions always yields an integer value" evalBoolExprYieldsBool
   ]
 
 prefixInfixEquivalence :: Int Int -> Property
@@ -248,16 +248,16 @@ prefixInfixEquivalence x y = ForEach [+., -., *.]
     E (Infix (Int x) prim (Int y)) newEnv newEnv
   )
 
-evalIEyieldsInt :: IntegerExpression -> Bool
-evalIEyieldsInt e =
+evalIntExprYieldsInt :: IntegerExpression -> Bool
+evalIntExprYieldsInt e =
   case E expr (makeEnvironment expr newEnv) newEnv of
     (Int _) = True
     = False
   where
     expr = intExprToExpr e
 
-evalBEyieldsBool :: BoolExpression -> Bool
-evalBEyieldsBool e =
+evalBoolExprYieldsBool :: BoolExpression -> Bool
+evalBoolExprYieldsBool e =
   case E expr (makeEnvironment expr newEnv) newEnv of
     (Bool _) = True
     = False
