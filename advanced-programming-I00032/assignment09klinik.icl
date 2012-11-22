@@ -61,10 +61,7 @@ E :: Expr State Funs -> Expr
 // Ints and Bools evaluate to themselves
 E expr=:(Int i)  _ _ = expr
 E expr=:(Bool b) _ _ = expr
-
-// Just evaluate the function body. Assume that all free variables which occur
-// in the function body have already been put in the environment.
-E (Fun (FI name)) env funs = E (defBody (funs name)) env funs
+E expr=:(Fun _) _ _ = expr
 
 // Just lookup the value of the identifier. Because we're evaluating function
 // arguments eagerly, there is no need to evaluate the value of variables any
@@ -73,8 +70,9 @@ E (Var (VI name)) env _ = env name
 
 // Put all arguments in the environment, then evaluate the function in that new
 // environment.
-E (Ap function=:(Fun (FI functionName)) actualParameters) env funs = E function newEnv funs
+E (Ap (Fun (FI functionName)) actualParameters) env funs = E functionBody newEnv funs
   where
+    (Def _ formalParameters functionBody) = funs functionName
     // Put all actual parameters into the environment using the corresponding
     // name from the function definition.
     newEnv = foldr (uncurry (|->)) env namedParameters
@@ -83,7 +81,7 @@ E (Ap function=:(Fun (FI functionName)) actualParameters) env funs = E function 
     // correct number of arguments. This means that the list of formal
     // parameters and the list of actual parameters are of the same length.
     namedParameters :: [(Ident, Expr)]
-    namedParameters = zip2 (map unVar (defFormalParameters (funs functionName))) evaluatedParameters
+    namedParameters = zip2 (map unVar formalParameters) evaluatedParameters
     evaluatedParameters = map (\x -> E x env funs) actualParameters
 
 E (Ap (Prim primitive) actualParameters) env funs = evaluatePrimitive primitive actualParameters env funs
@@ -204,8 +202,6 @@ Start
   , name "E on Bools is the identity" $ \x -> E (Bool x) newEnv newEnv === Bool x
 
   , name "E looks up a variable" $ E (Var (VI "x")) (("x" |-> Int 42) newEnv) newEnv === Int 42
-  , name "E looks up and evaluates the function which returns constant 42" $
-      E (Fun (FI "const42")) newEnv (("const42" |-> CONST42) newEnv) === Int 42
 
   , name "id 7 == 7" $ E (Ap (Fun (FI "id")) [Int 7]) newEnv (("id" |-> ID) newEnv) === Int 7
   , name "(+) 3 5 == 8" $ E (Ap (Prim +.) [Int 3, Int 5]) newEnv newEnv === Int 8
