@@ -84,8 +84,10 @@ E (Ap (Fun (FI functionName)) actualParameters) env funs = E functionBody newEnv
     namedParameters = zip2 (map unVar formalParameters) evaluatedParameters
     evaluatedParameters = map (\x -> E x env funs) actualParameters
 
-E (Ap (Prim primitive) actualParameters) env funs = evaluatePrimitive primitive actualParameters env funs
-E (Infix lhs primitive rhs)              env funs = evaluatePrimitive primitive [lhs,rhs]        env funs
+E (Ap (Prim primitive) actualParameters) env funs =
+    evaluatePrimitive primitive (map (\x -> E x env funs) actualParameters)
+E (Infix lhs primitive rhs)              env funs =
+    evaluatePrimitive primitive (map (\x -> E x env funs) [lhs,rhs])
 
 // Everything else evaluates to the Error expression
 E _ _ _ = Error
@@ -99,28 +101,22 @@ instance * Expr where
 instance - Expr where
   (-) (Int x) (Int y) = Int (x - y)
 
+instance < Expr where
+  (<) (Int x) (Int y) = x < y
+
 instance zero Expr where
   zero = (Int 0)
 
 instance one Expr where
   one = (Int 1)
 
-// Makes heavy use of the assumption that all terms are well-typed.
-evaluatePrimitive :: Prim [Expr] State Funs -> Expr
-
-evaluatePrimitive IF [condition:then:else:_] env funs = E (if (unBool $ E condition env funs) then else) env funs
-
-evaluatePrimitive +. actualParameters env funs = sum  (map (\x -> E x env funs) actualParameters)
-evaluatePrimitive *. actualParameters env funs = prod (map (\x -> E x env funs) actualParameters)
-evaluatePrimitive -. actualParameters env funs = foldr (-) zero (map (\x -> E x env funs) actualParameters)
-
-evaluatePrimitive <. [x:y:_] env funs = Bool (valueX < valueY)
-  where valueX = unInt $ E x env funs
-        valueY = unInt $ E y env funs
-
-// Evaluate, unwrap, modify, wrap
-evaluatePrimitive NOT [b:_] env funs = Bool $ not $ unBool $ E b env funs
-
+// The IF case makes use of Clean's lazy evaluation
+evaluatePrimitive IF [condition:then:else:_] = if (unBool condition) then else
+evaluatePrimitive +. actualParameters = sum actualParameters
+evaluatePrimitive *. actualParameters = prod actualParameters
+evaluatePrimitive -. actualParameters = foldr (-) (Int 0) actualParameters
+evaluatePrimitive <. [x:y:_] = Bool (x < y)
+evaluatePrimitive NOT [b:_] = Bool $ not $ unBool $ b
 
 Ds :: [Def] -> Expr
 Ds defs = E (Ap (Fun (FI "Start")) []) newEnv funs
