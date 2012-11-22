@@ -25,10 +25,8 @@ import StdEnv, gast
   | Prim  Prim
   | Error
 
-// Only use these when you are sure that the expression is indeed of the
+// Only use this when you are sure that the expression is indeed of the
 // expected form.
-unInt :: Expr -> Int
-unInt (Int i) = i
 unBool :: Expr -> Bool
 unBool (Bool b) = b
 
@@ -238,8 +236,8 @@ Start
   , prop $ Ds [start1 4:defs] === Int 24
 
   , name "equivalence of prefix and infix notation for operators" prefixInfixEquivalence
-  , name "evaluation of closed arithmetic expressions always yields an integer value" evalIEyieldsInt
-  , name "evaluation of closed boolean expressions always yields an integer value" evalBEyieldsBool
+  , name "evaluation of arithmetic expressions always yields an integer value" evalIEyieldsInt
+  , name "evaluation of boolean expressions always yields an integer value" evalBEyieldsBool
   ]
 
 prefixInfixEquivalence :: Int Int -> Property
