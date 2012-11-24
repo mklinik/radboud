@@ -133,15 +133,19 @@ F(X)$.
 Among those terms are, for example, all peano numbers like $0$, $S0$, $SS0$.
 We also have arbitrary underscores mixed in between the successors: $\_0$,
 $S\_S\_0$.  Instead of $0$, terms can be terminated by $\bot$, e.g.  $S\bot$,
-$S\_S\bot$.  Note that all finite terms end with either $0$ or $\bot$, and all
-infinite terms are $\omega$-sequences of $S$ and $\_$.
+$S\_S\bot$.
+
+Note that all finite terms are finite sequences of $S$ and $\_$
+that end with either $0$ or $\bot$, and all infinite terms are
+$\omega$-sequences of $S$ and $\_$.
+
 
 
 \begin{defStrictOrderNuF}
 
-Define the relation $\sqsubset$ on $\nu F \times \nu F$ as follows: two terms
-$s$ and $t$ are in relation $s \sqsubset t$ iff $s$ is finite and $|s| \leq
-|t|$ and $s_{|s|-1} = \bot$ and for all $i < n: s_i = t_i$
+Let the relation $\sqsubset$ on $\nu F \times \nu F$ be defined as follows: two
+terms $s$ and $t$ are in relation $s \sqsubset t$ iff $s$ is finite and $|s|
+\leq |t|$ and $s_{|s|-1} = \bot$ and for all $i < n: s_i = t_i$
 
 \end{defStrictOrderNuF}
 
@@ -169,10 +173,10 @@ Reflexive: by definition.
 
 Transitive: We need to distinguish four cases.
 
-1. if $x = y = z$ then $x \sqsubseteq z$ follows from reflexivity.
+1. If $x = y = z$ then $x \sqsubseteq z$ follows from reflexivity.
 
-2, 3. The cases $x \neq y \wedge x \sqsubseteq y \wedge y = z$ and $x = y \wedge y
-\neq z \wedge y \sqsubseteq z$ are trivial.
+2, 3. The cases $x \neq y \wedge y = z \wedge x \sqsubseteq y$ and $x = y
+\wedge y \neq z \wedge y \sqsubseteq z$ are trivial.
 
 4. $x \neq y \wedge y \neq z \wedge x \sqsubseteq y \wedge y \sqsubseteq z$ We
 have: $|x| \leq |y| \leq |z|$ and $x_{|x|-1} = \bot$ and $y_{|y|-1} = \bot$ and
