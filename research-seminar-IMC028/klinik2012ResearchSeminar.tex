@@ -169,12 +169,14 @@ The relation $\sqsubseteq$ is a partial order.
 
 \begin{proof}
 
-We need to prove the that $\sqsubseteq$ is reflexive, transitive, and
+We have to prove the that $\sqsubseteq$ is reflexive, transitive, and
 antisymmetric.
 
 Reflexive: by definition.
 
-Transitive: We need to distinguish four cases.
+Transitive: We have to prove that if $x \sqsubseteq y$ and $y \sqsubseteq z$
+then $x \sqsubseteq z$ for all terms $x$, $y$, $z$. We do so by distinguishing
+four cases.
 
 1. If $x = y = z$ then $x \sqsubseteq z$ follows from reflexivity.
 
@@ -187,12 +189,12 @@ for all $i < |x|-1: x_i = y_i$ and for all $j < |y|-1: y_j = z_j$.  But this
 means, because of $|x| \leq |y|$: for all $i < |x|: x_i = z_i$, hence $x
 \sqsubseteq z$.
 
-Antisymmetric: We need to prove that if $s \sqsubseteq t \wedge t \sqsubseteq
+Antisymmetric: We have to prove that if $s \sqsubseteq t \wedge t \sqsubseteq
 s$ then $s = t$.  The premise is either the case because $s = t$ to begin with,
-or we have: there is an $i < |s|$ such that $s_i = \bot$ and for all $j < i:
-s_j = t_j$ and there is an $i < |t|$ such that $t_i = \bot$ and for all $j < i:
-t_j = s_j$.  But then $s$ and $t$ are both finite and agree in all
-elements, hence $s = t$.
+or we have: $s$ is finite and $|s| \leq |t|$ and $s_i = \bot$ and for all $j <
+i: s_j = t_j$ and $t$ is finite and $|t| \leq |s|$ and $t_i = \bot$ and for all
+$j < i: t_j = s_j$.  But then $s$ and $t$ are both finite, of the same length,
+and agree in all elements, hence $s = t$.
 
 \end{proof}
 
