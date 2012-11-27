@@ -16,6 +16,11 @@
 \newtheorem{defStrictOrderNuF}[defNuF]{Definition}
 \newtheorem{defPartialOrderNuF}[defNuF]{Definition}
 \newtheorem{thmPONuFisPartial}[defNuF]{Proposition}
+\newtheorem{thmPONuFisChainComplete}[defNuF]{Proposition}
+\newtheorem{thmPONuFisADomain}[defNuF]{Proposition}
+\newtheorem{defIMapsNuFToL}[defNuF]{Definition}
+\newtheorem{thmIIsMonotone}[defNuF]{Proposition}
+\newtheorem{thmIIsContinuous}[defNuF]{Proposition}
 
 \begin{document}
 
@@ -225,6 +230,48 @@ $j < i: t_j = s_j$.  But then $s$ and $t$ are both finite, of the same length,
 and agree in all elements, hence $s = t$.
 
 \end{proof}
+
+\begin{thmPONuFisChainComplete}
+
+The relation $\sqsubseteq$ is a chain complete.
+
+\end{thmPONuFisChainComplete}
+
+We need to show that every $\omega$-chain in $\nu F$ has a least upper bound.
+An $\omega$-chain in $\nu F$ is a sequence $s : \mathbb{N} \arr \nu F$ such
+that for all $i \in \mathbb{N}: s(i) \sqsubseteq s(i + 1)$
+
+
+\begin{thmPONuFisADomain}
+
+The structure $(\nu F, \sqsubseteq)$ is a domain.
+
+\end{thmPONuFisADomain}
+
+We need to show that $(\nu F, \sqsubseteq)$ has a least element, i.e. there is
+an element $x \in \nu F$ such that for any other element $y \in \nu F: x
+\sqsubseteq y$.
+
+
+\begin{defIMapsNuFToL}
+
+Define the function $I : \nu F \arr L$ as follows: \ldots
+
+\end{defIMapsNuFToL}
+
+
+\begin{thmIIsMonotone}
+
+The function $I$ is monotone.
+
+\end{thmIIsMonotone}
+
+
+\begin{thmIIsContinuous}
+
+The function $I$ is continuous.
+
+\end{thmIIsContinuous}
 
 \section{Further directions}
 
