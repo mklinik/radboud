@@ -52,28 +52,6 @@ like Haskell, Clean and OCaml there are algebraic data types.  In this article,
 we take a closer look at algebraic data types and their underlying mathematical
 ideas.
 
-\begin{tikzpicture}
-  \node {$\underline 0$} [grow'=up, sibling distance=4.0em, level distance=1.8em]
-    child { node {$0$} }
-    child
-	{
-	  node {$\underline 1$}
-	  child { node {$1$} }
-	  child
-	  {
-	    node {$\underline 2$}
-		child { node {$2$} }
-	    child [thick, dotted]
-		{
-		  node {$\underline n$}
-		  child [thin, solid] { node {$n$} }
-		  child { node {$\infty$} }
-		}
-	  }
-	}
-  ;
-\end{tikzpicture}
-
 The definition of an algebraic data type consists of the name of that type,
 together with a list of constructors possibly taking parameters.  When supplied
 with the correct number and types of arguments, a constructor yields a new
@@ -239,7 +217,7 @@ The relation $\sqsubseteq$ is a chain complete.
 
 We need to show that every $\omega$-chain in $\nu F$ has a least upper bound.
 An $\omega$-chain in $\nu F$ is a sequence $s : \mathbb{N} \arr \nu F$ such
-that for all $i \in \mathbb{N}: s(i) \sqsubseteq s(i + 1)$
+that for all $i \in \mathbb{N}: s(i) \sqsubseteq s(i + 1)$.
 
 
 \begin{thmPONuFisADomain}
@@ -251,6 +229,39 @@ The structure $(\nu F, \sqsubseteq)$ is a domain.
 We need to show that $(\nu F, \sqsubseteq)$ has a least element, i.e. there is
 an element $x \in \nu F$ such that for any other element $y \in \nu F: x
 \sqsubseteq y$.
+
+Next, we want to check if we can recover the lazy natural numbers, denoted by
+$L$, from the New Naturals by giving a continuous map between $\nu F$ and $L$.
+The domain $(L, \sqsubseteq)$ is given informally in figure
+\ref{fig:DomainOfLazyNaturals}.
+
+\begin{figure}[htb]
+\begin{center}
+\begin{tikzpicture}
+  \node {$\underline 0$} [grow'=up, sibling distance=4.0em, level distance=1.8em]
+    child { node {$0$} }
+    child
+	{
+	  node {$\underline 1$}
+	  child { node {$1$} }
+	  child
+	  {
+	    node {$\underline 2$}
+		child { node {$2$} }
+	    child [thick, dotted]
+		{
+		  node {$\underline n$}
+		  child [thin, solid] { node {$n$} }
+		  child { node {$\infty$} }
+		}
+	  }
+	}
+  ;
+\end{tikzpicture}
+\end{center}
+\caption{The domain of the lazy natural numbers.}
+\label{fig:DomainOfLazyNaturals}
+\end{figure}
 
 
 \begin{defIMapsNuFToL}
