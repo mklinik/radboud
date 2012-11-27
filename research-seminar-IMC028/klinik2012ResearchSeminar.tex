@@ -1,8 +1,12 @@
 \documentclass[a4paper]{article}
 \usepackage{mathptmx}
+\usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
 %\usepackage[square]{natbib}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
 
 \newcommand{\arr}{\rightarrow}
 \newcommand{\todo}[1]{\bigskip \noindent \emph{todo: #1} \bigskip}
@@ -25,6 +29,15 @@ Lorem ipsum.
 
 \section{What are the New Naturals?}
 
+\begin{tikzpicture}[scale=2]
+%\clip (1.0, -0.5) rectangle (1.5, 1);
+\draw (1.3,0) circle (5pt);
+\draw[->,>=stealth] (0,0) node[left]{start here}
+  -- (1.3,0) node[right,fill=white]{turn left}
+  -- node[sloped, above]{move on} (1,1) node[above]{dig here}; % -- cycle;
+\end{tikzpicture}
+
+
 \begin{itemize}
 \item Explain inductive data types, F-algebras.
 \item Give Examples.
@@ -33,6 +46,16 @@ Lorem ipsum.
 \item The New Naturals are the coinductive data type associated with the
 functor $F(X) = 1 + X + X$.
 \end{itemize}
+
+\begin{tikzpicture}[minimum size=4mm,on grid=false]
+  \node (foobar) [draw]{foobar};
+  \node (barfoo) [circle,draw] [right=of foobar] [label=45:$x \leq 3$]{};
+  %\node (user) [circle,draw] [below=of foobar] {};
+  \node (admin) [draw] [below=of barfoo] {}
+    edge [->,bend left=30] node[auto]{moo} (foobar)
+    edge [<-,bend right=45] (foobar);
+\end{tikzpicture}
+
 
 Most programming languages offer the possibility to create new data types,
 together with functions that operate on them.  In C there are structures, in
