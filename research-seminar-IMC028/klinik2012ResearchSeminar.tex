@@ -48,13 +48,19 @@ we take a closer look at algebraic data types and their underlying mathematical
 ideas.
 
 \begin{tikzpicture}
-  \node {$\underline 0$} [grow'=up, sibling distance=4em, level distance=1.8em]
+  \node {$\underline 0$} [grow'=up, sibling distance=4.0em, level distance=1.8em]
     child { node {$0$} }
-    child { node {$\underline 1$}
+    child
+	{
+	  node {$\underline 1$}
 	  child { node {$1$} }
-	  child { node {$\underline 2$}
+	  child
+	  {
+	    node {$\underline 2$}
 		child { node {$2$} }
-	    child [thick, dotted] { node {$\underline n$}
+	    child [thick, dotted]
+		{
+		  node {$\underline n$}
 		  child [thin, solid] { node {$n$} }
 		  child { node {$\infty$} }
 		}
