@@ -251,10 +251,10 @@ together with the fact that the process has terminated.  As with flat domains,
 concrete values are incomparable, so we don't distinguish between $1$ and $2$
 from the viewpoint of information ordering.
 
-When looking at the subtree of $\_\bot$, we see that it has a similar structure
-than the whole domain itself, except that every value is prefixed with one more
+When looking at the subtree of $\_\bot$, we see that its structure is similar
+to the whole domain itself, except that every value is prefixed with one additional
 underscore.  Nodes in this subtree can be interpreted similarly as described
-above, only that it took the process one internal computation step longer to
+above, only that it took the process one internal computation step more to
 get to this point.
 
 \todo{What's with the sequence of infinite underscores, or a finite number of
@@ -308,8 +308,8 @@ The relation $\sqsubseteq$ is chain complete.
 \end{thmPONuFisChainComplete}
 
 We need to show that every $\omega$-chain in $\nu F$ has a least upper bound.
-An $\omega$-chain in $\nu F$ is a sequence $s : \mathbb{N} \arr \nu F$ such
-that for all $i \in \mathbb{N}: s(i) \sqsubseteq s(i + 1)$.
+An $\omega$-chain in $\nu F$ is a sequence $f : \mathbb{N} \arr \nu F$ such
+that for all $i \in \mathbb{N}: f(i) \sqsubseteq f(i + 1)$.
 
 
 \begin{thmPONuFisADomain}
