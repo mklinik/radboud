@@ -155,11 +155,9 @@ term $s$.
 
 \begin{defStrictOrderNuF}
 
-Let the relation $\sqsubset$ on $\nu F \times \nu F$ be defined as follows: two
+Let the relation $\sqsubset$ on $\nu F \times \nu F$ be defined as: two
 terms $s$ and $t$ are in relation $s \sqsubset t$ iff $s$ is finite and $|s|
 \leq |t|$ and $s_{|s|-1} = \bot$ and for all $i < |s|-1: s_i = t_i$.
-
-Note that $t$ may be infinite.
 
 \end{defStrictOrderNuF}
 
@@ -254,7 +252,7 @@ concrete values are incomparable, so we don't distinguish between $1$ and $2$
 from the viewpoint of information ordering.
 
 When looking at the subtree of $\_\bot$, we see that it has a similar structure
-than the whole domain itself, but every value is prefixed with one more
+than the whole domain itself, except that every value is prefixed with one more
 underscore.  Nodes in this subtree can be interpreted similarly as described
 above, only that it took the process one internal computation step longer to
 get to this point.
@@ -321,8 +319,8 @@ The structure $(\nu F, \sqsubseteq)$ is a domain.
 \end{thmPONuFisADomain}
 
 We need to show that $(\nu F, \sqsubseteq)$ has a least element, i.e. there is
-an element $x \in \nu F$ such that for any other element $y \in \nu F: x
-\sqsubseteq y$.
+an element $s \in \nu F$ such that for any other element $t \in \nu F: s
+\sqsubseteq t$.
 
 Next, we want to check if we can recover the lazy natural numbers, denoted by
 $L$, from the New Naturals by giving a continuous map between $\nu F$ and $L$.
