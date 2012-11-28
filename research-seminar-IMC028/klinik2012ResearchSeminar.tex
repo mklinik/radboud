@@ -279,20 +279,20 @@ antisymmetric.
 
 Reflexive: by definition.
 
-Transitive: We have to prove that if $x \sqsubseteq y$ and $y \sqsubseteq z$
-then $x \sqsubseteq z$ for all terms $x$, $y$, $z$. We do so by distinguishing
+Transitive: We have to prove that if $s \sqsubseteq t$ and $t \sqsubseteq u$
+then $s \sqsubseteq u$ for all terms $s$, $t$, $u$. We do so by distinguishing
 four cases.
 
-1. If $x = y = z$ then $x \sqsubseteq z$ follows from reflexivity.
+1. If $s = t = u$ then $s \sqsubseteq u$ follows from reflexivity.
 
-2, 3. The cases $x \neq y \wedge y = z \wedge x \sqsubseteq y$ and $x = y
-\wedge y \neq z \wedge y \sqsubseteq z$ are trivial.
+2, 3. The cases $s \neq t \wedge t = u \wedge s \sqsubseteq t$ and $s = t
+\wedge t \neq u \wedge t \sqsubseteq u$ are trivial.
 
-4. $x \neq y \wedge y \neq z \wedge x \sqsubseteq y \wedge y \sqsubseteq z$ We
-have: $|x| \leq |y| \leq |z|$ and $x_{|x|-1} = \bot$ and $y_{|y|-1} = \bot$ and
-for all $i < |x|-1: x_i = y_i$ and for all $j < |y|-1: y_j = z_j$.  But this
-means, because of $|x| \leq |y|$: for all $i < |x|: x_i = z_i$, hence $x
-\sqsubseteq z$.
+4. $s \neq t \wedge t \neq u \wedge s \sqsubseteq t \wedge t \sqsubseteq u$ We
+have: $|s| \leq |t| \leq |u|$ and $s_{|s|-1} = \bot$ and $t_{|t|-1} = \bot$ and
+for all $i < |s|-1: s_i = t_i$ and for all $j < |t|-1: t_j = u_j$.  But this
+means, because of $|s| \leq |t|$: for all $i < |s|-1: s_i = u_i$, hence $s
+\sqsubseteq u$.
 
 Antisymmetric: We have to prove that if $s \sqsubseteq t \wedge t \sqsubseteq
 s$ then $s = t$.  The premise is either the case because $s = t$ to begin with,
