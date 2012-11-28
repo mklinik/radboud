@@ -329,23 +329,51 @@ $L$, from the New Naturals by giving a continuous map between $\nu F$ and $L$.
 The domain $(L, \sqsubseteq)$ is given informally in figure
 \ref{fig:DomainOfLazyNaturals}.
 
+%\begin{figure}
+%\begin{center}
+%\begin{tikzpicture}
+  %\node {$\underline 0$} [grow'=up, sibling distance=4.0em, level distance=1.8em]
+    %child { node {$0$} }
+    %child
+    %{
+      %node {$\underline 1$}
+      %child { node {$1$} }
+      %child
+      %{
+        %node {$\underline 2$}
+        %child { node {$2$} }
+        %child [thick, dotted]
+        %{
+          %node {$\underline n$}
+          %child [thin, solid] { node {$n$} }
+          %child { node {$\infty$} }
+        %}
+      %}
+    %}
+  %;
+%\end{tikzpicture}
+%\end{center}
+%\caption{The domain of the lazy natural numbers.}
+%\label{fig:DomainOfLazyNaturals}
+%\end{figure}
+
 \begin{figure}
 \begin{center}
-\begin{tikzpicture}
-  \node {$\underline 0$} [grow'=up, sibling distance=4.0em, level distance=1.8em]
+\begin{tikzpicture}[scale=1.2]
+  \node {$\bot$} [grow'=up, sibling distance=4.0em, level distance=1.8em]
     child { node {$0$} }
     child
     {
-      node {$\underline 1$}
-      child { node {$1$} }
+      node {$S\bot$}
+      child { node {$S0$} }
       child
       {
-        node {$\underline 2$}
-        child { node {$2$} }
+        node {$SS\bot$}
+        child { node {$SS0$} }
         child [thick, dotted]
         {
-          node {$\underline n$}
-          child [thin, solid] { node {$n$} }
+          node {$S^n\bot$}
+          child [thin, solid] { node {$S^n0$} }
           child { node {$\infty$} }
         }
       }
