@@ -296,8 +296,8 @@ means, because of $|x| \leq |y|$: for all $i < |x|: x_i = z_i$, hence $x
 
 Antisymmetric: We have to prove that if $s \sqsubseteq t \wedge t \sqsubseteq
 s$ then $s = t$.  The premise is either the case because $s = t$ to begin with,
-or we have: $s$ is finite and $|s| \leq |t|$ and $s_i = \bot$ and for all $j <
-i: s_j = t_j$ and $t$ is finite and $|t| \leq |s|$ and $t_i = \bot$ and for all
+or we have: $s$ is finite and $|s| \leq |t|$ and $s_{|s|-1} = \bot$ and for all $j <
+i: s_j = t_j$ and $t$ is finite and $|t| \leq |s|$ and $t_{|t|-1} = \bot$ and for all
 $j < i: t_j = s_j$.  But then $s$ and $t$ are both finite, of the same length,
 and agree in all elements, hence $s = t$.
 
