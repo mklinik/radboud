@@ -189,7 +189,7 @@ Let $\sqsubseteq$ be the reflexive closure of $\sqsubset$.
     {
       node {$S\bot$}
       child { node {$S0$} }
-      child
+      child [skipping]
       {
         %node {$SS\bot$}
         %child { node {$SS0$} }
@@ -241,6 +241,29 @@ Let $\sqsubseteq$ be the reflexive closure of $\sqsubset$.
 \label{fig:DomainOfNuF}
 \end{figure}
 
+The definition of $\sqsubseteq$ is intended to define an information ordering
+on $\nu F$.  Its relation graph is shown in figure \ref{fig:DomainOfNuF}.
+Informally speaking, nodes closer to the root of the tree give less information
+than nodes further up the tree.  Consider a process that step-by-step
+calculates a value of type $\nu F$.  We want to interpret the result of the
+computation based on the output we have seen so far.  The root node can then be
+read as ``it could be any number''.  The value $S\bot$ can be read as ``it is
+at least one''.  Any value that ends with a $0$ tells us a concrete number,
+together with the fact that the process has terminated.  As with flat domains,
+concrete values are incomparable, so we don't distinguish between $1$ and $2$
+from the viewpoint of information ordering.
+
+When looking at the subtree of $\_\bot$, we see that it has a similar structure
+than the whole domain itself, but every value is prefixed with one more
+underscore.  Nodes in this subtree can be interpreted similarly as described
+above, only that it took the process one internal computation step longer to
+get to this point.
+
+\todo{What's with the sequence of infinite underscores, or a finite number of
+sucessors followed by an infinite number of underscores?  Do we regard them as
+infinity?}
+
+\todo{Are the two infinities in the picture the same?}
 
 \begin{thmPONuFisPartial}
 
