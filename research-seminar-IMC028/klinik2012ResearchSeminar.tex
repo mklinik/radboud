@@ -9,7 +9,7 @@
 \usetikzlibrary{positioning}
 
 \newcommand{\arr}{\rightarrow}
-\newcommand{\todo}[1]{\bigskip \noindent \emph{todo: #1} \bigskip}
+\newcommand{\todo}[1]{\bigskip \noindent \emph{todo: #1}}
 %\newcommand{\todo}[1]{}
 
 \newtheorem{defNuF}{Definition}[section]
@@ -157,7 +157,7 @@ term $s$.
 
 Let the relation $\sqsubset$ on $\nu F \times \nu F$ be defined as follows: two
 terms $s$ and $t$ are in relation $s \sqsubset t$ iff $s$ is finite and $|s|
-\leq |t|$ and $s_{|s|-1} = \bot$ and for all $i < |s|-1: s_i = t_i$
+\leq |t|$ and $s_{|s|-1} = \bot$ and for all $i < |s|-1: s_i = t_i$.
 
 Note that $t$ may be infinite.
 
@@ -282,7 +282,7 @@ and agree in all elements, hence $s = t$.
 
 \begin{thmPONuFisChainComplete}
 
-The relation $\sqsubseteq$ is a chain complete.
+The relation $\sqsubseteq$ is chain complete.
 
 \end{thmPONuFisChainComplete}
 
@@ -333,7 +333,6 @@ The domain $(L, \sqsubseteq)$ is given informally in figure
 \caption{The domain of the lazy natural numbers.}
 \label{fig:DomainOfLazyNaturals}
 \end{figure}
-
 
 \begin{defIMapsNuFToL}
 
