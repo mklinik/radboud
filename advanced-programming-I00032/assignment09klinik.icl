@@ -85,7 +85,7 @@ E (Ap (Fun (FI functionName)) actualParameters) env funs = E functionBody newEnv
 E (Ap (Prim primitive) actualParameters) env funs =
     evaluatePrimitive primitive (map (\x -> E x env funs) actualParameters)
 E (Infix lhs primitive rhs)              env funs =
-    evaluatePrimitive primitive (map (\x -> E x env funs) [lhs,rhs])
+    E (Ap (Prim primitive) [lhs, rhs]) env funs
 
 // Everything else evaluates to the Error expression
 E _ _ _ = Error
