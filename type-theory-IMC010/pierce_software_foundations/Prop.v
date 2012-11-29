@@ -134,6 +134,15 @@ Proof.
    apply b_5.
 Qed.
 
+Goal beautiful 8.
+Proof.
+apply (b_sum 3 5 b_3 b_5).
+Qed.
+
+Check b_sum.
+Check b_sum 3.
+Check b_sum 3 2.
+
 (* ##################################################### *)
 (** * Proof Objects *)
 
@@ -271,10 +280,12 @@ Print eight_is_beautiful'''.
 Theorem six_is_beautiful :
   beautiful 6.
 Proof.
-  (* FILL IN HERE *) Admitted.
+apply b_sum with (n:=3) (m:=3).
+apply b_3. apply b_3.
+Qed.
 
 Definition six_is_beautiful' : beautiful 6 :=
-  (* FILL IN HERE *) admit.
+  (b_sum 3 3 b_3 b_3).
 (** [] *)
 
 (** **** Exercise: 1 star (nine_is_beautiful) *)
@@ -283,10 +294,13 @@ Definition six_is_beautiful' : beautiful 6 :=
 Theorem nine_is_beautiful :
   beautiful 9.
 Proof.
-  (* FILL IN HERE *) Admitted.
+apply b_sum with (n:=6) (m:=3).
+apply six_is_beautiful.
+apply b_3.
+Qed.
 
 Definition nine_is_beautiful' : beautiful 9 :=
-  (* FILL IN HERE *) admit.
+  (b_sum 6 3 six_is_beautiful b_3).
 (** [] *)
 
 
@@ -337,19 +351,39 @@ Check b_plus3''.
 (** **** Exercise: 2 stars (b_times2) *)
 Theorem b_times2: forall n, beautiful n -> beautiful (2*n).
 Proof.
-    (* FILL IN HERE *) Admitted.
+intros n H.
+unfold mult.
+apply b_sum.
+apply H.
+apply b_sum.
+apply H.
+apply b_0.
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (b_times2') *)
 (** Write a proof object corresponding to [b_times2] above *)
 
+Check fun (n:nat) (H:beautiful n) => b_sum n (n+0) H (b_sum n 0 H b_0).
 Definition b_times2': forall n, beautiful n -> beautiful (2*n) :=
-  (* FILL IN HERE *) admit.
+fun (n:nat) (H:beautiful n) => b_sum n (n+0) H (b_sum n 0 H b_0).
 
 (** **** Exercise: 2 stars (b_timesm) *)
 Theorem b_timesm: forall n m, beautiful n -> beautiful (m*n).
 Proof.
-   (* FILL IN HERE *) Admitted.
+intros n m H.
+induction m.
+apply (b_sum 0).
+apply b_0. apply b_0.
+unfold mult.
+apply b_sum.
+apply H.
+fold mult.
+apply IHm.
+Qed.
+
+
+
 (** [] *)
 
 (* ####################################################### *)
