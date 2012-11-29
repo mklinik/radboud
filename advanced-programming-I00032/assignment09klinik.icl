@@ -23,7 +23,6 @@ import StdEnv, gast
   | Ap    Expr [Expr]
   | Infix Expr Prim Expr
   | Prim  Prim
-  | Error
 
 :: Prim = IF | +. | *. | -. | <. | NOT
 
@@ -78,9 +77,6 @@ E (Ap (Prim primitive) actualParameters) env funs =
     evaluatePrimitive primitive (map (\x -> E x env funs) actualParameters)
 E (Infix lhs primitive rhs)              env funs =
     E (Ap (Prim primitive) [lhs, rhs]) env funs
-
-// Everything else evaluates to the Error expression
-E _ _ _ = Error
 
 instance + Expr where
   (+) (Int x) (Int y) = Int (x + y)
