@@ -29,9 +29,6 @@ import StdEnv, gast
 
 :: Def = Def Ident [Var] Expr
 
-defBody (Def _ _ expr) = expr
-defFormalParameters (Def _ params _) = params
-
 unVar :: Var -> Ident
 unVar (VI name) = name
 
