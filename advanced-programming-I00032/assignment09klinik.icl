@@ -25,11 +25,6 @@ import StdEnv, gast
   | Prim  Prim
   | Error
 
-// Only use this when you are sure that the expression is indeed of the
-// expected form.
-unBool :: Expr -> Bool
-unBool (Bool b) = b
-
 :: Prim = IF | +. | *. | -. | <. | NOT
 
 :: Def = Def Ident [Var] Expr
@@ -109,12 +104,12 @@ instance one Expr where
   one = (Int 1)
 
 // The IF case makes use of Clean's lazy evaluation
-evaluatePrimitive IF [condition:then:else:_] = if (unBool condition) then else
+evaluatePrimitive IF [Bool condition:then:else:_] = if condition then else
 evaluatePrimitive +. actualParameters = sum actualParameters
 evaluatePrimitive *. actualParameters = prod actualParameters
 evaluatePrimitive -. actualParameters = foldr (-) (Int 0) actualParameters
 evaluatePrimitive <. [x:y:_] = Bool (x < y)
-evaluatePrimitive NOT [b:_] = Bool $ not $ unBool $ b
+evaluatePrimitive NOT [Bool b:_] = Bool (not b)
 
 Ds :: [Def] -> Expr
 Ds defs = E (Ap (Fun (FI "Start")) []) newEnv funs
