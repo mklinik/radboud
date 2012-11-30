@@ -383,19 +383,6 @@ apply IHm.
 Qed.
 
 
-Inductive foo : nat -> Prop :=
- | foo_0 : foo 0
- .
-
-Inductive bar : nat -> Set :=
- | bar_0 : bar 0
- .
-
-Inductive baz : nat -> Type :=
- | baz_0 : baz 0
- .
-
-
 (** [] *)
 
 (* ####################################################### *)
@@ -474,57 +461,6 @@ Proof.
    Case "g_plus5".
        apply b_sum. apply b_5. apply IHgorgeous. 
 Qed.
-
-
-
-
-(**
-
-Discussion between mkl and alex:
-
-**)
-
-Inductive evenmkl : nat -> Set :=
- | evenm0 : evenmkl 0
- | evenmS : forall n, evenmkl n -> evenmkl (S (S n))
- .
-
-Inductive evenalex : nat -> Set :=
- | evena0 : evenalex 0
- | evena2 : evenalex 2
- | evenaS : forall n, evenalex n -> evenalex (S (S n))
- .
-
-Theorem evenmkl_implies_evenalex :
-  forall n, evenmkl n -> evenalex n.
-Proof.
-intros n H.
-induction H.
-apply evena0.
-apply evenaS. apply IHevenmkl.
-Qed.
-
-Theorem evenalex_implies_evenmkl :
-  forall n, evenalex n -> evenmkl n.
-Proof.
-intros n H.
-induction H.
-apply evenm0.
-apply evenmS. apply evenm0.
-apply evenmS. apply IHevenalex.
-Qed.
-
-Check evena2.
-Check evenaS 0 evena0.
-
-Goal not (evena2 = (evenaS O evena0)).
-Proof.
-discriminate.
-Qed.
-
-(* Goal forall n, n = 2 -> evenalex n -> (evenaS 0 evena0). *)
-
-
 
 
 (** Let's see what happens if we try to prove this by induction on [n]
