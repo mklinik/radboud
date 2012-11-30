@@ -538,12 +538,41 @@ Proof.
    Case "n = S n'". (* We are stuck! *)
 Admitted.
 
+Theorem gorgeous_plus3 : forall n,
+  gorgeous n -> gorgeous (3+n).
+Proof.
+intros n H.
+induction H.
+apply (g_plus3 0). apply (g_0).
+apply (g_plus3 (3 + n)). apply IHgorgeous.
+apply (g_plus3 (5 + n)). apply (g_plus5 n). apply H.
+Qed.
+
 
 (** **** Exercise: 1 star (gorgeous_plus13) *)
 Theorem gorgeous_plus13: forall n, 
   gorgeous n -> gorgeous (13+n).
 Proof.
-   (* FILL IN HERE *) Admitted.
+intros n H.
+SearchAbout gorgeous.
+induction H.
+apply (g_plus3 10).
+apply (g_plus5 5).
+apply (g_plus5 0).
+apply g_0.
+rewrite plus_comm.
+apply (g_plus3 (n+13)).
+rewrite plus_comm.
+apply IHgorgeous.
+
+rewrite plus_comm.
+apply (g_plus5 (n+13)).
+rewrite plus_comm.
+assumption.
+Qed.
+
+
+
 (** [] *)
 
 (** **** Exercise: 2 stars (gorgeous_plus13_po):
