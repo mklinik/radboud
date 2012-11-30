@@ -554,21 +554,12 @@ Theorem gorgeous_plus13: forall n,
   gorgeous n -> gorgeous (13+n).
 Proof.
 intros n H.
-SearchAbout gorgeous.
-induction H.
-apply (g_plus3 10).
-apply (g_plus5 5).
-apply (g_plus5 0).
-apply g_0.
-rewrite plus_comm.
-apply (g_plus3 (n+13)).
-rewrite plus_comm.
-apply IHgorgeous.
 
-rewrite plus_comm.
-apply (g_plus5 (n+13)).
-rewrite plus_comm.
-assumption.
+apply (g_plus3 (10+n)).
+apply (g_plus5 (5+n)).
+apply (g_plus5 n).
+apply H.
+Show Proof.
 Qed.
 
 
@@ -578,9 +569,16 @@ Qed.
 (** **** Exercise: 2 stars (gorgeous_plus13_po):
 Give the proof object for theorem [gorgeous_plus13] above. *)
 
+SearchAbout gorgeous.
+Check g_plus3 10 (g_plus5 5 (g_plus5 0 g_0)).
+Check fun (n:nat) (H:gorgeous n) =>
+  g_plus3 (10+n) (g_plus5 (5+n) (g_plus5 n H)).
+Check gorgeous_ind.
 Definition gorgeous_plus13_po: forall n, gorgeous n -> gorgeous (13+n):=
-   (* FILL IN HERE *) admit.
+  fun (n:nat) (H:gorgeous n) =>
+    g_plus3 (10+n) (g_plus5 (5+n) (g_plus5 n H)).
 (** [] *)
+
 
 (** **** Exercise: 2 stars (gorgeous_sum) *)
 Theorem gorgeous_sum : forall n m,
