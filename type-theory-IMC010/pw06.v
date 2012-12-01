@@ -152,7 +152,6 @@ induction t.
 exists (leaf n).
 apply Mirrored_leaf.
 
-(* magic happens here *)
 inversion IHt1.
 inversion IHt2.
 
@@ -220,18 +219,18 @@ Qed.
 (* week 5 exercise 12 *)
 Theorem sortedone : sorted (cons 0 nil).
 Proof.
-apply (sorted1 0).
+apply sorted1.
 Qed.
 
 (* week 5 exercise 13 *)
 Theorem sorted_one_two_three :
   sorted (cons 1 (cons 2 (cons 3 nil))).
 Proof.
-apply (sorted2 1 2).
+apply (sorted2).
 apply le_S.
 apply le_n.
 
-apply (sorted2 2 3).
+apply (sorted2).
 apply le_S.
 apply le_n.
 
@@ -245,10 +244,9 @@ Theorem sorted_tail :
   sorted l.
 Proof.
 intros.
-induction l.
-apply sorted0.
 inversion H.
-exact H4.
+apply sorted0.
+exact H3.
 Qed.
 
 
@@ -323,13 +321,13 @@ Proof.
 apply Permutation_cons with (cons 3 (cons 2 nil)).
 apply Permutation_cons with (cons 3 nil).
 apply Permutation_cons with nil.
-apply Permutation_nil.
-apply Inserted_front.
-apply Inserted_cons.
-apply Inserted_front.
-apply Inserted_cons.
-apply Inserted_cons.
-apply Inserted_front.
+constructor.
+constructor.
+constructor.
+constructor.
+constructor.
+constructor.
+constructor.
 Qed.
 
 (* exercise 10 *)
@@ -369,10 +367,9 @@ intros.
 induction l.
 apply sorted1.
 apply sorted2.
-Focus 2.
-exact H0.
 inversion_clear H.
 assumption.
+exact H0.
 Qed.
 
 (* In the proof of the lemma sorted_Lowerbound we will use
@@ -380,6 +377,8 @@ Qed.
    It is a lemma expressing transitivity of the relation le. *)
 
 Check le_trans.
+
+SearchAbout le_trans.
 
 (* exercise 12 *)
 (* complete the following proof; use "apply le_trans with ..." *)
@@ -402,17 +401,16 @@ exact H.
 
 apply IHt.
 
-Lemma foo: forall m n:nat, n <= m -> forall l : natlist, sorted (cons m l) -> sorted (cons n l).
-Proof.
+assert (forall m n:nat, n <= m -> forall l : natlist, sorted (cons m l) -> sorted (cons n l)) as foo.
 intros.
-inversion_clear H0.
+inversion_clear H3.
 apply sorted1.
 apply sorted2.
 apply le_trans with m.
-exact H.
 exact H1.
-exact H2.
-Qed.
+exact H4.
+exact H5.
+
 
 apply foo with n0.
 exact H.
@@ -459,7 +457,7 @@ exact H0.
 intros k m H H0.
 inversion_clear H.
 inversion_clear H0.
-apply Inserted_Lowerbound with l' n.
+apply Inserted_Lowerbound with l0 n.
 exact H.
 exact H2.
 apply IHl.
@@ -520,6 +518,8 @@ Qed.
 
 Extraction Insert.
 
+
+
 (* exercise 13 *)
 (* Use induction on l.
    In the induction step, after two inversions,
@@ -528,8 +528,30 @@ Extraction Insert.
 Theorem Sort :
   forall l : natlist, {l' : natlist | Permutation l l' /\ sorted l'}.
 Proof.
-(*! proof *)
+intro l.
+induction l as [| h t].
 
+(* Case "l = nil". *)
+ exists nil.
+ split.
+
+ apply Permutation_nil.
+ apply sorted0.
+
+(* Case "l = (cons h t)". *)
+ inversion IHt.
+ inversion H.
+ elim Insert with x h.
+
+ intros.
+ exists x0.
+ split.
+
+ apply (Permutation_cons h t x x0).
+ assumption.
+ apply p.
+ apply p.
+ apply H1.
 Qed.
 
 Extraction Sort.
