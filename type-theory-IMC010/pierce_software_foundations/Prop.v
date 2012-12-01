@@ -3,6 +3,7 @@
 (* $Date: 2012-07-23 16:26:25 -0400 (Mon, 23 Jul 2012) $ *)
 
 Require Export Poly.
+Require Import Coq.Arith.Plus.
 
 
 
@@ -520,13 +521,28 @@ Definition gorgeous_plus13_po: forall n, gorgeous n -> gorgeous (13+n):=
 Theorem gorgeous_sum : forall n m,
   gorgeous n -> gorgeous m -> gorgeous (n + m).
 Proof.
- (* FILL IN HERE *) Admitted.
+intros n m Hn Hm.
+Print gorgeous.
+induction Hn.
+simpl. apply Hm.
+rewrite <- plus_assoc.
+apply g_plus3. apply IHHn.
+rewrite <- plus_assoc.
+apply g_plus5. apply IHHn.
+Show Proof.
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars (beautiful__gorgeous) *)
 Theorem beautiful__gorgeous : forall n, beautiful n -> gorgeous n.
 Proof.
- (* FILL IN HERE *) Admitted.
+intros n H.
+induction H.
+apply g_0. apply (g_plus3 0 g_0). apply (g_plus5 0 g_0).
+apply gorgeous_sum.
+apply IHbeautiful1.
+apply IHbeautiful2.
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (b_times2) *)
@@ -535,13 +551,36 @@ Proof.
 
 Lemma helper_g_times2 : forall x y z, x + (z + y)= z + x + y.
 Proof.
-   (* FILL IN HERE *) Admitted.
+intros x y z.
+rewrite plus_assoc.
+rewrite (plus_comm x z). rewrite <- plus_assoc.
+reflexivity.
+Qed.
 
 Theorem g_times2: forall n, gorgeous n -> gorgeous (2*n).
 Proof.
    intros n H. simpl. 
    induction H.
-   (* FILL IN HERE *) Admitted.
+   simpl. apply g_0.
+
+rewrite <- plus_assoc with (n:=3).
+apply g_plus3.
+rewrite helper_g_times2.
+rewrite <- plus_assoc with (n:=3).
+rewrite <- plus_assoc with (n:=3).
+apply g_plus3.
+rewrite <- plus_assoc.
+apply IHgorgeous.
+
+rewrite <- plus_assoc with (n:=5).
+apply g_plus5.
+rewrite helper_g_times2.
+rewrite <- plus_assoc with (n:=5).
+rewrite <- plus_assoc with (n:=5).
+apply g_plus5.
+rewrite <- plus_assoc.
+apply IHgorgeous.
+Qed.
 (** [] *)
 
 
@@ -580,7 +619,11 @@ Inductive ev : nat -> Prop :=
 Theorem double_even : forall n,
   ev (double n).
 Proof.
-  (* FILL IN HERE *) Admitted.
+intro n.
+induction n.
+simpl. apply ev_0.
+simpl. apply ev_SS. assumption.
+Qed.
 (** [] *)
 
 (** **** Exercise: 4 stars, optional (double_even_pfobj) *)
