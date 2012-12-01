@@ -3,7 +3,8 @@
 (* $Date: 2012-07-23 16:26:25 -0400 (Mon, 23 Jul 2012) $ *)
 
 Require Export Poly.
-Require Import Coq.Arith.Plus.
+Require Import Arith.
+
 
 
 
@@ -623,8 +624,16 @@ intro n.
 induction n.
 simpl. apply ev_0.
 simpl. apply ev_SS. assumption.
+Show Proof.
 Qed.
 (** [] *)
+
+Check
+  nat_ind
+    (fun (n:nat) => ev (double n))
+    ev_0
+    (fun (n0:nat) (IHn: ev (double n0)) => ev_SS (double n0) IHn)
+.
 
 (** **** Exercise: 4 stars, optional (double_even_pfobj) *)
 (** Try to predict what proof object is constructed by the above
@@ -693,8 +702,9 @@ Proof.
   Case "E = ev_0". 
     unfold even. reflexivity.
   Case "E = ev_SS n' E'".  
-    unfold even. apply IHE'.  
+    unfold even. simpl. apply IHE'.
 Qed.
+
 (** Could this proof also be carried out by induction on [n] instead
     of [E]?  If not, why not? *)
 
@@ -710,7 +720,7 @@ Qed.
     depth below, to explain what's really going on. *)
 
 (** **** Exercise: 1 star (l_fails) *)
-(** The following proof attempt will not succeed.
+(* The following proof attempt will not succeed.
      Theorem l : forall n,
        ev n.
      Proof.
@@ -719,9 +729,9 @@ Qed.
          Case "S".
            ...
    Briefly explain why.
- 
+ *)
 (* FILL IN HERE *)
-*)
+
 (** [] *)
 
 (** **** Exercise: 2 stars (ev_sum) *)
@@ -730,7 +740,10 @@ Qed.
 Theorem ev_sum : forall n m,
    ev n -> ev m -> ev (n+m).
 Proof. 
-  (* FILL IN HERE *) Admitted.
+intros n m Hn Hm.
+induction Hn. simpl. apply Hm.
+simpl. apply ev_SS. apply IHHn.
+Qed.
 (** [] *)
 
 (** Here's another situation where we want to analyze evidence for
@@ -766,7 +779,7 @@ Theorem SSev__even : forall n,
 Proof.
   intros n E. inversion E as [| n' E']. apply E'. Qed.
 
-(* Print SSev__even. *)
+Print SSev__even.
 
 (** This use of [inversion] may seem a bit mysterious at first.
     Until now, we've only used [inversion] on equality
@@ -798,7 +811,9 @@ Proof.
 Theorem SSSSev__even : forall n,
   ev (S (S (S (S n)))) -> ev n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+intros n E.
+inversion E. inversion H0. apply H2.
+Qed.
 
 (** The [inversion] tactic can also be used to derive goals by showing
     the absurdity of a hypothesis. *)
@@ -806,7 +821,11 @@ Proof.
 Theorem even5_nonsense : 
   ev 5 -> 2 + 2 = 9.
 Proof.
-  (* FILL IN HERE *) Admitted.
+intro H.
+inversion H.
+inversion H1.
+inversion H3.
+Qed.
 (** [] *)
 
 (** We can generally use [inversion] on inductive propositions.
@@ -829,7 +848,11 @@ Proof.
 Theorem ev_ev__ev : forall n m,
   ev (n+m) -> ev n -> ev m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+intros n m Eplus En.
+inversion En. rewrite <- H in Eplus. simpl in Eplus. apply Eplus.
+rewrite <- H0 in Eplus. simpl in Eplus.
+induction n0. simpl in Eplus. apply SSev__even in Eplus. apply Eplus.
+Admitted.
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (ev_plus_plus) *)
@@ -1032,7 +1055,10 @@ Proof.
 Theorem plus_one_r' : forall n:nat, 
   n + 1 = S n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  apply nat_ind.
+  Case "0". simpl. reflexivity.
+  Case "S n". intros n H. simpl. rewrite -> H. reflexivity.
+Qed.
 (** [] *)
 
 (** The induction principles that Coq generates for other datatypes
@@ -1070,6 +1096,14 @@ Inductive rgb : Type :=
   | red : rgb
   | green : rgb
   | blue : rgb.
+
+(* rgb_ind : forall P : rgb -> Prop,
+  P red ->
+  P green ->
+  P blue ->
+  forall c : rgb, P c.
+*)
+
 Check rgb_ind.
 (** [] *)
 
@@ -1095,6 +1129,8 @@ Check natlist_ind.
 Inductive natlist1 : Type :=
   | nnil1 : natlist1
   | nsnoc1 : natlist1 -> nat -> natlist1.
+
+Check natlist1_ind.
 
 (** Now what will the induction principle look like? *)
 (** [] *)
@@ -1123,8 +1159,11 @@ Inductive natlist1 : Type :=
     Give an [Inductive] definition of [ExSet]: *)
 
 Inductive ExSet : Type :=
-  (* FILL IN HERE *)
+ | con1 : bool -> ExSet
+ | con2 : nat -> ExSet -> ExSet
 .
+
+Check ExSet_ind.
 (** [] *)
 
 (** What about polymorphic datatypes?
@@ -1158,6 +1197,15 @@ Inductive ExSet : Type :=
 Inductive tree (X:Type) : Type :=
   | leaf : X -> tree X
   | node : tree X -> tree X -> tree X.
+
+(*
+tree_ind : forall (X:Type) (P:tree X -> Prop),
+  forall (x:X), P (leaf X x) ->
+  forall (l:tree X), P l ->
+    forall (r:tree X), P r -> P (node X l r) ->
+  forall (t:tree X), P t.
+*)
+
 Check tree_ind.
 (** [] *)
 
@@ -1174,6 +1222,14 @@ Check tree_ind.
 *) 
 (** [] *)
 
+Inductive mytype (X:Type) : Type :=
+ | constr1 : X -> mytype X
+ | constr2 : nat -> mytype X
+ | constr3 : mytype X -> nat -> mytype X
+.
+
+Check mytype_ind.
+
 (** **** Exercise: 1 star, optional (foo) *)
 (** Find an inductive definition that gives rise to the
     following induction principle:
@@ -1187,6 +1243,14 @@ Check tree_ind.
 *) 
 (** [] *)
 
+Inductive foo (X:Type) (Y:Type) : Type :=
+ | bar : X -> foo X Y
+ | baz : Y -> foo X Y
+ | quux : (nat -> foo X Y) -> foo X Y
+.
+
+Check foo_ind.
+
 (** **** Exercise: 1 star, optional (foo') *)
 (** Consider the following inductive definition: *)
 
@@ -1199,11 +1263,13 @@ Inductive foo' (X:Type) : Type :=
      foo'_ind :
         forall (X : Type) (P : foo' X -> Prop),
               (forall (l : list X) (f : foo' X),
-                    _______________________ -> 
-                    _______________________   ) ->
-             ___________________________________________ ->
-             forall f : foo' X, ________________________
+                    P f ->
+                    P (C1 X l f)   ) ->
+              P (C2 X) ->
+             forall f : foo' X, P f
 *)
+
+Check foo'_ind.
 
 (** [] *)
 
