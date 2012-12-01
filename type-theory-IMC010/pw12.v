@@ -48,7 +48,7 @@ Abort.
 *)
 
 (* the polymorphic identity *)
-Definition polyid : forall a:Set, forall x:a, a := 
+Definition polyid : forall a:Set, forall x:a, a :=
                     fun a:Set =>  fun x:a =>  x.
 (* instantiation by application *)
 (* Check gives the types *)
@@ -70,34 +70,30 @@ Eval compute in (polyid nat O).
 
 Lemma exercise2 : forall a:Prop, a -> ~~a.
 Proof.
-(*! proof *)
-
+unfold not. intros. apply H0. exact H.
 Qed.
 
 Lemma exercise3: forall a:Prop, ~~~a -> ~a.
 Proof.
-(*! proof *)
-
+unfold not. intros. apply H. intros. apply H1. exact H0.
 Qed.
 
 Lemma exercise4: forall a:Prop, ~~(~~a -> a).
 Proof.
-(*! proof *)
-
+unfold not. intros. apply H. intros. elimtype False.
+apply H0. intro. apply H. intro. exact H1.
 Qed.
 
 (* exercises with full intuitionistic prop2 *)
 
 Lemma exercise5 : forall a:Prop, (exists b:Prop, a) -> a.
 Proof.
-(*! proof *)
-
+intro a.  intro b.  elim b.  intros.  exact H.
 Qed.
 
 Lemma exercise6 : forall a:Prop, exists b:Prop, ((a -> b) \/ (b -> a)).
 Proof.
-(*! proof *)
-
+intro a.  exists a.  left.  intro.  exact H.
 Qed.
 
 (* exercise with classical prop2 *)
@@ -106,8 +102,12 @@ Definition em:= forall a:Prop, a \/ ~a.
 
 Lemma exercise7 : em -> forall a b:Prop, ((a -> b) \/ (b -> a)).
 Proof.
-(*! proof *)
-
+intros Hem a b.
+elim (Hem (a -> b)).
+intro. left. exact H.
+unfold not. intro. right.
+intro. elimtype False. apply H.
+intro. exact H0.
 Qed.
 
 (* expressibility of prop2 *)
@@ -119,22 +119,19 @@ Definition new_false := forall a:Prop, a.
 (* False implies new_false *)
 Lemma exercise8 : False -> new_false.
 Proof.
-(*! proof *)
-
+intro f. elimtype False. exact f.
 Qed.
 
 (* new_false implies False *)
 Lemma exercise9 : new_false -> False.
 Proof.
-(*! proof *)
-
+unfold new_false. intro nf. apply nf.
 Qed.
 
 (* from new_false we can prove anything *)
 Lemma exercise10 : forall a:Prop, new_false -> a.
 Proof.
-(*! proof *)
-
+unfold new_false.  intros.  apply H.
 Qed.
 
 (*  definition of and *)
@@ -145,8 +142,11 @@ Definition new_and (a b : Prop) := forall c : Prop, (a -> b -> c) -> c.
 (* and implies new_and *)
 Lemma exercise11 : forall a b : Prop,a /\ b -> new_and a b.
 Proof.
-(*! proof *)
-
+unfold new_and.
+intros.
+apply H0.
+elim H. intros. exact H1.
+elim H. intros. exact H2.
 Qed.
 
 
@@ -154,8 +154,10 @@ Qed.
 Lemma exercise12 : forall a b : Prop ,
                    new_and a b -> a /\ b.
 Proof.
-(*! proof *)
-
+unfold new_and. intros.
+split.
+apply H. intros Ha Hb. exact Ha.
+apply H. intros Ha Hb. exact Hb.
 Qed.
 
 (* exercise 13 *)
@@ -163,6 +165,8 @@ Qed.
 (* give an inhabitant of A and an inhabitant of B *)
 Parameters A B : Prop.
 Parameter P : new_and A B.
+Check (P A ((fun (a b : Prop) (Ha : a) (_ : b) => Ha) A B)).
+Check (P B ((fun (a b : Prop) (_ : a) (Hb : b) => Hb) A B)).
 
 (* "a or b" is valid if everything that follows form
    {a} and follows from {b} is valid *)
@@ -170,14 +174,16 @@ Definition new_or (a b : Prop) := forall c : Prop, (a -> c) -> (b -> c) -> c.
 
 Lemma exercise14 : forall a b , a \/ b -> new_or a b.
 Proof.
-(*! proof *)
-
+unfold new_or. intros.
+elim H. exact H0. exact H1.
 Qed.
 
 Lemma exercise15 : forall a b , new_or a b -> a \/ b.
 Proof.
-(*! proof *)
-
+unfold new_or. intros.
+apply (H (a \/ b)).
+intro. left. exact H0.
+intro. right. exact H0.
 Qed.
 
 (* exercise 16 *)
@@ -185,8 +191,20 @@ Qed.
 (* give an inhabitant of new_or A B with A and B in Prop *)
 Parameter Q:A.
 
-Check (*! term *)
-  .
+(* i.e. given a proof Q of A
+  give a proof of (new_or A B)
+*)
+
+Theorem Blah : A -> new_or A B.
+Proof.
+intro a. unfold new_or.
+intro c. intros.
+apply H. exact a.
+Qed.
+
+Print Blah.
+
+Check (fun (a : A) (c : Prop) (H : A -> c) (_ : B -> c) => H a) Q.
 
 
 (*
