@@ -73,20 +73,18 @@ Abort.
 (* exercise 2 *)
 Lemma exercise2 : forall a:Prop, a -> ~~a.
 Proof.
-(*! proof *)
-
+unfold not. intros. apply H0. exact H.
 Qed.
 
 Lemma exercise3: forall a:Prop, ~~~a -> ~a.
 Proof.
-(*! proof *)
-
+unfold not. intros. apply H. intros. apply H1. exact H0.
 Qed.
 
 Lemma exercise4: forall a:Prop, ~~(~~a -> a).
 Proof.
-(*! proof *)
-
+unfold not. intros. apply H. intros. elimtype False.
+apply H0. intro. apply H. intro. exact H1.
 Qed.
 
 
@@ -94,14 +92,20 @@ Qed.
 
 Lemma exercise5 : forall a:Prop, (exists b:Prop, a) -> a.
 Proof.
-(*! proof *)
-
+intro a.
+intro b.
+elim b.
+intros.
+exact H.
 Qed.
 
 Lemma exercise6 : forall a:Prop, exists b:Prop, ((a -> b) \/ (b -> a)).
 Proof.
-(*! proof *)
-
+intro a.
+exists a.
+left.
+intro.
+exact H.
 Qed.
 
 
@@ -112,8 +116,12 @@ Definition em:= forall a:Prop, a \/ ~a.
 
 Lemma exercise7: em -> forall a b:Prop, ((a -> b) \/ (b -> a)).
 Proof.
-(*! proof *)
-
+intros em a b.
+elim (em (a -> b)).
+intro. left. exact H.
+unfold not. intro. right.
+intro. elimtype False. apply H.
+intro. exact H0. 
 Qed.
 
 (* expressibility of prop2 *)
@@ -125,22 +133,21 @@ Definition new_false := forall a:Prop, a.
 (* False implies new_false *)
 Lemma exercise8 : False -> new_false.
 Proof.
-(*! proof *)
-
+intro f. elimtype False. exact f.
 Qed.
 
 (* new_false implies False *)
 Lemma exercise9 : new_false -> False.
 Proof.
-(*! proof *)
-
+unfold new_false. intro nf. apply nf.
 Qed.
 
 (* from new_false we can prove anything *)
 Lemma exercise10 : forall a:Prop, new_false -> a.
 Proof.
-(*! proof *)
-
+unfold new_false.
+intros.
+apply H.
 Qed.
 
 (*
