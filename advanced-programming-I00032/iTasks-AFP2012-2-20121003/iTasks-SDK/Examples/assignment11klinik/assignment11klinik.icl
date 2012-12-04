@@ -58,10 +58,21 @@ taskNoOfEditor responses label =
 labelOfTask responses taskNo =
   hd [er.EditorResponse.description \\ (currentTaskNo, EditorResponse er) <- responses | taskNo == currentTaskNo]
 
-Start = labelOfTask responses 1
+Start = properEvents (task, initState)
   where
-    (_, responses, _) = tasks (RefreshEvent`) initState
-    tasks = (simplified_edit "edit1" 42 .||. simplified_edit "edit2" (-42))
+    (_, responses, _) = task (RefreshEvent`) initState
+    task = (simplified_edit "edit1" 42 .||. simplified_edit "edit2" (-42))
+
+:: UserEvent = UserEditEvent String Int
+
+properEvents :: (Task` a, State) -> [UserEvent]
+properEvents (task, state) =
+  [  UserEditEvent er.EditorResponse.description value
+  \\ (currentTaskNo, EditorResponse er) <- responses
+  ,  value <- [0, 1, 42]
+  ]
+  where
+    (_, responses, _) = task (RefreshEvent`) state
 
 //taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
 //taskConformance world task1 task2
