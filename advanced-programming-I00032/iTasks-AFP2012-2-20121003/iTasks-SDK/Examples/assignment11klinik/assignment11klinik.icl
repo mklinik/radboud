@@ -58,17 +58,21 @@ taskNoOfEditor responses label =
 labelOfTask responses taskNo =
   hd [er.EditorResponse.description \\ (currentTaskNo, EditorResponse er) <- responses | taskNo == currentTaskNo]
 
-Start = properEvents (task, initState)
+foo responses =
+  [(taskId, er.EditorResponse.description) \\ (taskId, EditorResponse er) <- responses]
+
+//Start = properEvents (task, initState)
+Start = foo responses
   where
     (_, responses, _) = task (RefreshEvent`) initState
-    task = (simplified_edit "edit1" 42 >>>*
+    task = ((simplified_edit "edit1" 42 .||. simplified_edit "edit4" 10) >>>*
       [ OnAction` (Action "BLAHBAR") (const True) (const (simplified_edit "edit2" (-42)))
       , OnAction` (Action "MOOOOO!") (const True) (const (simplified_edit "edit3" (142)))
       ])
 
 :: UserEvent
   = UserEditEvent String Int
-  | UserActionEvent String Action
+  | UserActionEvent Int Action
 
 // I always wondered what list comprehensions are good for when you have map,
 // fold and filter.  Thank's for teaching me, Peter!
@@ -80,15 +84,17 @@ properEvents (task, state) =
   ,  value <- [0, 1, 42]
   ]
   ++
-  // ... and action events of all available actions to all available editors
-  [  UserActionEvent label action
-  \\ label <- availableEditors
-  ,  action <- availableActions
+  // ... and action events of all available actions
+  [  UserActionEvent taskId action
+  \\ (taskId, action) <- availableActions
   ]
 where
   availableActions =
-    [  action
-    \\ (_, ActionResponse` actionResponses) <- responses
+    // Actions belong to the sequential combinator task, which is not labelled
+    // and hence must be addressed by its taskId.  At least that's what I
+    // think.
+    [  (taskId, action)
+    \\ (taskId, ActionResponse` actionResponses) <- responses
     ,  (action, enabled) <- actionResponses
     |  enabled
     ]
