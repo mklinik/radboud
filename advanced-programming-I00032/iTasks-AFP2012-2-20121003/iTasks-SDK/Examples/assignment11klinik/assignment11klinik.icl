@@ -61,18 +61,42 @@ labelOfTask responses taskNo =
 Start = properEvents (task, initState)
   where
     (_, responses, _) = task (RefreshEvent`) initState
-    task = (simplified_edit "edit1" 42 .||. simplified_edit "edit2" (-42))
+    task = (simplified_edit "edit1" 42 >>>*
+      [ OnAction` (Action "BLAHBAR") (const True) (const (simplified_edit "edit2" (-42)))
+      , OnAction` (Action "MOOOOO!") (const True) (const (simplified_edit "edit3" (142)))
+      ])
 
-:: UserEvent = UserEditEvent String Int
+:: UserEvent
+  = UserEditEvent String Int
+  | UserActionEvent String Action
 
+// I always wondered what list comprehensions are good for when you have map,
+// fold and filter.  Thank's for teaching me, Peter!
 properEvents :: (Task` a, State) -> [UserEvent]
 properEvents (task, state) =
-  [  UserEditEvent er.EditorResponse.description value
-  \\ (currentTaskNo, EditorResponse er) <- responses
+  // proper events are edit events (we only toggle between a few values), ...
+  [  UserEditEvent label value
+  \\ label <- availableEditors
   ,  value <- [0, 1, 42]
   ]
-  where
-    (_, responses, _) = task (RefreshEvent`) state
+  ++
+  // ... and action events of all available actions to all available editors
+  [  UserActionEvent label action
+  \\ label <- availableEditors
+  ,  action <- availableActions
+  ]
+where
+  availableActions =
+    [  action
+    \\ (_, ActionResponse` actionResponses) <- responses
+    ,  (action, enabled) <- actionResponses
+    |  enabled
+    ]
+  availableEditors =
+    [  er.EditorResponse.description
+    \\ (_, EditorResponse er) <- responses
+    ]
+  (_, responses, _) = task RefreshEvent` state
 
 specTask :: (Task` a, State) UserEvent -> [Trans UserEvent (Task` a, State)]
 specTask (task, state) input = case input of
