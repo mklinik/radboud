@@ -470,7 +470,7 @@ handleOptions [o:r] ts=:{mesFile}
 				Seed n = {ts & rnd = genRandInt n}
 				Randoms rnd = {ts & rnd = rnd }
 				FixedInputs ll_input = {ts & input = fixedInputs ll_input }
-				InputFun f = {ts & inputs = undef }
+				InputFun f = {ts & inputs = f }
 			//	OutputFun f = {test & } //([s] i -> o)
 				FSM inp identify = {ts & input = fixedInputs (generateFSMpaths ts.iniState ts.spec inp identify) }
 				MkTrace b = { ts & trace = b }
