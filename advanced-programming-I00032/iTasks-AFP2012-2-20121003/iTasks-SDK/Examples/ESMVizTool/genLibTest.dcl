@@ -11,7 +11,7 @@ definition module genLibTest
 	pieter@cs.ru.nl
 */
 
-import StdGeneric, GenEq
+import StdGeneric, GenEq_NG
 
 import StdClass
 instance + String
@@ -22,7 +22,7 @@ instance + String
 generic genShow a :: String Bool a [String] -> [String]
 generic gLess a  :: a a -> Bool
 
-derive genShow	Int, Char, Bool, Real, String, UNIT, PAIR, EITHER, OBJECT, CONS, FIELD, [], (,), (,,), (,,,), (,,,,), (,,,,,), (,,,,,,), (,,,,,,,), (,,,,,,,,), (,,,,,,,,,), (->), {}, {!}
+derive genShow	Int, Char, Bool, Real, String, UNIT, PAIR, EITHER, OBJECT, CONS of {gcd_name,gcd_arity},RECORD of {grd_name}, FIELD of {gfd_name}, [], (,), (,,), (,,,), (,,,,), (,,,,,), (,,,,,,), (,,,,,,,), (,,,,,,,,), (,,,,,,,,,), (->), {}, {!}
 derive gLess    Int, Char, Bool, Real, String, UNIT, PAIR, EITHER, OBJECT, CONS, FIELD, [], (,), (,,), (,,,), (,,,,), (,,,,,), (,,,,,,), (,,,,,,,), (,,,,,,,,), (,,,,,,,,,) 
 
 show  :: !a -> [String] | genShow{|*|} a

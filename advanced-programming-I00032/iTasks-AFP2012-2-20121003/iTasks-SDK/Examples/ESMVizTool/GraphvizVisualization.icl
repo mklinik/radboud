@@ -1,7 +1,7 @@
 implementation module GraphvizVisualization
 
-import GenVisualize, GenUpdate, GenPrint, GenParse
-import Util, Error, HttpUtil, IWorld, Time
+import GenVisualize, GenUpdate, GenPrint_NG, GenParse_NG
+import Util, Error, HttpUtil, IWorld, Time, Map
 import StdFile, StdTuple, StdList, StdBool, StdArray, StdString, StdFunc
 
 from Text		import qualified class Text(..), instance Text String
@@ -25,7 +25,6 @@ derive gUpdate			Digraph, ArrowType, Color, DirType, EdgeStyle, NodeShape, NodeS
 derive gHeaders			Digraph, ArrowType, Color, DirType, EdgeStyle, NodeShape, NodeStyle
 derive gGridRows		Digraph, ArrowType, Color, DirType, EdgeStyle, NodeShape, NodeStyle
 derive gVerify			Digraph, ArrowType, Color, DirType, EdgeStyle, NodeShape, NodeStyle
-derive gDefaultMask		Digraph, ArrowType, Color, DirType, EdgeStyle, NodeShape, NodeStyle
 derive JSONEncode		Digraph, ArrowType, Color, DirType, EdgeStyle, NodeShape, NodeStyle
 derive JSONDecode		Digraph, ArrowType, Color, DirType, EdgeStyle, NodeShape, NodeStyle
 derive gEq				Digraph
@@ -46,14 +45,14 @@ instance + String where (+) a b = a +++ b
 gVisualizeEditor{|Digraph|} Nothing vst			= noVisualization vst				
 gVisualizeEditor{|Digraph|} (Just digraph) vst	= visualizeCustom mkControl vst
 where
-	mkControl name touched verRes mbEvent vst=:{VSt|iworld,taskId}
+	mkControl name touched verRes vst=:{VSt|iworld,taskId}
 		# filename			= imgname taskId name
 		# (mbErr, iworld)	= runGraphviz filename (printDigraph (enhanceDigraphWithLinks digraph)) iworld
 		= case mbErr of
 			Ok _
-				= ([defaultDef (TUIHtml {TUIHtml|html = "<img src=\"/" + (gifext filename) + "\" usemap=\"#" + filename + "\" />"})], {VSt|vst & iworld = iworld})
+				= ([(UIViewHtml defaultSizeOpts {UIViewOpts|value = Just (RawText("<img src=\"/" + (gifext filename) + "\" usemap=\"#" + filename + "\" />"))},newMap)], {VSt|vst & iworld = iworld})
 			Error msg
-				= ([defaultDef (TUIHtml {TUIHtml|html = msg})], {VSt|vst & iworld = iworld})
+				= ([(UIViewHtml defaultSizeOpts {UIViewOpts|value = Just (Text msg)},newMap)], {VSt|vst & iworld = iworld})
 		
 	runGraphviz :: String [String] *IWorld -> (!MaybeErrorString Void,!*IWorld)
 	runGraphviz name dotcode iworld=:{IWorld|world}
@@ -77,7 +76,7 @@ where
 			\\ NodeDef nr st nodeAtts edges <- nodeDefs
 			] selected
 
-	imgname taskId name	= (maybe "notask" toString taskId) + "-" + name
+	imgname taskId name	= (toString taskId) + "-" + name
 
 /*
 where

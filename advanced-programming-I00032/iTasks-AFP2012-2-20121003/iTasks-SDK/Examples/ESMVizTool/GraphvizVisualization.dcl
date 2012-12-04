@@ -8,7 +8,6 @@ derive gVisualizeText	Digraph
 derive gHeaders			Digraph
 derive gGridRows		Digraph
 derive gUpdate			Digraph
-derive gDefaultMask		Digraph
 derive gVerify			Digraph
 derive JSONEncode		Digraph
 derive JSONDecode		Digraph

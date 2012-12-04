@@ -11,7 +11,7 @@ implementation module genLibTest
 	pieter@cs.ru.nl
 */
 
-import StdEnv, StdGeneric, GenEq
+import StdEnv, StdGeneric, GenEq_NG
 
 instance + String where (+) s t = s +++ t
 
@@ -58,17 +58,19 @@ genShow{|(,,,,,,,,)|}f1 f2 f3 f4 f5 f6 f7 f8 f9 sep p (x1,x2,x3,x4,x5,x6,x7,x8,x
  = ["(":f1 sep False x1 [",":f2 sep False x2 [",":f3 sep False x3 [",":f4 sep False x4 [",":f5 sep False x5 [",":f6 sep False x6 [",":f7 sep False x7 [",":f8 sep False x8 [",":f9 sep False x9 [")":rest]]]]]]]]]]
 genShow{|(,,,,,,,,,)|}f1 f2 f3 f4 f5 f6 f7 f8 f9 f0 sep p (x1,x2,x3,x4,x5,x6,x7,x8,x9,x0) rest
  = ["(":f1 sep False x1 [",":f2 sep False x2 [",":f3 sep False x3 [",":f4 sep False x4 [",":f5 sep False x5 [",":f6 sep False x6 [",":f7 sep False x7 [",":f8 sep False x8 [",":f9 sep False x9 [",":f0 sep False x0 [")":rest]]]]]]]]]]]
-genShow{|CONS of {gcd_name, gcd_arity, gcd_fields}|} fx sep p (CONS x) rest
+genShow{|CONS of {gcd_name, gcd_arity}|} fx sep p (CONS x) rest
 	| gcd_arity == 0
 		= [gcd_name: rest]
-	| isEmpty gcd_fields // ordinary constructor
+	| otherwise
 		| p // parentheses needed
 //			= ["(",gcd_name," ":fx " " False x [")":rest]]
 //			= [gcd_name," ":fx " " False x rest]
 			= ["(",gcd_name," ":fx " " True x [")":rest]]
 			= [gcd_name," ":fx " " True x rest]
-	| otherwise // record
-		= ["{",{gcd_name.[i]\\i<-[1..size gcd_name-1]},"|":fx "," False x ["}":rest]]
+
+genShow{|RECORD of {grd_name}|} fx sep p (RECORD x) rest
+	= ["{",{grd_name.[i]\\i<-[1..size grd_name-1]},"|":fx "," False x ["}":rest]]
+
 genShow{|FIELD of {gfd_name}|} fx sep p (FIELD x) rest
 	= [gfd_name,"=":fx sep False x rest]
 

@@ -2,7 +2,7 @@ implementation module ESMVizTool
 
 import iTasks
 import ESMSpec
-import GenPrint
+import GenPrint_NG
 
 import Graphviz
 import GraphvizVisualization
@@ -48,7 +48,7 @@ DiGraphFlow :: !(ESM s i o) (State s i o) -> Task (State s i o)
 				| all, Eq, genShow{|*|} s & all, ggen{|*|} i & all o
 DiGraphFlow	esm st=:{ka,ss,trace,n,r}
  =	anyTask	[ selectInput
-			, state esm st
+			, state esm st @? const NoValue
 // 			, enterChoice "go to state... " [] (map show1 (if (isEmpty nodes) ss nodes)) >>= updateDig st
 // 			, chooseTaskComBo "go to state... " [let label = show1 node in (label, updateDig st label) \\ node <- if (isEmpty nodes) ss nodes]
 			, chooseTaskComBo ("Actions","Do one of the following actions...")
@@ -90,7 +90,7 @@ where
 	nodes		= nodesOf ka
 	newState 	= { ka = newKA, ss = [esm.s_0], trace = [], n = 1, r = rn}
 
-	traceTweak	=  AfterLayout (tweakTUI (\x -> appDeep [0] (fixedWidth 670 o fixedHeight 200) x)) 
+	traceTweak	=  AfterLayout (tweakUI (\x -> appDeep [0] (fixedWidth 670 o fixedHeight 200) x)) 
 	
 stepN :: !(ESM s i o) !(State s i o) -> Task (State s i o) | all, Eq s & all, ggen{|*|} i & all o
 stepN esm st=:{ka,ss,trace,n,r}
@@ -127,7 +127,7 @@ state esm st=:{ka,ss,trace,n,r}
 		=	digraph
 		=	digraph -|| viewIssues st 
 where
-	digraph = updateInformation Void [UpdateWith toView fromView] st <<@ AfterLayout (tweakTUI (fixedWidth 700 o fixedHeight 300))
+	digraph = updateInformation Void [UpdateWith toView fromView] st <<@ AfterLayout (tweakUI (fixedWidth 700 o fixedHeight 300))
 	
 	//Make an editable digraph from the esm state
 	toView st=:{ka,ss,trace} //TODO: MOVE mkDigraph function to this module as it is essentially the toView of a state

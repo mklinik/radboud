@@ -11,7 +11,7 @@ implementation module confSM
 	pieter@cs.ru.nl
 */
 
-import StdEnv, Random, gen, GenEq, testable //, StdLib
+import StdEnv, Random, gen, GenEq_NG, testable //, StdLib
 import StdMaybe
 //import qualified genLibTest
 

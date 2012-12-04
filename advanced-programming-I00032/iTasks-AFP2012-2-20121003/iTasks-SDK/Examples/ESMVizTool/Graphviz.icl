@@ -4,8 +4,8 @@
 implementation module Graphviz
 
 import StdArray, StdOverloaded, StdList, StdOrdList, StdTuple, StdString, StdBool, StdMisc
-import StdMaybe, StdListExtensions
-import GenLib
+import StdMaybe, List_NG
+import GenPrint_NG, GenEq_NG
 
 derive gEq    EdgeStyle, NodeStyle, DirType, NodeShape, Side, ArrowShape, Maybe, ArrowType, Arrow, Color
 derive gPrint EdgeStyle, NodeStyle, DirType, NodeShape, Side, ArrowShape, Maybe, CompassPoint, StartStyle,
