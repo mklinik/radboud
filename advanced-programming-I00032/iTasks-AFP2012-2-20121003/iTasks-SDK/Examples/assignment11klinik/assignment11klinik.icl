@@ -17,20 +17,6 @@ labelOfTask responses taskNo =
     [] = abort "labelOfTask: no such task"
     [x:_] = x
 
-Start world = taskConformance world (task1 .||. task2) (task2 .||. task1)
-//Start = properEvents (task, initState)
-//Start = foo responses
-  where
-    (_, responses, _) = task (RefreshEvent`) initState
-    task = ((simplified_edit "edit1" 42 .||. simplified_edit "edit4" 10) >>>*
-      [ OnAction` (Action "BLAHBAR") (const True) (const (simplified_edit "edit2" (-42)))
-      , OnAction` (Action "MOOOOO!") (const True) (const (simplified_edit "edit3" (142)))
-      ])
-
-//task1 :: Task` Int
-task1 = (simplified_edit "edit500" 42)
-task2 = (simplified_edit "edit500" 42) >>>* [OnAction` (Action "Ok") (const True) (\_ -> return` 0)]
-
 :: UserEvent
   = UserEditEvent String Int
   | UserActionEvent Int Action
@@ -66,17 +52,26 @@ where
   (_, responses, _) = task RefreshEvent` state
 toRealEvent (UserActionEvent taskId action) _ = ActionEvent` taskId action
 
+eventTaskId :: UserEvent (Task` a, State) -> TaskNo
+eventTaskId event state = case toRealEvent event state of
+  EditEvent`   taskId _ = taskId
+  ActionEvent` taskId _ = taskId
+
 specTask :: (Task` a, State) UserEvent -> [Trans Response (Task` a, State)]
 specTask (task, state) input
   # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task (toRealEvent input (task, state)) state
-  = [Pt (map snd responses) (newTask, newState)]
+  = [Pt [response \\ (senderTaskId, response) <- responses | senderTaskId == receiverTaskId] (newTask, newState)]
+where
+  receiverTaskId = eventTaskId input (task, state)
 
 iutTask :: (Task` a, State) -> UserEvent -> ([Response], (Task` a, State))
 iutTask (task, state) = iutTask` (task, state)
 
 iutTask` (task, state) input
   # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task (toRealEvent input (task, state)) state
-  = ((map snd responses), (newTask, newState))
+  = ([response \\ (senderTaskId, response) <- responses | senderTaskId == receiverTaskId], (newTask, newState))
+where
+  receiverTaskId = eventTaskId input (task, state)
 
 taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
 taskConformance world task1 task2
@@ -91,10 +86,34 @@ taskConformance world task1 task2
   where
     options =
       [ InputFun (const properEvents)
+      , Ntests 100
       , Nsequences 10
       ]
 
 derive ggen UserEvent, Action
 derive bimap []
-derive genShow Event`, State, Reduct, Response, UserEvent, Action, JSONNode,
+derive genShow Event`, State, Reduct, Response, UserEvent, Action,
   TaskResult`, EditorResponse, Value`, EditMode, Stability`
+
+genShow{|JSONNode|} _ _ _ c = c
+
+//Start world = taskConformance world task5 task6 // should pass, does
+//Start world = taskConformance world task1 task2 // should pass, does
+//Start world = taskConformance world task2 task1 // should fail, does
+//Start world = taskConformance world task3 task4 // should pass, but doesn't
+//Start world = taskConformance world task4 task3 // should pass, but doesn't
+//Start world = taskConformance world task5 task6 // should pass, does
+Start world = taskConformance world task6 task5 // should pass, does
+
+
+task1 = (simplified_edit "edit500" 42)
+task2 = (simplified_edit "edit500" 42) >>>* [OnAction` (Action "Ok") (isValue) (return` o getValue)]
+
+taskX = (simplified_edit "edit500" 42)
+taskY = (simplified_edit "edit501" 42) >>>* [OnAction` (Action "Ok") (isValue) (return` o getValue)]
+
+task3 = (taskX .||. taskY)
+task4 = (taskY .||. taskX)
+
+task5 = (simplified_edit "foo" 42    .||. simplified_edit "bar" (-42))
+task6 = (simplified_edit "bar" (-42) .||. simplified_edit "foo" 42)
