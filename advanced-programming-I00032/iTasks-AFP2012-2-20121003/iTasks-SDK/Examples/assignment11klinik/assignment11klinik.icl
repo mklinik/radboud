@@ -108,6 +108,13 @@ specTask (task, state) input
   # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task (toRealEvent input (task, state)) state
   = [Pt (map snd responses) (newTask, newState)]
 
+iutTask :: (Task` a, State) -> UserEvent -> ([Response], (Task` a, State))
+iutTask (task, state) = iutTask` (task, state)
+
+iutTask` (task, state) input
+  # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task (toRealEvent input (task, state)) state
+  = ((map snd responses), (newTask, newState))
+
 //taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
 //taskConformance world task1 task2
   //= snd (testConfSM options
