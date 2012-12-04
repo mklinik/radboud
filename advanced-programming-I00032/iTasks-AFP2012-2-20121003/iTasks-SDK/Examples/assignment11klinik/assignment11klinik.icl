@@ -74,6 +74,11 @@ properEvents (task, state) =
   where
     (_, responses, _) = task (RefreshEvent`) state
 
+specTask :: (Task` a, State) UserEvent -> [Trans UserEvent (Task` a, State)]
+specTask (task, state) input = case input of
+  UserEditEvent label _ = [Pt [input] (task, state)]
+  = [Pt [input] (task, state)]
+
 //taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
 //taskConformance world task1 task2
   //= snd (testConfSM options
@@ -86,7 +91,3 @@ properEvents (task, state) =
         //)
   //where
     //options = [InputFun (const properEvents) ]
-
-//properEvents = undef
-//specTask = undef
-//iutTask = undef
