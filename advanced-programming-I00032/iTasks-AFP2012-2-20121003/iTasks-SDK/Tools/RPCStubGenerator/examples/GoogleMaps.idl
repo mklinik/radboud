@@ -1,0 +1,31 @@
+{ "service" : 
+	{ "name" : "Google Maps Services"
+	, "description" : "A collection of webservices from Google Maps"
+	}
+, "interface" :
+	{ "protocol" : ["HTTP","GET"]
+	, "type"	 : "JSONRPC"
+	}
+, "operations" : [
+	{ "name" : "Reverse Geocoding"
+	, "parameters" : [
+		{ "name" : "lat"
+		, "type" : "RPCReal"
+		},
+		{ "name" : "lng"
+		, "type" : "RPCReal"
+		},
+		{ "name" : "output"
+		, "type" : "RPCString"
+		},
+		{ "name" : "sensor"
+		, "type" : "RPCBool"
+		},
+		{ "name" : "api_key"
+		, "type" : "RPCString"
+		}]
+	, "location" : "http://maps.google.com/maps/geo"
+	, "callType" : "RequestResponse"
+	, "returnType" : "String"
+	}]
+}

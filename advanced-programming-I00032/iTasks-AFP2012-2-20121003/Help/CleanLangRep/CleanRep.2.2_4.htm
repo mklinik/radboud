@@ -1,0 +1,2210 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection5>
+
+<p class=Heading1Chapter><span style='position:absolute;z-index:251674112;
+left:0px;margin-left:38px;margin-top:19px;width:200px;height:97px'><img
+width=200 height=97 src="CleanRep.2.2_files/image001.jpg"></span><a
+name="_Toc311797978"><span lang=EN-US><br>
+Chapter 2</span></a><a name="_Defining_Modules"></a><span lang=EN-US><br>
+Modules and Scopes</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="50%" valign=bottom style='width:50.32%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.06%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>2.1</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.94%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_2.1_Identifiers,_Scopes">Identifiers, Scopes and Name
+    Spaces</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.06%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>2.2</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.94%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_2.2_Modular_Structure">Modular Structure of Clean
+    Programs</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.06%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>2.3</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.94%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_2.3_Implementation_Modules">Implementation Modules</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="49%" valign=bottom style='width:49.68%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>2.4</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_2.4_Definition_Modules">Definition Modules</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>2.5</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_2.5_Importing_Definitions">Importing Definitions</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.22%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>2.6</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.78%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_2.6_System_Definition">System Definition and Implementation
+    Modules</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>A C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> program is composed out
+of modules. Each module is stored in a file that contains C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> source code. There are implementation modules and definition
+modules, in the spirit of Modula-2 (<b>Wirth</b>, 1982). This module system is
+used for several reasons.</span></p>
+
+<p class=lop><span lang=EN-US>-&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;First of all, the module structure is
+used to <i>control the scope of definitions</i>. The basic idea is that def­i­nitions
+only have a meaning in the implementation module they are defined in unless
+they are ex­ported by the correspond­ing definition module. </span></p>
+
+<p class=lopal><span lang=EN-US>-&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Having the exported definitions
+collected in a separate definition module has as advantage that one in addition
+obtains a <i>self-contained interface document</i> one can reach out to others.
+The definition module is a document that defines which functions and data types
+can be used by others without revealing uninter­esting implementation details.</span></p>
+
+<p class=lopal><span lang=EN-US>-&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Furthermore, the module structure
+enables <i>separate compilation</i> that heavily reduces compilation time. If
+the definition module stays the same, a change in an implementation module only
+will cause the recompilation of that implementation module. When the definition
+module is changed as well, only those implementation modules that are affected
+by this change need to be recompiled.</span></p>
+
+<p class=par><span lang=EN-US>In this Chapter we explain the module structure
+of C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> and the influence it has on the scope of def­initions. New scopes can
+also be introduced inside modules. This is further explained in the <a
+href="#_Defining_Modules">Chapters 2</a> and <a href="CleanRep.2.2_5.htm#_Defining_Functions">3</a>.</span></p>
+
+<p class=par><span lang=EN-US>In the pictures in the subsections below nested
+boxes indicate nested scopes.</span></p>
+
+<h2><a name="_Toc311797979"></a><a name="_Toc524343490"></a><a
+name="_2.1_Identifiers,_Scopes"></a><span lang=EN-US>2.1    Identifiers, Scopes
+and Name Spaces</span></h2>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<h3><a name="_Toc311797980"></a><a name="_Toc524343491"><span lang=EN-US>2.1.1 Naming
+Conventions of Identifiers</span></a></h3>
+
+<p class=par><span lang=EN-US>In C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> we distinguish the
+following kind of <i>identifiers</i>.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;background:#FFCC99;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>ModuleName</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UpperCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunnyId</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>FunctionName</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>| </span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UpperCaseId </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunnyId</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>ConstructorName</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UpperCaseId </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>| </span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunnyId</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>SelectorVariable</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>Variable</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>MacroName</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UpperCaseId </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunnyId</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>FieldName</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>TypeName</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UpperCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>| </span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunnyId</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>TypeVariable</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>UniqueTypeVariable</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>ClassName</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|        </span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UpperCaseId       
+  </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|        </span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunnyId</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>MemberName</span></span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|   </span></p>
+  </td>
+  <td width="15%" valign=top style='width:15.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UpperCaseId       
+  </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|        </span></p>
+  </td>
+  <td width="43%" valign=top style='width:43.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunnyId</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='background:#FFCC99;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseChar~{IdChar}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UpperCaseId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UpperCaseChar~{IdChar}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunnyId</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{SpecialChar}+</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='background:#FFCC99;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>LowerCaseChar</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>a</span></span><span lang=EN-US>    |    </span><span
+  class=cleanb><span lang=EN-US>b</span></span><span lang=EN-US>    |    </span><span
+  class=cleanb><span lang=EN-US>c</span></span><span lang=EN-US>    |    </span><span
+  class=cleanb><span lang=EN-US>d</span></span><span lang=EN-US>    |    </span><span
+  class=cleanb><span lang=EN-US>e</span></span><span lang=EN-US>    |    </span><span
+  class=cleanb><span lang=EN-US>f</span></span><span lang=EN-US>    |    </span><span
+  class=cleanb><span lang=EN-US>g</span></span><span lang=EN-US>    |    </span><span
+  class=cleanb><span lang=EN-US>h</span></span><span lang=EN-US>    |    </span><span
+  class=cleanb><span lang=EN-US>i</span></span><span lang=EN-US>    |    </span><span
+  class=cleanb><span lang=EN-US>j</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>k</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>l</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>m</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>n</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>o</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>p</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>q</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>r</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>s</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>t</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>u</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>v</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>w</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>x</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>y</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>z</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>UpperCaseChar</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>a</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>b</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>c</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>d</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>e</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>f</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>g</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>h</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>i</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>j</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>k</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>l</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>m</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>n</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>o</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>p</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>q</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>r</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>s</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>t</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>u</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>v</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>w</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>x</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>y</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>z</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>SpecialChar</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>~</span></span><span lang=PT-BR>    |    </span><span
+  class=cleanb><span lang=PT-BR>@</span></span><span lang=EN-US>    </span><span
+  lang=PT-BR>|    </span><span class=cleanb><span lang=PT-BR>#</span></span><span
+  lang=EN-US>    </span><span lang=PT-BR>|    </span><span class=cleanb><span
+  lang=PT-BR>$</span></span><span lang=EN-US>    </span><span lang=PT-BR>|    </span><span
+  class=cleanb><span lang=PT-BR>%</span></span><span lang=EN-US>    </span><span
+  lang=PT-BR>|    </span><span class=cleanb><span lang=PT-BR>^</span></span><span
+  lang=EN-US>    </span><span lang=PT-BR>|    </span><span class=cleanb><span
+  lang=PT-BR>?</span></span><span lang=EN-US>    </span><span lang=PT-BR>|    </span><span
+  class=cleanb><span lang=PT-BR>!</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>+</span></span><span lang=EN-US>    </span><span lang=PT-BR>|    </span><span
+  class=cleanb><span lang=PT-BR>-</span></span><span lang=EN-US>    </span><span
+  lang=PT-BR>|    </span><span class=cleanb><span lang=PT-BR>*</span></span><span
+  lang=EN-US>    </span><span lang=PT-BR>|    </span><span class=cleanb><span
+  lang=PT-BR>&lt;</span></span><span lang=EN-US>    </span><span lang=PT-BR>|   
+  </span><span class=cleanb><span lang=PT-BR>&gt;</span></span><span
+  lang=EN-US>    </span><span lang=PT-BR>|    </span><span class=cleanb><span
+  lang=PT-BR>\</span></span><span lang=EN-US>    </span><span lang=PT-BR>|    </span><span
+  class=cleanb><span lang=PT-BR>/</span></span><span lang=EN-US>    </span><span
+  lang=PT-BR>|    </span><span class=cleanb><span lang=PT-BR>|</span></span><span
+  lang=EN-US>    </span><span lang=PT-BR>|    </span><span class=cleanb><span
+  lang=PT-BR>&amp;</span></span><span lang=EN-US>    </span><span lang=PT-BR>|   
+  </span><span class=cleanb><span lang=PT-BR>=</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>:</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>IdChar</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>LowerCaseChar</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>UpperCaseChar</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>Digit</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>_</span></span><span lang=EN-US>    </span><span lang=PT-BR>|    </span><span
+  class=cleanb><span lang=PT-BR>‘</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=PT-BR>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='background:#FFCC99;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>Digit</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=PT-BR>0</span></span><span lang=EN-US>    </span><span lang=PT-BR>|    </span><span
+  class=cleanb><span lang=PT-BR>1</span></span><span lang=EN-US>    </span><span
+  lang=PT-BR>|    </span><span class=cleanb><span lang=PT-BR>2</span></span><span
+  lang=EN-US>    </span><span lang=PT-BR>|    </span><span class=cleanb><span
+  lang=PT-BR>3</span></span><span lang=EN-US>    </span><span lang=PT-BR>|    </span><span
+  class=cleanb><span lang=PT-BR>4</span></span><span lang=EN-US>    </span><span
+  lang=PT-BR>|    </span><span class=cleanb><span lang=PT-BR>5</span></span><span
+  lang=EN-US>    </span><span lang=PT-BR>|    </span><span class=cleanb><span
+  lang=PT-BR>6</span></span><span lang=EN-US>    </span><span lang=PT-BR>|    </span><span
+  class=cleanb><span lang=PT-BR>7</span></span><span lang=EN-US>    </span><span
+  lang=PT-BR>|    </span><span class=cleanb><span lang=PT-BR>8</span></span><span
+  lang=EN-US>    </span><span lang=PT-BR>|    </span><span class=cleanb><span
+  lang=PT-BR>9</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>The con­vention used is that variables always
+start with a lower­case char­ac­ter while constructors and types al­ways start
+with an uppercase character. The other identifiers can ei­ther start with an
+upper­case or a lowercase character. Notice that for the identifiers names can
+be used consisting of a combination of lower and/or up­per­case char­acters but
+one can also define identifiers constructed from special char­ac­ters like </span><span
+class=clean><span lang=EN-US>+</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>&lt;</span></span><span lang=EN-US>, etc. (<a
+href="CleanRep.2.2_14.htm#_Context-Free_Syntax_Description">see Appendix A</a>). These two kinds
+of identifiers cannot be mixed. This makes it pos­sible to leave out white
+space in ex­pressions like </span><span class=clean><span lang=EN-US>a+1</span></span><span
+lang=EN-US> (same as </span><span class=clean><span lang=EN-US>a + 1</span></span><span
+lang=EN-US>). </span></p>
+
+<h3><a name="_Toc311797981"></a><a name="_Toc524343492"></a><a
+name="_2.1.2_Scopes_and"></a><span lang=EN-US>2.1.2 Scopes and Name Spaces</span></h3>
+
+<p class=par><span lang=EN-US>The <i>scope</i></span><span
+lang=EN-US> is the program region in which definitions (e.g. function
+definition, class definition, macro definition, type de­f­ini­tion) with the
+identifiers introduced (e.g. function name, class name, class vari­able, macro
+name, type con­structor name, type variable name) have a meaning. </span></p>
+
+<p class=par><span lang=EN-US>It must be clear from the context to which
+definition an identifier is referring. If all identifiers in a scope have
+different names than it will always be clear which definition is meant.
+However, one gener­ally wants to have a free choice in naming identifiers. If
+identifiers belong to different <i>name spaces</i></span><span
+lang=EN-US> no conflict can arise even if the same name is used. In C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> the following name spaces exist:</span></p>
+
+<p class=lop><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;ModuleNames form a name space;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;FunctionNames, ConstructorNames,
+SelectorVariables, Variables and MacroNames form a name space;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;FieldNames form a name space;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;TypeNames, TypeVariables and
+UniqueTypeVariables form a name space;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;ClassNames form a name space.</span></p>
+
+<p class=par><span lang=EN-US>So, it is allowed to use the same identifier</span><span lang=EN-US> name for different purposes as long as the identifier belongs to dif­ferent
+name spaces. </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Identifiers belonging to the same name space must all have different
+names within the same scope. Under certain conditions it is allowed to use the
+same name for different functions and opera­tors (overloading</span><span lang=EN-US>, <a href="CleanRep.2.2_8.htm#_Overloading">see Chapter 6</a>).</span></p>
+
+<h3><a name="_Toc311797982"></a><a name="_Toc524343493"><span lang=EN-US>2.1.3 Nesting
+of Scopes</span></a></h3>
+
+<p class=par><span lang=EN-US>Reusing identifier names is possible by
+introducing a new scope level. Scopes can be nested: within a scope a new <i>nested
+scope</i></span><span
+lang=EN-US> can be de­fined.</span><span
+lang=EN-US> Within such a nested scope new definitions can be given, new names
+can be intro­duced. As usual it is al­lowed in a nested scope to re-define
+defini­tions or re-use names given in a sur­round­ing scope: When a name is
+re-used the old name and definition is no longer in scope and cannot be used in
+the new scope. A definition given or a name introduced in a (nested) scope has
+no meaning in sur­round­ing scope</span><span
+lang=EN-US>s.</span><span
+lang=EN-US> It has a meaning for all scopes nested within it (unless they are
+redefined within such a nested scope).</span></p>
+
+<h2><a name="_Toc311797983"></a><a name="_Toc524343494"></a><a
+name="_2.2_Modular_Structure"></a><span lang=EN-US>2.2    Modular Structure of
+Clean Programs</span></h2>
+
+<p class=par><span lang=EN-US>A C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> program consists of a
+collection of <i>definition module</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US> and <span style='display:none'>.ib</span>
+<span style='display:none'>.i</span><i>implementation mo­d­ule</i><span
+style='display:none'>;</span><i>s</i>.</span><span
+lang=EN-US> An imple­menta­tion module and a definition module <i>correspond</i>
+to each other if the names of the two mo­dules are the same.</span><span
+lang=EN-US> The basic idea is that the definitions given in an imple­men­ta­tion
+mo­dule only have a meaning in the module in which they are defined <i>unless</i>
+these definitions are expor­ted by putting them into the corresponding
+definition module. In that case the definitions also have a meaning in those
+other modules in which the definitions are im­ported (<a
+href="#_2.5_Importing_Definitions">see 2.5</a>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>CleanProgram</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{Module}+</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Module</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DefinitionModule
+  </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ImplementationModule</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DefinitionModule
+  </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>definition </span></span><span
+  class=cleankw><span lang=EN-US>module</span></span><span
+  lang=EN-US> </span><span class=clean><span lang=EN-US>ModuleName</span></span><span
+  lang=EN-US style='color:#3366FF'> </span><span class=clean><span lang=EN-US
+  style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{DefDefinition}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>system </span></span><span
+  class=cleankw><span lang=EN-US>module</span></span><span lang=EN-US> </span><span
+  class=clean><span lang=EN-US>ModuleName<span style='color:#3366FF'> ;</span></span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{DefDefinition}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ImplementationModule</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[</span><span
+  class=cleankw><span lang=EN-US>implementation</span></span><span
+  lang=EN-US>] </span><span class=cleankw><span lang=EN-US>module</span></span><span
+  lang=EN-US> </span><span class=clean><span lang=EN-US>Modu­le­Name</span></span><span
+  lang=EN-US> </span><span class=clean><span lang=EN-US style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{ImplDefinition}</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>An executable C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> program consists at
+least of one implementation module, the <i>main</i> or <i>start</i> <i>module</i>,
+which is the top-most module (<i>root module</i>) of a C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> program.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Each C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> module has to be put in a separate
+file.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The name of a module (i.e. the module name) should be the same as
+the name of the file (minus the suffix) in which the module is stored.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A <i>definition</i> module should have .<i>dcl</i> as suffix; an <i>implementation</i>
+module should have <i>.i<span style='display:none'>.i</span>cl</i><span
+style='display:none'>.i</span><i> </i>as suffix.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A definition module can have at most one cor­responding im­ple­menta­tion
+module.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Every implementation module (except the main module, <a
+href="#_2.3.1_The_Main">see 2.3.1</a>) must have a corre­spond­ing definition
+module.</span></p>
+
+<h2><a name="_Toc311797984"></a><a name="_Toc524343495"></a><a
+name="_2.3_Implementation_Modules"></a><span lang=EN-US>2.3    Implementation
+Modules</span></h2>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<h3><a name="_Toc311797985"></a><a name="_Toc524343496"></a><a
+name="_2.3.1_The_Main"></a><span lang=EN-US>2.3.1 The Main or Start Module</span></h3>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>In the main module</span><span
+lang=EN-US> a </span><span lang=EN-US style='font-family:Courier'>Start</span><span
+lang=EN-US> rule has to be defined (<a href="CleanRep.2.2_3.htm#_Basic_Semantics">see Chapter 1</a>).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Only in the main module one can leave out the keyword </span><span
+lang=EN-US style='font-family:Courier'>implementation</span><span lang=EN-US>
+in the module header. In that case the implementation module does not need to
+have a corre­sponding defi­ni­tion module (which makes sense for a top-most
+module).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>A very tiny but complete C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><i><span
+lang=EN-US> </span></i><span lang=EN-US>program consisting of one
+implementation module.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> hello</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start = &quot;Hello World!&quot;</span></p>
+
+<p class=par><i><span lang=EN-US>Evaluation of a </span></i><span lang=EN-US>C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><i><span
+lang=EN-US> pro­gram </span></i><span lang=EN-US>consists of the evaluation of
+the ap­plication de­fined in the right-hand side of the </span><span
+class=clean><span lang=EN-US>Start</span></span><i><span lang=EN-US> rule</span></i><span
+lang=EN-US> to nor­mal form (<a href="CleanRep.2.2_3.htm#_Basic_Semantics">see Chapter 1</a>).
+The right-hand side of the </span><span class=clean><span lang=EN-US>Start</span></span><span
+lang=EN-US> rule is regarded to be the <i>initial expression</i></span><span
+lang=EN-US> to be computed. </span></p>
+
+<p class=par><span lang=EN-US>It is allowed to have a </span><span class=clean><span
+lang=EN-US>Start</span></span><span lang=EN-US> rule in other implementation mo­dules
+as well. This can be handy for test­ing functions defined in such a module: to
+eval­uate such a </span><span class=clean><span lang=EN-US>Start</span></span><span
+lang=EN-US> rule simply generate an application with the module as root and
+execute it. In the C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> IDE one can specify which module has to
+be regarded as being the root module.</span></p>
+
+<p class=par><span lang=EN-US>The definition of the left-hand side of the Start
+rule con­sists of the <i>symbol </i></span><span class=clean><span lang=EN-US>Start</span></span><span
+lang=EN-US> with one optional ar­gu­ment (of type </span><span class=clean><span
+lang=EN-US>*World</span></span><span
+lang=EN-US>), which is the envi­ronment pa­rame­ter, which is neces­sary to
+write interactive applications. </span></p>
+
+<p class=par><span lang=EN-US>A C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> program can run in two
+modes.</span></p>
+
+<h4><a name="_Toc524343497"><span lang=EN-US>         </span></a><a
+name="_Toc311797986"><span lang=EN-US>I/O Using the Console</span></a></h4>
+
+<p class=par><span lang=EN-US>The first mode is a <i>console mode</i></span><span
+lang=EN-US>. It is chosen when the </span><span class=clean><span lang=EN-US>Start</span></span><span
+lang=EN-US> rule is defined as a <i>nullary</i> func­tion.</span></p>
+
+<p class=exb></p>
+
+<p class=ex><span lang=EN-US>Start:: TypeOfStartFunction</span></p>
+
+<p class=ex><span lang=EN-US>Start = …                         </span><span
+class=cleancom><span lang=EN-US>// initial expression</span></span></p>
+
+<p class=par><span lang=EN-US>In the console mode, that part of the <i>initial
+expression</i></span><span lang=EN-US> (indicated by the right-hand side of the
+</span><span class=clean><span lang=EN-US>Start</span></span><span lang=EN-US>
+rule), which is in <i>root normal form</i></span><span
+lang=EN-US> (also called the head normal form</span><span
+lang=EN-US> or root stable form</span><span
+lang=EN-US>), is printed as soon as possible. The console mode can be used for
+instance to test or debug func­tions. </span></p>
+
+<p class=par><span lang=EN-US>In the C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> IDE one can choose
+to print the result of a </span><span class=clean><span lang=EN-US>Start </span></span><span
+lang=EN-US>expression <i>with</i> or <i>without</i> the data constructors.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>For ex­ample, the initial expression</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start:: String</span></p>
+
+<p class=ex><span lang=EN-US>Start = &quot;Hello World!&quot;</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>in mode “show data constructors” will print: </span><span
+class=clean><span lang=EN-US>&quot;Hello World!&quot;</span></span><span
+lang=EN-US>, in mode “don’t show data constructors” it will print: </span><span
+class=clean><span lang=EN-US>Hello World!</span></span></p>
+
+<h4><a name="_Toc524343498"><span lang=EN-US>         </span></a><a
+name="_Toc311797987"><span lang=EN-US>I/O on the Unique World</span></a></h4>
+
+<p class=par><span lang=EN-US>The second mode is the<i> world mode</i></span><span
+lang=EN-US>. It is chosen when the optional additional parameter (which is of
+type </span><span class=clean><span lang=EN-US>*World)</span></span><span
+lang=EN-US> is added to the </span><span class=clean><span lang=EN-US>Start</span></span><span
+lang=EN-US> rule and delivered as result.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start:: *World -&gt; *World</span></p>
+
+<p class=ex><span lang=EN-US>Start w = …                         </span><span
+class=cleancom><span lang=EN-US>// initial expression returning a changed world</span></span></p>
+
+<p class=par><span lang=EN-US>The world which is given to the initial
+expression is an <i>abstract data structure</i>, an <i>abstract world</i> of
+type </span><span class=clean><span lang=EN-US>*World</span></span><span
+lang=EN-US> which models <i>the concrete physical world</i> as seen from the
+program. The ab­stract world can in principle contain <i>anything</i> what a
+func­tio­nal program needs to in­ter­act during execution with the con­crete
+world. The world can be seen as a <i>state</i> and modifica­tions of the world
+can be realized via <i>state transition functions</i> defined on the world or a
+part of the world. By re­qui­ring that these state transition functions work on
+a <i>unique</i> world the modifi­cations of the abstract world can di­rectly be
+realized in the real physical world, without loss of effi­ciency and without
+losing referen­tial trans­parency (<a href="CleanRep.2.2_11.htm#_Uniqueness_Typing">see Chapter 9</a>)
+</span><span
+lang=EN-US> </span></p>
+
+<p class=par><span lang=EN-US>The concrete way in which the world can be
+handled in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> is determined by the system pro­gram­mer. One way to handle the
+world is by using the predefined C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> I/O library</span><span lang=EN-US>, which can be regarded as a platform independent mini operating
+system. It makes it possible to do file I/O, win­dow based I/O, dynamic process
+creation and process communication in a pure functional language in an
+efficient way. The definition of the I/O library is treated in a separate
+document (<a
+href="ftp://ftp.cs.kun.nl/pub/Clean/supported/ObjectIO.1.2/doc/tutorial.ps.gz">Object
+IO tutorial</a>, Achten <i>et al.</i>, 1997).</span></p>
+
+<h3><a name="_Toc311797988"></a><a name="_Toc524343499"></a><a
+name="_2.3.2_Scope_of"></a><span lang=EN-US>2.3.2 Scope of Global Definitions
+in Implementation Modules</span></h3>
+
+<p class=par><span lang=EN-US>In an implementation module the following global
+definitions can be specified in <i>any</i> order.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ImplDefinition</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ImportDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_2.5_Importing_Definitions">see 2.5</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_5.htm#_Defining_Functions">see Chapter 3</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_5.htm#_Defining_Types">see 3.6</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>MacroDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_12.htm#_10.3_Defining_Macros">see 10.3</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_7.htm#_Defining_New_Types">see Chapter 5</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ClassDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_8.htm#_Overloading">see Chapter 6</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GenericsDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_9.htm#_Generic_Programming">see Chapter 7</a></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><i><span lang=EN-US>Definitions</span></i><span lang=EN-US> on the
+<i>global</i> level (= outermost level in the module,) have in principle the
+whole imple­men­tation mo­dule as scope (see Figure 2.1). </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Figure 2.1 </span></b><span lang=EN-US>(Scope
+of global definitions inside an implementation module).</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251636224;margin-left:103px;
+margin-top:65px;width:226px;height:16px'><img width=226 height=16
+src="CleanRep.2.2_files/image007.gif"></span><span style='position:absolute;
+z-index:251632128;margin-left:82px;margin-top:39px;width:248px;height:17px'><img
+width=248 height=17 src="CleanRep.2.2_files/image008.gif"></span><span
+style='position:absolute;z-index:251656704;margin-left:-5px;margin-top:13px;
+width:343px;height:166px'><img width=343 height=166
+src="CleanRep.2.2_files/image009.gif"></span><span style='position:absolute;
+z-index:251635200;margin-left:67px;margin-top:157px;width:261px;height:17px'><img
+width=261 height=17 src="CleanRep.2.2_files/image010.gif"></span><span
+style='position:absolute;z-index:251657728;margin-left:75px;margin-top:106px;
+width:84px;height:17px'><img width=84 height=17
+src="CleanRep.2.2_files/image011.gif"></span><span style='position:absolute;
+z-index:251633152;margin-left:89px;margin-top:81px;width:240px;height:16px'><img
+width=240 height=16 src="CleanRep.2.2_files/image012.gif"></span><span
+style='position:absolute;z-index:251634176;margin-left:38px;margin-top:131px;
+width:290px;height:17px'><img width=290 height=17
+src="CleanRep.2.2_files/image013.gif"></span><span class=cleankw><span
+lang=EN-US><br>
+implementation</span></span><span lang=EN-US> module XXX<br>
+<br>
+:: TypeName typevars = type_expression           </span><span class=cleancom><span
+lang=EN-US>// definition of a new type<br>
+</span></span><span lang=EN-US><br>
+functionName:: type_of_args -&gt; type_of_result    </span><span
+class=cleancom><span lang=EN-US>// definition of the type of a function<br>
+</span></span><span lang=EN-US>functionName args = expression                  
+</span><span class=cleancom><span lang=EN-US>// definition of a function<br>
+</span></span><span lang=EN-US><br>
+selector = expression                            </span><span class=cleancom><span
+lang=EN-US>// definition of a constant graph<br>
+</span></span><span lang=EN-US><br>
+</span><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> className = expression                     </span><span
+class=cleancom><span lang=EN-US>// definition of a class<br>
+</span></span><span lang=EN-US><br>
+macroName args :==  expression                   </span><span class=cleancom><span
+lang=EN-US>// definition of a macro<br>
+<br>
+</span></span></p>
+
+<p class=par><span lang=EN-US>Types can only be defined globally (<a
+href="CleanRep.2.2_7.htm#_Defining_New_Types">see Chapter 5</a>) and therefore always have a
+meaning in the whole implementation module. Type variables introduced on the
+left-hand side of a (algebraic, record, syn­onym, overload, class, in­stance,
+func­tion, graph) type definition have the right-hand side of the type
+definition as scope.</span></p>
+
+<p class=par><span lang=EN-US>Functions, the type of these functions, constants
+(selectors) and macro’s can be defined on the <i>global</i> level as well as on
+a <i>local</i> level in nested scopes. When defined globally they have a
+meaning in the whole implementa­tion module. Arguments introduced on the
+left-hand side of a definition (formal ar­guments) only have a meaning in the
+corresponding right-hand side.</span><span lang=EN-US> </span></p>
+
+<p class=par><span lang=EN-US>Functions, the type of these functions, constants
+(selectors) and macro’s can also be defined locally in a new scope</span><span lang=EN-US>. However, new scopes can only be intro­duced at certain points. In
+functional languages local definitions are by tradition defined by using <i>let</i>-expressions
+(definitions given <i>before</i> they are used in a certain expression, nice
+for a bottom-up style of programming) and <i>where</i>-blocks (definitions
+given <i>af­terwards</i>, nice for a top-down style of program­ming). These
+constructs are explained in detail in Chapter 3.</span></p>
+
+<h3><a name="_Toc311797989"></a><a name="_Toc524343500"></a><a
+name="_2.3.3_Begin_and"></a><span lang=EN-US>2.3.3 Begin and End of a
+Definition: the Layout Rule</span></h3>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> programs can be written
+in two modes: layout sensitive mode ‘on’ and ‘off’. The layout sensi­tive mode
+is switched off when a semi-colon is specified after the module name. In that
+case each defi­nition has to be ended with a semicolon ‘</span><span
+class=clean><span lang=EN-US style='color:blue'>;</span></span><span
+lang=EN-US>’. A new scope has to begin with ‘</span><span class=clean><span
+lang=EN-US style='color:blue'>{</span></span><span lang=EN-US>’ and ends with a
+‘</span><span class=clean><span lang=EN-US style='color:blue'>}</span></span><span
+lang=EN-US>’. This mode is handy if C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> code is generated
+automatically (e.g. by a compiler).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+program <i>not</i> using the layout rule.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> primes<span style='color:blue'>;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>import</span></span><span
+lang=EN-US> StdEnv<span style='color:blue'>;</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>primes:: [Int]<span style='color:blue'>;</span></span></p>
+
+<p class=ex><span lang=EN-US>primes = sieve [2..]<span style='color:blue'>;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=PT-BR style='color:blue'>{   </span><span lang=PT-BR>sieve::
+[Int] -&gt; [Int]<span style='color:blue'>;</span> sieve [pr:r] = [pr:sieve
+(filter pr r)]<span style='color:blue'>;</span></span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>    filter:: Int [Int] -&gt; [Int]<span
+style='color:blue'>;</span></span></p>
+
+<p class=ex><span lang=PT-BR>    filter pr [n:r] | n mod pr == 0 = filter pr r<span
+style='color:blue'>;</span></span></p>
+
+<p class=ex><span lang=PT-BR>    | otherwise        = [n:filter pr r]<span
+style='color:blue'>;</span></span></p>
+
+<p class=ex><span lang=EN-US style='color:blue'>}</span></p>
+
+<p class=par><span lang=EN-US>Programs look a little bit old fashion C-like in
+this way. Functional programmers generally prefer a more mathematical style.
+Hence, as is common in modern functional languages, there is a layout rule in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>. When a semicolon does not end the header of a module, a C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> program has become layout sensi­tive. The <i>layout rule</i></span><span lang=EN-US> assumes the omission of the semi-colon (‘</span><span class=clean><span
+lang=EN-US style='color:blue'>;</span></span><span lang=EN-US>’)</span><span
+class=clean><span lang=EN-US> </span></span><span lang=EN-US>that ends a
+definition and of the braces (‘</span><span class=clean><span lang=EN-US
+style='color:blue'>{</span></span><span lang=EN-US>’ and ‘</span><span
+class=clean><span lang=EN-US style='color:blue'>}</span></span><span
+lang=EN-US>’) that are used to group a list of definitions. These symbols are
+automati­cally added according to the following rules: </span></p>
+
+<p class=par><span lang=EN-US>In <i>layout sensitive mode</i> the indentation
+of the first lexeme after the keywords </span><span class=cleankw><span
+lang=EN-US>let</span></span><span lang=EN-US>,</span><span class=clean><span
+lang=EN-US> #</span></span><span lang=EN-US>, </span><span class=clean><span
+lang=EN-US>#!</span></span><span lang=EN-US>, </span><span class=cleankw><span
+lang=EN-US>of</span></span><span lang=EN-US>, </span><span class=cleankw><span
+lang=EN-US>where</span></span><span lang=EN-US>, or </span><span class=cleankw><span
+lang=EN-US>with</span></span><span lang=EN-US> deter­mines the indentation that
+the group of definitions fol­lowing the keyword has to obey. De­pend­ing on the
+indentation of the first lexeme on a subse­quent line the following happens. A
+new def­ini­tion is assumed if the lexeme starts on the same in­dentation (and
+a semicolon is inserted). A previous defini­tion is assumed to be continued if
+the lex­eme is in­dented more. The group of defini­ti­ons ends (and a close
+brace is inserted) if the lexeme is indented less. Global definition</span><span
+lang=EN-US>s are as­su­med to start in col­umn 0.</span></p>
+
+<p class=par><span lang=EN-US>We strongly advise to write programs in layout
+sensitive mode. <i>For reasons of portability it is assumed that a tab space is
+set to 4 white spaces and that a non-pro­portional font is used.</i></span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Same program using the layout sensitive mode.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> primes</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>import</span></span><span
+lang=EN-US> StdEnv</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>primes:: [Int]</span></p>
+
+<p class=ex><span lang=EN-US>primes = sieve [2..]</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=PT-BR>    sieve:: [Int] -&gt; [Int]</span></p>
+
+<p class=ex><span lang=PT-BR>    sieve [pr:r]  = [pr:sieve (filter pr r)]</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>    filter:: Int [Int] -&gt; [Int]</span></p>
+
+<p class=ex><span lang=PT-BR>    filter pr [n:r]</span></p>
+
+<p class=ex><span lang=PT-BR>    | n mod pr == 0 = filter pr r</span></p>
+
+<p class=ex><span lang=PT-BR>    | otherwise     = [n:filter pr r]</span></p>
+
+<h2><a name="_Toc311797990"></a><a name="_Toc524343501"></a><a
+name="_2.4_Definition_Modules"></a><span lang=EN-US>2.4    Definition Modules</span></h2>
+
+<p class=par><span lang=EN-US>The definitions given in an implementation module
+only have a meaning in the module in which they are defined. If you want to <i>export</i>
+a definition, you have to specify the definition in the corresponding
+definition module. Some definitions can only appear in implementation modules,
+not in definition modules. The idea is to hide the actual implementa­tion from
+the outside world. The is good for soft­ware engineering reasons while another
+advantage is that an implementation module can be recompiled separately without
+a need to recompile other modu­les. Recompilation of other modules is only
+neces­sary when a definition module is changed. All mod­u­les depending on the
+changed module will have to be recompiled as well. Implementations of func­tions,
+graphs and class instances are therefore only allowed in <i>implementation</i>
+modules. They are exported by only specifying their type definition in the
+definition module. Also the right-hand side of any type de­f­inition can remain
+hidden. In this way an abstract data type is created (<a
+href="CleanRep.2.2_7.htm#_4.2.4_Defining_Abstract">see 5.4</a>).</span></p>
+
+<p class=par><span lang=EN-US>In a definition module</span><span
+lang=EN-US> the following global definitions can be given in <i>any</i> order.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DefDefinition</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ImportDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_2.5_Importing_Definitions">see 2.5</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionTypeDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_5.htm#_3.7_Typing_Functions_1">see 3.7</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>MacroDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_12.htm#_5.3_Defining_Macros">see 10.3</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_7.htm#_Defining_New_Types">see Chapter 5</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ClassDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_8.htm#_Overloading">see Chapter 6</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeClassInstanceExportDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_8.htm#_4.4.10_Exporting_Type">see 6.10</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GenericExportDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="CleanRep.2.2_9.htm#_Generic_Programming">see Chapter 7</a></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The definitions given in an implementation module only have a
+meaning in the module in which they are defined (<a
+href="#_2.3_Implementation_Modules">see 2.3</a>) <i>unless</i> these
+definitions are exported by putting them into the cor­re­s­pon­d­ing definition
+module. In that case they also have a meaning in those other modules in which
+the de­fi­nitions are imported (<a href="#_2.5_Importing_Definitions">see 2.5</a>).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>In the corresponding implementation module all exported definitions
+have to get an appropriate imple­men­tation (this holds for functions, abstract
+data types, class instances).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>An <i>abstract data type</i></span><i><span lang=EN-US> </span></i><span lang=EN-US>is exported by specifying the left-hand side of
+a type rule in the defini­tion module. In the corre­spond­ing implementation module
+the abstract type <i>has to be de­fined again</i> but then right-hand side has
+to be defined as well. For such an abstract data type only the name of the type
+is ex­ported but not its defini­tion.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A <i>function,</i> global <i>graph</i> or <i>class instance</i> is
+exported by defining the type header in the definition module. For optimal
+efficiency it is recommended also to specify strictness annotations (<a
+href="CleanRep.2.2_12.htm#_5.1_Annotations_to">see 10.1</a>). For library functions it is
+recommended also to specify the uniqueness type attributes (<a
+href="CleanRep.2.2_11.htm#_Uniqueness_Typing">see Chapter 9</a>). The implementation of a
+function, a graph, a class instance has to be given in the corresponding
+implementa­tion module. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Although it is not required anymore to repeat an exported definition
+in the corresponding implementation module, it is a good habit to do so to keep
+the implementation module readable. If a definition is repeated, the definition
+given in the definition module and in the implementation module should be the
+same (modulo variable names). </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Definition module.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>definition</span></span><span
+lang=EN-US> </span><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> ListOperations</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::complex                          </span><span
+class=cleancom><span lang=EN-US>// abstract type definition</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>re:: complex -&gt; Real               </span><span
+class=cleancom><span lang=EN-US>// function taking the real part of complex
+number</span></span></p>
+
+<p class=ex><span lang=EN-US>im:: complex -&gt; Real               </span><span
+class=cleancom><span lang=EN-US>// function taking the imaginary part of com­plex</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>mkcomplex:: Real Real -&gt; Complex   </span><span
+class=cleancom><span lang=EN-US>// function creating a complex number</span></span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>corresponding implementation module):</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>implementation</span></span><span
+lang=EN-US> </span><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> ListOperations</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::complex :== (!Real,!Real)        </span><span
+class=cleancom><span lang=EN-US>// a type synonym</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>re:: complex -&gt; Real               </span><span
+class=cleancom><span lang=EN-US>// type of function followed by its
+implementation</span></span></p>
+
+<p class=ex><span lang=EN-US>re (frst,_) = frst </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>im:: complex -&gt; Real</span></p>
+
+<p class=ex><span lang=EN-US>im (_,scnd) = scnd </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>mkcomplex:: Real Real -&gt; Complex</span></p>
+
+<p class=ex><span lang=EN-US>mkcomplex frst scnd = (frst,scnd) </span></p>
+
+<h2><a name="_Toc311797991"></a><a name="_Toc524343502"></a><a
+name="_2.5_Importing_Definitions"></a><span lang=EN-US>2.5    Importing
+Definitions</span></h2>
+
+<p class=par><span lang=EN-US>Via an <i>import</i> <i>statement</i></span><span
+lang=EN-US> a definition <i>exported</i> by a definition module (<a
+href="#_2.4_Definition_Modules">see 2.4</a>) can be <i>imported</i> into any
+other (definition or implementation) module. There are two kinds of import
+statements, <i>explicit</i> im­ports and <i>implicit</i> imports.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ImportDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ImplicitImportDef</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ExplicitImportDef</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>A module <i>depends</i> <i>on</i> another module
+if it imports something from that other module. In C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'> </span><span lang=EN-US>2.x
+cyclic dependencies are allowed.</span></p>
+
+<h3><a name="_Toc311797992"></a><a name="_Toc524343503"></a><a
+name="_2.5.1_Explicit_Imports"></a><span lang=EN-US>2.5.1 Explicit Imports of
+Definitions</span></h3>
+
+<p class=par><i><span lang=EN-US>Explicit</span></i><span lang=EN-US> <i>imports</i>
+are import statements in which the modules to import from as well as the
+identifiers indicating the definitions to import are explicitly specified. All
+identifiers explicitly being imported in a definition or implementation module
+will be included in the global scope</span><span
+lang=EN-US> level (= outermost scope, <a href="#_2.3.2_Scope_of">see 2.3.2</a>)
+of the module that does the import.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ExplicitImportDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>from</span></span><span
+  lang=EN-US> </span><span class=clean><span lang=EN-US>ModuleName</span></span><span
+  lang=EN-US> </span><span class=cleankw><span lang=EN-US>import</span></span><span
+  lang=EN-US> {Imports}-list </span><span class=clean><span lang=EN-US
+  style='color:#3366FF'>; </span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Imports</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>FunctionName</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span><span class=clean><span lang=EN-US>TypeName</span></span><span
+  lang=EN-US> [ConstructorsOrFields]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>class</span></span><span lang=EN-US> </span><span class=clean><span
+  lang=EN-US>ClassName</span></span><span lang=EN-US> [Members]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>| </span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>instance</span></span><span lang=EN-US> </span><span class=clean><span
+  lang=EN-US>ClassName</span></span><span lang=EN-US> {TypeName}+</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ConstructorsOrFields
+  </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(..) </span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span lang=EN-US>{</span><span class=clean><span
+  lang=EN-US>ConstructorName</span></span><span lang=EN-US>}-list</span><span
+  class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{..}</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US> </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span><span lang=EN-US>{</span><span class=clean><span
+  lang=EN-US>FieldName</span></span><span lang=EN-US>}-list</span><span
+  class=cleanb><span lang=EN-US>}</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Members</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(..) </span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span lang=EN-US>{</span><span class=clean><span
+  lang=EN-US>MemberName</span></span><span lang=EN-US>}-list</span><span
+  class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>The syntax and semantics of <i>explicit import
+statements</i> has been completely revised in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'> </span><span lang=EN-US>2.x
+in order to make it possible to discriminate between the different namespaces
+that exist in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;text-transform:
+uppercase'>&nbsp; (</span><span lang=EN-US><a href="#_2.1.2_Scopes_and">see
+2.1.2</a>). One can import functions or macro's, types with optionally their
+corresponding constructors, record types with optionally their corresponding
+fieldnames, classes and instances of classes.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an explicit import.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>implementation</span></span><span
+lang=EN-US> </span><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> XXX</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>from</span></span><span
+lang=EN-US> m </span><span class=cleankw><span lang=EN-US>import</span></span><span
+lang=EN-US>    F, </span></p>
+
+<p class=ex><span lang=EN-US>                 :: T1, :: T2(..), :: T3(C1, C2),
+:: T4{..}, :: T5{field1, field2},</span></p>
+
+<p class=ex><span lang=EN-US>                 </span><span class=cleankw><span
+lang=EN-US>class</span></span><span lang=EN-US> C1, </span><span class=cleankw><span
+lang=EN-US>class</span></span><span lang=EN-US> C2(..), </span><span
+class=cleankw><span lang=EN-US>class</span></span><span lang=EN-US> C3(mem1,
+mem2),</span></p>
+
+<p class=ex><span lang=EN-US>                 </span><span class=cleankw><span
+lang=EN-US>instance</span></span><span lang=EN-US> C4 Int</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>With the import statement the following
+definition exported by module </span><span class=clean><span lang=EN-US>m</span></span><span
+lang=EN-US> are imported in module </span><span class=clean><span lang=EN-US>XXX</span></span><span
+lang=EN-US>: the <i>function</i> or <i>macro</i> <span class=clean><span
+style='font-family:"Microsoft Sans Serif","sans-serif"'>F</span></span>, the <i>type</i>
+<span class=clean><span style='font-family:"Microsoft Sans Serif","sans-serif"'>T1</span></span>,
+the <i>algebraic</i> <i>type</i> <span class=clean><span style='font-family:
+"Microsoft Sans Serif","sans-serif"'>T2</span></span> with <i>all</i> it's</span><span
+lang=EN-US> constructors that are exported by </span><span class=clean><span
+lang=EN-US>m</span></span><span lang=EN-US>, the <i>algebraic type </i></span><span
+class=clean><span lang=EN-US>T3</span></span><span lang=EN-US> with it's
+constructors </span><span class=clean><span lang=EN-US>C1</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>C2</span></span><span
+lang=EN-US>, the <i>record type </i></span><span class=clean><span lang=EN-US>T4</span></span><span
+lang=EN-US> with <i>all</i> it's fields that are exported by </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US>, the <i>record
+type </i></span><span class=clean><span lang=EN-US>T5</span></span><span
+lang=EN-US> with it's fields </span><span class=clean><span lang=EN-US>field1</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>field2</span></span><span
+lang=EN-US>, the <i>class</i> </span><span class=clean><span lang=EN-US>C1</span></span><span
+lang=EN-US>, the <i>class</i> </span><span class=clean><span lang=EN-US>C2</span></span><span
+lang=EN-US> with all it's members that are exported by m</span><span
+class=clean><span lang=EN-US>,</span></span><span lang=EN-US> the class</span><span
+class=clean><span lang=EN-US> C3</span></span><span lang=EN-US> with it's
+members </span><span class=clean><span lang=EN-US>mem1</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>mem2</span></span><span
+lang=EN-US>, the instance of class </span><span class=clean><span lang=EN-US>C4</span></span><span
+lang=EN-US> defined on integers.</span></p>
+
+<p class=nlop><a name="_Toc524343504"><span lang=EN-US style='font-size:12.0pt;
+font-family:"Times New Roman";color:#FFCC99'><img src="square_8.png" /></span>
+<span style="margin-left:20px"></span><span lang=EN-US>Importing identifiers can cause error messages
+because the imported identifiers may be in conflict with other identifiers in
+this scope (remember that identifiers belonging to the same name space must all
+have dif­ferent names within the same scope, </span></a><a
+href="#_2.1_Identifiers,_Scopes"><span lang=EN-US>see 2.1</span></a><span
+lang=EN-US>). This problem can be solved by renaming the internally defined
+identifiers or by renaming the imported identifiers (eg by adding an additional
+module layer just to rename things).</span></p>
+
+<h3><a name="_Toc311797993"></a><a name="_2.5.2_Implicit_Imports"></a><span
+lang=EN-US>2.5.2 Implicit Imports of Definitions</span></h3>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>ImplicitImportDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=PT-BR>import</span></span><span
+  lang=PT-BR> {</span><span class=clean><span lang=EN-US>ModuleName</span></span><span
+  lang=PT-BR>}-list<span style='color:#3366FF'> </span></span><span
+  class=clean><span lang=EN-US style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><i><span lang=EN-US>Implicit imports</span></i><span lang=EN-US>
+are import statements in which only the module name to import from is men­tioned.
+In this case <i>all</i> definitions that are <i>exported</i> from that module
+are imported as well as <i>all</i> definitions that on their turn are <i>imported</i>
+in the indicated definition module, and so on. So, all related defini­tions
+from va­ri­ous modules can be imported with one single im­port. This opens the
+possibil­ity for definition mod­u­les to serve as a kind of <i>‘pass-through’</i>
+module. </span><span
+lang=EN-US style='display:none'>   </span><span lang=EN-US>Hence, it is
+meaningful to have definition modules with import state­ments but with­out any
+definitions and without a corresponding implementation module.</span><span
+lang=EN-US style='display:none'>.</span></p>
+
+<p class=exb><span lang=EN-US style='display:none'>ib.import:implicit</span></p>
+
+<p class=exth><span lang=EN-US>Example of an implicit import: all (arithmetic)
+rules which are predefined can be imported easily with <i>one</i> import state­ment.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>import</span></span><span
+lang=EN-US> MyStdEnv</span></p>
+
+<p class=par><span lang=EN-US>im­porting implicitly all definitions imported by
+the definition module </span><span class=clean><span lang=EN-US>‘MyStdEnv’ </span></span><span
+lang=EN-US>which is defined below (note that de­fi­nition mod­ule </span><span
+class=clean><span lang=EN-US>‘MyStdEnv’</span></span><span lang=EN-US> does not
+require a corresponding implementation module) :</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>definition</span></span><span
+lang=EN-US> </span><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> MyStdEnv</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>import </span></span><span
+lang=EN-US>StdBool, StdChar, StdInt, StdReal, StdString</span></p>
+
+<p class=par><span lang=EN-US>All identifiers implicitly being imported in a
+definition or implementation module will be included in the global scope level
+(= outermost scope, <a href="#_2.3.2_Scope_of">see 2.3.2</a>) of the module
+that does the import.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Importing identifiers can cause error messages because the imported
+identifiers may be in conflict with other identifiers in this scope (remember
+that identifiers belonging to the same name space must all have dif­ferent
+names within the same scope, <a href="#_2.1_Identifiers,_Scopes">see 2.1</a>).
+This problem can be solved by renaming the internally defined identifiers or by
+renaming the imported identifiers (eg by adding an additional module layer just
+to rename identifiers).</span></p>
+
+<h2><a name="_Toc311797994"></a><a name="_Toc524343505"></a><a
+name="_2.6_System_Definition"></a><span lang=EN-US>2.6    System Definition and
+Implementation Modules</span></h2>
+
+<p class=par><span lang=EN-US>System modules are special modules. A <i>system
+definition module</i></span><span
+lang=EN-US> indicates that the correspond­ing im­plementa­tion module is a <i>system
+implementation module</i></span><span
+lang=EN-US> which does not contain ordi­nary C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+rules. In system imple­mentation modules it is allowed to define <i>foreign
+function</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US>: the bod­ies of these foreign functions
+are written in another language than C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>. System
+implementation mod­u­les make it possi­ble to create interfaces to operating
+sys­tems, to file systems or to increase exe­cu­tion speed of heavily used
+functions or complex data struc­tures. Typically, predefined function and
+operators for arithmetic and File I/O are imple­mented as system modules.</span></p>
+
+<p class=par><span lang=EN-US>System implementation modules may use machine
+code, C-code, abstract machine code (PABC-code) or code written in any other
+language. What exactly is allowed depends on the C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+compiler used and the platform for which code is generated. The keyword </span><span
+class=cleankw><span lang=EN-US>code</span></span><span
+lang=EN-US> is reserved to make it possible to write C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+programs in a for­eign language. This is not treated in this reference ma­n­ual.</span></p>
+
+<p class=par><span lang=EN-US>When one writes system implementation modules one
+has to be very careful because the correct­ness of the func­tions can no longer
+be checked by the C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> compiler. Therefore, the programmer is
+now re­s­ponsible for the follow­ing:</span></p>
+
+<p class=lopal><span lang=EN-US>!&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;The function must be correctly typed.</span></p>
+
+<p class=lopal><span lang=EN-US>!&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;When a function destructively
+updates one of its (sub-)arguments, the corresponding type of the arguments
+should have the uniqueness type attribute. Furthermore, those arguments must be
+strict.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+</div>
+
+</body>
+</html>

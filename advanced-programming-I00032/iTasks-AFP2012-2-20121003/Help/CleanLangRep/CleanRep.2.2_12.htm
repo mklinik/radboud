@@ -1,0 +1,1274 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection13>
+
+<p class=Heading1Chapter><span style='position:absolute;z-index:251675136;
+left:0px;margin-left:38px;margin-top:19px;width:200px;height:97px'><img
+width=200 height=97 src="CleanRep.2.2_files/image001.jpg"></span><a
+name="_Toc311798103"><span lang=EN-US><br>
+Chapter 10</span></a><a name="_Toc524343593"></a><a
+name="_Annotations_and_Directives"></a><a name="_Strictness,_Macros_and"></a><span
+lang=EN-US><br>
+Strictness, Macros and </span><span lang=EN-US>Efficiency</span><span
+lang=EN-US> </span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="64%" valign=bottom style='width:64.06%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr style='page-break-inside:avoid'>
+    <td width="9%" valign=top style='width:9.0%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>10.1</span></p>
+    </td>
+    <td width="91%" valign=top style='width:91.0%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US><a href="#_5.1_Annotations_to">Defining Partially Strict Data
+    Structures and Functions</a></span></p>
+    </td>
+   </tr>
+   <tr style='page-break-inside:avoid'>
+    <td width="9%" valign=top style='width:9.0%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>10.2</span></p>
+    </td>
+    <td width="91%" valign=top style='width:91.0%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US><a href="#_5.2_Defining_Graphs">Defining Graphs on the Global
+    Level</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="35%" valign=top style='width:35.94%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="15%" valign=top style='width:15.28%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>10.3</span></p>
+    </td>
+    <td width="84%" valign=top style='width:84.72%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US><a href="#_5.3_Defining_Macros">Defining Macros</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="15%" valign=top style='width:15.28%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>10.4</span></p>
+    </td>
+    <td width="84%" valign=top style='width:84.72%;padding:0cm 0cm 0cm 0cm'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US><a href="#_5.4_Process_Annotations">Efficiency Tips</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>Programming in a functional language means that
+one should focus on algorithms and without wor­ry­ing about all kinds of
+efficiency details. However, when large applications are being written it may
+hap­pen that this attitude re­sults in a program that is unacceptably
+inefficient in time and/or space. </span></p>
+
+<p class=par><span lang=EN-US>In this Chapter we explain several kinds of
+annotations and directives that can be defined in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>.
+These annotations and directives are designed to give the programmer some means
+to influence the time and space behavior of C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US
+style='font-size:10.0pt;text-transform:uppercase'> </span><span lang=EN-US>applications.</span></p>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US style='font-size:10.0pt;
+text-transform:uppercase'> </span><span lang=EN-US>is by default a <i>lazy</i>
+language: applications will only be evaluated when their results are needed for
+the final outcome of the program. However, lazy evaluation is in general not
+very efficient. It is much more efficient to compute function arguments in
+advance (<i>strict</i> evaluation) when it is known that the arguments will be used
+in the function body. By using strictness annotations in type defini­tions the
+evaluation order of data structures and functions can be changed from lazy to
+strict. This is explained in <a href="#_5.1_Annotations_to">Section 10.1</a>.</span></p>
+
+<p class=par><span lang=EN-US>One can define constant graphs on the global
+level also known as <i>Constant Applicative Forms</i> (<a
+href="#_5.2_Defining_Graphs">see Section 10.2</a>). Unlike constant functions,
+these constant graphs are shared such that they are computed only one. This
+generally reduces execution time possibly at the cost of some heap space needed
+to re­member the shared graph constants.</span></p>
+
+<p class=par><span lang=EN-US>Macro’s (<a href="#_5.3_Defining_Macros">Section
+10.3</a>) are special functions that will already be substituted (evaluated) at
+<i>compile-time</i>. This generally reduces execution time (the work has
+already been done by the compiler) but it will lead to an increase of object
+code.</span></p>
+
+<h2><a name="_Toc311798104"></a><a name="_Toc524343594"></a><a
+name="_5.1_Annotations_to"></a><a name="_10.1_Annotations_to"></a><span
+lang=EN-US>10.1  Annotations to Change Lazy Evaluation into Strict Evaluation</span></h2>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> uses by default a <i>lazy
+evaluation</i> </span><i><span
+lang=EN-US> strategy</span></i><span lang=EN-US>: a redex is only evaluated
+when it is needed to com­pute the final result. Some functional languages (e.g.
+ML, Harper <i>et al.</i>) use an <i>eager</i> (<i>strict</i>) evaluation strat­egy
+and always evaluate all function arguments in advance.</span></p>
+
+<h3><a name="_Toc311798105"></a><a name="_Toc524343595"></a><a
+name="_5.1.1_Advantages_and"></a><span lang=EN-US>10.1.1                          Advantages
+and Disadvantages of Lazy versus Strict Evaluation</span></h3>
+
+<p class=par><span lang=EN-US>Lazy evaluation has the following advantages (+)
+/ disadvantages (-) over eager (strict) eva­lu­a­tion:</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;only those computations which
+contribute to the final result are computed (for some algorithms this is a
+clear advantage while it generally gives a greater expressive freedom);</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;one can work with infinite data
+structures (e.g. </span><span lang=EN-US style='font-family:Courier'>[1..]</span><span
+lang=EN-US>);</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;it is unknown when a lazy expression
+will be computed (disadvantage for debugging, for con­t­rol­ling evaluation
+order);</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;strict evaluation is in general much
+more efficient, in particular for objects of basic types, non-re­cur­sive types
+and tuples and records which are composed of such types;</span></p>
+
+<p class=lopal><span lang=EN-US>-/+&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;in general a strict expression (e.g. </span><span
+lang=EN-US style='font-family:Courier'>2 + 3 + 4</span><span lang=EN-US>) takes
+less space than a lazy one, however, some­ti­mes the other way around (e.g. </span><span
+lang=EN-US style='font-family:Courier'>[1..1000]</span><span lang=EN-US>);</span></p>
+
+<h3><a name="_Toc311798106"></a><a name="_Toc524343596"></a><a
+name="_5.1.2_Strict_and"></a><span lang=EN-US>10.1.2   Strict and Lazy Context</span></h3>
+
+<p class=par><span lang=EN-US>Each expression in a function definition is
+considered to be either strict (appearing in a <i>strict context</i></span><span
+lang=EN-US>: it has to be evaluated to strong root normal form) or lazy
+(appearing in a <i>lazy context</i> </span><span
+lang=EN-US>: not yet to be evalu­ated to strong root normal form) </span><span lang=EN-US> The following ru­les spec­ify whether or not a particu­lar
+expression is lazy or strict:</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;a non-variable pattern is strict;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;an expression in a guard is strict;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;the expressions specified in a strict
+let-before expression are strict;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;the <b>root expression</b> is strict;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;the arguments of a function or data
+constructor in a strict context are strict when these argu­ments are being an­notated
+as strict in the type definition of that function (manually or automatically)
+or in the type definition of the data constructor;</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;all the other expressions are lazy.</span></p>
+
+<p class=par><span lang=EN-US>Evaluation of a function will happen in the
+following order: patterns, guard, expressions in a strict let before ex­pres­sion,
+root expression (<a href="CleanRep.2.2_5.htm#_3.1_Defining_Functions">see also 3.1</a>).</span></p>
+
+<h3><a name="_Toc311798107"></a><a name="_Toc524343597"></a><a
+name="_5.1.3_Space_Consumption"></a><a name="_10.1.3_Space_Consumption"></a><span
+lang=EN-US>10.1.3   Space Consumption in Strict and Lazy Context</span></h3>
+
+<p class=par><span lang=EN-US>The space occupied by C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+structures depend on the kind of structures one is using, but also de­pends on
+whether these data struc­tures appear in a strict or in a lazy context. To
+understand this one has to have some knowledge about the basic implementation
+of C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> (see Plasmeijer and Van Eekelen, 1993).</span></p>
+
+<p class=par><span lang=EN-US>Graphs (<a href="CleanRep.2.2_3.htm#_Basic_Semantics">see Chapter 1</a>)
+are stored in a piece of memory called the heap. The amount of heap space
+needed highly depends on the kind of data structures that are in use. Graph
+structures that are created in a lazy context can occupy more space than graphs
+created in a strict context. The garbage collector in the run-time system of C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> automatically collects graphs that are not being used. The
+arguments of functions being evaluated are stored on a stack. There are two
+stacks: the A-stack, which contains references to graph nodes stored in the
+heap and the BC-stack which contains ar­guments of basic type and return
+addresses. Data structures in a <i>lazy context</i> are passed via references
+on the <i>A</i>-stack. Data structures of the <i>basic types</i> (</span><span
+class=clean><span lang=EN-US>Int,</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>Real</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>Char</span></span><span lang=EN-US> or </span><span
+class=clean><span lang=EN-US>Bool</span></span><span lang=EN-US>) in a <i>strict
+context</i> are stored on the <i>B</i>-stack or in registers. This is also the
+case for these strict basic types when they are part of a <i>re­cord</i> or <i>tuple</i>
+in a strict context. </span></p>
+
+<p class=par><span lang=EN-US>Data structures living on the B-stack are passed <i>unboxed</i>.
+They consume less space (because they are not part of a node) and can be
+treated much more effi­ciently. When a function is called in a lazy context its
+data structures are passed in a graph node (<i>boxed</i>).</span><span lang=EN-US> The amount of space occupied is also depending on the arity of the
+function.</span></p>
+
+<p class=par><span lang=EN-US>In the table below the amount of space consumed
+in the different situations is summarised (for the lazy as well as for the
+strict context). For the size of the elements one can take the size consumed in
+a strict context.</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='margin-left:7.0pt;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:double windowtext 2.25pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par style='margin-bottom:4.0pt;line-height:2.0pt'><i><span
+  lang=EN-US>Type</span></i></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:double windowtext 2.25pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par style='margin-bottom:4.0pt;line-height:2.0pt'><i><span
+  lang=EN-US>Arity</span></i></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:double windowtext 2.25pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par style='margin-bottom:4.0pt;line-height:2.0pt'><i><span
+  lang=EN-US>Lazy context (bytes)</span></i></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:double windowtext 2.25pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par style='margin-bottom:4.0pt;line-height:2.0pt'><i><span
+  lang=EN-US>Strict context (bytes)</span></i></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:double windowtext 2.25pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=par style='margin-bottom:4.0pt;line-height:2.0pt'><i><span
+  lang=EN-US>Comment</span></i></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>Int,
+  Bool</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>-</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>8</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>4</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>Int
+  (0&#8804;n&#8804;32), Char</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>-</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>-</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>4</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt'>node is shared</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>Real</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>-</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>12</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>8</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>Small
+  Record</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>n</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>4 
+  + </span><span lang=EN-US style='font-size:9.0pt;font-family:Symbol'>S </span><span
+  lang=EN-US style='font-size:9.0pt;font-family:Courier'>size elements</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Symbol'>S
+  </span><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>size
+  elements</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt'>total
+  length&#8804;12</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>Large
+  Record</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>n</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>8 
+  + </span><span lang=EN-US style='font-size:9.0pt;font-family:Symbol'>S </span><span
+  lang=EN-US style='font-size:9.0pt;font-family:Courier'>size elements</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Symbol'>S
+  </span><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>size
+  elements</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>Tuple</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>2</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>12</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Symbol'>S
+  </span><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>size
+  elements</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&gt;2</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>8 
+  + 4*n</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Symbol'>S
+  </span><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>size
+  elements</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>{a}</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>n</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>20
+  + 4*n</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>12
+  + 4*n</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'> !Int</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>n</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>20
+  + 4*n</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>12
+  + 4*n</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'> !Bool,!Char</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>n</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>20
+  + 4*ciel(n/4)</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>12
+  + 4*ciel(n/4)</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'> !Real</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>n</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>20
+  + 8*n</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>12
+  + 8*n</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'> !Tuple,
+  !Record</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>n</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>20
+  + size rec/tup*n</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>12
+  + size rec/tup*n</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>Hnf</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>0</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>-</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>4
+  + size node</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt'>node is shared</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>1</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>8</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>4
+  + size node</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'> </span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>2</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>12</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>4
+  + size node</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt'>also for </span><span
+  lang=EN-US style='font-size:9.0pt;font-family:Courier'>[a]</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&gt;2</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>8 
+  + 4*n</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>4
+  + size node</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=PT-BR style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>Pointer
+  to node</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>-</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>4</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>4</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>Function</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>0,1,2</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>12</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>-</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr style='page-break-inside:avoid'>
+  <td width=145 valign=top style='width:109.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+  <td width=52 valign=top style='width:39.0pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&gt;3</span></p>
+  </td>
+  <td width=169 valign=top style='width:127.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>4 
+  + 4*n</span></p>
+  </td>
+  <td width=175 valign=top style='width:131.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>-</span></p>
+  </td>
+  <td width=93 valign=top style='width:70.0pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0cm 4.0pt 0cm 4.0pt'>
+  <p class=ex2comment><span lang=EN-US style='font-size:9.0pt;font-family:Courier'>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>&nbsp;</span></p>
+
+<h3><a name="_Toc311798108"></a><a name="_Toc524343598"></a><a
+name="_5.1.4_Time_Consumption"></a><span lang=EN-US>10.1.4   Time Consumption
+in Strict and Lazy Context</span></h3>
+
+<p class=par><span lang=EN-US>Strict arguments of functions can sometimes be
+handled much more efficiently than lazy arguments, in particular when the
+arguments are of basic type. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: functions with strict arguments of
+basic type are more efficient.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Ackerman:: !Int !Int -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>Ackerman 0 j = j+1</span></p>
+
+<p class=ex><span lang=EN-US>Ackerman i 0 = Ackerman (i-1) 1</span></p>
+
+<p class=ex><span lang=EN-US>Ackerman i j = Ackerman (i-1) (Ackerman i (j-1))</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The computation of a lazy version of </span><span
+lang=EN-US style='font-family:Courier'>Ackerman</span><span lang=EN-US> </span><span
+lang=EN-US style='font-family:Courier'>3</span><span lang=EN-US>&nbsp;</span><span
+lang=EN-US style='font-family:Courier'>7</span><span lang=EN-US> takes 14.8 sec­onds
++ 0.1 seconds for garbage collection on an old fashion Ma­cII (5Mb heap). When
+both arguments are annotated as strict (which in this case will be done
+automati­cally by the compiler) the computation will only take 1.5 seconds +
+0.0 sec­onds garbage collec­tion. The gain is one order of magnitude. Instead
+of rewriting graphs the calculation is per­formed using stacks and reg­isters
+where pos­sible. The speed is comparable with a recursive call in highly
+optimised C or with the speed ob­tai­n­able when the function was pro­grammed
+directly in as­sem­bly.</span></p>
+
+<h3><a name="_Toc311798109"></a><a name="_Toc524343599"></a><a
+name="_5.1.5_Changing_Lazy"></a><span lang=EN-US>10.1.5   Changing Lazy into
+Strict Evaluation</span></h3>
+
+<p class=par><span lang=EN-US>So, lazy evaluation gives a notational freedom
+(no worrying about what is computed when) but it might cost space as well as
+time. In C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> the default lazy evaluation can therefore be turned into eager
+evaluation by adding strictness annotations to types.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US
+  style='font-size:10.0pt;font-family:"CG Times","serif"'>Strict</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US
+  style='font-size:10.0pt;font-family:"CG Times","serif"'>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>This can be done in several ways:</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;The C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+compiler has a built-in strictness analyzer based on <i>abstract reduction</i>
+(Nöcker, 1993) (it can be optionally turned off)<i>.</i> The analyzer searches
+for strict arguments of a function and an­no­tate them internally as strict (<a
+href="#_5.1.1_Advantages_and">see 10.1.1</a>). In this way lazy arguments are <i>automatically</i>
+turned into strict ones. This optimization does not influence the termination
+behavior of the program. It ap­pears that the analyzer can find much infor­mation.
+The anal­ysis itself is quite fast.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;The strictness analyzer cannot find
+all strict arguments. Therefore one can also <i>manually</i> an­no­tate a
+function as being strict in a certain argument or in its result (<a
+href="#_5.1.1_Advantages_and">see 10.1.1</a>). </span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;By using strictness annotations, a
+programmer can define (partially) strict data structures (Nöcker and Smetsers,
+1993; see <a href="#_5.1.3_Space_Consumption">10.1.3</a>). Whenever such a data
+structure oc­curs in a strict context (<a href="#_5.1.1_Advantages_and">see 10.1.1</a>),
+its strict components will be evaluated.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;The order of evaluation of
+expressions in a function body can also be changed from lazy to strict by using
+a strict  let-before expression (<a href="CleanRep.2.2_5.htm#_3.5.3_Defining_Local">see 3.5.4</a>).</span></p>
+
+<p class=par><i><span lang=EN-US>One has to be careful though. When a
+programmer manually changes lazy evaluation into strict evaluation, the
+termination behavior of the pro­gram might change. It is only safe to put
+strictness annotations in the case that the func­tion or data con­structor is
+known to be strict in the cor­responding argument which means that the
+evaluation of that argu­ment in advance does not change the termination
+behavior of the pro­gram. The compiler is not able to check this.</span></i></p>
+
+<h2><a name="_Toc311798110"></a><a name="_Toc524343600"></a><a
+name="_5.2_Defining_Graphs"></a><a name="_10.2_Defining_Graphs"></a><span
+lang=EN-US>10.2  Defining Graphs on the Global Level</span></h2>
+
+<p class=par><span lang=EN-US>Constant graphs can also be defined on a global
+level (for local constant graphs <a href="CleanRep.2.2_5.htm#_Defining_Types">see 3.6</a>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selector </span><span
+  class=cleanb><span lang=EN-US>=</span></span><span lang=EN-US>[</span><span
+  class=cleanb><span lang=EN-US>:</span></span><span lang=EN-US>] GraphExpr </span><span
+  class=clean><span lang=EN-US>;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>A <i>global graph definition</i></span><i><span
+lang=EN-US> </span></i><span lang=EN-US>defines a global constant (closed)
+graph, i.e. a graph which has the same scope</span><span
+lang=EN-US> as a global function definition (<a href="CleanRep.2.2_4.htm#_2.1_Identifiers,_Scopes">see
+2.1</a>). The selector variables that occur in the selectors of a global graph
+defi­nition have a global scope just as globally defined functions.</span></p>
+
+<p class=par><span lang=EN-US>Special about <i>global</i> graphs (in contrast
+with <i>local</i> graphs) is that they are <i>not</i> garbage col­lected dur­ing
+the evalua­tion of the pro­gram </span><span
+lang=EN-US> A global graph can be compared with a <i>CAF</i></span><span lang=EN-US> (<i>Constant Ap­plicative Form</i></span><span
+lang=EN-US>): its value is com­puted at most once and re­m­embered at run-time.
+A global graph can save execu­tion-time at the cost of permanent space con­sumption.</span></p>
+
+<p class=par><span lang=EN-US>Syntactically the definition of a graph is
+distinguished from the definition of a function by the sym­bol which sepa­rates
+left-hand side from right-hand side: &quot;</span><span class=clean><span
+lang=EN-US>=:</span></span><span lang=EN-US>&quot; is used for graphs while
+&quot;</span><span class=clean><span lang=EN-US>=&gt;</span></span><span
+lang=EN-US>&quot; is used for func­tions. However, in general the more common
+symbol &quot;</span><span class=clean><span lang=EN-US>=</span></span><span
+lang=EN-US>&quot; is used for both type of definitions. Gen­erally it is clear
+from the context what is meant (functions have parameters, selectors are also
+easy recognisa­ble). However, when a simple con­stant is defined the syntax is
+ambiguous (it can be a constant func­tion definition as well as a constant
+graph definition). </span></p>
+
+<p class=par><span lang=EN-US>To allow the use of the &quot;</span><span
+class=clean><span lang=EN-US>=</span></span><span lang=EN-US>&quot; whenever
+possible, the following rule is followed. Locally constant defini­tions are <i>by
+default</i> taken to be <i>graph</i> definitions and therefore shared, globally
+they are <i>by default</i> taken to be <i>function</i> defini­tions (<a
+href="CleanRep.2.2_5.htm#_3.1_Defining_Functions">see 3.1</a>) and therefore recomputed. If one
+wants to obtain a different behavior one has to explicit state the na­ture of
+the constant definition (has it to be shared or has it to be recomputed) by
+using &quot;</span><span class=clean><span lang=EN-US>=:</span></span><span
+lang=EN-US>&quot; (on the global level, meaning it is a constant graph which is
+shared) or &quot;</span><span class=clean><span lang=EN-US>=&gt;</span></span><span
+lang=EN-US>&quot; (on the local level, meaning it is a constant function and
+has to be recomputed).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Global constant graph versus global constant
+function definition: </span><span lang=EN-US style='font-family:Courier'>biglist1</span><span
+lang=EN-US> is a <i>graph</i> which is computed only once, </span><span
+lang=EN-US style='font-family:Courier'>biglist3</span><span lang=EN-US> and </span><span
+lang=EN-US style='font-family:Courier'>biglist2</span><span lang=EN-US> is a
+constant <i>function</i> which is computed every time it is ap­plied.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>biglist1 =   [1..10000]                </span><span
+class=cleancom><span lang=EN-US>// a constant function (if defined globally)</span></span></p>
+
+<p class=ex><span lang=EN-US>biglist2 =:  [1..10000]                </span><span
+class=cleancom><span lang=EN-US>// a graph </span></span></p>
+
+<p class=ex><span lang=EN-US>biglist3 =&gt;  [1..10000]                </span><span
+class=cleancom><span lang=EN-US>// a constant function</span></span></p>
+
+<p class=par><span lang=EN-US>A graph saves execution-time at the cost of space
+con­sumption. A constant function saves space at the cost of execution time.
+So, use graphs when the com­putation is time-consuming while the space con­sumption
+is small and constant func­tions in the other case.</span></p>
+
+<h2><a name="_Toc311798111"></a><a name="_Toc524343601"></a><a
+name="_5.3_Defining_Macros"></a><a name="_10.3_Defining_Macros"></a><span
+lang=EN-US>10.3  Defining Macros</span></h2>
+
+<p class=par><span lang=EN-US>Macros are functions (rewrite rules) which are
+applied at <i>compile-time</i> instead of at <i>run-time</i>. Macro’s can be
+used to define constants, create in-line substitutions, rename functions, do
+conditional compila­tion etc. With a macro definition one can, for instance,
+assign a name to a constant such that it can be used as pattern on the
+left-hand side of a function definition.</span></p>
+
+<p class=par><span lang=EN-US>At compile-time the right-hand side of the <i>macro</i>
+<i>definition</i></span><span
+lang=EN-US> will be substituted for every application of the macro in the scope
+of the macro definition. This saves a function call and makes basic blocks
+larger (see Plasmeijer and Van Eeke­len, 1993) such that <i>better</i> code can
+be generated. A dis­advantage is that also <i>more</i> code will be gen­er­a­ted.
+Inline substitution is also one of the regular optimisations performed by the C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> compiler. To avoid code explosion a compiler will generally not
+substitute big functions. Macros give the pro­grammer a possi­bility to control
+the substitution process manually to get an op­ti­mal trade-off between the
+effi­ciency of code and the size of the code. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>MacroDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[MacroFixityDef]
+  </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DefOfMacro</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>MacroFixityDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span class=clean><span lang=EN-US>FunctionName</span></span><span
+  class=cleanb><span lang=EN-US>)</span></span><span lang=EN-US> [Fix][Prec]</span><span
+  class=clean><span lang=EN-US> </span></span><span class=cleankw><span
+  lang=EN-US style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>DefOfMacro</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Function
+  {Variable} </span><span class=cleanb><span lang=EN-US>:== </span></span><span
+  lang=EN-US>FunctionBody </span><span class=cleankw><span lang=EN-US
+  style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[LocalFunctionAltDefs]</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>The compile-time substitution process is
+guaranteed to terminate. To ensure this some restrictions are imposed on
+Macro’s (compared to common functions). Only variables are allowed as for­mal
+argu­ment. A macro rule always consists of a single alternative. Furthermore,</span></p>
+
+<p class=nlopal style='text-indent:-18.0pt'><span lang=EN-US>8)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>Macro definitions are not allowed to be cyclic to ensure that the
+substitution process terminates.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a macro definition.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Black    :== 1                                      
+</span><span class=cleancom><span lang=EN-US>// Macro definition</span></span></p>
+
+<p class=ex><span lang=EN-US>White    :== 0                                      
+</span><span class=cleancom><span lang=EN-US>// Macro definition</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: Color :== Int                                  
+  </span><span class=cleancom><span lang=EN-US>// Type synonym definition</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Invert:: Color -&gt; Color                             
+</span><span class=cleancom><span lang=EN-US>// Function definition</span></span></p>
+
+<p class=ex><span lang=EN-US>Invert Black = White</span></p>
+
+<p class=ex><span lang=EN-US>Invert White = Black</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: macro to write (a?b) for lists instead
+of [a:b] and its use in the function map.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>(?) </span><span class=cleankw><span lang=EN-US>infixr</span></span><span
+lang=EN-US> 5                                         </span><span
+class=cleancom><span lang=EN-US>// Fixity of Macro</span></span></p>
+
+<p class=ex><span lang=EN-US>(?) h t :== [h:t]                                   
+</span><span class=cleancom><span lang=EN-US>// Macro definition of operator</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>map:: (a -&gt; b) [a] -&gt; [b]</span></p>
+
+<p class=ex><span lang=EN-US>map f (x?xs) = f x ? map f xs</span></p>
+
+<p class=ex><span lang=EN-US>map f []     = []</span></p>
+
+<p class=par><span lang=EN-US>Notice that macros can contain local function
+definitions. These local definitions (which can be recur­sive) will also be
+substituted inline. In this way complicated substitutions can be achieved
+resulting in efficient code.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: macros can be used to speed up
+frequently used functions. See for instance the definition of the function </span><span
+lang=EN-US style='font-family:Courier'>foldl</span><span lang=EN-US> in </span><span
+lang=EN-US style='font-family:Courier'>StdList</span><span lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex>foldl op r l :== foldl r l                           <span
+class=cleancom>// Macro definition</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    </span><span lang=PT-BR>foldl r []    = r</span></p>
+
+<p class=ex><span lang=PT-BR>    foldl r [a:x] = foldl (op r a) x</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>sum list = foldl (+) 0 list</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>After substitution of the macro </span><span
+lang=EN-US style='font-family:Courier'>foldl</span><span lang=EN-US> a very
+efficient function </span><span lang=EN-US style='font-family:Courier'>sum</span><span
+lang=EN-US> will be generated by the compiler:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>sum list = foldl 0 list</span></p>
+
+<p class=ex><span class=cleankw><span lang=PT-BR>where</span></span></p>
+
+<p class=ex><span lang=PT-BR>    foldl r []    = r</span></p>
+
+<p class=ex><span lang=PT-BR>    foldl r [a:x] = foldl ((+) r a) x</span></p>
+
+<p class=par><span lang=EN-US>The expansion of the macros takes place before
+type checking. Type specifications of macro rules are not possible. When
+operators are defined as macros, fixity and associativity can be defined.</span></p>
+
+<h2><a name="_Toc311798112"></a><a name="_Toc524343605"></a><a
+name="_5.4_Process_Annotations"></a><a name="_5.5_Efficiency_Tips"></a><a
+name="_10.4_Efficiency_Tips"></a><span lang=EN-US>10.4  Efficiency Tips</span></h2>
+
+<p class=par><span lang=EN-US>Here are some additional suggestions how to make
+your program more efficient:</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Use the C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+profiler to find out which frequently called functions are consuming a lot of
+space and/or time. If you modify your program, these functions are the one to
+have a good look at.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Transform a recursive function to a
+tail-recursive function.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;It is better to accumulate results in
+parameters instead of in the right-hand side results.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;It is better to use records instead
+of tuples.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Arrays can be more efficient than
+lists since they allow constant access time on their elements and can be
+destructive updated.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;When functions return multiple ad-hoc
+results in a tuple put these results in a strict tuple instead (can be
+indicated in the type).</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Use strict data structures whenever
+possible.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Export the strictness information to
+other modules (the compiler will warn you if you don’t).</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Make function strict in its arguments
+whenever possible.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Use macros for simple constant
+expressions or frequently used functions.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Use CAF’s and local graphs to avoid
+recalculation of expressions.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Selections in a lazy context can
+better be transformed to functions which do a pattern match.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Higher order functions are nice but
+inefficient (the compiler will try to convert higher order func­tion into first
+order functions).</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Constructors of high arity are
+inefficient.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Increase the heap space in the case
+that the garbage collector takes place too often.<br>
+<br>
+</span></p>
+
+</div>
+
+</body>
+</html>

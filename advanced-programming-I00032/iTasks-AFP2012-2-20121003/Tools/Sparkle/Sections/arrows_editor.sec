@@ -1,0 +1,2208 @@
+SECTION DEPENDENCIES:
+  THEOREM decompose_evalEState       (arrows_definedness)
+  THEOREM tertium                    (tautology)
+  THEOREM decompose_evalEvent        (arrows_definedness)
+  THEOREM eval_write                 (arrows_definedness)
+  THEOREM decompose_evalEditableData (arrows_definedness)
+  THEOREM eval_compareEditorId       (arrows_definedness)
+  THEOREM not_read_bottom            (arrows_definedness)
+  THEOREM decompose_evalTuple        (arrows_definedness)
+  THEOREM not_write_bottom           (arrows_definedness)
+  THEOREM string_==                  (strings)
+  THEOREM decompose_evalEditorId     (arrows_definedness)
+  THEOREM eval_read                  (arrows_definedness)
+  SYMBOL evalEvent                :: "(({#Char}, {#Char}), {#Char}) -> Bool"
+  SYMBOL fst                      :: "!(!a, b) -> a"
+  SYMBOL evalEState               :: "(a -> Bool) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> Bool"
+  SYMBOL thd3                     :: "!(a, b, !c) -> c"
+  SYMBOL Pending                  :: "EventStatus"
+  SYMBOL evalEditorId             :: "({#Char}, {#Char}) -> Bool"
+  SYMBOL known                    :: "({#Char}, {#Char}) [(({#Char}, {#Char}), {#Char})] -> Bool"
+  SYMBOL fst3                     :: "!(!a, b, c) -> a"
+  SYMBOL feedbacks                :: "({#Char}, {#Char}) ({#Char}, {#Char}) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], {#Char}, EventStatus)"
+  SYMBOL editsets                 :: "(({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], (({#Char}, {#Char}), {#Char}), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], {#Char}, EventStatus)"
+  SYMBOL editreads                :: "(({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], ({#Char}, {#Char}), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], {#Char}, EventStatus)"
+  SYMBOL evalString               :: "!{#Char} -> Bool"
+  SYMBOL evalEditableData         :: "[(({#Char}, {#Char}), {#Char})] -> Bool"
+  SYMBOL ==_tuple10000            :: "!({#Char}, {#Char}) !({#Char}, {#Char}) -> Bool"
+  SYMBOL write`                   :: "({#Char}, {#Char}) {#Char} [(({#Char}, {#Char}), {#Char})] -> [(({#Char}, {#Char}), {#Char})]"
+  SYMBOL read`                    :: "({#Char}, {#Char}) [(({#Char}, {#Char}), {#Char})] -> {#Char}"
+  SYMBOL evalTuple                :: "(a -> Bool) (b -> Bool) (a, b) -> Bool"
+  SYMBOL times_lr                 :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)) ((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], d, EventStatus)) -> (({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], (a, b), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], (c, d), EventStatus)"
+  SYMBOL fdota                    :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], (a, b), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)) a (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], b, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)"
+  SYMBOL times_rl                 :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], d, EventStatus)) ((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)) -> (({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], (a, b), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], (c, d), EventStatus)"
+  SYMBOL >>>                      :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) ((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)"
+  SYMBOL fboxa                    :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)) a (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], b, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)"
+  SYMBOL selfs                    :: "({#Char} -> {#Char}) ({#Char}, {#Char}) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], {#Char}, EventStatus)"
+  SYMBOL o                        :: "(a -> b) (c -> a) -> c -> b"
+  SYMBOL Processed                :: "EventStatus"
+  SYMBOL ==_uarray                :: "!{#Char} !{#Char} -> Bool"
+
+SECTION DEFINES:
+  THEOREM ==_editorId              : (All i1 (All i2 {(= (@ 5 evalEditorId i1) (BOOL True)) -> {(= (@ 5 evalEditorId i2) (BOOL True)) -> {(= (@ 13 ==_tuple10000 i1 i2) (BOOL True)) <-> (= i1 i2)}}}))
+  THEOREM classify_event           : (All i (All j (All ev_id {~(= i j) -> {{(= ev_id i) /\ ~(= ev_id j)} \/ {{(= ev_id j) /\ ~(= ev_id i)} \/ {~(= ev_id i) /\ ~(= ev_id j)}}}})))
+  THEOREM expand_editreads_pending_other: (All ev_id (All i (All data (All ev_v {(= (@ 5 evalEditorId ev_id) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> {~(= ev_id i) -> (= (@ 10 editreads (TUPLE ev_id ev_v) (TUPLE data i (@ 4 Pending))) (TUPLE data (@ 15 read` i data) (@ 4 Pending)))}}}}))))
+  THEOREM expand_editreads_pending_self: (All ev_id (All ev_v (All data (All i {(= (@ 5 evalEditorId ev_id) (BOOL True)) -> {(= (@ 11 evalString ev_v) (BOOL True)) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> {(= ev_id i) -> (= (@ 10 editreads (TUPLE ev_id ev_v) (TUPLE data i (@ 4 Pending))) (TUPLE (@ 14 write` ev_id ev_v data) ev_v (@ 24 Processed)))}}}}))))
+  THEOREM expand_editreads_processed: (All data (All i (All ev_id (All ev_v {(= (@ 12 evalEditableData data) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> (= (@ 10 editreads (TUPLE ev_id ev_v) (TUPLE data i (@ 24 Processed))) (TUPLE data (@ 15 read` i data) (@ 24 Processed)))}}))))
+  THEOREM expand_editsets_pending_other: (All ev_id (All i (All v (All data (All ev_v {(= (@ 5 evalEditorId ev_id) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 11 evalString v) (BOOL True)) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> {~(= ev_id i) -> (= (@ 9 editsets (TUPLE ev_id ev_v) (TUPLE data (TUPLE i v) (@ 4 Pending))) (TUPLE (@ 14 write` i v data) v (@ 4 Pending)))}}}}})))))
+  THEOREM expand_editsets_pending_self: (All ev_id (All i (All ev_v (All data (All v {(= (@ 5 evalEditorId ev_id) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 11 evalString ev_v) (BOOL True)) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> {(= ev_id i) -> (= (@ 9 editsets (TUPLE ev_id ev_v) (TUPLE data (TUPLE i v) (@ 4 Pending))) (TUPLE (@ 14 write` i ev_v data) ev_v (@ 24 Processed)))}}}}})))))
+  THEOREM expand_editsets_processed: (All data (All i (All v (All ev_id (All ev_v {(= (@ 12 evalEditableData data) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 11 evalString v) (BOOL True)) -> (= (@ 9 editsets (TUPLE ev_id ev_v) (TUPLE data (TUPLE i v) (@ 24 Processed))) (TUPLE (@ 14 write` i v data) v (@ 24 Processed)))}}})))))
+  THEOREM feedback_swap            : (All ev (All i (All j (All A (All state {(= (@ 0 evalEvent ev) (BOOL True)) -> {{(= (@ 1 fst ev) i) \/ (= (@ 1 fst ev) j)} -> {(= (@ 2 evalEState A state) (BOOL True)) -> {(= (@ 3 thd3 state) (@ 4 Pending)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 5 evalEditorId j) (BOOL True)) -> {(= (@ 6 known i (@ 7 fst3 state)) (BOOL True)) -> {(= (@ 6 known j (@ 7 fst3 state)) (BOOL True)) -> {(= (@ 6 known (@ 1 fst ev) (@ 7 fst3 state)) (BOOL True)) -> (= (@ 8 feedbacks i j ev state) (@ 8 feedbacks j i ev state))}}}}}}}}})))))
+  THEOREM feedback_swap_lemma      : (All v (All data (All i (All j (All a {(= (@ 11 evalString v) (BOOL True)) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 5 evalEditorId j) (BOOL True)) -> {~(= i j) -> {(= (@ 6 known i data) (BOOL True)) -> {(= (@ 6 known j data) (BOOL True)) -> (= (@ 8 feedbacks i j (TUPLE i v) (TUPLE data a (@ 4 Pending))) (@ 8 feedbacks j i (TUPLE i v) (TUPLE data a (@ 4 Pending))))}}}}}}})))))
+  THEOREM not_==_editorId          : (All i (All j {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 5 evalEditorId j) (BOOL True)) -> {~(= i j) -> (= (@ 13 ==_tuple10000 i j) (BOOL False))}}}))
+  THEOREM read_i_write_i           : (All i (All v (All data {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 11 evalString v) (BOOL True)) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> (= (@ 15 read` i (@ 14 write` i v data)) v)}}})))
+  THEOREM read_i_write_j           : (All i (All j (All v (All data {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 5 evalEditorId j) (BOOL True)) -> {(= (@ 11 evalString v) (BOOL True)) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> {~(= i j) -> (= (@ 15 read` i (@ 14 write` j v data)) (@ 15 read` i data))}}}}}))))
+  THEOREM read_read_elimination    : (All ev (All A (All state (All i {(= (@ 0 evalEvent ev) (BOOL True)) -> {(= (@ 2 evalEState A state) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> (= (@ 20 >>> (@ 21 fboxa (@ 10 editreads) i) (@ 21 fboxa (@ 10 editreads) i) ev state) (@ 21 fboxa (@ 10 editreads) i ev state))}}}))))
+  THEOREM read_read_swap           : (All ev (All A (All state (All i (All j {(= (@ 0 evalEvent ev) (BOOL True)) -> {(= (@ 2 evalEState A state) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 5 evalEditorId j) (BOOL True)) -> {~(= i j) -> (= (@ 17 times_lr (@ 21 fboxa (@ 10 editreads) i) (@ 21 fboxa (@ 10 editreads) j) ev state) (@ 19 times_rl (@ 21 fboxa (@ 10 editreads) j) (@ 21 fboxa (@ 10 editreads) i) ev state))}}}}})))))
+  THEOREM read_set_elimination     : (All ev (All A (All state (All i {(= (@ 0 evalEvent ev) (BOOL True)) -> {(= (@ 2 evalEState A state) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 6 known i (@ 7 fst3 state)) (BOOL True)) -> (= (@ 20 >>> (@ 21 fboxa (@ 10 editreads) i) (@ 18 fdota (@ 9 editsets) i) ev state) (@ 21 fboxa (@ 10 editreads) i ev state))}}}}))))
+  THEOREM read_set_swap            : (All ev (All A (All state (All i (All j {(= (@ 0 evalEvent ev) (BOOL True)) -> {(= (@ 2 evalEState (@ 16 evalTuple A (@ 11 evalString)) state) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 5 evalEditorId j) (BOOL True)) -> {(= (@ 6 known i (@ 7 fst3 state)) (BOOL True)) -> {(= (@ 6 known j (@ 7 fst3 state)) (BOOL True)) -> {(= (@ 6 known (@ 1 fst ev) (@ 7 fst3 state)) (BOOL True)) -> {~(= i j) -> (= (@ 17 times_lr (@ 21 fboxa (@ 10 editreads) i) (@ 18 fdota (@ 9 editsets) j) ev state) (@ 19 times_rl (@ 18 fdota (@ 9 editsets) j) (@ 21 fboxa (@ 10 editreads) i) ev state))}}}}}}}})))))
+  THEOREM same_editorId            : (All i {(= (@ 5 evalEditorId i) (BOOL True)) -> (= (@ 13 ==_tuple10000 i i) (BOOL True))})
+  THEOREM self_composition         : (All ev (All A (All state (All i (All f (All g {(= (@ 0 evalEvent ev) (BOOL True)) -> {(= (@ 2 evalEState A state) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(All a {(= (@ 11 evalString a) (BOOL True)) -> (= (@ 11 evalString {f @ a}) (BOOL True))}) -> {(All a {(= (@ 11 evalString a) (BOOL True)) -> (= (@ 11 evalString {g @ a}) (BOOL True))}) -> (= (@ 20 >>> (@ 22 selfs f i) (@ 22 selfs g i) ev state) (@ 22 selfs (@ 23 o g f) i ev state))}}}}}))))))
+  THEOREM set_read_elimination     : (All ev (All state (All i {(= (@ 0 evalEvent ev) (BOOL True)) -> {(= (@ 2 evalEState (@ 11 evalString) state) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> (= (@ 20 >>> (@ 18 fdota (@ 9 editsets) i) (@ 21 fboxa (@ 10 editreads) i) ev state) (@ 18 fdota (@ 9 editsets) i ev state))}}})))
+  THEOREM set_read_swap            : (All ev (All A (All state (All i (All j {(= (@ 0 evalEvent ev) (BOOL True)) -> {(= (@ 2 evalEState (@ 16 evalTuple (@ 11 evalString) A) state) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 5 evalEditorId j) (BOOL True)) -> {~(= i j) -> {(= (@ 6 known i (@ 7 fst3 state)) (BOOL True)) -> {(= (@ 6 known j (@ 7 fst3 state)) (BOOL True)) -> {(= (@ 6 known (@ 1 fst ev) (@ 7 fst3 state)) (BOOL True)) -> (= (@ 17 times_lr (@ 18 fdota (@ 9 editsets) i) (@ 21 fboxa (@ 10 editreads) j) ev state) (@ 19 times_rl (@ 21 fboxa (@ 10 editreads) j) (@ 18 fdota (@ 9 editsets) i) ev state))}}}}}}}})))))
+  THEOREM set_set_elimination      : (All ev (All state (All i {(= (@ 0 evalEvent ev) (BOOL True)) -> {(= (@ 2 evalEState (@ 11 evalString) state) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> (= (@ 20 >>> (@ 18 fdota (@ 9 editsets) i) (@ 18 fdota (@ 9 editsets) i) ev state) (@ 18 fdota (@ 9 editsets) i ev state))}}})))
+  THEOREM set_set_swap             : (All ev (All state (All i (All j {(= (@ 0 evalEvent ev) (BOOL True)) -> {(= (@ 2 evalEState (@ 16 evalTuple (@ 11 evalString) (@ 11 evalString)) state) (BOOL True)) -> {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 5 evalEditorId j) (BOOL True)) -> {~(= i j) -> {(= (@ 6 known i (@ 7 fst3 state)) (BOOL True)) -> {(= (@ 6 known j (@ 7 fst3 state)) (BOOL True)) -> {(= (@ 6 known (@ 1 fst ev) (@ 7 fst3 state)) (BOOL True)) -> (= (@ 17 times_lr (@ 18 fdota (@ 9 editsets) i) (@ 18 fdota (@ 9 editsets) j) ev state) (@ 19 times_rl (@ 18 fdota (@ 9 editsets) j) (@ 18 fdota (@ 9 editsets) i) ev state))}}}}}}}}))))
+  THEOREM write_i_read_i           : (All i (All data {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> {(= (@ 6 known i data) (BOOL True)) -> (= (@ 14 write` i (@ 15 read` i data) data) data)}}}))
+  THEOREM write_i_write_i          : (All i (All v (All data {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 11 evalString v) (BOOL True)) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> (= (@ 14 write` i v (@ 14 write` i v data)) (@ 14 write` i v data))}}})))
+  THEOREM write_i_write_i_2        : (All i (All v (All w (All data {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 11 evalString v) (BOOL True)) -> {(= (@ 11 evalString w) (BOOL True)) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> (= (@ 14 write` i v (@ 14 write` i w data)) (@ 14 write` i v data))}}}}))))
+  THEOREM write_i_write_j          : (All i (All j (All data (All v (All w {(= (@ 5 evalEditorId i) (BOOL True)) -> {(= (@ 5 evalEditorId j) (BOOL True)) -> {~(= i j) -> {(= (@ 12 evalEditableData data) (BOOL True)) -> {(= (@ 6 known i data) (BOOL True)) -> {(= (@ 6 known j data) (BOOL True)) -> (= (@ 14 write` i v (@ 14 write` j w data)) (@ 14 write` j w (@ 14 write` i v data)))}}}}}})))))
+
+THEOREM:
+  ==_editorId
+DEPENDS:
+  25 5 13
+PROOF:
+  Introduce i1 i2 H1 H2.
+  Cases i1.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to n1.
+     RenameE x2 to v1.
+     Rewrite -> All "decompose_evalEditorId" in H1.
+     Split Shallow H1.
+     Cases i2.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to n2.
+        RenameE x2 to v2.
+        Rewrite -> All "decompose_evalEditorId" in H2.
+        Split Shallow H2.
+        Assume {(= (@ 25 ==_uarray n1 n2) (BOOL True)) <-> (= n1 n2)}.
+        1. Assume {(= (@ 25 ==_uarray v1 v2) (BOOL True)) <-> (= v1 v2)}.
+           1. Reduce NF All (  ).
+              SplitCase 1.
+              1. Definedness.
+              2. SplitIff.
+                 1. Introduce H10.
+                    Injective.
+                    Split Shallow.
+                    1. Rewrite <- All H7.
+                       Exact H9.
+                    2. Rewrite <- All H8.
+                       Exact H10.
+                 2. Introduce H10.
+                    InjectiveH in H10.
+                    Split Shallow H10.
+                    Rewrite -> All H8.
+                    Exact H11.
+              3. SplitIff.
+                 1. AbsurdEquality.
+                 2. Introduce H10.
+                    InjectiveH in H10.
+                    Split Shallow H10.
+                    Rewrite <- All H7 in H10.
+                    Rewrite -> All H10 in H9.
+                    AbsurdEqualityH H9.
+           2. Apply "string_==".
+              Split Shallow.
+              1. Definedness.
+              2. Definedness.
+        2. Apply "string_==".
+           Split Shallow.
+           1. Definedness.
+           2. Definedness.
+
+THEOREM:
+  classify_event
+DEPENDS:
+  
+PROOF:
+  Introduce i j ev_id H1.
+  Assume {(= ev_id i) \/ ~(= ev_id i)}.
+  1. Case Shallow H2.
+     1. Assume {(= ev_id j) \/ ~(= ev_id j)}.
+        1. Case Shallow H3.
+           1. Rewrite -> All H2 in H3.
+              Absurd H1 H3.
+           2. Case Shallow 1.
+              Split Shallow.
+              1. Exact H2.
+              2. Exact H3.
+        2. Apply "tertium".
+     2. Assume {(= ev_id j) \/ ~(= ev_id j)}.
+        1. Case Shallow H3.
+           1. Case Shallow 2.
+              Case Shallow 1.
+              Split Shallow.
+              1. Exact H3.
+              2. Exact H2.
+           2. Case Shallow 2.
+              Case Shallow 2.
+              Split Shallow.
+              1. Exact H2.
+              2. Exact H3.
+        2. Apply "tertium".
+  2. Apply "tertium".
+
+THEOREM:
+  expand_editreads_pending_other
+DEPENDS:
+  15 5 12 10 4
+PROOF:
+  Introduce ev_id i data ev_v H1 H2 H3 H4.
+  Reduce NF All (  ).
+  SplitCase 1.
+  1. Contradiction H5.
+     Apply "eval_compareEditorId".
+     Split Shallow.
+     1. Exact H1.
+     2. Exact H2.
+  2. Rewrite -> All "==_editorId" in H5.
+     1. Absurd H4 H5.
+     2. Exact H1.
+     3. Exact H2.
+  3. Rewrite -> All H2.
+     Reduce NF All (  ).
+     Assume ~(= (@ 15 read` i data) BOTTOM).
+     1. Reduce NF All (  ).
+        Reflexive.
+     2. Apply "not_read_bottom".
+        Split Shallow.
+        1. Exact H2.
+        2. Exact H3.
+
+THEOREM:
+  expand_editreads_pending_self
+DEPENDS:
+  14 13 5 11 12 10 4 24
+PROOF:
+  Introduce ev_id ev_v data i H1 H2 H3 H4.
+  Reduce NF All (  ).
+  Assume (= (@ 13 ==_tuple10000 ev_id i) (BOOL True)).
+  1. Rewrite -> All H5.
+     Rewrite <- All H4.
+     Rewrite -> All H1.
+     Reduce NF All (  ).
+     Assume ~(= (@ 14 write` ev_id ev_v data) BOTTOM).
+     1. Reduce NF All (  ).
+        Reflexive.
+     2. Apply "not_write_bottom".
+        Split Deep.
+        1. Exact H1.
+        2. Exact H2.
+        3. Exact H3.
+  2. Rewrite -> All "==_editorId".
+     1. Exact H4.
+     2. Exact H1.
+     3. Rewrite <- All H4.
+        Exact H1.
+
+THEOREM:
+  expand_editreads_processed
+DEPENDS:
+  15 12 5 10 24
+PROOF:
+  Introduce data i ev_id ev_v H1 H2.
+  Reduce NF All (  ).
+  Rewrite -> All H2.
+  Reduce NF All (  ).
+  Assume ~(= (@ 15 read` i data) BOTTOM).
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Apply "not_read_bottom".
+     Split Shallow.
+     1. Exact H2.
+     2. Exact H1.
+
+THEOREM:
+  expand_editsets_pending_other
+DEPENDS:
+  14 5 11 12 9 4
+PROOF:
+  Introduce ev_id i v data ev_v H1 H2 H3 H4 H5.
+  Reduce NF All (  ).
+  Rewrite -> All "not_==_editorId".
+  1. Rewrite -> All H2.
+     Reduce NF All (  ).
+     Assume ~(= (@ 14 write` i v data) BOTTOM).
+     1. Reduce NF All (  ).
+        Reflexive.
+     2. Apply "not_write_bottom".
+        Split Deep.
+        1. Exact H2.
+        2. Exact H3.
+        3. Exact H4.
+  2. Exact H1.
+  3. Exact H2.
+  4. Exact H5.
+
+THEOREM:
+  expand_editsets_pending_self
+DEPENDS:
+  14 5 11 12 9 4 24
+PROOF:
+  Introduce ev_id i ev_v data v H1 H2 H3 H4 H5.
+  Reduce NF All (  ).
+  Rewrite <- All "==_editorId" in H5.
+  1. Rewrite -> All H5.
+     Rewrite -> All H2.
+     Reduce NF All (  ).
+     Assume ~(= (@ 14 write` i ev_v data) BOTTOM).
+     1. Reduce NF All (  ).
+        Reflexive.
+     2. Apply "not_write_bottom".
+        Split Deep.
+        1. Exact H2.
+        2. Exact H3.
+        3. Exact H4.
+  2. Exact H1.
+  3. Exact H2.
+
+THEOREM:
+  expand_editsets_processed
+DEPENDS:
+  14 12 5 11 9 24
+PROOF:
+  Introduce data i v ev_id ev_v H1 H2 H3.
+  Reduce NF All (  ).
+  Rewrite -> All H2.
+  Reduce NF All (  ).
+  Assume ~(= (@ 14 write` i v data) BOTTOM).
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Apply "not_write_bottom".
+     Split Deep.
+     1. Exact H2.
+     2. Exact H3.
+     3. Exact H1.
+
+THEOREM:
+  feedback_swap
+DEPENDS:
+  0 1 2 3 4 5 6 7 8
+PROOF:
+  Introduce ev i j A state H1 H2 H3 H4 H5 H6 H7 H8 H9.
+  Assume {(= i j) \/ ~(= i j)}.
+  1. Case Shallow H10.
+     1. Rewrite -> All H10.
+        Reflexive.
+     2. Cases ev.
+        1. ReduceH NF All in H1 (  ).
+           Definedness.
+        2. RenameE x1 to ev_id.
+           RenameE x2 to ev_v.
+           Rewrite -> All "decompose_evalEvent" in H1.
+           Split Shallow H1.
+           Cases state.
+           1. ReduceH NF All in H3 (  ).
+              Definedness.
+           2. RenameE x1 to data.
+              RenameE x2 to a.
+              ReduceH NF All in H4 (  ).
+              Rewrite -> All H4.
+              Rewrite -> All "decompose_evalEState" in H3.
+              Split Deep H3.
+              ReduceH NF All in H2 (  ).
+              Discard 0 0 1 H4.
+              ReduceH NF All in H7 (  ).
+              ReduceH NF All in H8 (  ).
+              ReduceH NF All in H9 (  ).
+              Discard 0 0 1 H14.
+              Discard 0 0 1 H15.
+              Case Shallow H2.
+              1. Rewrite -> All H2.
+                 Rewrite -> 1 "feedback_swap_lemma".
+                 1. Reflexive.
+                 2. Exact H12.
+                 3. Exact H13.
+                 4. Exact H5.
+                 5. Exact H6.
+                 6. Exact H10.
+                 7. Exact H7.
+                 8. Exact H8.
+              2. Rewrite -> All H2.
+                 Rewrite -> 1 "feedback_swap_lemma".
+                 1. Reflexive.
+                 2. Exact H12.
+                 3. Exact H13.
+                 4. Exact H6.
+                 5. Exact H5.
+                 6. Symmetric.
+                    Exact H10.
+                 7. Exact H8.
+                 8. Exact H7.
+  2. Apply "tertium".
+
+THEOREM:
+  feedback_swap_lemma
+DEPENDS:
+  9 10 11 12 5 6 8 4
+PROOF:
+  Introduce v data i j a H1 H2 H3 H4 H5 H6 H7.
+  Opaque 10 editreads.
+  Opaque 9 editsets.
+  Reduce NF All (  ).
+  Rewrite -> 1 "expand_editreads_pending_self".
+  1. Reduce NF All (  ).
+     Rewrite -> 1 "expand_editsets_processed".
+     1. Reduce NF All (  ).
+        Rewrite -> 1 "expand_editsets_processed".
+        1. Rewrite -> 1 "expand_editreads_pending_other".
+           1. Reduce NF All (  ).
+              Rewrite -> 1 "expand_editsets_pending_self".
+              1. Reduce NF All (  ).
+                 Rewrite -> All "expand_editsets_processed".
+                 1. Rewrite -> 2 "write_i_write_j".
+                    1. Rewrite -> 1 "write_i_write_i".
+                       1. Rewrite -> 1 "write_i_write_j".
+                          1. Reflexive.
+                          2. Exact H3.
+                          3. Exact H4.
+                          4. Exact H5.
+                          5. Exact H2.
+                          6. Exact H6.
+                          7. Exact H7.
+                       2. Exact H3.
+                       3. Exact H1.
+                       4. Apply "eval_write".
+                          Split Deep.
+                          1. Exact H4.
+                          2. Exact H1.
+                          3. Exact H2.
+                    2. Exact H4.
+                    3. Exact H3.
+                    4. Symmetric.
+                       Exact H5.
+                    5. Exact H2.
+                    6. Exact H7.
+                    7. Exact H6.
+                 2. Apply "eval_write".
+                    Split Deep.
+                    1. Exact H3.
+                    2. Exact H1.
+                    3. Exact H2.
+                 3. Exact H4.
+                 4. Exact H1.
+              2. Exact H3.
+              3. Exact H1.
+              4. Exact H2.
+              5. Reflexive.
+           2. Exact H3.
+           3. Exact H4.
+           4. Exact H2.
+           5. Exact H5.
+        2. Apply "eval_write".
+           Split Deep.
+           1. Exact H4.
+           2. Exact H1.
+           3. Apply "eval_write".
+              Split Deep.
+              1. Exact H3.
+              2. Exact H1.
+              3. Exact H2.
+        3. Exact H3.
+        4. Exact H1.
+     2. Apply "eval_write".
+        Split Deep.
+        1. Exact H3.
+        2. Exact H1.
+        3. Exact H2.
+     3. Exact H4.
+     4. Exact H1.
+  2. Exact H3.
+  3. Exact H1.
+  4. Exact H2.
+  5. Reflexive.
+
+THEOREM:
+  not_==_editorId
+DEPENDS:
+  13 5
+PROOF:
+  Introduce i j H1 H2 H3.
+  Explicit Cases (@ 13 ==_tuple10000 i j).
+  1. Introduce H4.
+     Contradiction H4.
+     Apply "eval_compareEditorId".
+     Split Shallow.
+     1. Exact H1.
+     2. Exact H2.
+  2. Introduce H4.
+     Rewrite -> All "==_editorId" in H4.
+     1. Absurd H3 H4.
+     2. Exact H1.
+     3. Exact H2.
+  3. Introduce H4.
+     Exact H4.
+
+THEOREM:
+  read_i_write_i
+DEPENDS:
+  5 11 12 15 14
+PROOF:
+  Induction data.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Introduce i v H1 H2 H3.
+     Reduce NF All (  ).
+     Rewrite -> All "same_editorId".
+     1. Reduce NF All (  ).
+        Reflexive.
+     2. Exact H1.
+  3. Introduce data datas IH i v H1 H2 H3.
+     Cases data.
+     1. ReduceH NF All in H3 (  ).
+        Definedness.
+     2. Rewrite -> All "decompose_evalEditableData" in H3.
+        Split Deep H3.
+        Reduce NF All (  ).
+        SplitCase 1.
+        1. Contradiction H6.
+           Apply "eval_compareEditorId".
+           Split Shallow.
+           1. Exact H3.
+           2. Exact H1.
+        2. Reduce NF All (  ).
+           Rewrite -> All "same_editorId".
+           1. Reduce NF All (  ).
+              Reflexive.
+           2. Exact H1.
+        3. Reduce NF All (  ).
+           Rewrite -> All H6.
+           Reduce NF All (  ).
+           Apply IH.
+           Split Deep.
+           1. Exact H1.
+           2. Exact H2.
+           3. Exact H5.
+
+THEOREM:
+  read_i_write_j
+DEPENDS:
+  5 11 12 15 14
+PROOF:
+  Induction data.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Introduce i j v H1 H2 H3 H4 H5.
+     Reduce NF All (  ).
+     Rewrite -> All "not_==_editorId".
+     1. Reduce NF All (  ).
+        Reflexive.
+     2. Exact H2.
+     3. Exact H1.
+     4. Symmetric.
+        Exact H5.
+  3. Introduce data datas IH i j v H1 H2 H3 H4 H5.
+     Cases data.
+     1. ReduceH NF All in H4 (  ).
+        Definedness.
+     2. Rewrite -> All "decompose_evalEditableData" in H4.
+        Split Deep H4.
+        Cut ("classify_event" E i E j E x1).
+        Introduce H9.
+        Apply H9 to H5.
+        Case Deep H10.
+        1. Split Shallow H10.
+           Reduce NF All (  ).
+           Rewrite -> 1 "not_==_editorId".
+           1. Rewrite <- All "==_editorId" in H10.
+              1. Rewrite -> All H10.
+                 Reduce NF All (  ).
+                 Rewrite -> All H10.
+                 Reduce NF All (  ).
+                 Reflexive.
+              2. Exact H6.
+              3. Exact H1.
+           2. Exact H6.
+           3. Exact H2.
+           4. Exact H11.
+        2. Split Shallow H10.
+           Rewrite <- All "==_editorId" in H10.
+           1. Reduce NF All (  ).
+              Rewrite -> All H10.
+              Reduce NF All (  ).
+              Rewrite -> All "not_==_editorId".
+              1. Reduce NF All (  ).
+                 Reflexive.
+              2. Exact H6.
+              3. Exact H2.
+              4. Exact H1.
+              5. Exact H11.
+              6. Symmetric.
+                 Exact H5.
+           2. Exact H6.
+           3. Exact H2.
+        3. Split Shallow H10.
+           Reduce NF All (  ).
+           Rewrite -> All "not_==_editorId".
+           1. Reduce NF All (  ).
+              Rewrite -> All "not_==_editorId".
+              1. Reduce NF All (  ).
+                 Apply IH.
+                 Split Deep.
+                 1. Exact H1.
+                 2. Exact H2.
+                 3. Exact H3.
+                 4. Exact H8.
+                 5. Exact H5.
+              2. Exact H6.
+              3. Exact H1.
+              4. Exact H10.
+           2. Exact H6.
+           3. Exact H1.
+           4. Exact H2.
+           5. Exact H10.
+           6. Exact H11.
+
+THEOREM:
+  read_read_elimination
+DEPENDS:
+  15 14 0 2 5 20 21 10
+PROOF:
+  Introduce ev A state i H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x3 to status.
+     Rewrite -> All "decompose_evalEState" in H2.
+     Split Deep H2.
+     Discard 0 0 1 H5.
+     Cases status.
+     1. ReduceH NF All in H6 (  ).
+        Definedness.
+     2. Discard 0 0 1 H6.
+        Cases ev.
+        1. ReduceH NF All in H1 (  ).
+           Definedness.
+        2. RenameE x1 to id2.
+           RenameE x2 to v2.
+           Rewrite -> All "decompose_evalEvent" in H1.
+           Split Shallow H1.
+           Reduce NF All (  ).
+           Rewrite -> All H3.
+           Reduce NF All (  ).
+           Assume ~(= (@ 15 read` i data) BOTTOM).
+           1. Reduce NF All (  ).
+              Rewrite -> All H3.
+              Reduce NF All (  ).
+              Reflexive.
+           2. Apply "not_read_bottom".
+              Split Shallow.
+              1. Exact H3.
+              2. Exact H4.
+     3. Discard 0 0 1 H6.
+        Cases ev.
+        1. ReduceH NF All in H1 (  ).
+           Definedness.
+        2. RenameE x1 to id2.
+           RenameE x2 to v2.
+           Rewrite -> All "decompose_evalEvent" in H1.
+           Split Shallow H1.
+           Reduce NF All (  ).
+           SplitCase 1.
+           1. Contradiction H7.
+              Apply "eval_compareEditorId".
+              Split Shallow.
+              1. Exact H5.
+              2. Exact H3.
+           2. Rewrite -> All H3.
+              Reduce NF All (  ).
+              Assume ~(= (@ 14 write` i v2 data) BOTTOM).
+              1. Reduce NF All (  ).
+                 Rewrite -> All H3.
+                 Reduce NF All (  ).
+                 Assume ~(= (@ 15 read` i (@ 14 write` i v2 data)) BOTTOM).
+                 1. Unshare True 1 data All.
+                    Rewrite -> All "read_i_write_i".
+                    1. Reduce NF All (  ).
+                       Reflexive.
+                    2. Exact H3.
+                    3. Exact H6.
+                    4. Exact H4.
+                 2. Apply "not_read_bottom".
+                    Split Shallow.
+                    1. Exact H3.
+                    2. Apply "eval_write".
+                       Split Deep.
+                       1. Exact H3.
+                       2. Exact H6.
+                       3. Exact H4.
+              2. Apply "not_write_bottom".
+                 Split Deep.
+                 1. Exact H3.
+                 2. Exact H6.
+                 3. Exact H4.
+           3. Rewrite -> All H3.
+              Reduce NF All (  ).
+              Assume ~(= (@ 15 read` i data) BOTTOM).
+              1. Reduce NF All (  ).
+                 Rewrite -> All H7.
+                 Rewrite -> All H3.
+                 Reduce NF All (  ).
+                 Reflexive.
+              2. Apply "not_read_bottom".
+                 Split Shallow.
+                 1. Exact H3.
+                 2. Exact H4.
+
+THEOREM:
+  read_read_swap
+DEPENDS:
+  10 0 2 5 17 21 19
+PROOF:
+  Introduce ev A state i j H1 H2 H3 H4 H5.
+  Cases ev.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to ev_id.
+     RenameE x2 to ev_v.
+     Rewrite -> All "decompose_evalEvent" in H1.
+     Split Shallow H1.
+     Cases state.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to data.
+        RenameE x3 to status.
+        Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        Discard 0 0 1 H9.
+        Cases status.
+        1. ReduceH NF All in H10 (  ).
+           Definedness.
+        2. Discard 0 0 1 H10.
+           Opaque 10 editreads.
+           Reduce NF All (  ).
+           Rewrite -> 1 "expand_editreads_processed".
+           1. Unshare True 1 _x All.
+              Reduce NF All (  ).
+              Rewrite -> All "expand_editreads_processed".
+              1. Reduce NF All (  ).
+                 Rewrite -> All "expand_editreads_processed".
+                 1. Reduce NF All (  ).
+                    Reflexive.
+                 2. Exact H8.
+                 3. Exact H3.
+              2. Exact H8.
+              3. Exact H4.
+           2. Exact H8.
+           3. Exact H3.
+        3. Discard 0 0 1 H10.
+           Opaque 10 editreads.
+           Cut ("classify_event" E i E j E ev_id).
+           Introduce H9.
+           Apply H9 to H5.
+           Case Deep H10.
+           1. Split Shallow H10.
+              Reduce NF All (  ).
+              Rewrite -> 1 "expand_editreads_pending_self".
+              1. Unshare True 1 _x All.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editreads_processed".
+                 1. Unshare True 1 _x All.
+                    Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editreads_pending_other".
+                    1. Unshare True 1 _x All.
+                       Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editreads_pending_self".
+                       1. Unshare True 1 _x All.
+                          Reduce NF All (  ).
+                          Rewrite -> All "read_i_write_j".
+                          1. Reflexive.
+                          2. Exact H4.
+                          3. Exact H6.
+                          4. Exact H7.
+                          5. Exact H8.
+                          6. Symmetric.
+                             Exact H11.
+                       2. Exact H6.
+                       3. Exact H7.
+                       4. Exact H8.
+                       5. Exact H10.
+                    2. Exact H6.
+                    3. Exact H4.
+                    4. Exact H8.
+                    5. Exact H11.
+                 2. Apply "eval_write".
+                    Split Deep.
+                    1. Exact H6.
+                    2. Exact H7.
+                    3. Exact H8.
+                 3. Exact H4.
+              2. Exact H6.
+              3. Exact H7.
+              4. Exact H8.
+              5. Exact H10.
+           2. Split Shallow H10.
+              Reduce NF All (  ).
+              Rewrite -> 1 "expand_editreads_pending_other".
+              1. Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editreads_pending_self".
+                 1. Reduce NF All (  ).
+                    Rewrite -> All "expand_editreads_pending_self".
+                    1. Unshare True 1 _x All.
+                       Reduce NF All (  ).
+                       Rewrite -> All "expand_editreads_processed".
+                       1. Unshare True 1 _x All.
+                          Reduce NF All (  ).
+                          Rewrite -> All "read_i_write_j".
+                          1. Reflexive.
+                          2. Exact H3.
+                          3. Exact H6.
+                          4. Exact H7.
+                          5. Exact H8.
+                          6. Symmetric.
+                             Exact H11.
+                       2. Apply "eval_write".
+                          Split Deep.
+                          1. Exact H6.
+                          2. Exact H7.
+                          3. Exact H8.
+                       3. Exact H3.
+                    2. Exact H6.
+                    3. Exact H7.
+                    4. Exact H8.
+                    5. Exact H10.
+                 2. Exact H6.
+                 3. Exact H7.
+                 4. Exact H8.
+                 5. Exact H10.
+              2. Exact H6.
+              3. Exact H3.
+              4. Exact H8.
+              5. Exact H11.
+           3. Split Shallow H10.
+              Reduce NF All (  ).
+              Rewrite -> 1 "expand_editreads_pending_other".
+              1. Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editreads_pending_other".
+                 1. Reduce NF All (  ).
+                    Rewrite -> All "expand_editreads_pending_other".
+                    1. Reduce NF All (  ).
+                       Rewrite -> All "expand_editreads_pending_other".
+                       1. Reduce NF All (  ).
+                          Reflexive.
+                       2. Exact H6.
+                       3. Exact H3.
+                       4. Exact H8.
+                       5. Exact H10.
+                    2. Exact H6.
+                    3. Exact H4.
+                    4. Exact H8.
+                    5. Exact H11.
+                 2. Exact H6.
+                 3. Exact H4.
+                 4. Exact H8.
+                 5. Exact H11.
+              2. Exact H6.
+              3. Exact H3.
+              4. Exact H8.
+              5. Exact H10.
+
+THEOREM:
+  read_set_elimination
+DEPENDS:
+  11 15 14 0 2 5 6 7 20 21 10 18 9
+PROOF:
+  Introduce ev A state i H1 H2 H3 H4.
+  Cases ev.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to ev_id.
+     RenameE x2 to ev_v.
+     Rewrite -> All "decompose_evalEvent" in H1.
+     Split Shallow H1.
+     Cases state.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to data.
+        RenameE x3 to status.
+        Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        ReduceH NF All in H4 (  ).
+        Cases status.
+        1. ReduceH NF All in H9 (  ).
+           Definedness.
+        2. Discard 0 0 1 H9.
+           Reduce NF All (  ).
+           Rewrite -> All H3.
+           Reduce NF All (  ).
+           Assume ~(= (@ 15 read` i data) BOTTOM).
+           1. Reduce NF All (  ).
+              Unshare True 1 a All.
+              Rewrite -> All H3.
+              Reduce NF All (  ).
+              Rewrite -> All "write_i_read_i".
+              1. Assume ~(= data BOTTOM).
+                 1. Reduce NF All (  ).
+                    Reflexive.
+                 2. Contradiction.
+                    Rewrite -> All H10 in H7.
+                    ReduceH NF All in H7 (  ).
+                    Definedness.
+              2. Exact H3.
+              3. Exact H7.
+              4. Exact H4.
+           2. Apply "not_read_bottom".
+              Split Shallow.
+              1. Exact H3.
+              2. Exact H7.
+        3. Discard 0 0 1 H9.
+           Reduce NF All (  ).
+           SplitCase 1.
+           1. Contradiction H9.
+              Apply "eval_compareEditorId".
+              Split Shallow.
+              1. Exact H5.
+              2. Exact H3.
+           2. Rewrite -> All H3.
+              Reduce NF All (  ).
+              Assume ~(= (@ 14 write` i ev_v data) BOTTOM).
+              1. Reduce NF All (  ).
+                 Rewrite -> All H3.
+                 Reduce NF All (  ).
+                 Rewrite -> All "write_i_write_i".
+                 1. Reduce NF All (  ).
+                    Reflexive.
+                 2. Exact H3.
+                 3. Exact H6.
+                 4. Exact H7.
+              2. Apply "not_write_bottom".
+                 Split Deep.
+                 1. Exact H3.
+                 2. Exact H6.
+                 3. Exact H7.
+           3. Rewrite -> All H3.
+              Reduce NF All (  ).
+              Assume ~(= (@ 15 read` i data) BOTTOM).
+              1. Reduce NF All (  ).
+                 Rewrite -> All H9.
+                 Rewrite -> All H3.
+                 Reduce NF All (  ).
+                 Unshare True 1 a All.
+                 Assume (= (@ 11 evalString (@ 15 read` i data)) (BOOL True)).
+                 1. Rewrite -> All H11.
+                    Reduce NF All (  ).
+                    Rewrite -> All "write_i_read_i".
+                    1. Assume ~(= data BOTTOM).
+                       1. Reduce NF All (  ).
+                          Reflexive.
+                       2. Contradiction.
+                          Rewrite -> All H12 in H7.
+                          ReduceH NF All in H7 (  ).
+                          Definedness.
+                    2. Exact H3.
+                    3. Exact H7.
+                    4. Exact H4.
+                 2. Apply "eval_read".
+                    Split Shallow.
+                    1. Exact H3.
+                    2. Exact H7.
+              2. Apply "not_read_bottom".
+                 Split Shallow.
+                 1. Exact H3.
+                 2. Exact H7.
+
+THEOREM:
+  read_set_swap
+DEPENDS:
+  9 10 0 2 16 11 5 6 7 1 17 21 18 19
+PROOF:
+  Introduce ev A state i j H1 H2 H3 H4 H5 H6 H7 H8.
+  Cases ev.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to ev_id.
+     RenameE x2 to ev_v.
+     Rewrite -> All "decompose_evalEvent" in H1.
+     Split Shallow H1.
+     Cases state.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to data.
+        RenameE x3 to status.
+        Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        Cases x2.
+        1. ReduceH NF All in H12 (  ).
+           Definedness.
+        2. RenameE x1 to a.
+           RenameE x2 to v.
+           ReduceH NF All in H5 (  ).
+           ReduceH NF All in H6 (  ).
+           ReduceH NF All in H7 (  ).
+           Rewrite -> All "decompose_evalTuple" in H12.
+           Split Shallow H12.
+           UncurryH in H15.
+           Opaque 10 editreads.
+           Opaque 9 editsets.
+           Cases status.
+           1. ReduceH NF All in H13 (  ).
+              Definedness.
+           2. Discard 0 0 1 H13.
+              Reduce NF All (  ).
+              Rewrite -> 1 "expand_editreads_processed".
+              1. Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editsets_processed".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editsets_processed".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editreads_processed".
+                       1. Reduce NF All (  ).
+                          Rewrite -> All "read_i_write_j".
+                          1. Reflexive.
+                          2. Exact H3.
+                          3. Exact H4.
+                          4. Exact H15.
+                          5. Exact H11.
+                          6. Exact H8.
+                       2. Apply "eval_write".
+                          Split Deep.
+                          1. Exact H4.
+                          2. Exact H15.
+                          3. Exact H11.
+                       3. Exact H3.
+                    2. Exact H11.
+                    3. Exact H4.
+                    4. Exact H15.
+                 2. Exact H11.
+                 3. Exact H4.
+                 4. Exact H15.
+              2. Exact H11.
+              3. Exact H3.
+           3. Discard 0 0 1 H13.
+              Cut ("classify_event" E i E j E ev_id).
+              Introduce H16.
+              Apply H16 to H8.
+              Case Deep H17.
+              1. Split Shallow H17.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editreads_pending_self".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editsets_processed".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editsets_pending_other".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editreads_pending_self".
+                          1. Reduce NF All (  ).
+                             Rewrite -> 1 "write_i_write_j".
+                             1. Reflexive.
+                             2. Exact H4.
+                             3. Exact H9.
+                             4. Symmetric.
+                                Exact H18.
+                             5. Exact H11.
+                             6. Exact H6.
+                             7. Exact H7.
+                          2. Exact H9.
+                          3. Exact H10.
+                          4. Apply "eval_write".
+                             Split Deep.
+                             1. Exact H4.
+                             2. Exact H15.
+                             3. Exact H11.
+                          5. Exact H17.
+                       2. Exact H9.
+                       3. Exact H4.
+                       4. Exact H15.
+                       5. Exact H11.
+                       6. Exact H18.
+                    2. Apply "eval_write".
+                       Split Deep.
+                       1. Exact H9.
+                       2. Exact H10.
+                       3. Exact H11.
+                    3. Exact H4.
+                    4. Exact H15.
+                 2. Exact H9.
+                 3. Exact H10.
+                 4. Exact H11.
+                 5. Exact H17.
+              2. Split Shallow H17.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editreads_pending_other".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editsets_pending_self".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editsets_pending_self".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editreads_processed".
+                          1. Reduce NF All (  ).
+                             Rewrite -> All "read_i_write_j".
+                             1. Reflexive.
+                             2. Exact H3.
+                             3. Exact H4.
+                             4. Exact H10.
+                             5. Exact H11.
+                             6. Exact H8.
+                          2. Apply "eval_write".
+                             Split Deep.
+                             1. Exact H4.
+                             2. Exact H10.
+                             3. Exact H11.
+                          3. Exact H3.
+                       2. Exact H9.
+                       3. Exact H4.
+                       4. Exact H10.
+                       5. Exact H11.
+                       6. Exact H17.
+                    2. Exact H9.
+                    3. Exact H4.
+                    4. Exact H10.
+                    5. Exact H11.
+                    6. Exact H17.
+                 2. Exact H9.
+                 3. Exact H3.
+                 4. Exact H11.
+                 5. Exact H18.
+              3. Split Shallow H17.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editreads_pending_other".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editsets_pending_other".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editsets_pending_other".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editreads_pending_other".
+                          1. Reduce NF All (  ).
+                             Rewrite -> All "read_i_write_j".
+                             1. Reflexive.
+                             2. Exact H3.
+                             3. Exact H4.
+                             4. Exact H15.
+                             5. Exact H11.
+                             6. Exact H8.
+                          2. Exact H9.
+                          3. Exact H3.
+                          4. Apply "eval_write".
+                             Split Deep.
+                             1. Exact H4.
+                             2. Exact H15.
+                             3. Exact H11.
+                          5. Exact H17.
+                       2. Exact H9.
+                       3. Exact H4.
+                       4. Exact H15.
+                       5. Exact H11.
+                       6. Exact H18.
+                    2. Exact H9.
+                    3. Exact H4.
+                    4. Exact H15.
+                    5. Exact H11.
+                    6. Exact H18.
+                 2. Exact H9.
+                 3. Exact H3.
+                 4. Exact H11.
+                 5. Exact H17.
+
+THEOREM:
+  same_editorId
+DEPENDS:
+  5 13
+PROOF:
+  Introduce i H1.
+  Cases i.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. Rewrite -> All "decompose_evalEditorId" in H1.
+     Split Shallow H1.
+     Reduce NF All (  ).
+     Assume (= x1 x1).
+     1. Rewrite <- All "string_==" in H3.
+        1. Assume (= x2 x2).
+           1. Rewrite <- All "string_==" in H4.
+              1. Rewrite -> All H3.
+                 Rewrite -> All H4.
+                 Reduce NF All (  ).
+                 Reflexive.
+              2. Definedness.
+           2. Reflexive.
+        2. Definedness.
+     2. Reflexive.
+
+THEOREM:
+  self_composition
+DEPENDS:
+  15 11 9 10 0 2 5 20 22 23
+PROOF:
+  Introduce ev A state i f g H1 H2 H3 H4 H5.
+  Cases ev.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to ev_id.
+     RenameE x2 to ev_v.
+     Rewrite -> All "decompose_evalEvent" in H1.
+     Split Shallow H1.
+     Cases state.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to data.
+        RenameE x2 to a.
+        RenameE x3 to status.
+        Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        Opaque 10 editreads.
+        Opaque 9 editsets.
+        Assume (= (@ 11 evalString (@ 15 read` i data)) (BOOL True)).
+        1. Cases status.
+           1. ReduceH NF All in H10 (  ).
+              Definedness.
+           2. Discard 0 0 1 H10.
+              Reduce NF All (  ).
+              Rewrite -> 1 "expand_editreads_processed".
+              1. Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editsets_processed".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editreads_processed".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "read_i_write_i".
+                       1. Rewrite -> 1 "expand_editsets_processed".
+                          1. Rewrite -> 1 "expand_editreads_processed".
+                             1. Reduce NF All (  ).
+                                Rewrite -> 1 "expand_editsets_processed".
+                                1. Rewrite -> 1 "write_i_write_i_2".
+                                   1. Reflexive.
+                                   2. Exact H3.
+                                   3. Apply H5.
+                                      Apply H4.
+                                      Exact H11.
+                                   4. Apply H4.
+                                      Exact H11.
+                                   5. Exact H8.
+                                2. Exact H8.
+                                3. Exact H3.
+                                4. Apply H5.
+                                   Apply H4.
+                                   Exact H11.
+                             2. Exact H8.
+                             3. Exact H3.
+                          2. Apply "eval_write".
+                             Split Deep.
+                             1. Exact H3.
+                             2. Apply H4.
+                                Exact H11.
+                             3. Exact H8.
+                          3. Exact H3.
+                          4. Apply H5.
+                             Apply H4.
+                             Exact H11.
+                       2. Exact H3.
+                       3. Apply H4.
+                          Exact H11.
+                       4. Exact H8.
+                    2. Apply "eval_write".
+                       Split Deep.
+                       1. Exact H3.
+                       2. Apply H4.
+                          Exact H11.
+                       3. Exact H8.
+                    3. Exact H3.
+                 2. Exact H8.
+                 3. Exact H3.
+                 4. Apply H4.
+                    Exact H11.
+              2. Exact H8.
+              3. Exact H3.
+           3. Discard 0 0 1 H10.
+              Assume {(= ev_id i) \/ ~(= ev_id i)}.
+              1. Case Shallow H12.
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editreads_pending_self".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editsets_processed".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editreads_processed".
+                          1. Reduce NF All (  ).
+                             Rewrite -> 1 "read_i_write_i".
+                             1. Rewrite -> 1 "expand_editsets_processed".
+                                1. Rewrite -> 1 "write_i_write_i_2".
+                                   1. Rewrite -> 1 "expand_editreads_pending_self".
+                                      1. Reduce NF All (  ).
+                                         Rewrite -> 1 "expand_editsets_processed".
+                                         1. Reflexive.
+                                         2. Apply "eval_write".
+                                            Split Deep.
+                                            1. Exact H6.
+                                            2. Exact H7.
+                                            3. Exact H8.
+                                         3. Exact H3.
+                                         4. Apply H5.
+                                            Apply H4.
+                                            Exact H7.
+                                      2. Exact H6.
+                                      3. Exact H7.
+                                      4. Exact H8.
+                                      5. Exact H12.
+                                   2. Exact H3.
+                                   3. Apply H5.
+                                      Apply H4.
+                                      Exact H7.
+                                   4. Apply H4.
+                                      Exact H7.
+                                   5. Apply "eval_write".
+                                      Split Deep.
+                                      1. Exact H6.
+                                      2. Exact H7.
+                                      3. Exact H8.
+                                2. Apply "eval_write".
+                                   Split Deep.
+                                   1. Exact H3.
+                                   2. Apply H4.
+                                      Exact H7.
+                                   3. Apply "eval_write".
+                                      Split Deep.
+                                      1. Exact H6.
+                                      2. Exact H7.
+                                      3. Exact H8.
+                                3. Exact H3.
+                                4. Apply H5.
+                                   Apply H4.
+                                   Exact H7.
+                             2. Exact H3.
+                             3. Apply H4.
+                                Exact H7.
+                             4. Apply "eval_write".
+                                Split Deep.
+                                1. Exact H6.
+                                2. Exact H7.
+                                3. Exact H8.
+                          2. Apply "eval_write".
+                             Split Deep.
+                             1. Exact H3.
+                             2. Apply H4.
+                                Exact H7.
+                             3. Apply "eval_write".
+                                Split Deep.
+                                1. Exact H6.
+                                2. Exact H7.
+                                3. Exact H8.
+                          3. Exact H3.
+                       2. Apply "eval_write".
+                          Split Deep.
+                          1. Exact H6.
+                          2. Exact H7.
+                          3. Exact H8.
+                       3. Exact H3.
+                       4. Apply H4.
+                          Exact H7.
+                    2. Exact H6.
+                    3. Exact H7.
+                    4. Exact H8.
+                    5. Exact H12.
+                 2. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editreads_pending_other".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editsets_pending_other".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editreads_pending_other".
+                          1. Reduce NF All (  ).
+                             Rewrite -> 1 "read_i_write_i".
+                             1. Rewrite -> 1 "expand_editsets_pending_other".
+                                1. Rewrite -> 1 "expand_editreads_pending_other".
+                                   1. Reduce NF All (  ).
+                                      Rewrite -> 1 "expand_editsets_pending_other".
+                                      1. Rewrite -> 1 "write_i_write_i_2".
+                                         1. Reflexive.
+                                         2. Exact H3.
+                                         3. Apply H5.
+                                            Apply H4.
+                                            Exact H11.
+                                         4. Apply H4.
+                                            Exact H11.
+                                         5. Exact H8.
+                                      2. Exact H6.
+                                      3. Exact H3.
+                                      4. Apply H5.
+                                         Apply H4.
+                                         Exact H11.
+                                      5. Exact H8.
+                                      6. Exact H12.
+                                   2. Exact H6.
+                                   3. Exact H3.
+                                   4. Exact H8.
+                                   5. Exact H12.
+                                2. Exact H6.
+                                3. Exact H3.
+                                4. Apply H5.
+                                   Apply H4.
+                                   Exact H11.
+                                5. Apply "eval_write".
+                                   Split Deep.
+                                   1. Exact H3.
+                                   2. Apply H4.
+                                      Exact H11.
+                                   3. Exact H8.
+                                6. Exact H12.
+                             2. Exact H3.
+                             3. Apply H4.
+                                Exact H11.
+                             4. Exact H8.
+                          2. Exact H6.
+                          3. Exact H3.
+                          4. Apply "eval_write".
+                             Split Deep.
+                             1. Exact H3.
+                             2. Apply H4.
+                                Exact H11.
+                             3. Apply H8.
+                          5. Exact H12.
+                       2. Exact H6.
+                       3. Exact H3.
+                       4. Apply H4.
+                          Exact H11.
+                       5. Exact H8.
+                       6. Exact H12.
+                    2. Exact H6.
+                    3. Exact H3.
+                    4. Exact H8.
+                    5. Exact H12.
+              2. Apply "tertium".
+        2. Assume ~(= (@ 15 read` i data) BOTTOM).
+           1. Reduce NF All (  ).
+              Reflexive.
+           2. Apply "not_read_bottom".
+              Split Shallow.
+              1. Exact H3.
+              2. Exact H8.
+
+THEOREM:
+  set_read_elimination
+DEPENDS:
+  14 0 2 11 5 20 18 9 21 10
+PROOF:
+  Introduce ev state i H1 H2 H3.
+  Cases ev.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to ev_id.
+     RenameE x2 to ev_v.
+     Rewrite -> All "decompose_evalEvent" in H1.
+     Split Shallow H1.
+     Cases state.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to data.
+        RenameE x2 to a.
+        RenameE x3 to status.
+        Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        Cases status.
+        1. ReduceH NF All in H8 (  ).
+           Definedness.
+        2. Discard 0 0 1 H8.
+           Reduce NF All (  ).
+           Rewrite -> All H3.
+           Reduce NF All (  ).
+           Rewrite -> All H7.
+           Reduce NF All (  ).
+           Assume ~(= (@ 14 write` i a data) BOTTOM).
+           1. Reduce NF All (  ).
+              Unshare True 1 data All.
+              Rewrite -> All H3.
+              Reduce NF All (  ).
+              Rewrite -> All "read_i_write_i".
+              1. UncurryH in H7.
+                 Reduce NF All (  ).
+                 Reflexive.
+              2. Exact H3.
+              3. Exact H7.
+              4. Exact H6.
+           2. Apply "not_write_bottom".
+              Split Deep.
+              1. Exact H3.
+              2. Exact H7.
+              3. Exact H6.
+        3. Discard 0 0 1 H8.
+           UncurryH in H7.
+           Reduce NF All (  ).
+           SplitCase 1.
+           1. Contradiction H8.
+              Apply "eval_compareEditorId".
+              Split Shallow.
+              1. Exact H4.
+              2. Exact H3.
+           2. Rewrite -> All H3.
+              Reduce NF All (  ).
+              Assume ~(= (@ 14 write` i ev_v data) BOTTOM).
+              1. Reduce NF All (  ).
+                 Unshare True 1 data All.
+                 Rewrite -> All H3.
+                 Reduce NF All (  ).
+                 Rewrite -> All "read_i_write_i".
+                 1. Reduce NF All (  ).
+                    Reflexive.
+                 2. Exact H3.
+                 3. Exact H5.
+                 4. Exact H6.
+              2. Apply "not_write_bottom".
+                 Split Deep.
+                 1. Exact H3.
+                 2. Exact H5.
+                 3. Exact H6.
+           3. Rewrite -> All H3.
+              Reduce NF All (  ).
+              Assume ~(= (@ 14 write` i a data) BOTTOM).
+              1. Reduce NF All (  ).
+                 Unshare True 1 data All.
+                 Rewrite -> All H8.
+                 Rewrite -> All H3.
+                 Reduce NF All (  ).
+                 Rewrite -> All "read_i_write_i".
+                 1. Reduce NF All (  ).
+                    Reflexive.
+                 2. Exact H3.
+                 3. Exact H7.
+                 4. Exact H6.
+              2. Apply "not_write_bottom".
+                 Split Deep.
+                 1. Exact H3.
+                 2. Exact H7.
+                 3. Exact H6.
+
+THEOREM:
+  set_read_swap
+DEPENDS:
+  9 10 0 2 16 11 5 6 7 1 17 18 21 19
+PROOF:
+  Introduce ev A state i j H1 H2 H3 H4 H5 H6 H7 H8.
+  Cases ev.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to ev_id.
+     RenameE x2 to ev_v.
+     Rewrite -> All "decompose_evalEvent" in H1.
+     Split Shallow H1.
+     Cases state.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to data.
+        RenameE x3 to status.
+        Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        Cases x2.
+        1. ReduceH NF All in H12 (  ).
+           Definedness.
+        2. RenameE x1 to v.
+           RenameE x2 to a.
+           Rewrite -> All "decompose_evalTuple" in H12.
+           Split Shallow H12.
+           ReduceH NF All in H6 (  ).
+           ReduceH NF All in H7 (  ).
+           ReduceH NF All in H8 (  ).
+           UncurryH in H14.
+           Opaque 10 editreads.
+           Opaque 9 editsets.
+           Cases status.
+           1. ReduceH NF All in H13 (  ).
+              Definedness.
+           2. Discard 0 0 1 H13.
+              Reduce NF All (  ).
+              Rewrite -> 1 "expand_editsets_processed".
+              1. Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editreads_processed".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editreads_processed".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editsets_processed".
+                       1. Reduce NF All (  ).
+                          Rewrite -> All "read_i_write_j".
+                          1. Reflexive.
+                          2. Exact H4.
+                          3. Exact H3.
+                          4. Exact H14.
+                          5. Exact H11.
+                          6. Symmetric.
+                             Exact H5.
+                       2. Exact H11.
+                       3. Exact H3.
+                       4. Exact H14.
+                    2. Exact H11.
+                    3. Exact H4.
+                 2. Apply "eval_write".
+                    Split Deep.
+                    1. Exact H3.
+                    2. Exact H14.
+                    3. Exact H11.
+                 3. Exact H4.
+              2. Exact H11.
+              3. Exact H3.
+              4. Exact H14.
+           3. Discard 0 0 1 H13.
+              Cut ("classify_event" E i E j E ev_id).
+              Introduce H16.
+              Apply H16 to H5.
+              Case Deep H17.
+              1. Split Shallow H17.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editsets_pending_self".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editreads_processed".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editreads_pending_other".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editsets_pending_self".
+                          1. Reduce NF All (  ).
+                             Rewrite -> All "read_i_write_j".
+                             1. Reflexive.
+                             2. Exact H4.
+                             3. Exact H3.
+                             4. Exact H10.
+                             5. Exact H11.
+                             6. Symmetric.
+                                Exact H5.
+                          2. Exact H9.
+                          3. Exact H3.
+                          4. Exact H10.
+                          5. Exact H11.
+                          6. Exact H17.
+                       2. Exact H9.
+                       3. Exact H4.
+                       4. Exact H11.
+                       5. Exact H18.
+                    2. Apply "eval_write".
+                       Split Deep.
+                       1. Exact H3.
+                       2. Exact H10.
+                       3. Exact H11.
+                    3. Exact H4.
+                 2. Exact H9.
+                 3. Exact H3.
+                 4. Exact H10.
+                 5. Exact H11.
+                 6. Exact H17.
+              2. Split Shallow H17.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editsets_pending_other".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editreads_pending_self".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editreads_pending_self".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editsets_processed".
+                          1. Reduce NF All (  ).
+                             Rewrite -> 1 "write_i_write_j".
+                             1. Reflexive.
+                             2. Exact H9.
+                             3. Exact H3.
+                             4. Exact H18.
+                             5. Exact H11.
+                             6. Exact H8.
+                             7. Exact H6.
+                          2. Apply "eval_write".
+                             Split Deep.
+                             1. Exact H9.
+                             2. Exact H10.
+                             3. Exact H11.
+                          3. Exact H3.
+                          4. Exact H14.
+                       2. Exact H9.
+                       3. Exact H10.
+                       4. Exact H11.
+                       5. Exact H17.
+                    2. Exact H9.
+                    3. Exact H10.
+                    4. Apply "eval_write".
+                       Split Deep.
+                       1. Exact H3.
+                       2. Exact H14.
+                       3. Exact H11.
+                    5. Exact H17.
+                 2. Exact H9.
+                 3. Exact H3.
+                 4. Exact H14.
+                 5. Exact H11.
+                 6. Exact H18.
+              3. Split Shallow H17.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editsets_pending_other".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editreads_pending_other".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editreads_pending_other".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editsets_pending_other".
+                          1. Reduce NF All (  ).
+                             Rewrite -> All "read_i_write_j".
+                             1. Reflexive.
+                             2. Exact H4.
+                             3. Exact H3.
+                             4. Exact H14.
+                             5. Exact H11.
+                             6. Symmetric.
+                                Exact H5.
+                          2. Exact H9.
+                          3. Exact H3.
+                          4. Exact H14.
+                          5. Exact H11.
+                          6. Exact H17.
+                       2. Exact H9.
+                       3. Exact H4.
+                       4. Exact H11.
+                       5. Exact H18.
+                    2. Exact H9.
+                    3. Exact H4.
+                    4. Apply "eval_write".
+                       Split Deep.
+                       1. Exact H3.
+                       2. Exact H14.
+                       3. Exact H11.
+                    5. Exact H18.
+                 2. Exact H9.
+                 3. Exact H3.
+                 4. Exact H14.
+                 5. Exact H11.
+                 6. Exact H17.
+
+THEOREM:
+  set_set_elimination
+DEPENDS:
+  14 0 2 11 5 20 18 9
+PROOF:
+  Introduce ev state i H1 H2 H3.
+  Cases ev.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to ev_id.
+     RenameE x2 to ev_v.
+     Rewrite -> All "decompose_evalEvent" in H1.
+     Split Shallow H1.
+     Cases state.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to data.
+        RenameE x2 to a.
+        RenameE x3 to status.
+        Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        UncurryH in H7.
+        Cases status.
+        1. ReduceH NF All in H8 (  ).
+           Definedness.
+        2. Discard 0 0 1 H8.
+           Reduce NF All (  ).
+           Rewrite -> All H3.
+           Reduce NF All (  ).
+           Assume ~(= (@ 14 write` i a data) BOTTOM).
+           1. Reduce NF All (  ).
+              Rewrite -> All H3.
+              Reduce NF All (  ).
+              Rewrite -> All "write_i_write_i".
+              1. Reduce NF All (  ).
+                 Reflexive.
+              2. Exact H3.
+              3. Exact H7.
+              4. Exact H6.
+           2. Apply "not_write_bottom".
+              Split Deep.
+              1. Exact H3.
+              2. Exact H7.
+              3. Exact H6.
+        3. Discard 0 0 1 H8.
+           Reduce NF All (  ).
+           SplitCase 1.
+           1. Contradiction H8.
+              Apply "eval_compareEditorId".
+              Split Shallow.
+              1. Exact H4.
+              2. Exact H3.
+           2. Rewrite -> All H3.
+              Reduce NF All (  ).
+              Assume ~(= (@ 14 write` i ev_v data) BOTTOM).
+              1. Reduce NF All (  ).
+                 Rewrite -> All H3.
+                 Reduce NF All (  ).
+                 Rewrite -> All "write_i_write_i".
+                 1. Reduce NF All (  ).
+                    Reflexive.
+                 2. Exact H3.
+                 3. Exact H5.
+                 4. Exact H6.
+              2. Apply "not_write_bottom".
+                 Split Deep.
+                 1. Exact H3.
+                 2. Exact H5.
+                 3. Exact H6.
+           3. Rewrite -> All H3.
+              Reduce NF All (  ).
+              Assume ~(= (@ 14 write` i a data) BOTTOM).
+              1. Reduce NF All (  ).
+                 Rewrite -> All H8.
+                 Rewrite -> All H3.
+                 Reduce NF All (  ).
+                 Rewrite -> All "write_i_write_i".
+                 1. Reduce NF All (  ).
+                    Reflexive.
+                 2. Exact H3.
+                 3. Exact H7.
+                 4. Exact H6.
+              2. Apply "not_write_bottom".
+                 Split Deep.
+                 1. Exact H3.
+                 2. Exact H7.
+                 3. Exact H6.
+
+THEOREM:
+  set_set_swap
+DEPENDS:
+  9 10 0 2 16 11 5 6 7 1 17 18 19
+PROOF:
+  Introduce ev state i j H1 H2 H3 H4 H5 H6 H7 H8.
+  Cases ev.
+  1. ReduceH NF All in H1 (  ).
+     Definedness.
+  2. RenameE x1 to ev_id.
+     RenameE x2 to ev_v.
+     Rewrite -> All "decompose_evalEvent" in H1.
+     Split Shallow H1.
+     Cases state.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to data.
+        RenameE x3 to status.
+        Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        Cases x2.
+        1. ReduceH NF All in H12 (  ).
+           Definedness.
+        2. RenameE x1 to v1.
+           RenameE x2 to v2.
+           Rewrite -> All "decompose_evalTuple" in H12.
+           Split Deep H12.
+           ReduceH NF All in H6 (  ).
+           ReduceH NF All in H7 (  ).
+           ReduceH NF All in H8 (  ).
+           UncurryH in H14.
+           UncurryH in H15.
+           Opaque 10 editreads.
+           Opaque 9 editsets.
+           Cases status.
+           1. ReduceH NF All in H13 (  ).
+              Definedness.
+           2. Discard 0 0 1 H13.
+              Reduce NF All (  ).
+              Rewrite -> 1 "expand_editsets_processed".
+              1. Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editsets_processed".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editsets_processed".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editsets_processed".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "write_i_write_j".
+                          1. Reflexive.
+                          2. Exact H4.
+                          3. Exact H3.
+                          4. Symmetric.
+                             Exact H5.
+                          5. Exact H11.
+                          6. Exact H7.
+                          7. Exact H6.
+                       2. Apply "eval_write".
+                          Split Deep.
+                          1. Exact H4.
+                          2. Exact H15.
+                          3. Exact H11.
+                       3. Exact H3.
+                       4. Exact H14.
+                    2. Exact H11.
+                    3. Exact H4.
+                    4. Exact H15.
+                 2. Apply "eval_write".
+                    Split Deep.
+                    1. Exact H3.
+                    2. Exact H14.
+                    3. Exact H11.
+                 3. Exact H4.
+                 4. Exact H15.
+              2. Exact H11.
+              3. Exact H3.
+              4. Exact H14.
+           3. Discard 0 0 1 H13.
+              Cut ("classify_event" E i E j E ev_id).
+              Introduce H16.
+              Apply H16 to H5.
+              Case Deep H17.
+              1. Split Shallow H17.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editsets_pending_self".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editsets_processed".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editsets_pending_other".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editsets_pending_self".
+                          1. Reduce NF All (  ).
+                             Rewrite -> 1 "write_i_write_j".
+                             1. Reflexive.
+                             2. Exact H4.
+                             3. Exact H3.
+                             4. Symmetric.
+                                Exact H5.
+                             5. Exact H11.
+                             6. Exact H7.
+                             7. Exact H6.
+                          2. Exact H9.
+                          3. Exact H3.
+                          4. Exact H10.
+                          5. Apply "eval_write".
+                             Split Deep.
+                             1. Exact H4.
+                             2. Exact H15.
+                             3. Exact H11.
+                          6. Exact H17.
+                       2. Exact H9.
+                       3. Exact H4.
+                       4. Exact H15.
+                       5. Exact H11.
+                       6. Exact H18.
+                    2. Apply "eval_write".
+                       Split Deep.
+                       1. Exact H3.
+                       2. Exact H10.
+                       3. Exact H11.
+                    3. Exact H4.
+                    4. Exact H15.
+                 2. Exact H9.
+                 3. Exact H3.
+                 4. Exact H10.
+                 5. Exact H11.
+                 6. Exact H17.
+              2. Split Shallow H17.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editsets_pending_other".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editsets_pending_self".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editsets_pending_self".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editsets_processed".
+                          1. Reduce NF All (  ).
+                             Rewrite -> 1 "write_i_write_j".
+                             1. Reflexive.
+                             2. Exact H4.
+                             3. Exact H3.
+                             4. Symmetric.
+                                Exact H5.
+                             5. Exact H11.
+                             6. Exact H7.
+                             7. Exact H6.
+                          2. Apply "eval_write".
+                             Split Deep.
+                             1. Exact H4.
+                             2. Exact H10.
+                             3. Exact H11.
+                          3. Exact H3.
+                          4. Exact H14.
+                       2. Exact H9.
+                       3. Exact H4.
+                       4. Exact H10.
+                       5. Exact H11.
+                       6. Exact H17.
+                    2. Exact H9.
+                    3. Exact H4.
+                    4. Exact H10.
+                    5. Apply "eval_write".
+                       Split Deep.
+                       1. Exact H3.
+                       2. Exact H14.
+                       3. Exact H11.
+                    6. Exact H17.
+                 2. Exact H9.
+                 3. Exact H3.
+                 4. Exact H14.
+                 5. Exact H11.
+                 6. Exact H18.
+              3. Split Shallow H17.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 "expand_editsets_pending_other".
+                 1. Reduce NF All (  ).
+                    Rewrite -> 1 "expand_editsets_pending_other".
+                    1. Reduce NF All (  ).
+                       Rewrite -> 1 "expand_editsets_pending_other".
+                       1. Reduce NF All (  ).
+                          Rewrite -> 1 "expand_editsets_pending_other".
+                          1. Reduce NF All (  ).
+                             Rewrite -> 1 "write_i_write_j".
+                             1. Reflexive.
+                             2. Exact H4.
+                             3. Exact H3.
+                             4. Symmetric.
+                                Exact H5.
+                             5. Exact H11.
+                             6. Exact H7.
+                             7. Exact H6.
+                          2. Exact H9.
+                          3. Exact H3.
+                          4. Exact H14.
+                          5. Apply "eval_write".
+                             Split Deep.
+                             1. Exact H4.
+                             2. Exact H15.
+                             3. Exact H11.
+                          6. Exact H17.
+                       2. Exact H9.
+                       3. Exact H4.
+                       4. Exact H15.
+                       5. Exact H11.
+                       6. Exact H18.
+                    2. Exact H9.
+                    3. Exact H4.
+                    4. Exact H15.
+                    5. Apply "eval_write".
+                       Split Deep.
+                       1. Exact H3.
+                       2. Exact H14.
+                       3. Exact H11.
+                    6. Exact H18.
+                 2. Exact H9.
+                 3. Exact H3.
+                 4. Exact H14.
+                 5. Exact H11.
+                 6. Exact H17.
+
+THEOREM:
+  write_i_read_i
+DEPENDS:
+  15 5 12 6 14
+PROOF:
+  Induction data.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     AbsurdEquality.
+  3. Introduce data datas IH i H1 H2 H3.
+     Cases data.
+     1. ReduceH NF All in H2 (  ).
+        Definedness.
+     2. RenameE x1 to i2.
+        RenameE x2 to v2.
+        Rewrite -> All "decompose_evalEditableData" in H2.
+        Split Deep H2.
+        ReduceH NF All in H3 (  ).
+        Reduce NF All (  ).
+        SplitCase 1.
+        1. Contradiction H7.
+           Apply "eval_compareEditorId".
+           Split Shallow.
+           1. Exact H4.
+           2. Exact H1.
+        2. Unshare True 1 value All.
+           Rewrite -> All "==_editorId" in H7.
+           1. Rewrite -> All H7.
+              Reflexive.
+           2. Exact H4.
+           3. Exact H1.
+        3. Assume ~(= (@ 15 read` i datas) BOTTOM).
+           1. Reduce NF All (  ).
+              Rewrite -> All IH.
+              1. Reflexive.
+              2. Exact H1.
+              3. Exact H6.
+              4. Rewrite -> All H7 in H3.
+                 ReduceH NF All in H3 (  ).
+                 Exact H3.
+           2. Apply "not_read_bottom".
+              Split Shallow.
+              1. Exact H1.
+              2. Exact H6.
+
+THEOREM:
+  write_i_write_i
+DEPENDS:
+  5 11 12 14
+PROOF:
+  Induction data.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Introduce i v H1 H2 H3.
+     Reduce NF All (  ).
+     Rewrite -> All "same_editorId".
+     1. Reduce NF All (  ).
+        Reflexive.
+     2. Exact H1.
+  3. Introduce data datas IH i v H1 H2 H3.
+     Cases data.
+     1. ReduceH NF All in H3 (  ).
+        Definedness.
+     2. RenameE x1 to i2.
+        RenameE x2 to v2.
+        Rewrite -> All "decompose_evalEditableData" in H3.
+        Split Deep H3.
+        Reduce NF All (  ).
+        SplitCase 1.
+        1. Contradiction H6.
+           Apply "eval_compareEditorId".
+           Split Shallow.
+           1. Exact H3.
+           2. Exact H1.
+        2. Reduce NF All (  ).
+           Rewrite -> All "same_editorId".
+           1. Reduce NF All (  ).
+              Reflexive.
+           2. Exact H1.
+        3. Reduce NF All (  ).
+           Unshare True 1 data All.
+           Rewrite -> All H6.
+           Reduce NF All (  ).
+           Rewrite -> All IH.
+           1. Reflexive.
+           2. Exact H1.
+           3. Exact H2.
+           4. Exact H5.
+
+THEOREM:
+  write_i_write_i_2
+DEPENDS:
+  13 5 11 12 14
+PROOF:
+  Induction data.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     Introduce i v w H1 H2 H3 H4.
+     Assume (= (@ 13 ==_tuple10000 i i) (BOOL True)).
+     1. Rewrite -> All H5.
+        Reduce NF All (  ).
+        Reflexive.
+     2. Rewrite -> All "==_editorId".
+        1. Reflexive.
+        2. Exact H1.
+  3. Introduce data datas IH i v w H1 H2 H3 H4.
+     Cases data.
+     1. ReduceH NF All in H4 (  ).
+        Definedness.
+     2. Rewrite -> All "decompose_evalEditableData" in H4.
+        Split Deep H4.
+        Reduce NF All (  ).
+        SplitCase 1.
+        1. Contradiction H7.
+           Apply "eval_compareEditorId".
+           Split Shallow.
+           1. Exact H4.
+           2. Exact H1.
+        2. Reduce NF All (  ).
+           Assume (= (@ 13 ==_tuple10000 i i) (BOOL True)).
+           1. Rewrite -> All H8.
+              Reduce NF All (  ).
+              Reflexive.
+           2. Rewrite -> All "==_editorId".
+              1. Reflexive.
+              2. Exact H1.
+        3. Reduce NF All (  ).
+           Rewrite -> All H7.
+           Reduce NF All (  ).
+           Rewrite -> All IH.
+           1. Reflexive.
+           2. Exact H1.
+           3. Exact H2.
+           4. Exact H3.
+           5. Exact H6.
+
+THEOREM:
+  write_i_write_j
+DEPENDS:
+  13 5 12 6 14
+PROOF:
+  Induction data.
+  1. Reduce NF All (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     AbsurdEquality.
+  3. Introduce data datas IH i j v w H1 H2 H3 H4 H5 H6.
+     Cases data.
+     1. ReduceH NF All in H4 (  ).
+        Definedness.
+     2. Rewrite -> All "decompose_evalEditableData" in H4.
+        Split Deep H4.
+        Cut ("classify_event" E i E j E x1).
+        Introduce H10.
+        Apply H10 to H3.
+        Case Deep H11.
+        1. Split Shallow H11.
+           Assume (= (@ 13 ==_tuple10000 x1 i) (BOOL True)).
+           1. Reduce NF All (  ).
+              Rewrite -> 1 "not_==_editorId".
+              1. Rewrite -> All H13.
+                 Reduce NF All (  ).
+                 Rewrite -> All H13.
+                 Rewrite -> 1 "not_==_editorId".
+                 1. Reduce NF All (  ).
+                    Reflexive.
+                 2. Exact H1.
+                 3. Exact H2.
+                 4. Exact H3.
+              2. Exact H7.
+              3. Exact H2.
+              4. Exact H12.
+           2. Rewrite -> All "==_editorId".
+              1. Exact H11.
+              2. Exact H7.
+              3. Exact H1.
+        2. Split Shallow H11.
+           Assume (= (@ 13 ==_tuple10000 x1 j) (BOOL True)).
+           1. Reduce NF All (  ).
+              Rewrite -> All H13.
+              Rewrite -> 1 "not_==_editorId".
+              1. Reduce NF All (  ).
+                 Rewrite -> 1 "not_==_editorId".
+                 1. Rewrite -> All H13.
+                    Reduce NF All (  ).
+                    Reflexive.
+                 2. Exact H2.
+                 3. Exact H1.
+                 4. Symmetric.
+                    Exact H3.
+              2. Exact H7.
+              3. Exact H1.
+              4. Exact H12.
+           2. Rewrite -> All "==_editorId".
+              1. Exact H11.
+              2. Exact H7.
+              3. Exact H2.
+        3. Split Shallow H11.
+           Assume (= (@ 13 ==_tuple10000 x1 i) (BOOL False)).
+           1. Assume (= (@ 13 ==_tuple10000 x1 j) (BOOL False)).
+              1. ReduceH NF All in H5 (  ).
+                 Rewrite -> All H13 in H5.
+                 ReduceH NF All in H5 (  ).
+                 ReduceH NF All in H6 (  ).
+                 Rewrite -> All H14 in H6.
+                 ReduceH NF All in H6 (  ).
+                 Reduce NF All (  ).
+                 Rewrite -> All H13.
+                 Rewrite -> All H14.
+                 Reduce NF All (  ).
+                 Rewrite -> All H13.
+                 Rewrite -> All H14.
+                 Reduce NF All (  ).
+                 Rewrite -> 1 IH.
+                 1. Reflexive.
+                 2. Exact H1.
+                 3. Exact H2.
+                 4. Exact H3.
+                 5. Exact H9.
+                 6. Exact H5.
+                 7. Exact H6.
+              2. Rewrite -> All "not_==_editorId".
+                 1. Reflexive.
+                 2. Exact H7.
+                 3. Exact H2.
+                 4. Exact H12.
+           2. Apply "not_==_editorId".
+              Split Deep.
+              1. Exact H7.
+              2. Exact H1.
+              3. Exact H11.
+
+

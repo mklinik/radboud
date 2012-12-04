@@ -1,0 +1,26 @@
+1.0.5
+    - experimental support for showing closures (only tested under Windows)
+    - wrapping in two phases (shallow, deep), shallow wrapping can also be
+      used for reifying expressions
+    - updated email addresses
+1.0.4
+    - somewhat better output for unboxed lists
+    - removed RWSDebug module, it was just intended as an example interface
+    - removed Clean 1.3 compatibility
+    - renamed Examples to DebugExamples
+1.0.3
+    - changed output for records (for example "{R | 1}" instead of "{R 1}")
+    - added support for wrapping unboxed lists, output for this could still be
+      improved
+1.0.2
+    - Made Clean 2.0 compatible 
+1.0.1
+    - Fixed spelling of Dave Brubeck's surname in Examples:example8
+    - Distinguish between constructors with strict arguments and records
+      in Wrap
+    - Fixed bug in debugBefore with Clean 1.3.3 (introduced
+      by smarter strictness analyzer)
+    - Renamed function debugShow to debugWithOptions
+    - Renamed module ShowDebug to Debug
+1.0
+    - Initial release

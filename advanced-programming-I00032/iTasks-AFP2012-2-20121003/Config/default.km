@@ -1,0 +1,42 @@
+Version: 1.0
+Table
+	Entry:	Shift+PgDownKey $$$ Select to next page
+	Entry:	Shift+PgUpKey $$$ Select to previous page
+	Entry:	Shift+Ctrl+BeginKey $$$ Select to start of text
+	Entry:	Shift+Ctrl+EndKey $$$ Select to end of text
+	Entry:	Ctrl+EndKey $$$ Move to end of text
+	Entry:	Ctrl+BeginKey $$$ Move to start of text
+	Entry:	Shift+Ctrl+RightKey $$$ Select to next word
+	Entry:	Shift+EndKey $$$ Select to end of line
+	Entry:	Shift+BeginKey $$$ Select to start of line
+	Entry:	Shift+Ctrl+LeftKey $$$ Select to previous word
+	Entry:	Ctrl+RightKey $$$ Move to next word
+	Entry:	Ctrl+LeftKey $$$ Move to previous word
+	Entry:	EndKey $$$ Move to end of line
+	Entry:	BeginKey $$$ Move to start of line
+	Entry:	PgUpKey $$$ Move to previous page
+	Entry:	PgDownKey $$$ Move to next page
+	Entry:	Shift+Alt+LeftKey $$$ Select to previous word
+	Entry:	Shift+LeftKey $$$ Select to previous character
+	Entry:	Alt+LeftKey $$$ Move to previous word
+	Entry:	LeftKey $$$ Move to previous character
+	Entry:	Shift+Alt+RightKey $$$ Select to next word
+	Entry:	Shift+RightKey $$$ Select to next character
+	Entry:	Alt+RightKey $$$ Move to next word
+	Entry:	RightKey $$$ Move to next character
+	Entry:	Shift+Alt+UpKey $$$ Select to previous page
+	Entry:	Shift+Ctrl+UpKey $$$ Select to start of text
+	Entry:	Shift+UpKey $$$ Select to previous line
+	Entry:	Alt+UpKey $$$ Move to previous page
+	Entry:	Ctrl+UpKey $$$ Move to start of text
+	Entry:	UpKey $$$ Move to previous line
+	Entry:	Shift+Alt+DownKey $$$ Select to next page
+	Entry:	Shift+Ctrl+DownKey $$$ Select to end of text
+	Entry:	Shift+DownKey $$$ Select to next line
+	Entry:	Alt+DownKey $$$ Move to next page
+	Entry:	Ctrl+DownKey $$$ Move to end of text
+	Entry:	DownKey $$$ Move to next line
+	Entry:	Alt+DeleteKey $$$ Remove to next word
+	Entry:	DeleteKey $$$ Remove to next character
+	Entry:	Alt+BackSpaceKey $$$ Remove to previous word
+	Entry:	BackSpaceKey $$$ Remove to previous character

@@ -1,0 +1,121 @@
+\About
+\DTuring
+
+\dTuring machine interpreter
+
+\cThis application is developed using the Concurrent Clean System, 
+\ca programming environment for the functional language Concurrent Clean. 
+\cThis system is developed by the research group Functional Languages at 
+\cthe University of Nijmegen.
+
+\dThe Concurrent Clean System is freely available via FTP for 
+\dMacintoshes, Suns, and PCs (OS/2, Windows95)
+\d(see ftp.cs.kun.nl and http://www.cs.kun.nl/~clean/).
+\EndAbout
+
+\Help
+\DTuring
+
+A Turing Machine Interpreter written in Concurrent Clean, a functional language developed
+at the department of Functional Languages at the University of Nijmegen.
+
+This program is a complete programming environment for the simplest computer of all:
+                                         
+\dThe Turing Machine.
+
+
+\DConventions
+
+In this Turing machine interpreter the following conventions are used:
+
+- The start state must be "S".
+- The halt state must be "halt".
+- An empty tapecell is filled with a '#'.
+- A transition has the following form: from,head -> to,move where from and to are
+   states, head can be any symbol except L and R and move can be any symbol. When
+   move is L or R the head will move one cell to the left resp. right.
+- Moving the head over the left edge of the tape is considered to be an error, which will
+   be reported.
+- The interpreter will stop with an error message when there is no transition applicable.
+- A state can be up to 4 characters long.
+- The name of the T.M. can be up to 29 characters long.
+- There is no explicit alphabet the T.M. works on.
+- There is no explicit set of states.
+The alphabet and the set of states are defined implicitly by the transitions.
+
+A file containing a T.M. contains the transitions and the initial tape contents. First the
+transitions must be specified, one on each line. A transition consists of the parts 'from',
+'head', 'to' and 'move', where 'from' and 'to' are states (max. four characters) and
+'head' and 'move' are characters. These parts must be separated by blanks, or one or
+more of the following characters: (){}[],.;:->. When a complete transition has been read
+the rest of the line is considered to be comment. The following are all valid transitions:
+
+   S # Q1 1                 From state 'S' reading '#', go to state 'Q1' and write '1'
+   ((Q1,1),(Q2,R))      Read a '1' and go right
+     Q2   #  ->  halt L
+
+The tape is separated from the transitions by a line beginning with the word "Tape":
+
+   Tape:
+   #0000011111#
+   
+Empty lines and lines beginning with a '|' (comment lines) are ignored.
+
+
+\DMenus and commands
+\L
+\bThe File menu:
+
+- The command New will open a new empty Turing Machine.
+- With the commands Open, Save and Save As a T.M. can be opened and saved.
+
+\bWarning:
+   A T.M. is saved in a standard format (see the sample machines). Comments and special
+   transition layouts will be lost!
+
+- Help gives you the information you are reading now.
+- With the command Quit you can quit the program.
+\L
+\bThe Machine Menu:
+
+- Step: let the T.M. do one step (transition).
+- Run:  change the state into S and let the T.M. run until the halt-state is reached.
+- Halt/Continue: Halt halts a running T.M., Continue continues a halted T.M.
+- Speed: a submenu to set the speed of the T.M. (Very Slow - Very Fast).
+\L
+\bEditing the Turing Machine:
+
+By clicking anywhere on the Turing Machine the machine can be edited. When you click
+on the state a dialog appears that lets you alter the state of the machine, when you click
+on a transition a dialog appears that lets you change or remove that transition etcetera.
+When you click inside the transitions area but outside the existing transitions you can
+add a new transition. When you Command-click on the tape the head will move to the
+cell you clicked on. The empty cells between the current head position and the new position
+will be filled with #'s.
+
+
+\DSample machines
+
+Five sample machines have been defined which perform the following actions:
+
+\baddunary.tm
+Adds the two unary coded integers that are on the tape. The head position must be on the
+first empty cell on the right of the input.
+
+\bsleft.tm
+Shifts the input (consisting of 0's and 1's) one cell to the left. The head can begin anywhere
+in the input. The input is bounded by the empty cells to left and the right of it.
+
+\bsright.tm
+Shifts the input (consisting of a's and b's) one cell to the right. The head can begin
+anywhere in the input. The input is bounded by the empty cells to left and the right of it.
+
+\beright.tm
+Shifts the input one cell to the right (just like sright.tm) and after that starts again.
+Therefore it will continue to shift the input to the right "eternally" (until the heap is full).
+
+\bbininc.tm
+Increments the binary number that is on the tape. The binary number on the tape is
+reversed (low bits to the left, high bits to the right, e.g. 001 = 8 decimal). After
+incrementing the number it starts again.
+\EndHelp

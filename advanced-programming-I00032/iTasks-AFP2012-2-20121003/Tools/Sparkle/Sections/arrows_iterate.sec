@@ -1,0 +1,91 @@
+SECTION DEPENDENCIES:
+  THEOREM x_<_succ_x                 (ints)
+  THEOREM transitive_<               (ints)
+  THEOREM not_smaller                (ints)
+  THEOREM move_not                   (booleans)
+  THEOREM decompose_evalEState       (arrows_definedness)
+  SYMBOL +_int                    :: "!Int !Int -> Int"
+  SYMBOL iterateN                 :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], (Int, a), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], (Int, a), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus)"
+  SYMBOL <_int                    :: "!Int !Int -> Bool"
+  SYMBOL evalEState               :: "(a -> Bool) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> Bool"
+  SYMBOL >=                       :: "!a !a -> Bool | Ord a"
+  SYMBOL _create_dictionary_Ord;  :: " | < untypable"
+  SYMBOL _create_dictionary_<;    :: "!untypable -> "
+  SYMBOL evalEvent                :: "(({#Char}, {#Char}), {#Char}) -> Bool"
+  SYMBOL evalTuple                :: "(a -> Bool) (b -> Bool) (a, b) -> Bool"
+  SYMBOL evalNat                  :: "!Int -> Bool"
+  SYMBOL fdota                    :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], (a, b), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)) a (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], b, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)"
+  SYMBOL >>>                      :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) ((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)"
+  SYMBOL arr                      :: "(a -> b) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)"
+  SYMBOL id                       :: "!a -> a"
+
+SECTION DEFINES:
+  THEOREM iterate_base             : (All ev (All A (All state (All f {(= (@ 7 evalEvent ev) (BOOL True)) -> {(= (@ 3 evalEState A state) (BOOL True)) -> (= (@ 10 fdota (@ 1 iterateN f) (INT 0) ev state) (@ 12 arr (@ 13 id) ev state))}}))))
+  THEOREM iterate_next             : (All ev (All A (All state (All f (All m {(= (@ 4 >= (@ 5 _create_dictionary_Ord; (@ 6 _create_dictionary_<; (@ 2 <_int))) m (INT 0)) (BOOL True)) -> {(= (@ 7 evalEvent ev) (BOOL True)) -> {(= (@ 3 evalEState A state) (BOOL True)) -> {(All e (All s {(= (@ 7 evalEvent e) (BOOL True)) -> {(= (@ 3 evalEState (@ 8 evalTuple (@ 9 evalNat) A) s) (BOOL True)) -> (= (@ 3 evalEState A {f @ e s}) (BOOL True))}})) -> (= (@ 10 fdota (@ 1 iterateN f) (@ 0 +_int m (INT 1)) ev state) (@ 11 >>> (@ 10 fdota f (@ 0 +_int m (INT 1))) (@ 10 fdota (@ 1 iterateN f) m) ev state))}}}})))))
+
+THEOREM:
+  iterate_base
+DEPENDS:
+  7 3 10 1 12 13
+PROOF:
+  Introduce ev A state f H1 H2.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+
+THEOREM:
+  iterate_next
+DEPENDS:
+  0 1 2 3 4 5 6 7 8 9 10 11
+PROOF:
+  Introduce ev A state f m H1 H2 H3 H4.
+  Cases state.
+  1. ReduceH NF All in H3 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x2 to a.
+     RenameE x3 to status.
+     Rewrite -> All "decompose_evalEState" in H3.
+     Split Deep H3.
+     Reduce RNF All (  ).
+     Unshare True 1 n All.
+     Assume (= (@ 2 <_int (INT 0) (@ 0 +_int m (INT 1))) (BOOL True)).
+     1. Rewrite -> All H8.
+        Reduce 2 All (  ).
+        Reduce NF (arr 2 NO) (  ).
+        IntArith All.
+        Assume (= (@ 3 evalEState A {f @ ev (TUPLE data (TUPLE (@ 0 +_int m (INT 1)) a) status)}) (BOOL True)).
+        1. Cases {f @ ev (TUPLE data (TUPLE (@ 0 +_int m (INT 1)) a) status)}.
+           1. ReduceH NF All in H9 (  ).
+              Definedness.
+           2. Opaque 1 iterateN.
+              Reduce NF All (  ).
+              Reflexive.
+        2. Apply H4.
+           Split Deep.
+           1. Exact H2.
+           2. Rewrite -> All "decompose_evalEState".
+              Split Deep.
+              1. Exact H5.
+              2. Reduce NF All (  ).
+                 Assume (= (@ 2 <_int (@ 0 +_int m (INT 1)) (INT 0)) (BOOL False)).
+                 1. Rewrite -> All H9.
+                    Reduce NF All (  ).
+                    Exact H6.
+                 2. Rewrite -> All "not_smaller".
+                    Apply "transitive_<".
+                    WitnessE (@ 0 +_int m (INT 1)).
+                    Split Shallow.
+                    1. Exact H8.
+                    2. Apply "x_<_succ_x".
+                       Definedness.
+              3. Exact H7.
+     2. ReduceH NF All in H1 (  ).
+        Rewrite -> All "move_not" in H1.
+        ReduceH NF All in H1 (  ).
+        Rewrite -> All "not_smaller" in H1.
+        Exact H1.
+
+

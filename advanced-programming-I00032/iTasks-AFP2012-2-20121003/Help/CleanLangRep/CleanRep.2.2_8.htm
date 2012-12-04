@@ -1,0 +1,1572 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection9>
+
+<p class=Heading1Chapter><span style='position:absolute;z-index:251680256;
+left:0px;margin-left:38px;margin-top:19px;width:200px;height:97px'><img
+width=200 height=97 src="CleanRep.2.2_files/image001.jpg"></span><a
+name="_Toc311798055"></a><span lang=EN-US style='font-size:12.0pt;font-family:
+"New York","serif"'><br>
+</span><span lang=EN-US>Chapter 6<a name="_Overloading"></a><br>
+Overloading</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="99%"
+ style='width:99.02%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="50%" valign=bottom style='width:50.72%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.1</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.1_Type_Classes"><span lang=EN-US>Type Classes</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.2</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.2_Functions_Defined"><span lang=EN-US>Functions Defined in Terms
+    of Overloaded Functions</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.3</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.3_Instances_of"><span lang=EN-US>Instances of Type Classes
+    Defined in Terms of Overloaded Functions</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.4</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.4_Type_Constructor"><span lang=EN-US>Type Constructor Classes</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.5</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.5_Overlapping_Instances"><span lang=EN-US>Overlapping Instances </span></a></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="49%" valign=bottom style='width:49.28%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="13%" valign=top style='width:13.92%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.6</span></p>
+    </td>
+    <td width="86%" valign=top style='width:86.08%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.6_Internal_Overloading"><span lang=EN-US>Internal Overloading</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="13%" valign=top style='width:13.92%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.7</span></p>
+    </td>
+    <td width="86%" valign=top style='width:86.08%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.7_Defining_Derived"><span lang=EN-US>Defining Derived Members in
+    a Class</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="13%" valign=top style='width:13.92%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.8</span></p>
+    </td>
+    <td width="86%" valign=top style='width:86.08%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.8_A_Shorthand"><span lang=EN-US>A Shorthand for Defining
+    Overloaded Functions</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="13%" valign=top style='width:13.92%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.9</span></p>
+    </td>
+    <td width="86%" valign=top style='width:86.08%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.9_Classes_Defined"><span lang=EN-US>Classes Defined in Terms of
+    Other Classes</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="13%" valign=top style='width:13.92%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.10</span></p>
+    </td>
+    <td width="86%" valign=top style='width:86.08%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.10_Exporting_Type"><span lang=EN-US>Exporting Type Classes</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="13%" valign=top style='width:13.92%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>6.11</span></p>
+    </td>
+    <td width="86%" valign=top style='width:86.08%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_6.11_Semantic_Restrictions"><span lang=EN-US>Semantic Restrictions
+    on Type Classes</span></a></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> allows functions and
+operators to be <i>overloaded</i>. <i>Type classes</i> and type constructor
+classes are pro­vided (which look similar to Haskell (Hudak <i>et al.</i> 1992)
+and Gofer (Jones, 1993), although our classes have slightly different
+semantics) with which a re­stricted context can be imposed on a type variable
+in a type specification.</span></p>
+
+<p class=par><span lang=EN-US>If one defines a function it should in general
+have a name that is <i>different</i> from all other function names defined
+within the same scope and name space (<a href="CleanRep.2.2_4.htm#_2.1_Identifiers,_Scopes">see
+2.1</a>). How­ever, it is some­times very convenient to <i>overload</i> certain
+functions and opera­tors (e.g. </span><span class=clean><span lang=EN-US>+</span></span><span
+lang=EN-US>, </span><span class=clean><span lang=EN-US>-</span></span><span
+lang=EN-US>, </span><span class=clean><span lang=EN-US>==</span></span><span
+lang=EN-US>), i.e. use <i>identi­cal</i> names for <i>different</i> functions
+or operators that perform <i>simi­lar</i> <i>tasks</i> albeit on objects of <i>diffe­r­ent
+types</i>. </span></p>
+
+<p class=par><span lang=EN-US>In principle it is possible to simulate a kind of
+overloading by using records. One simply defines a re­cord (<a
+href="CleanRep.2.2_7.htm#_5.2_Defining_Record">see 5.2</a>) in which a collection of functions
+are stored that somehow belong to each other. Now the field name of the record
+can be used as (overloaded) synonym for any con­crete func­tion stored on the
+corresponding position. The record can be re­garded as a kind of <i>dic­tio­nary</i>
+</span><span
+lang=EN-US> in which the concrete function can be looked up. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of the use of a dictionary record to
+simulate overloading. </span><span lang=EN-US style='font-family:Courier'>sumlist</span><span
+lang=EN-US> can use the field name </span><span lang=EN-US style='font-family:
+Courier'>add</span><span lang=EN-US> as syno­nym for any concrete function
+obeying the type as specified in the record definition. The operators </span><span
+lang=EN-US style='font-family:Courier'>+.</span><span lang=EN-US>, </span><span
+lang=EN-US style='font-family:Courier'>+^</span><span lang=EN-US>, </span><span
+lang=EN-US style='font-family:Courier'>-.</span><span lang=EN-US> and </span><span
+lang=EN-US style='font-family:Courier'>-^</span><span lang=EN-US> are assumed
+to be predefined primitives opera­tors for addition and sub­traction on the
+basic types </span><span lang=EN-US style='font-family:Courier'>Real</span><span
+lang=EN-US> and </span><span lang=EN-US style='font-family:Courier'>Int</span><span
+lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Arith a =  {    add      :: a a -&gt; a </span></p>
+
+<p class=ex><span lang=EN-US>             ,    subtract :: a a -&gt; a</span></p>
+
+<p class=ex><span lang=EN-US>             }</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>ArithReal = { add = (+.), subtract = (-.) }</span></p>
+
+<p class=ex><span lang=EN-US>ArithInt  = { add = (+^), subtract = (-^) }</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>sumlist:: (Arith a) [a] [a] -&gt; [a]</span></p>
+
+<p class=ex><span lang=EN-US>sumlist arith [x:xs] [y:ys]    =  [arith.add x
+y:sumlist arith xs ys]</span></p>
+
+<p class=ex><span lang=EN-US>sumlist arith x y              =  []</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start = sumlist ArithInt [1..10] [11..20]</span></p>
+
+<p class=par><span lang=EN-US>A disadvantage of such a dictionary record is
+that it is syntactically not so nice (e.g. one explicitly has to pass the
+record to the appropriate function) and that one has to pay a huge price for
+effi­ciency (due to the use of higher order func­tions) as well. C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>’s overloading system as introduced below enables the C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> system to automatically create and add dictionaries as argument to
+the appropriate function de­finitions and function applications. To avoid effi­ciency
+loss the C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> com­pi­ler will substitute the in­tended concrete function for the
+over­loaded func­tion application where pos­sible. In worst case however C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>’s overloading system will indeed have to generate a dictionary
+record that is then automati­cally passed as additional para­me­ter to the
+appropriate function.</span></p>
+
+<h2><a name="_Toc311798056"></a><a name="_Toc524343570"></a><a
+name="_6.1_Type_Classes"></a><span lang=EN-US>6.1    Type Classes</span></h2>
+
+<p class=par><span
+lang=EN-US>In a <i>type class</i> </span><i><span
+lang=EN-US> def­inition</span></i><span lang=EN-US> one gives a name to a <i>set
+of overloaded functions</i> (this is similar to the definition of a type of the
+dictionary record as explained above). For each <i>over­loaded</i> </span><i><span
+lang=EN-US> func­tion</span></i><span lang=EN-US> or <i>operator</i> which is a
+<i>member</i> of the class the <i>overloaded name</i> and its <i>overloaded
+type</i> is specified. The<i> type class variables</i> are used to indicate how
+the different instantiations of the class vary from each other. C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0 offers multi-parameter type constructor classes, similar to
+those available in Haskell.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeClassDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>class</span></span><span lang=EN-US> </span><span
+  lang=EN-US> ClassName TypeVariable+ [ClassContext]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[[</span><span
+  class=cleankw><span lang=EN-US>where</span></span><span lang=EN-US>] </span><span
+  class=clean><span lang=EN-US>{</span></span><span lang=EN-US>
+  {ClassMemberDef}+ </span><span class=clean><span lang=EN-US>}</span></span><span
+  lang=EN-US>]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>class</span></span><span lang=EN-US> FunctionName TypeVariable+ </span><span
+  class=cleanb><span lang=EN-US>::</span></span><span lang=EN-US> FunctionType</span><span
+  class=clean><span lang=EN-US style='color:blue'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>class</span></span><span lang=EN-US> (FunctionName) [Fix][Prec]
+  TypeVariable+</span><span class=clean><span lang=EN-US> </span></span><span
+  class=cleanb><span lang=EN-US>::</span></span><span lang=EN-US> Function­Type</span><span
+  class=clean><span lang=EN-US style='color:blue'>;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ClassMemberDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionTypeDef</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[MacroDef]</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of the definition of a type class; in
+this case the class named </span><span lang=EN-US style='font-family:Courier'>Arith</span><span
+lang=EN-US> contains two overloaded operators.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Arith a</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=PT-BR>    (+) </span><span class=cleankw><span
+lang=PT-BR>infixl</span></span><span lang=PT-BR> 6:: a a -&gt; a</span></p>
+
+<p class=ex><span lang=PT-BR>    (-) </span><span class=cleankw><span
+lang=PT-BR>infixl</span></span><span lang=PT-BR> 6:: a a -&gt; a</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example. Classes can have several type class
+variables.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Arith2 a b c</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=PT-BR>    (:+:) </span><span class=cleankw><span
+lang=PT-BR>infixl</span></span><span lang=PT-BR> 6:: a b -&gt; c</span></p>
+
+<p class=par><span lang=EN-US>With an <i>in­stance</i> <span style='display:
+none'>.ib</span> <span style='display:none'>.i<i>n­stance</i>;</span> <i>declara­tion</i>
+an instance of a given class can be defined (this is simi­lar to the creation
+of a dictionary record). When the instance is made one has to be specify for
+which <i>concrete type</i> an in­stance is created. For each overloaded
+function in the class an <i>instance of the overloaded function</i> or <i>op­erator</i>
+has to be defi­ned. The type of the instance can be found via uni­form substi­tution
+of the type class variables by the corresponding type instances specified in
+the instance definition.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeClassInstanceDef</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="73%" colspan=2 valign=top style='width:73.28%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>instance</span></span><span
+  lang=EN-US> ClassName Type+ [ClassContext]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[[</span><span
+  class=cleankw><span lang=EN-US>where</span></span><span
+  lang=EN-US>] </span><span class=clean><span lang=EN-US>{</span></span><span
+  lang=EN-US>{DefOfFunction}+ </span><span class=clean><span lang=EN-US>}</span></span><span
+  lang=EN-US>]</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in
+  implementation modules</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="23%" valign=top style='width:23.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="3%" valign=top style='width:3.56%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="35%" valign=top style='width:35.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[</span><span
+  class=cleankw><span lang=EN-US>special</span></span><span lang=EN-US>
+  {TypeVariable = Type}+]</span></p>
+  </td>
+  <td width="38%" valign=top style='width:38.14%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// in
+  definition modules</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of the </span><span
+lang=EN-US>definition of an instance of a type class </span><span lang=EN-US
+style='font-family:Courier'>Arith</span><span lang=EN-US> for type </span><span
+lang=EN-US style='font-family:Courier'>Int</span><span lang=EN-US>. The type of
+the concrete functions can be obtained via uniform substitution of the type
+class variable in the class definition by the corresponding type specified in
+the instance definition. One is not obliged to repeat the type of the concrete
+functions instantiated (nor the fixity or associativity in the case of op­era­tors).</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Arith Int</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (+):: Int Int -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>    (+) x y = x +^ y</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    (-):: Int Int -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>    (-) x y = x -^ y</span></p>
+
+<p class=exb></p>
+
+<p class=exth><span lang=EN-US>Example of the definition of an instance of a
+type class </span><span lang=EN-US style='font-family:Courier'>Arith</span><span
+lang=EN-US> for type </span><span lang=EN-US style='font-family:Courier'>Real</span><span
+lang=EN-US>.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Arith Real</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (+) x y = x +. y</span></p>
+
+<p class=ex><span lang=EN-US>    (-) x y = x -. y</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example. Instantiation of </span><span
+class=clean><span lang=EN-US>Arith2</span></span><span lang=EN-US> using the
+instantiations of </span><span class=clean><span lang=EN-US>Arith</span></span><span
+lang=EN-US> specified above.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Arith2 Int  Int  Int  </span><span class=cleankw><span lang=EN-US>where
+</span></span><span lang=PT-BR>(:+:) x y = x + y</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Arith2 Int  Real Real  </span><span class=cleankw><span lang=EN-US>where
+</span></span><span lang=PT-BR>(:+:) x y = toReal x + y</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Arith2 Real Int  Real  </span><span class=cleankw><span lang=EN-US>where
+</span></span><span lang=PT-BR>(:+:) x y = x + toReal y</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Arith2 Real Real Real </span><span class=cleankw><span lang=EN-US>where
+</span></span><span lang=PT-BR>(:+:) x y = x + y</span></p>
+
+<p class=par><span lang=EN-US>One can define as many instances of a class as
+one likes. Instances can be added later on in any module that has imported the
+class one wants to instantiate. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When an instance of a class is defined a concrete definition has to
+be gi­ven for all the class mem­bers.</span></p>
+
+<h2><a name="_Toc311798057"></a><a name="_Toc524343571"></a><a
+name="_6.2_Functions_Defined"></a><span lang=EN-US>6.2    Functions Defined in
+Terms of Overloaded Functions</span></h2>
+
+<p class=par><span lang=EN-US>When an overloaded name is encountered in an
+expression, the compiler will determine which of the corresponding concrete
+functions/operators is meant by looking at the concrete type of the expres­sion.
+This type is used to determine which concrete function to apply. </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>All instances of a type variable of a certain class have to be of a
+flat type (see the restrictions mentioned in <a
+href="#_4.4.11_Semantic_Restrictions">6.11</a>).</span></p>
+
+<p class=par><span lang=EN-US> If it is clear from the type of the ex­pres­sion
+which one of the con­crete instantiations is me­ant the compiler will in
+principle substitute the concrete func­tion for the overloaded one, such that
+no efficiency is lost.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of the substitution of a concrete
+function for an overloaded one. Given the definitions above the func­tion </span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>inc n = n + 1</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>will be internally transformed into</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>inc n = n +^ 1</span></p>
+
+<p class=par><span lang=EN-US>However, it is very well possible that the
+compiler, given the type of the expression, cannot decide which one of the
+corresponding concrete functions to apply. The new function then be­comes over­loa­ded
+as well.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>For instance, the function</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>add x y = x + y</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>becomes overloaded as well because it cannot be
+determined which concrete instances can be applied: </span><span class=clean><span
+lang=EN-US>add</span></span><span lang=EN-US> can be ap­plied to ar­guments of
+any type, as long as addition (</span><span class=clean><span lang=EN-US>+</span></span><span
+lang=EN-US>) is defined on them.</span></p>
+
+<p class=par><span lang=EN-US>This has as consequence that an additional
+restriction must be im­posed on the type of such an ex­pres­sion. A <i>class</i>
+<i>context</i> has to be added to the function type to ex­press that the
+function can only be ap­plied provided that the appropriate type classes have
+been instantiated (in fact one speci­fies the type of the dictionary record
+which has to be passed to the function in worst case). Such a context can also
+be regarded as an additional restriction imposed on a type variable,
+introducing a kind of <i>bounded poly­morphism</i>. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>FunctionType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Type </span><span
+  class=cleanb><span lang=EN-US>-&gt;</span></span><span lang=EN-US> Type
+  [ClassContext] [UnqTypeUnEqualities]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ClassContext</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>|</span></span><span lang=EN-US> ClassOrGenericName-list
+  TypeVariable {</span><span class=cleanb><span lang=EN-US>&amp;</span></span><span
+  lang=EN-US> </span><span class=clean><span lang=EN-US>ClassName</span></span><span
+  lang=EN-US>-list TypeVariable }</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ClassOrGenericName</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>ClassName</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>FunctionName</span></span><span lang=EN-US> TypeKind</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of the use of a class context to impose
+a restriction on the instantiation of a type variable. The function </span><span
+class=clean><span lang=EN-US>add</span></span><span lang=EN-US> can be ap­plied
+on arguments of any type under the condition that an instance of the class </span><span
+lang=EN-US style='font-family:Courier'>Arith</span><span lang=EN-US> is defined
+on them.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>add:: a a -&gt; a | Arith a</span></p>
+
+<p class=ex><span lang=EN-US>add x y = x + y</span></p>
+
+<p class=par><span lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US>’s type system can infer
+class contexts automatically. If a type class is specified as a restricted con­text
+the type system will check the correct­ness of the specification (as al­ways a
+type specifica­tion can be more restrictive than is deduced by the com­piler).</span></p>
+
+<h2><a name="_Toc311798058"></a><a name="_Toc524343572"></a><a
+name="_6.3_Instances_of"></a><span lang=EN-US>6.3    Instances of Type Classes
+Defined in Terms of Overloaded Functions</span></h2>
+
+<p class=par><span lang=EN-US>The concrete functions defined in a class
+instance definition can also be defined in terms of (other) overloa­ded
+functions. This is reflected in the type of the instantiated functions. Both
+the concrete type and the context restriction have to be speci­fied.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an instance declaration with a type
+which is depending on the same type class. The function </span><span
+class=clean><span lang=EN-US>+</span></span><span lang=EN-US> on lists can be
+de­fined in terms of the overloaded operator </span><span class=clean><span
+lang=EN-US>+</span></span><span lang=EN-US> on the list elements. With this
+definition </span><span lang=EN-US style='font-family:Courier'>+</span><span
+lang=EN-US> is de­fi­ned not only on lists, but also on a list of lists
+etcetera.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Arith [a] | Arith a                        </span><span
+class=cleancom><span lang=EN-US>// on lists</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (+) </span><span class=cleankw><span
+lang=EN-US>infixl</span></span><span lang=EN-US> 6:: [a] [a] -&gt; [a] | Arith
+a</span></p>
+
+<p class=ex><span lang=EN-US>    (+) [x:xs] [y:ys] = [x + y:xs + ys]</span></p>
+
+<p class=ex><span lang=EN-US>    (+) _       _     = []</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    (-) </span><span class=cleankw><span
+lang=EN-US>infixl</span></span><span lang=EN-US> 6:: [a] [a] -&gt; [a] | Arith
+a</span></p>
+
+<p class=ex><span lang=EN-US>    (-) [x:xs] [y:ys] = [x - y:xs - ys]</span></p>
+
+<p class=ex><span lang=EN-US>    (-) _      _      = []</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Equality class.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Eq a</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>     (==) </span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US> 2:: a a -&gt; Bool</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Eq [a] | Eq a                              </span><span
+class=cleancom><span lang=EN-US>// on lists</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (==) </span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US> 2:: [a] [a] -&gt; Bool | Eq a</span></p>
+
+<p class=ex><span lang=EN-US>    (==) [x:xs] [y:ys] = x == y &amp;&amp; xs ==
+ys</span></p>
+
+<p class=ex><span lang=EN-US>    (==) []     []     = True</span></p>
+
+<p class=ex><span lang=EN-US>    (==) _      _      = False</span></p>
+
+<h2><a name="_Toc311798059"></a><a name="_Toc524343573"></a><a
+name="_6.4_Type_Constructor"></a><span lang=EN-US>6.4    Type Constructor
+Classes</span></h2>
+
+<p class=par><span lang=EN-US>The C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> type system offers
+the possibility to use higher order types (<a href="CleanRep.2.2_5.htm#_3.7.1_Typing_Curried">see
+3.7.1</a>). This makes it possi­ble to define <i>type</i> <i>constructor
+classes</i> (similar to constructor classes as introduced in Gofer, Jones
+(1993)). In that case the overloaded type variable of the type class is not of
+kind </span><span class=clean><span lang=EN-US>X</span></span><span lang=EN-US>,
+but of higher order, e.g. </span><span class=clean><span lang=EN-US>X</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>-&gt;</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>X</span></span><span
+lang=EN-US>, </span><span class=clean><span lang=EN-US>X</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>-&gt;</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>X</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>-&gt;</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>X</span></span><span
+lang=EN-US>, etcetera. This offers the possibility to define overloaded
+functions that can be instan­ti­a­ted with type constructors of higher order
+(as usual, the overloaded type variable and a concrete in­stan­tiation of this
+type variable need to be of the same kind). This makes it possible to overload
+more complex functions like </span><span class=clean><span lang=EN-US>map</span></span><span
+lang=EN-US> and the like. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a definition of a type constructor
+class. The class </span><span lang=EN-US style='font-family:Courier'>Functor</span><span
+lang=EN-US> including the overloaded function </span><span lang=EN-US
+style='font-family:Courier'>map</span><span lang=EN-US> which varies in type
+variable </span><span lang=EN-US style='font-family:Courier'>f</span><span
+lang=EN-US> of kind </span><span lang=EN-US style='font-family:Courier'>X -&gt;
+X</span><span lang=EN-US>.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Functor f</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    map:: (a -&gt; b) (f a) -&gt; (f b)</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an instantiation of a type
+constructor class. An instantiation of the well-known function </span><span
+lang=EN-US style='font-family:Courier'>map</span><span lang=EN-US> applied on
+lists (</span><span lang=EN-US style='font-family:Courier'>[]</span><span
+lang=EN-US> is of kind </span><span lang=EN-US style='font-family:Courier'>X -&gt;
+X</span><span lang=EN-US>), and a </span><span lang=EN-US style='font-family:
+Courier'>map</span><span lang=EN-US> function defined on </span><span
+lang=EN-US style='font-family:Courier'>Tree’</span><span lang=EN-US>s (</span><span
+lang=EN-US style='font-family:Courier'>Tree </span><span lang=EN-US>is of kind </span><span
+class=clean><span lang=EN-US>X -&gt; X</span></span><span lang=EN-US>).</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Functor []</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    map:: (a -&gt; b) [a] -&gt; [b]</span></p>
+
+<p class=ex><span lang=EN-US>    map f [x:xs] = [f x : map f xs]</span></p>
+
+<p class=ex><span lang=EN-US>    map f []     = []</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Tree a = (/\) </span><span class=cleankw><span
+lang=EN-US>infixl</span></span><span lang=EN-US> 0 (Tree a) (Tree a)</span></p>
+
+<p class=ex><span lang=EN-US>         | Leaf a</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Functor Tree</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    map:: (a -&gt; b) (Tree a) -&gt; (Tree b)</span></p>
+
+<p class=ex><span lang=EN-US>    </span><span lang=PT-BR>map f (l/\r)      =
+map f l /\ map f r</span></p>
+
+<p class=ex><span lang=PT-BR>    </span><span lang=EN-US>map f (Leaf a)    =
+Leaf (f a)</span></p>
+
+<p class=par><a name="_Toc524343574"><span lang=EN-US>C</span></a><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> 2.0 offers the possibility to define generic functions. With
+generic functions one is able to define a function like </span><span
+class=clean><span lang=EN-US>map</span></span><span lang=EN-US> once that works
+for <i>any</i> type (see ???).</span></p>
+
+<h2><a name="_Toc311798060"></a><a name="_6.5_Overlapping_Instances"></a><span
+lang=EN-US>6.5    Overlapping Instances</span></h2>
+
+<p class=par><span lang=EN-US>Identical instances of the same class are not
+allowed. The compiler would not know which instance to choose. However, it is
+not required that all instances are of different type. It is allowed to specify
+an instance of a class of which the types overlap with some other instance
+given for that class, i.e. the types of the different class instances are
+different but they can be unified with each other. It is even allowed to
+specify an instance that works for any type, just by instantiating with a type
+variable instead of instantiating with a concrete type. This can be handy to
+define a simple default case (see also the section one generic definitions). If
+more than one instance is applicable, the compiler will always choose the most
+specific instantiation.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of overlapping instances. Below there
+are three instances given for the class </span><span class=clean><span
+lang=EN-US>Eq</span></span><span lang=EN-US>: one for </span><span class=clean><span
+lang=EN-US>Int</span></span><span lang=EN-US>eger values, one for </span><span
+class=clean><span lang=EN-US>Real</span></span><span lang=EN-US> values, and
+one for objects of any type. The latter instance is more general and overlaps
+with both the other instances that are more specific. If </span><span
+class=clean><span lang=EN-US>Int</span></span><span lang=EN-US>egers or </span><span
+class=clean><span lang=EN-US>Real</span></span><span lang=EN-US>s are compared,
+the corresponding equality function will be chosen. For all other types for
+which no specific instances for equality are defined, the general instance will
+be chosen.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Eq a</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (==) </span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US> 2:: a a -&gt; Bool</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Eq Int                                  </span><span
+class=cleancom><span lang=EN-US>// on Integers</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (==) x y = x ==^ y </span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Eq Real                                 </span><span
+class=cleancom><span lang=EN-US>// on Reals</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (==) x y = x ==. y </span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Eq a                                   </span><span class=cleancom><span
+lang=EN-US>// generic instance for Eq</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (==) x y = False</span></p>
+
+<p class=par><a name="_Toc524343575"><span lang=EN-US>It is sometimes unclear
+which of the class instances is the most specific. In that case the lexicographic
+order is chosen looking at the specified instances (with type variables always
+&lt;= type constructors).      </span></a></p>
+
+<p class=exth><span lang=EN-US>Example of overlapping instances. The two
+instances of class </span><span class=clean><span lang=EN-US>C</span></span><span
+lang=EN-US> overlap with each other. In the </span><span class=clean><span
+lang=EN-US>Start</span></span><span lang=EN-US> rule the function </span><span
+class=clean><span lang=EN-US>f</span></span><span lang=EN-US> is applied to two
+</span><span class=clean><span lang=EN-US>Bool</span></span><span lang=EN-US>ean
+values. In this case any of the two instances of </span><span class=clean><span
+lang=EN-US>f</span></span><span lang=EN-US> could be chosen. They both can be
+applied (one has type </span><span class=clean><span lang=EN-US>f::Bool a -&gt;
+Bool</span></span><span lang=EN-US>, the other </span><span class=clean><span
+lang=EN-US>f::a Bool -&gt; Bool</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>Start</span></span><span lang=EN-US> requires </span><span
+class=clean><span lang=EN-US>f:: Bool Bool -&gt; Bool</span></span><span
+lang=EN-US>). The compiler will choose the first instance, because in lexicographical
+order </span><span class=clean><span lang=EN-US>instance</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>C Bool dontcare</span></span><span
+lang=EN-US> &lt;= </span><span class=clean><span lang=EN-US>instance</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>C dontcare Bool</span></span><span
+lang=EN-US>. </span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> C a1 a2</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    f:: a1 a2 -&gt; Bool</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> C Bool dontcare</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    f b x     = b </span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> C dontcare Bool</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    f x b     = b </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start = f True False                     </span><span
+class=cleancom><span lang=EN-US>// the result will yield True</span></span></p>
+
+<h2><a name="_Toc311798061"></a><a name="_6.6_Internal_Overloading"></a><span
+lang=EN-US>6.6    </span><span lang=EN-US>Internal Overloading</span></h2>
+
+<p class=par><span lang=EN-US>It is possible that a C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+expression using overloaded functions is internally <i>ambiguously over­loaded</i>.
+The problem can occur when an overloaded function is used which has on
+overloaded type in which an overloaded type variable appears on the right-hand
+side of the </span><span lang=EN-US style='font-family:Courier'>-&gt;</span><span
+lang=EN-US>. If such a func­tion is applied in such a way that the overloaded
+type does not appear in the resulting type of the appli­cation, any of the
+available instances of the overloaded function can be used. </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>In that case that an overloaded function is internally ambiguously
+overloaded the compiler cannot determine which instance to take: a type error
+is given.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Counter example</span></b><span lang=EN-US>
+(ambiguous internal overloaded expression). The function body of </span><span
+lang=EN-US style='font-family:Courier'>f</span><span lang=EN-US> is internally
+ambiguously over­loa­ded which results in a type error. It is not possible to
+determine whether its argument should be con­ver­ted to an </span><span
+lang=EN-US style='font-family:Courier'>Int</span><span lang=EN-US> or to a </span><span
+lang=EN-US style='font-family:Courier'>Bool</span><span lang=EN-US>. </span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Read  a:: a -&gt; String</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Write a:: String -&gt; a</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Read  Int, Bool                        </span><span class=cleancom><span
+lang=EN-US>// export of class instance, <a href="#_4.4.10_Exporting_Type">see 6.10</a></span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Write Int, Bool</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>f:: String -&gt; String </span></p>
+
+<p class=ex><span lang=EN-US>f x = Write (Read x)                            </span><span
+class=cleancom><span lang=EN-US>// ! This results in a type error !</span></span></p>
+
+<p class=par><span lang=EN-US>One can solve such an ambiguity by splitting up
+the expression in parts that are typed explicitly such that it becomes clear
+which of the instances should be used. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>f:: String -&gt; String </span></p>
+
+<p class=ex><span lang=EN-US>f x = Write (MyRead x)</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    MyRead:: Int -&gt; String</span></p>
+
+<p class=ex><span lang=EN-US>    MyRead x = Read x</span></p>
+
+<p class=exb><a name="_Toc524343576"></a><a name="_6.7_Defining_Derived"></a><span
+lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Counter example</span></b><span lang=EN-US>
+(ambiguous internal overloaded expression). The function </span><span
+class=clean><span lang=EN-US>:+:</span></span><span lang=EN-US> is internally
+ambiguously over­loa­ded which results in a type error. The compiler is not
+able to infer the result type </span><span class=clean><span lang=EN-US>c</span></span><span
+lang=EN-US> of the multi parameter type class</span><span class=clean><span
+lang=EN-US> Arith2 a b c</span></span><span lang=EN-US>.  The reason is that
+the compiler will first do the type unification and then tries to solve the
+overloading. In this case solving the overloading will have consequences for
+other overloading situations. The system can only solve one overloaded
+situation at a time and solving the overloading may not have any effect on
+other unifications. </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start :: Int</span></p>
+
+<p class=ex><span lang=EN-US>Start = 2 :+: 3 :+: 4</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Example</span></b><span lang=EN-US>
+(ambiguous internal overloaded expression). By explicitly specifying types the
+overloading can be solved. The following program is accepted.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start:: Int</span></p>
+
+<p class=ex><span lang=EN-US>Start = 2 :+: more </span></p>
+
+<p class=ex><span lang=EN-US>where </span></p>
+
+<p class=ex><span lang=EN-US>    more:: Int</span></p>
+
+<p class=ex><span lang=EN-US>    more = 3 :+: 4</span></p>
+
+<h2><a name="_Toc311798062"><span lang=EN-US>6.7    Defining Derived Members in
+a Class</span></a></h2>
+
+<p class=par><span lang=EN-US>The members of a class consist of a set of
+functions or operators that logically belong to each other. It is often the
+case that the effect of some members (<i>derived members</i>) can be expressed
+in others. For instance, </span><span class=clean><span lang=EN-US>&lt;&gt;</span></span><span
+lang=EN-US> can be regarded as synonym for </span><span class=clean><span
+lang=EN-US>not</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>(==)</span></span><span lang=EN-US>. For software engineering (the
+fixed relation is made explicit) and efficiency (one does not need to include
+such deri­ved mem­bers in the dictionary re­cord) it is good to make this relation
+explicit. In C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> the existing macro facili­ties (<a
+href="CleanRep.2.2_12.htm#_5.3_Defining_Macros">see Chapter 10.3</a>) are used for this purpose. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Classes with macro definitions to specify
+derived members.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Eq a</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (==) </span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US> 2:: a a -&gt; Bool</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    (&lt;&gt;) </span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US> 2:: a a -&gt;  Bool | Eq a</span></p>
+
+<p class=ex><span lang=EN-US>    (&lt;&gt;) x y :== not (x == y)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Ord a</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (&lt;) </span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US> 2:: a a  -&gt;   Bool</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    (&gt;) </span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US> 2:: a a  -&gt;   Bool | Ord a</span></p>
+
+<p class=ex><span lang=EN-US>    (&gt;) x y :== y &lt; x </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    (&lt;=) </span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US> 2:: a a -&gt;  Bool | Ord a</span></p>
+
+<p class=ex><span lang=EN-US>    (&lt;=) x y :== not (y&lt;x)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    (&gt;=) </span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US> 2:: a a -&gt;  Bool | Ord a</span></p>
+
+<p class=ex><span lang=EN-US>    (&gt;=) x y :== not (x&lt;y) </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>min:: a a -&gt; a | Ord a</span></p>
+
+<p class=ex><span lang=EN-US>min x y :== if (x&lt;y) x y</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>max:: a a -&gt; a | Ord a</span></p>
+
+<p class=ex><span lang=EN-US>max x y :== if (x&lt;y) y x</span></p>
+
+<h2><a name="_Toc311798063"></a><a name="_Toc524343577"></a><a
+name="_6.8_A_Shorthand"></a><span lang=EN-US>6.8    A Shorthand for Defining
+Overloaded Functions</span></h2>
+
+<p class=par><span lang=EN-US>A class definition seems sometimes a bit overdone
+when a class actually only consists of one member. Special syntax is provided
+for this case. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeClassDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>class</span></span><span lang=EN-US> </span><span
+  lang=EN-US> ClassName TypeVariable [ClassContext]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[[</span><span
+  class=cleankw><span lang=EN-US>where</span></span><span lang=EN-US>] </span><span
+  class=clean><span lang=EN-US>{</span></span><span lang=EN-US>
+  {ClassMemberDef}+ </span><span class=clean><span lang=EN-US>}</span></span><span
+  lang=EN-US>]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>class</span></span><span lang=EN-US> FunctionName TypeVariable </span><span
+  class=cleanb><span lang=EN-US>::</span></span><span lang=EN-US> FunctionType</span><span
+  class=clean><span lang=EN-US style='color:blue'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>class</span></span><span lang=EN-US> (FunctionName) [Fix][Prec]
+  TypeVariable</span><span class=clean><span lang=EN-US> </span></span><span
+  class=cleanb><span lang=EN-US>::</span></span><span lang=EN-US> Function­Type</span><span
+  class=clean><span lang=EN-US style='color:blue'>;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an overloaded function/operator.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> (+) </span><span class=cleankw><span lang=EN-US>infixl</span></span><span
+lang=EN-US> 6 a:: a a -&gt; a</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>which is shorthand for:</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> + a</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (+) </span><span class=cleankw><span
+lang=EN-US>infixl</span></span><span lang=EN-US> 6:: a a -&gt; a</span></p>
+
+<p class=par><span lang=EN-US>The instantiation of such a simple one-member
+class is done in a similar way as with ordinary clas­ses, using the name of the
+overloaded function as class name.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an instantiation of an overloaded
+function/operator.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> + Int    </span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (+) x y = x +^ y</span></p>
+
+<h2><a name="_Toc311798064"></a><a name="_Toc524343578"></a><a
+name="_6.9_Classes_Defined"></a><span lang=EN-US>6.9    Classes Defined in
+Terms of Other Classes</span></h2>
+
+<p class=par><span lang=EN-US>In the definition of a class one can optionally
+specify that other classes that already have been defined elsewhere are
+included. The classes to include are specified as context after the overloaded
+type variable. It is not needed (but it is allowed) to define new members in
+the class body of the new class. In this way one can give a new name to a
+collec­tion of existing classes creating a hierarchy of classes (cyclic de­pendencies
+are forbidden). Since one and the same class can be included in se­veral other
+classes, one can combine classes in different kinds of meaningful ways. For an
+ex­ample have a closer look at the C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> standard library
+(see e.g. </span><span class=clean><span lang=EN-US>StdOverloaded</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>Std­Class</span></span><span
+lang=EN-US>)</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of defining classes in terms of existing
+classes. The class </span><span class=clean><span lang=EN-US>Arith</span></span><span
+lang=EN-US> consists of the class</span><span class=clean><span lang=EN-US> +</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>-</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> (+) </span><span class=cleankw><span lang=EN-US>infixl</span></span><span
+lang=EN-US> 6 a:: a a -&gt; a</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> (-) </span><span class=cleankw><span lang=EN-US>infixl</span></span><span
+lang=EN-US> 6 a:: a a -&gt; a</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Arith a | +,- a</span></p>
+
+<h2><a name="_Toc311798065"></a><a name="_Toc524343579"></a><a
+name="_4.4.10_Exporting_Type"></a><a name="_6.10_Exporting_Type"></a><span
+lang=EN-US>6.10  Exporting Type Classes</span></h2>
+
+<p class=par><span lang=EN-US>To export a class one simply repeats the class
+definition in the definition module (<a href="CleanRep.2.2_4.htm#_Defining_Modules">see Chapter 2</a>).
+To export an instantiation of a class one simply repeats the instance
+definition in the definition mo­d­ule, however <i>without</i> re­vealing the
+concrete implementation (which can only be specified in the im­plemen­ta­tion
+module).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeClassInstanceDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="39%" colspan=2 valign=top style='width:39.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>instance</span></span><span
+  lang=EN-US> ClassName Type+ [ClassContext]</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[[</span><span
+  class=cleankw><span lang=EN-US>where</span></span><span
+  lang=EN-US>] </span><span class=clean><span lang=EN-US>{</span></span><span
+  lang=EN-US>{DefOfFunction}+ </span><span class=clean><span lang=EN-US>}</span></span><span
+  lang=EN-US>]</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// only in
+  implementation modules</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[</span><span
+  class=cleankw><span lang=EN-US>special</span></span><span lang=EN-US>
+  {{TypeVariable </span><span class=cleanb><span lang=EN-US>=</span></span><span
+  lang=EN-US> Type}-list}+]</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// only in
+  definition modules</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Exporting classes and instances.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>definition</span></span><span
+lang=EN-US> </span><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> example</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> Eq a                         </span><span class=cleancom><span
+lang=EN-US>// the class Eq is exported</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (==) </span><span class=cleankw><span
+lang=EN-US>infix</span></span><span lang=EN-US> 2:: a a -&gt; Bool</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Eq [a] | Eq a             </span><span class=cleancom><span
+lang=EN-US>// an instance of Eq on lists is exported</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>special</span></span><span
+lang=EN-US>  a = Int                   </span><span class=cleancom><span
+lang=EN-US>// with an additional specialised version for [Int]</span></span></p>
+
+<p class=ex><span lang=EN-US>         a = Real                  </span><span
+class=cleancom><span lang=EN-US>// and an additional specialised version for
+[real]</span></span></p>
+
+<p class=ex><span class=cleancom><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> Eq  a                     </span><span class=cleancom><span
+lang=EN-US>// a general instance of Eq is exported</span></span></p>
+
+<p class=par><span lang=EN-US>For reasons of efficiency the compiler will
+always make specialized efficient versions of overloaded functions inside an
+implementation module. For each concrete application of an overloaded function
+a specialized version is made for the concrete type the overloaded function is
+applied to. So, when an overloaded function is used in the implementation
+module in which the overloaded function is defined, no overhead is introduced.</span></p>
+
+<p class=par><span lang=EN-US>However, when an overloaded function is exported
+it is unknown with which concrete in­stances the function will be applied. So,
+a dictionary record is constructed in which the con­crete function can be
+stored as is explained in the introduction of this Section. This approach can
+be very inefficient, especially in comparison to a specialized version. One can
+therefore ask the compiler to generate specialized versions of an overloaded
+function that is being exported. This can be done by using the keyword </span><span
+class=cleankw><span lang=EN-US>special</span></span><span lang=EN-US>. If the
+exported overloaded function will be used very frequently, we advise to
+specialize the function for the most important types it will be applied on.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A specialised function can only be generated if for all type
+variables which appear in the instance definition of a class a concrete type is
+defined.</span></p>
+
+<h2><a name="_Toc311798066"></a><a name="_Toc524343580"></a><a
+name="_4.4.11_Semantic_Restrictions"></a><a name="_6.11_Semantic_Restrictions"></a><span
+lang=EN-US>6.11  Semantic Restrictions on Type Classes</span></h2>
+
+<p class=par><span lang=EN-US>Semantic restrictions:</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When a class is instantiated a concrete definition must be given for
+each of the members in the class (not for derived members).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The type of a concrete function or operator must exactly match the
+overloaded type af­ter uniform substi­tution of the overloaded type variable by
+the concrete type as specified in the correspon­ding type instance declaration.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The overloaded type variable and the concrete type must be of the same
+kind.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span lang=EN-US>A type instance of an overloaded type must be a <i>flat type</i></span><span lang=EN-US>, i.e. a type of the form </span><span lang=EN-US style='font-family:
+Courier'>T a<sub>1</sub> … a<sub>n</sub></span><span lang=EN-US> where </span><span
+lang=EN-US style='font-family:Courier'>a<sub>i</sub> </span><span lang=EN-US>are
+type vari­ables which are <i>all</i> different.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>It is not allowed to use a type synonym as instance.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The start rule cannot have an overloaded type.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>For the specification of derived members in a class the same
+restrictions hold as for defining ma­cros.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A restricted context can only be imposed on one of the type
+variables appearing in the type of the expression. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The specification of the concrete functions can only be given in im­plementation
+modules.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A specialised function can only be generated if for all type
+variables which appear in the instance definition of a class a concrete type is
+defined. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A request to generate a specialised function for a class instance
+can only be defined in a definition module.<a name="_Toc524343582"></a><a
+name="_6.12_The_Costs"></a><a name="_4.5_Defining_Uniqueness"></a></span></p>
+
+</div>
+
+</body>
+</html>
