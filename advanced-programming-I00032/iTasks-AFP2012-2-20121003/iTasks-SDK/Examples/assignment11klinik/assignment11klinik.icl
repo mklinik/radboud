@@ -1,5 +1,6 @@
 module assignment11klinik
 
+import StdMisc
 import confSM
 import iTask_semantics
 import derived_combinators
@@ -53,15 +54,20 @@ impl state = \input -> ([state + input], state + input)
 initState = { State | mem = [], taskNo = 0, timeStamp = 0 }
 
 taskNoOfEditor responses label =
-  hd [taskNo \\ (taskNo, EditorResponse er) <- responses | er.EditorResponse.description == label]
+  case [taskNo \\ (taskNo, EditorResponse er) <- responses | er.EditorResponse.description == label] of
+    [] = abort ("taskNoOfEditor: no such editor: " +++ label)
+    [x:_] = x
 
 labelOfTask responses taskNo =
-  hd [er.EditorResponse.description \\ (currentTaskNo, EditorResponse er) <- responses | taskNo == currentTaskNo]
+  case [er.EditorResponse.description \\ (currentTaskNo, EditorResponse er) <- responses | taskNo == currentTaskNo] of
+    [] = abort "labelOfTask: no such task"
+    [x:_] = x
 
 foo responses =
   [(taskId, er.EditorResponse.description) \\ (taskId, EditorResponse er) <- responses]
 
-Start = properEvents (task, initState)
+Start world = taskConformance world (task1 .||. task2) (task2 .||. task1)
+//Start = properEvents (task, initState)
 //Start = foo responses
   where
     (_, responses, _) = task (RefreshEvent`) initState
@@ -69,6 +75,10 @@ Start = properEvents (task, initState)
       [ OnAction` (Action "BLAHBAR") (const True) (const (simplified_edit "edit2" (-42)))
       , OnAction` (Action "MOOOOO!") (const True) (const (simplified_edit "edit3" (142)))
       ])
+
+//task1 :: Task` Int
+task1 = (simplified_edit "edit500" 42)
+task2 = (simplified_edit "edit500" 42) >>>* [OnAction` (Action "Ok") (const True) (\_ -> return` 0)]
 
 :: UserEvent
   = UserEditEvent String Int
@@ -99,7 +109,9 @@ where
 toRealEvent :: UserEvent (Task` a, State) -> Event`
 toRealEvent (UserEditEvent label value) (task, state) = EditEvent` taskId (serialize` value)
 where
-  taskId = hd [taskNo \\ (taskNo, EditorResponse er) <- responses | er.EditorResponse.description == label]
+  taskId = case [taskId \\ (taskId, EditorResponse er) <- responses | er.EditorResponse.description == label] of
+    [] = abort ("toRealEvent: no such editor:" +++ label)
+    [x:_] = x
   (_, responses, _) = task RefreshEvent` state
 toRealEvent (UserActionEvent taskId action) _ = ActionEvent` taskId action
 
@@ -115,15 +127,23 @@ iutTask` (task, state) input
   # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task (toRealEvent input (task, state)) state
   = ((map snd responses), (newTask, newState))
 
-//taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
-//taskConformance world task1 task2
-  //= snd (testConfSM options
-                    //specTask
-                    //(task1, initState)
-                    //iutTask
-                    //(task2, initState)
-                    //(const (task2, initState))
-                    //world
-        //)
-  //where
-    //options = [InputFun (const properEvents) ]
+taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
+taskConformance world task1 task2
+  = snd (testConfSM options
+                    specTask
+                    (task1, initState)
+                    iutTask
+                    (task2, initState)
+                    (const (task2, initState))
+                    world
+        )
+  where
+    options =
+      [ InputFun (const properEvents)
+      , Nsequences 10
+      ]
+
+derive ggen UserEvent, Action
+derive bimap []
+derive genShow Event`, State, Reduct, Response, UserEvent, Action, JSONNode,
+  TaskResult`, EditorResponse, Value`, EditMode, Stability`
