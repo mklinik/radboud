@@ -41,8 +41,8 @@ CWSync
 	col_decl:	0Black
 EWPrefs
 	EWPos
-		VX:	23
-		VY:	510
+		VX:	14
+		VY:	244
 	EWSiz
 		W:	1062
 		H:	286
@@ -158,6 +158,10 @@ ImpCl
 	col_keyw:	RGB 127 :: 0 :: 127
 	col_type:	RGB 195 :: 0 :: 0
 	col_decl:	RGB 195 :: 0 :: 0
+ProjHist
+	Path:	Z:\home\mkl\sandbox\radboud\advanced-programming-I00032\iTasks-AFP2012-2-20121003\iTasks-SDK\Examples\assignment11klinik\assignment11klinik.prj
+FileHist
+	Path:	Z:\home\mkl\sandbox\radboud\advanced-programming-I00032\iTasks-AFP2012-2-20121003\iTasks-SDK\Examples\assignment11klinik\assignment11klinik.icl
 SwitchClose:	0
 ShowToolbar:	1
 BeVerbose:	0
