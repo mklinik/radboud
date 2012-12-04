@@ -61,8 +61,8 @@ labelOfTask responses taskNo =
 foo responses =
   [(taskId, er.EditorResponse.description) \\ (taskId, EditorResponse er) <- responses]
 
-//Start = properEvents (task, initState)
-Start = foo responses
+Start = properEvents (task, initState)
+//Start = foo responses
   where
     (_, responses, _) = task (RefreshEvent`) initState
     task = ((simplified_edit "edit1" 42 .||. simplified_edit "edit4" 10) >>>*
@@ -79,29 +79,21 @@ Start = foo responses
 properEvents :: (Task` a, State) -> [UserEvent]
 properEvents (task, state) =
   // proper events are edit events (we only toggle between a few values), ...
-  [  UserEditEvent label value
-  \\ label <- availableEditors
+  [  UserEditEvent er.EditorResponse.description value
+  \\ (_, EditorResponse er) <- responses
   ,  value <- [0, 1, 42]
   ]
   ++
   // ... and action events of all available actions
+  // Actions belong to the sequential combinator task, which is not labelled
+  // and hence must be addressed by its taskId.  At least that's what I
+  // think.
   [  UserActionEvent taskId action
-  \\ (taskId, action) <- availableActions
+  \\ (taskId, ActionResponse` actionResponses) <- responses
+  ,  (action, enabled) <- actionResponses
+  |  enabled
   ]
 where
-  availableActions =
-    // Actions belong to the sequential combinator task, which is not labelled
-    // and hence must be addressed by its taskId.  At least that's what I
-    // think.
-    [  (taskId, action)
-    \\ (taskId, ActionResponse` actionResponses) <- responses
-    ,  (action, enabled) <- actionResponses
-    |  enabled
-    ]
-  availableEditors =
-    [  er.EditorResponse.description
-    \\ (_, EditorResponse er) <- responses
-    ]
   (_, responses, _) = task RefreshEvent` state
 
 specTask :: (Task` a, State) UserEvent -> [Trans UserEvent (Task` a, State)]
