@@ -33,11 +33,15 @@ spec state input = [Pt [state + input] (state + input)]
 // The implementation is a curried function
 //   State -> Input -> ([Output], State)
 //impl :: IUTstep State Input Output
+impl 30 = \input -> ([0], 30 + input)
 impl state = \input -> ([state + input], state + input)
+
 
 Start world =
   testConfSM
-    [Ntests 10] // options
+    [ Nsequences 10
+    , InputFun (const (const [1..100]))
+    ] // options
     spec
     specStartState
     impl
