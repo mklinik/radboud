@@ -1,0 +1,26 @@
+DefinitionWindowBG:               (R:170,G:255,B:255,H:127,L:212,S:255)
+DefinitionListWindowBG:           (R:230,G:190,B:40,H:33,L:135,S:201)
+HintWindowBG:                     (R:170,G:220,B:170,H:84,L:194,S:106)
+ProjectCenterBG:                  (R:120,G:165,B:222,H:151,L:171,S:154)
+ProofWindowBG:                    (R:0,G:0,B:0,H:0,L:0,S:0)
+SectionCenterBG:                  (R:217,G:176,B:183,H:247,L:196,S:89)
+TacticDialogBG:                   (R:0,G:0,B:0,H:0,L:0,S:0)
+TacticListBG:                     (R:180,G:225,B:140,H:64,L:182,S:149)
+TheoremWindowBG:                  (R:0,G:0,B:0,H:0,L:0,S:0)
+TheoremListWindowBG:              (R:170,G:210,B:100,H:57,L:154,S:140)
+Start with about:                 True
+Show |-bars:                      True
+Hints view threshold:             1
+Hints apply threshold:            101
+_WinTacticList0                   "List of tactics (1)" + "*"
+_WinTacticList1                   "List of tactics (2)" 
+_WinTacticList2                   "List of tactics (3)" Absurd AbsurdEquality Apply Assume Case Cases ChooseCase Compare Contradiction Cut Definedness Discard Exact ExFalso ExpandFun Extensionality Generalize Induction Injective Introduce IntArith IntCompare MoveInCase MoveQuantors Opaque Reduce RefineUndefinedness Reflexive RemoveCase Rename Rewrite Specialize Split SplitCase SplitIff Symmetric Transitive Transparent Trivial Uncurry Undo Witness
+_WinTacticList3                   "List of tactics (4)" 
+_WinTacticList4                   "List of tactics (5)" 
+WinProof:                         CLOSED 177x221 745x306
+WinHints:                         CLOSED 184x2 748x91
+WinSectionCenter:                 OPENED 206x0 172x421
+WinTacticList0:                   OPENED 1206x1 154x809
+WinTacticList2:                   CLOSED 565x175 203x427
+WinProjectCenter:                 OPENED 0x0 170x420
+

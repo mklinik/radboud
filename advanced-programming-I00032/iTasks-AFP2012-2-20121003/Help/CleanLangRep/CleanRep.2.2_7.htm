@@ -1,0 +1,2286 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection8>
+
+<p class=Heading1Chapter><span style='position:absolute;z-index:251679232;
+left:0px;margin-left:38px;margin-top:19px;width:200px;height:97px'><img
+width=200 height=97 src="CleanRep.2.2_files/image001.jpg"></span><a
+name="_Toc311798038"></a><span lang=EN-US style='font-size:12.0pt;font-family:
+"New York","serif"'><br>
+</span><span lang=EN-US>Chapter 5<a name="_Defining_New_Types"></a><br>
+Defining New Types</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="99%"
+ style='width:99.02%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="50%" valign=bottom style='width:50.32%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.2%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>5.1</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.8%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_4.2.1_Defining_Algebraic"><span lang=EN-US>Defining Algebraic Data
+    Types</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.2%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>5.2</span></p>
+    </td>
+    <td width="88%" valign=top style='width:88.8%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_4.2.2_Defining_Record"><span lang=EN-US>Defining Record Types</span></a></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="49%" valign=bottom style='width:49.68%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>5.3</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_5.3_Defining_Synonym"><span lang=EN-US>Defining Synonym Types</span></a><span
+    lang=EN-US> </span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>5.4</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><a
+    href="#_4.2.4_Defining_Abstract"><span lang=EN-US>Defining Abstract Data
+    Types</span></a></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span
+lang=EN-US>C</span><span lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> is a strongly typed language: every object (graph) and function
+(graph rewrite rule) in C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> has a type. The basic
+type system of C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> is based on the classical<b> </b>po­ly­mor­p­hic
+Mil­ner/Hindley/Mycroft<b> </b>(Milner </span><span
+lang=EN-US> 1978; Hindley</span><span
+lang=EN-US> 1969, Mycroft, 1984) type sys­tem. This type sys­tem is adapted for
+graph rewrit­ing sys­tems and extended with <i>basic types</i>, (possibly <i>ex­is­tentially
+and universally quanti­fied) algebraic ty­pes</i>, <i>record types</i>, <i>ab­stract
+types</i> and <i>synonym types</i>. </span></p>
+
+<p class=par><span lang=EN-US>New types can be defined in an implementation as
+well as in a definition module. Types can <i>only</i> be defined on the global
+level. Abstract types can only be defined in a definition module hiding the
+actual implementation in the corresponding im­plementation module. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeDef </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AlgebraicTypeDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_4.2.1_Defining_Algebraic">see 5.1</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordTypeDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_4.2.2_Defining_Record">see 5.2</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SynonymTypeDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_5.3_Defining_Synonym">see 5.3</a></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AbstractTypeDef</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// <a
+  href="#_4.2.4_Defining_Abstract">see 5.4</a></span></p>
+  </td>
+ </tr>
+</table>
+
+<h2><a name="_Toc311798039"></a><a name="_Toc524343557"></a><a
+name="_4.2.1_Defining_Algebraic"></a><a name="_5.1_Defining_Algebraic"></a><span
+lang=EN-US>5.1    Defining Algebraic Data Types</span></h2>
+
+<p class=par><span lang=EN-US>With an algebraic data type </span><span
+lang=EN-US>one assigns a new type constructor (a new type) to a newly in­troduced
+data structure</span><span
+lang=EN-US>. The data structure consists of a new constant value </span><span
+lang=EN-US style='display:none'> </span><span lang=EN-US>(called the data
+constructor</span><span
+lang=EN-US>) that can have zero or more arguments (of any type). Every data con­struc­tor
+must unambigu­ously have been (pre) defined in an algebraic data type
+definition </span><span
+lang=EN-US> Sev­eral data con­struc­tors can be introduced in one al­gebraic
+data type defini­tion which makes it possible to define alter­native data
+structures of the same al­gebraic data type. The data constructors can, just
+like functions, be used in a curried way. Also type constructors can be used in
+a curried way, albeit only in the type world of course.</span></p>
+
+<p class=par><span
+lang=EN-US>Polymorphic algebraic data types can be defined by adding (possibly
+existentially or universally quanti­fied, see below) type variable</span><span
+lang=EN-US>s to the type constructors on the left-hand side of the algebraic
+data type definition. </span><span
+lang=EN-US>The argu­ments of the data constructor in a type definition are type
+instances of ty­pes (that are defined or are being de­fi­ned).</span></p>
+
+<p class=par><span lang=EN-US>Types can be preceded by uniqueness type
+attributes (see <a href="CleanRep.2.2_11.htm#_Uniqueness_Typing">Chapter 9</a>). The argu­ments of
+a defined data con­structor can optionally be annotated as being strict (<a
+href="#_5.1.5_Strictness_Annotations">see 5.1.5</a>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AlgebraicTypeDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span><span lang=EN-US>TypeLhs</span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>= </span></span><span lang=EN-US>ConstructorDef</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US>
+  ConstructorDef} </span><span class=clean><span lang=EN-US style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeLhs</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[</span><span
+  class=cleanb><span lang=EN-US>*</span></span><span lang=EN-US>] TypeConstructor
+  {TypeVariable} </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeConstructor
+  </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>TypeName</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ConstructorDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US> [ExistentalQuantVariables]
+  ConstructorName {BrackType}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US> [ExistentalQuantVariables]
+  (ConstructorName) [Fix][Prec] {BrackType}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>Fix</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=PT-BR>infixl</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=PT-BR>infixr</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=PT-BR>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleankw><span
+  lang=EN-US>infix</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Prec</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Digit</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[UniversalQuantVariables]
+  [Strict] [UnqTypeAttrib] SimpleType</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ExistentalQuantVariables</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>E.</span></span><span lang=EN-US>{TypeVariable }+</span><span
+  class=cleanb><span lang=EN-US>:</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UniversalQuantVariables</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>A.</span></span><span lang=EN-US>{TypeVariable }+</span><span
+  class=cleanb><span lang=EN-US>:</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an algebraic type definition and its
+use.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Day = Mon | Tue | Wed | Thu | Fri | Sat | Sun</span></p>
+
+<p class=ex><span lang=EN-US>::Tree a = NilTree</span></p>
+
+<p class=ex><span lang=EN-US>         | NodeTree a (Tree a) (Tree a)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyTree:: (Tree Int)                    </span><span
+class=cleancom><span lang=EN-US>// constant function yielding a Tree of Int</span></span></p>
+
+<p class=ex><span lang=EN-US>MyTree = NodeTree 1 NilTree NilTree </span></p>
+
+<p class=par><span lang=EN-US>An algebraic data type definition can be seen as
+the specification of a grammar in which is specified what legal data objects
+are of that specific type. Notice that all other C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+ty­pes (basic, list, tuple, array, record, abstract types) can be regarded as
+special cases of an algebraic type.</span></p>
+
+<p class=par><span lang=EN-US>Constructors with two arguments can be defined as
+<i>in­fix constructor</i><span style='display:none'>.ib.i<i>n­fix constructor</i>;</span>,
+in a similar way as function op­era­tors (with fixity (</span><span
+class=cleankw><span lang=EN-US>infixl</span></span><span
+lang=EN-US>, </span><span class=cleankw><span lang=EN-US>infixr</span></span><span
+lang=EN-US> or just </span><span class=cleankw><span lang=EN-US>infix</span></span><span class=clean><span lang=EN-US>,</span></span><span lang=EN-US> default </span><span
+class=cleankw><span lang=EN-US>infixl</span></span><span lang=EN-US>) and prece­dence
+(</span><span class=clean><span lang=EN-US>0</span></span><span lang=EN-US>
+through </span><span class=clean><span lang=EN-US>9</span></span><span
+lang=EN-US>, default </span><span class=clean><span lang=EN-US>9</span></span><span
+lang=EN-US>). If infix construc­tors are surrounded by brackets they can also
+be used in prefix posi­tion (<a href="CleanRep.2.2_5.htm#_3.1_Defining_Functions">see 3.1</a> and
+<a href="CleanRep.2.2_5.htm#_3.4_Expressions">3.4</a>). </span><span
+lang=EN-US>In a pattern match they can be written down in infix position</span><span lang=EN-US> as well. </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When a constructor operator is used in infix position (in an
+expression or in a in a pattern) <i>both</i> arguments have to be present.
+Constructor operators can be used in a curried way, but then they have to be
+used as or­di­nary prefix construc­tors (<a href="CleanRep.2.2_5.htm#_3.1_Defining_Functions">see
+3.1</a> and <a href="CleanRep.2.2_5.htm#_3.4_Expressions">3.4</a>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Algebraic type definition and constructor
+pattern in function definition.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Tree2 a    = (/\) </span><span class=cleankw><span
+lang=EN-US>infixl</span></span><span lang=EN-US> 0 (Tree a) (Tree a)</span></p>
+
+<p class=ex><span lang=EN-US>             | Value a</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Mirror:: (Tree2 a) -&gt; Tree2 a</span></p>
+
+<p class=ex><span lang=EN-US>Mirror (left/\right)  = Mirror right/\Mirror left</span></p>
+
+<p class=ex><span lang=EN-US>Mirror leaf           = leaf</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an algebraic type defining an infix
+data constructor and a function on this type; notice that one cannot use a ‘</span><span
+lang=EN-US style='font-family:Courier'>:</span><span lang=EN-US>’ because this
+character is already reserved.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::List a = (&lt;:&gt;) </span><span class=cleankw><span
+lang=EN-US>infixr</span></span><span lang=EN-US> 5 a (List a)</span></p>
+
+<p class=ex><span lang=EN-US>         | Nil</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Head:: (List a) -&gt; a</span></p>
+
+<p class=ex><span lang=EN-US>Head (x&lt;:&gt;xs) = x</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>All data constructors being de­fi­ned in the scope must have <i>different</i>
+names, to make type inferencing possible.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Scope of type definitions.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span style='position:absolute;z-index:251654656;margin-left:-3px;
+margin-top:0px;width:374px;height:68px'><img width=374 height=68
+src="CleanRep.2.2_files/image033.gif"></span><span class=cleankw><span
+lang=EN-US>implementation</span></span><span lang=EN-US> </span><span
+class=cleankw><span lang=EN-US>module</span></span><span lang=EN-US> XYZ</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span style='position:absolute;z-index:251655680;margin-left:130px;
+margin-top:2px;width:176px;height:15px'><img width=176 height=15
+src="CleanRep.2.2_files/image034.gif"></span><span lang=EN-US>::
+Type_contructor type_vars = expression</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>other_definitions</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<h3><a name="_Toc524343558"></a><a name="_Toc311798040"></a><a
+name="_5.1.1_Using_Algebraic"></a><span lang=EN-US>5.1.1 Using Constructors in
+Patterns</span></h3>
+
+<p class=par><span lang=EN-US>An algebraic data type can be used in a pattern.
+The pattern<i> </i>consists of the <i>data constructor</i> (</span><a
+href="CleanRep.2.2_5.htm#_3.2_Patterns"><span lang=EN-US>see 3.2</span></a><span lang=EN-US>)
+with its op­tional ar­gu­ments which on its turn can contain <i>sub-pattern</i></span><i><span
+lang=EN-US>s.</span></i><span
+lang=EN-US> A constructor pattern forces evalua­tion of the cor­responding
+actual argument to strong root normal form since the strategy has to deter­mine
+whe­ther the actual ar­gument indeed is equal to the speci­fied constructor.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphPattern</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Constructor</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// Zero
+  arity Constructor</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>(</span></span><span lang=EN-US>Constructor {Pattern}</span><span
+  class=cleanb><span lang=EN-US>)</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>//
+  Constructor pattern</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphPattern
+  </span><span class=clean><span lang=EN-US>ConstructorName</span></span><span
+  lang=EN-US> GraphPattern</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// Infix
+  Constructor opera­tor</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an algebraic data type definition and
+its use in a pattern in function definition.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Tree a = Node a (Tree a) (Tree a)</span></p>
+
+<p class=ex><span lang=EN-US>         | Nil</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Mirror:: (Tree a) -&gt; Tree a</span></p>
+
+<p class=ex><span lang=EN-US>Mirror (Node e left right) = Node e (Mirror right)
+(Mirror left)</span></p>
+
+<p class=ex><span lang=EN-US>Mirror Nil                 = Nil</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The data con­structor</span><span
+lang=EN-US> used in a patter must have been defined in an algebraic data type
+definition</span><span
+lang=EN-US>.</span></p>
+
+<h3><a name="_Toc311798041"></a><a name="_Toc524343559"></a><a
+name="_5.1.2_Using_Higher"></a><span lang=EN-US>5.1.2 Using Higher Order Types</span></h3>
+
+<p class=par><span lang=EN-US>In an algebraic type definition ordinary types
+can be used (such as a basic type, e.g. </span><span class=clean><span
+lang=EN-US>Int</span></span><span lang=EN-US>, or a list type, e.g. </span><span
+class=clean><span lang=EN-US>[Int]</span></span><span lang=EN-US>, or an
+instantiation of a user defined type, e.g. </span><span class=clean><span
+lang=EN-US>Tree</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>Int</span></span><span lang=EN-US>), but one can also use <i>higher
+order ty­pes</i>. Higher order types can be constructed by curried applications
+of the type constructors. Higher or­der types can be applied in the type world
+in a similar way as higher order functi­ons in the function world. The use of
+higher order types increases the flexibility with which al­gebraic types can be
+defined. Predefi­ned types can also be used in curried way (<a
+href="CleanRep.2.2_6.htm#_4.5_Arrow_Types">see 4.5</a>). Higher or­der types play an important
+role in combination with type classes (see <a href="CleanRep.2.2_8.htm#_Overloading">Chapter 6</a>).</span></p>
+
+<p class=par><span lang=EN-US>Of course, one needs to ensure that all types are
+applied in a correct way. To be able to specify the rules that indicate whether
+a type itself is correct, we introduce the notion of <i>kind</i>. A kind can be
+seen as the ‘type of a type‘. In our case, the kind of a type expresses the
+number of type arguments this type may have. The kind </span><span class=clean><span
+lang=EN-US>X</span></span><span lang=EN-US> stands for any so-called <i>first-order
+</i>type: a type expecting no further arguments ((</span><span class=clean><span
+lang=EN-US>Int</span></span><span lang=EN-US>, </span><span class=clean><span
+lang=EN-US>Bool</span></span><span lang=EN-US>, </span><span class=clean><span
+lang=EN-US>[Int]</span></span><span lang=EN-US>, etcetera). All function
+arguments are of kind </span><span class=clean><span lang=EN-US>X</span></span><span
+lang=EN-US>. The kind </span><span class=clean><span lang=EN-US>X -&gt; X</span></span><span
+lang=EN-US> stands for a type that can be applied to a (first-order) type,
+which then yields another first-order type, </span><span class=clean><span
+lang=EN-US>X -&gt; X -&gt; X</span></span><span lang=EN-US> expects two type
+arguments, and so on.</span></p>
+
+<p class=par><span lang=EN-US>In C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> each <i>top-level</i>
+type should have kind </span><span class=clean><span lang=EN-US>X</span></span><span
+lang=EN-US>. A top-level type is a type that occurs either as an argu­ment or
+result type of a function or as argument type of a data constructor (in some
+algebraic type de­finition). The rule for determining the kinds of the type
+variables (which can be of any order) is fairly simple: The kind of a type
+variable directly follows from its use. If a variable has no arguments, its
+kind is </span><span class=clean><span lang=EN-US>X</span></span><span
+lang=EN-US>. Otherwise its kind corresponds to the number of arguments to which
+the variable is applied. The kind of type variable determines its possible
+instantiations, i.e. it can only be instantiated with a type, which is of the
+same kind as the type variable itself.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an algebraic type using higher order
+types; the type variable </span><span lang=EN-US style='font-family:Courier'>t</span><span
+lang=EN-US> in the definition of </span><span lang=EN-US style='font-family:
+Courier'>Tree2</span><span lang=EN-US> s of kind </span><span lang=EN-US
+style='font-family:Courier'>X -&gt; X</span><span lang=EN-US>. Tree2 is
+instantiated with a list (also of kind </span><span lang=EN-US
+style='font-family:Courier'>X -&gt; X</span><span lang=EN-US>) in the
+definition of MyTree2.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Tree2 t    = NilTree</span></p>
+
+<p class=ex><span lang=EN-US>             | NodeTree (t Int) (Tree2 t) (Tree2
+t)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MyTree2:: Tree2 []</span></p>
+
+<p class=ex><span lang=EN-US>MyTree2 = NodeTree [1,2,3] NilTree NilTree </span></p>
+
+<h3><a name="_Toc311798042"></a><a name="_Toc524343560"></a><a
+name="_Defining_Algebraic_Data"></a><a name="_5.1.3_Defining_Algebraic"></a><span
+lang=EN-US>5.1.3 Defining Algebraic Data Types with Existentially Quantified
+Variables</span></h3>
+
+<p class=par><span lang=EN-US>An al­ge­braic type defi­nition can contain <i>existen­tially
+quantified</i> <i>type variable</i> </span><i><span
+lang=EN-US>s</span></i><span lang=EN-US> (or, for short, existential type
+variables) (<b>Läufer </b><span style='display:none'>  </span>1992). These
+special vari­a­bles are defined on the right-hand side of the type definition
+and are indicated by preceding them with “</span><span class=cleanb><span
+lang=EN-US>E.</span></span><b><span lang=EN-US style='font-family:Courier;
+display:none'>.</span></b><span lang=EN-US style='font-family:Courier;
+display:none'>;</span><span
+lang=EN-US>”. </span><span
+lang=EN-US style='display:none'>  </span><span lang=EN-US>Exis­tential types
+are use­ful if one wants to create (recursive) data struc­tures in which
+objects of <i>different ty­pes</i> are being stored (e.g. a list with elements
+of different ty­pes).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AlgebraicTypeDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span><span lang=EN-US>TypeLhs</span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>= </span></span><span lang=EN-US>ConstructorDef</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US>
+  ConstructorDef} </span><span class=clean><span lang=EN-US style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ConstructorDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="62%" colspan=2 valign=top style='width:62.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ExistentalQuantVariables]
+  </span><span class=clean><span lang=EN-US>ConstructorName</span></span><span
+  lang=EN-US> {BrackType}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="62%" colspan=2 valign=top style='width:62.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[ExistentalQuantVariables]
+  (</span><span class=clean><span lang=EN-US>ConstructorName</span></span><span
+  lang=EN-US>) [Fix][Prec] {BrackType}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ExistentalQuantVariables</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="62%" colspan=2 valign=top style='width:62.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>E.</span></span><span lang=EN-US>{TypeVariable}+</span><span
+  class=cleanb><span lang=EN-US>:</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of the use of an existentially
+quantified type. In this example a record (<a href="#_4.2.2_Defining_Record">see
+5.2</a>) is defined containing an existentially quantified state </span><span
+class=clean><span lang=EN-US>s</span></span><span lang=EN-US>, a method to
+change this state </span><span class=clean><span lang=EN-US>s</span></span><span
+lang=EN-US>, and a method to convert the state </span><span class=clean><span
+lang=EN-US>s</span></span><span lang=EN-US> into a </span><span class=clean><span
+lang=EN-US>String</span></span><span lang=EN-US>. Notice that upon creation of
+the record </span><span class=clean><span lang=EN-US>MyObject</span></span><span
+lang=EN-US> the type of the internal state and the methods defined on the state
+are consistent (in this case the state is of type </span><span class=clean><span
+lang=EN-US>Int</span></span><span lang=EN-US>). The methods stored in the
+object </span><span class=clean><span lang=EN-US>Object</span></span><span
+lang=EN-US> can (only) be applied on the state of that object thus enabling an
+object-oriented style of programming. The concrete type of the state hidden in
+the object is not visible from outside. To show it to the outside world one has
+to convert the state, which can be of any type, to an ordinary not
+existentially quantified type. For instance, </span><span class=clean><span
+lang=EN-US>PrintState</span></span><span lang=EN-US> converts the any state
+into a </span><span class=clean><span lang=EN-US>String</span></span><span
+lang=EN-US>. Objects that have states of different type are considered to be of
+the same type and can for instance be part of the same list.</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>::Object = E.s: {state::s, method::s-&gt;s,
+tostring:: s -&gt; String }</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>MyObject =   { state = 3</span></p>
+
+<p class=ex><span lang=PT-BR>             , method = (+) 1</span></p>
+
+<p class=ex><span lang=PT-BR>             , tostring = toString</span></p>
+
+<p class=ex><span lang=PT-BR>             }</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>IncrementObject obj=:{method,state} = {obj &amp;
+state = method state}</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>PrintState obj=:{tostring,state} = tostring state</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>Start = PrintState (IncrementObject MyObject)       
+</span><span class=cleancom><span lang=EN-US>// the result will be 4</span></span></p>
+
+<p class=par><span lang=EN-US>To ensure correctness of typing, there is a
+limitation imposed on the use of <i>existentially quantified data structures.</i>
+</span><span
+lang=EN-US> </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Once a<span style='color:red'> </span>data structure containing
+existentially quantified parts is created the type of these compo­nents are
+forgotten. This means that, in general, if such a data structured is passed to
+another function it is statically impossible to determine the actual types of
+those components: it can be of any type. The­re­fore, a function having an
+existentially quantified data structure as input is not al­lowed to make
+specific type assumptions on the parts that correspond to the existential type
+va­ri­ables. This implies that one can only instantiate an existen­tial type
+variable with a concrete type when the object is created. In all other cases it
+can only be unified with a universally quantified type.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Counter Example. </span></b><span lang=EN-US>Illegal
+use of an object with existentially quantified components.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>Start = (IncrementObject MyObject).state</span></p>
+
+<h3><a name="_Toc524343561"></a><a name="_Toc311798043"></a><a
+name="_5.1.4_Defining_Algebraic"></a><span lang=EN-US>5.1.4 Defining Algebraic
+Data Types with Universally Quantified Variables</span></h3>
+
+<p class=par><span lang=EN-US>An al­ge­braic type defi­nition can contain <i>universally
+quantified</i> <i>type variable</i></span><i><span
+lang=EN-US>s</span></i><span lang=EN-US> (or, for short, universal type
+variables) of Rank 2 (on the argument position of a data constructor). These
+special vari­a­bles are defined on the right-hand side of a type definition on
+the arguments position of the data constructor being defined and have to be
+preceded by an “</span><span class=cleanb><span lang=EN-US>A.</span></span><b><span
+lang=EN-US style='font-family:Courier;display:none'>.</span></b><span
+lang=EN-US style='font-family:Courier;display:none'>;</span><span
+lang=EN-US>” (meaning: &quot;for all&quot;). It can be used to store
+polymorphic functions that work on arguments of 'any' type. The universal type
+is very useful for constructing dictionaries for overloaded functions (see </span><a
+href="CleanRep.2.2_8.htm#_Overloading"><span lang=EN-US>Chapter 6</span></a><span lang=EN-US>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AlgebraicTypeDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span><span lang=EN-US>TypeLhs</span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>= </span></span><span lang=EN-US>ConstructorDef</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US>
+  ConstructorDef} </span><span class=clean><span lang=EN-US style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ConstructorDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="62%" colspan=2 valign=top style='width:62.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[ExistentalQuantVariables]
+  </span><span class=clean><span lang=EN-US>ConstructorName</span></span><span
+  lang=EN-US> {BrackType}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="62%" colspan=2 valign=top style='width:62.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ExistentalQuantVariables]
+  (</span><span class=clean><span lang=EN-US>ConstructorName</span></span><span
+  lang=EN-US>) [Fix][Prec] {BrackType}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="62%" colspan=2 valign=top style='width:62.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[UniversalQuantVariables]
+  [Strict] [UnqTypeAttrib] SimpleType</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UniversalQuantVariables</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="62%" colspan=2 valign=top style='width:62.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>A.</span></span><span lang=EN-US>{TypeVariable }+</span><span
+  class=cleanb><span lang=EN-US>:</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Counter Example</span></b><span lang=EN-US>.
+The following program is ill typed. Although an identity function is stored in </span><span
+class=clean><span lang=EN-US>T2</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>T2</span></span><span lang=EN-US> can contain any
+function that can be unified with </span><span class=clean><span lang=EN-US>b
+-&gt; b</span></span><span lang=EN-US> (for instance </span><span class=clean><span
+lang=EN-US>Int -&gt; Int</span></span><span lang=EN-US> will do). Therefore a
+type error is given for </span><span class=clean><span lang=EN-US>f2</span></span><span
+lang=EN-US> since </span><span class=clean><span lang=EN-US>g</span></span><span
+lang=EN-US> is applied to both an </span><span class=clean><span lang=EN-US>Int</span></span><span
+lang=EN-US> and a </span><span class=clean><span lang=EN-US>Char</span></span><span
+lang=EN-US>. </span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>:: T2 b = C2 (b -&gt; b)</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>f2:: (T2 b) -&gt; (Int,Char)</span></p>
+
+<p class=ex><span lang=PT-BR>f2 (C2 g) = (g 1, g 'a')</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>Id::a -&gt; a</span></p>
+
+<p class=ex><span lang=PT-BR>Id x = x</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>Start = f2 (C2 Ids)</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of the use of a universally quantified
+type. In contrast with the example above it is now specified that T must
+contain a universally quantified function </span><span class=clean><span
+lang=EN-US>b -&gt; b</span></span><span lang=EN-US>. The identity function </span><span
+class=clean><span lang=EN-US>Id</span></span><span lang=EN-US> can be stored in
+</span><span class=clean><span lang=EN-US>T</span></span><span lang=EN-US>,
+since its type </span><span class=clean><span lang=EN-US>Id::a -&gt; a</span></span><span
+lang=EN-US> </span><span lang=EN-US>is actually a shorthand for </span><span
+class=clean><span lang=EN-US>Id</span></span><span class=clean><span
+lang=PT-BR>::A.a:a -&gt; a</span></span><span lang=PT-BR>.</span><span
+lang=EN-US>  A function from </span><span class=clean><span lang=EN-US>Int
+-&gt; Int</span></span><span lang=EN-US> cannot be stored in </span><span
+class=clean><span lang=EN-US>T</span></span><span lang=EN-US> since this type
+is not unifiable with </span><span class=clean><span lang=PT-BR>A.a:a -&gt; a</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>:: T = C (A.b: b -&gt; b)</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>f:: (T b) -&gt; (Int,Char)</span></p>
+
+<p class=ex><span lang=PT-BR>f (C g) = (g 1, g 'a')</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>Id::a -&gt; a</span></p>
+
+<p class=ex><span lang=PT-BR>Id x = x</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>Start = f (C Ids)</span></p>
+
+<h3><a name="_Toc311798044"></a><a name="_5.1.5_Strictness_Annotations"></a><span
+lang=EN-US>5.1.5 Strictness Annotations in Type Definitions</span></h3>
+
+<p class=par><span lang=EN-US>Functio­nal programs will generally run much more
+efficient when strict data structures are being used instead of lazy ones. If
+the inefficiency of your program becomes problematic one can think of chang­ing
+lazy data structures into strict ones. This has to be done by hand in the
+definition of the type.</span></p>
+
+<p class=exb><span lang=EN-US> </span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AlgebraicTypeDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span><span lang=EN-US>TypeLhs</span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>= </span></span><span lang=EN-US>ConstructorDef</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US>
+  ConstructorDef} </span><span class=clean><span lang=EN-US style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ConstructorDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="62%" colspan=2 valign=top style='width:62.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[ExistentalQuantVariables]
+  ConstructorName {BrackType}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="62%" colspan=2 valign=top style='width:62.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[ExistentalQuantVariables]
+  (ConstructorName) [Fix][Prec] {BrackType}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US
+  style='font-size:10.0pt;font-family:"CG Times","serif"'>Strict</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US
+  style='font-size:10.0pt;font-family:"CG Times","serif"'>=</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>!</span></span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US
+  style='font-size:10.0pt;font-family:"CG Times","serif"'>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>In the type definition of a constructor (in an
+algebraic data type definition or in a defini­tion of a re­cord type) the
+arguments of the data constructor can <i>optionally</i> be annotated as being
+strict. So, some arguments can be defined strict while others can be defined as
+being lazy. In rea­son­ing about objects of such a type it will always be true
+that the annotated argument will be in strong root normal form when the object
+is exam­ined. Whenever a new object is created in a strict context, the
+compiler will take care of the evaluation of the strict annotated arguments.
+When the new object is cre­ated in a lazy context, the compiler will insert
+code that will take care of the eval­ua­tion whenever the object is put into a
+strict context. If one makes a data structure strict in a certain argument, it
+is better not define infinite in­stances of such a data structure to avoid
+non-termination. </span></p>
+
+<p class=par><span lang=EN-US>So, in a type definition one can define a data
+constructor to be strict in zero or more of its arguments. Strictness is a
+property of data structure that is specified in its type. </span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>In general (with the exceptions of tuples) one cannot arbitrary mix
+strict and non-strict data structures because they are considered to be of
+different type. </span></p>
+
+<p class=par><span lang=EN-US>When a strict annotated ar­gument is put in a
+strict context while the argument is defined in terms of another strict
+annotated data struc­ture the latter is put in a strict context as well and
+there­fore also eval­uated. So, one can change the default <i>lazy semantics</i></span><span
+lang=EN-US> of C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US> into a (<i>hyper</i>) <i>strict se­man­tics</i>
+</span><span
+lang=EN-US> as de­manded. The type system will check the consis­tency of types
+and ensure that the speci­fied strict­ness is maintai­ned.</span></p>
+
+<p class=par><span lang=EN-US>There is no explicit notation for creating
+unboxed versions of an algebraic data type. The compiler will automatically
+choose the most efficient representation for a given data type. For algebraic
+data type definitions containing strict elements of basic type, record type and
+array type an unboxed representation will be chosen.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example: both integer values in the definition
+of </span><span class=clean><span lang=EN-US>Point</span></span><span
+lang=EN-US> are strict and will be stored unboxed since they are known to be of
+basic type. The integer values stored in </span><span class=clean><span
+lang=EN-US>MyPoint</span></span><span lang=EN-US> are strict as well, but will
+be stored unboxed since </span><span class=clean><span lang=EN-US>MyTuple</span></span><span
+lang=EN-US> is polymorphic.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Point = (!Int,!Int)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::MyTuple a = Pair !a !a</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::MyPoint :== MyTuple Int </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>A user defined lazy list similar to type </span><span
+class=clean><span lang=EN-US>[a] </span></span><span lang=EN-US>could be
+defined in algebraic type definition as follows:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::LazyList a      =   LazyCons a (LazyList a)</span></p>
+
+<p class=ex><span lang=EN-US>                  |   LazyNil</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>A head strict list similar to type</span><span
+class=clean><span lang=EN-US> [!a] </span></span><span lang=EN-US>could be
+defined in algebraic type definition as follows:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::HeadSList a     =   HeadSCons !a (HeadSList a)</span></p>
+
+<p class=ex><span lang=EN-US>                  |   HeadSNil</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>A tail strict list similar to type</span><span
+class=clean><span lang=EN-US> [a!] </span></span><span lang=EN-US>could be
+defined in algebraic type definition as follows:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::TailSList a     =   TailSCons a !(TailSList a)</span></p>
+
+<p class=ex><span lang=EN-US>                  |   TailSNil</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>A strict listssimilar to type</span><span
+class=clean><span lang=EN-US> [!a!] </span></span><span lang=EN-US>could be
+defined in algebraic type definition as follows:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::StrictList a    =   StrictCons !a !(StrictList
+a)</span></p>
+
+<p class=ex><span lang=EN-US>                  |   StrictNil</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>An unboxed list similar to type</span><span
+class=clean><span lang=EN-US> [#Int] </span></span><span lang=EN-US>could be
+defined in algebraic type definition as follows:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::UnboxedIList    =   UnboxedICons !Int 
+UnboxedIList</span></p>
+
+<p class=ex><span lang=EN-US>                  |   UnboxedINil</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>An unboxed list similar to type</span><span
+class=clean><span lang=EN-US> [#Int!] </span></span><span lang=EN-US>could be
+defined in algebraic type definition as follows:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::UnboxedIList    =   UnboxedICons !Int 
+!UnboxedIList</span></p>
+
+<p class=ex><span lang=EN-US>                  |   UnboxedINil</span></p>
+
+<h3><a name="_Toc311798045"><span lang=EN-US>5.1.6 Semantic Restrictions on
+Algebraic Data Types</span></a></h3>
+
+<p class=par><span lang=EN-US>Other semantic restrictions on algebraic data
+types:</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The name of a type must be different from other names in the same
+scope and name space (<a href="CleanRep.2.2_4.htm#_2.1_Identifiers,_Scopes">see 2.1</a>).</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The name of a type variable must be different from other type
+variable names in the same scope and name space</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>All type variables used on the right-hand side are bound, i.e. must
+either be introduced on the left-hand side of the algebraic type being defined,
+or they must be bound by an existential quantifier on the right-hand side, or,
+they must be bound by a universal quantifier specified on the corresponding argument.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A data constructor can only be defined once within the same scope
+and name space. So, each data con­struc­tor unambiguously identifies its type
+to make type inferencing possible.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When a data constructor is used in infix position both arguments have
+to be present. Data con­structors can be used in a curried way in the function
+world, but then they have to be used as ordi­nary prefix constructors.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Type constructors can be used in a curried way in the type world; to
+use predefined bracket-like type construc­tors (for lists, tuples, arrays) in a
+curried way they must be used in prefix notation.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The right-hand side of an algebraic data type definition should
+yield a type of kind </span><span lang=EN-US style='font-family:Courier'>X</span><span
+lang=EN-US>, all argu­ments of the data constructor being defined should be of
+kind </span><span lang=EN-US style='font-family:Courier'>X</span><span
+lang=EN-US> as well.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A type can only be instantiated with a type that is of the same
+kind. </span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>An existentially quantified type variable specified in an algebraic
+type can only be instantiated with a con­crete type (= not a type variable)
+when a data struc­ture of this type is created.</span></p>
+
+<h2><a name="_Toc311798046"></a><a name="_Toc524343562"></a><a
+name="_4.2.2_Defining_Record"></a><a name="_5.2_Defining_Record"></a><span
+lang=EN-US>5.2    Defining Record Types</span></h2>
+
+<p class=par><span
+lang=EN-US>A <i>record</i> <i>type</i> </span><span
+lang=EN-US> is basically an algebraic data type in which exactly one
+constructor is defined. Spe­cial about records is that a <i>field name</i> </span><span
+lang=EN-US> is attached to each of the arguments of the data con­structor and
+that</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>records cannot be used in a curried way.</span></p>
+
+<p class=par><span lang=EN-US>Compared with ordinary algebraic data structures
+the use of records gives a lot of notational con­ve­nience because the field
+names enable <i>selection by field name</i> instead of <i>selection by posi­tion</i>
+</span><span
+lang=EN-US> When a re­cord is created <i>all</i> arguments of the constructor
+have to be defined but one can spec­ify the arguments in <i>any</i> order.
+Furthermore, when pattern matching is performed on a record, one only has to
+mention those fields one is interested in (<a href="#_5.2.2_Record_Patterns">see
+5.2.2</a>). A record can be created via a functional update (<a
+href="#_Record_Update">see 5.2.1</a>). In that case one only has to specify the
+values for those fields that differ from the old record. Matching and creation
+of records can hence be specified in C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> in such a way that
+after a change in the structure of a record only those functions have to be
+chan­ged that are explicitly referring to the changed fields. </span></p>
+
+<p class=par><span lang=EN-US>Existential and universal type variables (see <a
+href="#_Defining_Algebraic_Data">5.1.3</a> and <a
+href="#_5.1.4_Defining_Algebraic">5.1.4</a>) are allowed in record types (as in
+any other type). The arguments of the constructor can op­tio­n­ally be
+annotated as being strict (<a href="CleanRep.2.2_12.htm#_5.1_Annotations_to">see 10.1</a>). The op­tional
+uni­queness at­tri­butes are treated in <a href="CleanRep.2.2_11.htm#_Uniqueness_Typing">Chapter 9</a>.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordTypeDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span><span lang=EN-US>TypeLhs</span><span class=cleanb><span
+  lang=EN-US> = </span></span><span lang=EN-US>[ExistentalQuantVariables] [Strict]
+  </span><span class=cleanb><span lang=EN-US>{</span></span><span lang=EN-US>{FieldName
+  </span><span class=cleanb><span lang=EN-US>::</span></span><span lang=EN-US>
+  [Strict] Type}-list</span><span class=cleanb><span lang=EN-US>} </span></span><span
+  class=clean><span lang=EN-US style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>As data constructor for a record the name of the
+record type is used internally.</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The se­mantic restrictions that apply for algebraic data types also
+hold for record types.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The field names inside one record all have to be different. It is
+allowed to use the same field name in different records. If the same names are
+used in different records, one can explicitly specify the intended record type
+when the record is constructed.  </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a record definition.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Complex    =   { re :: Real</span></p>
+
+<p class=ex><span lang=EN-US>                 , im :: Real</span></p>
+
+<p class=ex><span lang=EN-US>                 }</span></p>
+
+<p class=par><span lang=EN-US>The combination of existential type variables in
+record types are of use for an object ori­en­ted style of programming.</span></p>
+
+<p class=exb><span lang=EN-US> </span></p>
+
+<p class=exth><span lang=EN-US>Example of the use of an existentially
+quantified record. One can create an object of a certain type that can have
+different representations.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Object = E.x:  { state  :: x</span></p>
+
+<p class=ex><span lang=EN-US>                 , get :: x -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>                 , set :: x Int -&gt; x</span></p>
+
+<p class=ex><span lang=EN-US>                 }</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>CreateObject1:: Object</span></p>
+
+<p class=ex><span lang=EN-US>CreateObject1 = {state = [], get = myget, set =
+myset}</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    myget:: [Int] -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>    myget [i:is] = i</span></p>
+
+<p class=ex><span lang=EN-US>    myget []     = 0</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    myset:: [Int] Int -&gt; [Int]</span></p>
+
+<p class=ex><span lang=EN-US>    myset is i = [i:is]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>CreateObject2 = {state = 0.0, get = myget, set =
+myset}</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    myget:: Real -&gt; Int</span></p>
+
+<p class=ex><span lang=PT-BR>    myget r = toInt r</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>    myset:: Real Int -&gt; Real</span></p>
+
+<p class=ex><span lang=PT-BR>    myset r i = r + toReal i </span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Get:: Object -&gt; Int</span></p>
+
+<p class=ex><span lang=EN-US>Get {state,get} = get state</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Set:: Object Int -&gt; Object</span></p>
+
+<p class=ex><span lang=EN-US>Set o=:{state,set} i = {o &amp; state = set state
+i}</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Start:: [Object]</span></p>
+
+<p class=ex><span lang=EN-US>Start = map (Set 3) [CreateObject1,CreateObject2]</span></p>
+
+<p class=exb><a name="_Toc524343563"></a><a name="_4.2.3_Defining_Synonym"></a><a
+name="_5.2.1_Creating_Records"></a><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a complex number as record type with
+strict components.</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>::Complex    =   {    re:: !Real</span></p>
+
+<p class=ex><span lang=PT-BR>                 ,    im:: !Real </span></p>
+
+<p class=ex><span lang=PT-BR>                 }</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>(+) </span><span class=cleankw><span lang=PT-BR>infixl</span></span><span
+lang=PT-BR> 6:: !Complex !Complex -&gt; Complex</span></p>
+
+<p class=ex><span lang=PT-BR>(+) {re=r1,im=i1} {re=r2,im=i2} =
+{re=r1+r2,im=i1+i2}</span></p>
+
+<p class=par><span lang=EN-US>The compiler often unboxes records to make the
+generated code more efficient. However in some cases this is less efficient, for
+example for abstract data types, large unique records that can be updated in
+place, or when records are shared. Therefore unboxing can be prevented by
+adding an ! before the { in the record type definition.</span></p>
+
+<h3><a name="_Toc311798047"><span lang=EN-US>5.2.1 Creating Records and
+Selection of Record Fields</span></a></h3>
+
+<p class=par><span lang=EN-US>A <i>record</i></span><span
+lang=EN-US> is a tuple-like algebraic data structure that has the advantage
+that its elements can be se­lected by <i>field name</i></span><span
+lang=EN-US> rather than by position.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Record</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordDenotation</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordUpdate</span></p>
+  </td>
+ </tr>
+</table>
+
+<h4><span lang=EN-US>         <a name="_Toc311798048">Simple Records</a></span></h4>
+
+<p class=par><span lang=EN-US>The first way is to create a record is by <i>explicitly</i>
+defining a value for <i>each</i> of its fields. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordDenotation</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span><span lang=EN-US>[TypeName</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US>] {FieldName </span><span
+  class=cleanb><span lang=EN-US>=</span></span><span lang=EN-US>
+  GraphExpr}-list]</span><span class=cleanb><span lang=EN-US>}</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Creation of a record.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Point      =   { x:: Real                        
+</span><span class=cleancom><span lang=EN-US>// record type definition</span></span></p>
+
+<p class=ex><span lang=EN-US>                 , y:: Real</span></p>
+
+<p class=ex><span lang=EN-US>                 }</span></p>
+
+<p class=ex><span lang=EN-US>::ColorPoint =   { p:: Point                       
+</span><span class=cleancom><span lang=EN-US>// record type definition</span></span></p>
+
+<p class=ex><span lang=EN-US>                 , c:: Color</span></p>
+
+<p class=ex><span lang=EN-US>                 }</span></p>
+
+<p class=ex><span lang=EN-US>::Color      =   Red | Green | Blue                
+</span><span class=cleancom><span lang=EN-US>// algebraic type definition</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>CreateColorPoint:: (Real,Real) Color -&gt;
+ColorPoint  </span><span class=cleancom><span lang=EN-US>// type of function</span></span></p>
+
+<p class=ex><span lang=EN-US>CreateColorPoint (px,py) col = { c = col           
+</span><span class=cleancom><span lang=EN-US>// function creating a new re­cord</span></span></p>
+
+<p class=ex><span lang=EN-US>                               , p = { x = px</span></p>
+
+<p class=ex><span lang=EN-US>                                     , y = py</span></p>
+
+<p class=ex><span lang=EN-US>                                     }</span></p>
+
+<p class=ex><span lang=EN-US>                               }</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>A record can only be used if its type has been defined in a record
+type definition; the field name</span><span
+lang=EN-US>s used must be identi­cal to the field names specified in the cor­re­spond­ing
+type.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When creating a record explicitly, the order in which the record
+fields are instantiated is irrele­vant, but <i>all</i> fields have to get a
+value; the type of these values must be an instantiation of the corre­sponding
+type specified in record type definition. Curried use of records is <i>not</i>
+possible.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When creating a record, its type constructor that can be used to
+disambiguate the record from other records; the type constructor can be left
+out if there is <i>at least </i>one field name is speci­fied which is not being
+defined in some other record.</span></p>
+
+<h4><a name="_Record_Update"></a><span lang=EN-US>         <a
+name="_Toc311798049">Record Update</a></span></h4>
+
+<p class=par><span lang=EN-US>The second way is to construct a new record out
+of an existing one (a <i>functional</i> <i>record</i> <i>up­date</i></span><span
+lang=EN-US>). </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordUpdate</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span><span lang=EN-US>[TypeName</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US>][RecordExpr </span><span
+  class=cleanb><span lang=EN-US>&amp;</span></span><span lang=EN-US>][{FieldName
+  {Selection} = GraphExpr}-list]</span><span class=cleanb><span lang=EN-US>}</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selection</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span><span lang=EN-US>FieldName</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span><span lang=EN-US>ArrayIndex</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordExpr</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>GraphExpr</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The record expression must yield a record.</span></p>
+
+<p class=par><span lang=EN-US>The re­cord written to the left of the </span><span
+class=clean><span lang=EN-US>&amp;</span></span><span lang=EN-US> (</span><span
+class=clean><span lang=EN-US>r &amp; f</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>= v</span></span><span lang=EN-US> is pronounced
+as: </span><span class=clean><span lang=EN-US>r</span></span><span lang=EN-US>
+with for </span><span class=clean><span lang=EN-US>f </span></span><span
+lang=EN-US>the value </span><span class=clean><span lang=EN-US>v</span></span><span
+lang=EN-US>) is the re­cord to be duplicated. On the right from the </span><span
+class=clean><span lang=EN-US>&amp;</span></span><span lang=EN-US> the
+structures are specified in which the new record <i>dif­fers</i> from the old
+one. A structure can be any field of the record or a selection of any field or
+array ele­ment of a record or array stored in this record. All other fields are
+duplicated and cre­ated<i> implicitly</i>. Notice that the functional update is
+not an update in the classi­cal, de­struc­tive sense since a <i>new</i> record
+is cre­ated.<span style='display:none'> However, when the given record is of
+unique type </span></span><span lang=EN-US style='font-size:10.0pt;font-family:
+Courier;display:none'>*T</span><span lang=EN-US style='display:none'>, the <b>update</b>
+is done <b>de­structively</b> (!) which in this particular case is safe since
+the original record is known not to be used any­more (see 9.2).</span><span
+lang=EN-US> </span><span
+lang=EN-US> The functional update of records is performed very efficient such
+that we have not added support for destructive updates of records of unique
+type. The </span><span class=clean><span lang=EN-US>&amp;</span></span><span
+lang=EN-US>-operator is strict in its ar­guments.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Updating a record within a record using the functional
+update.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>MoveColorPoint:: ColorPoint (Real,Real) -&gt;
+ColorPoint</span></p>
+
+<p class=ex><span lang=EN-US>MoveColorPoint cp (dx,dy) = {cp &amp; p.x = cp.p.x
++ dx, p.y = c.p.y + dy}</span></p>
+
+<h4><a name="_Selection_of_a"></a><span lang=EN-US>         <a
+name="_Toc311798050">Selection of a Record Field</a></span></h4>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordSelection</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordExpr 
+  [</span><span class=cleanb><span lang=EN-US>.</span></span><span lang=EN-US>TypeName]</span><span
+  class=cleanb><span lang=EN-US>.</span></span><span lang=EN-US>FieldName
+  {Selection}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordExpr 
+  [</span><span class=cleanb><span lang=EN-US>.</span></span><span lang=EN-US>TypeName]</span><span
+  class=cleanb><span lang=EN-US>!</span></span><span lang=EN-US>FieldName
+  {Selection}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Selection</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span><span lang=EN-US>FieldName</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span><span lang=EN-US>ArrayIndex</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>With a <i>record selection</i></span><span
+lang=EN-US> (using the ‘</span><span class=clean><span lang=EN-US>.</span></span><span
+lang=EN-US>’ symbol) one can select the value stored in the indicated record
+field. A “unique” selection using the ‘</span><span class=clean><span
+lang=EN-US>!</span></span><span lang=EN-US>’ symbol returns a tuple containing
+the demanded record field and the original record. This type of record
+selection can be very handy for destructively updating of uniquely typed
+records with values that depend on the current contents of the record. Record
+selec­tion binds more tightly (priority </span><span class=clean><span
+lang=EN-US>11</span></span><span lang=EN-US>) than application (priority </span><span
+class=clean><span lang=EN-US>10</span></span><span lang=EN-US>).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Record selection.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>GetPoint:: ColorPoint -&gt; Point</span></p>
+
+<p class=ex><span lang=EN-US>GetPoint cp = cp.p                                  </span><span
+class=cleancom><span lang=EN-US>// selection of a record field</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>GetXPoint:: ColorPoint -&gt; Real</span></p>
+
+<p class=ex><span lang=EN-US>GetXPoint cp = cp.p.x                              
+</span><span class=cleancom><span lang=EN-US>// selection of a record field</span></span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>GetXPoint2:: *ColorPoint -&gt; (Real,.ColorPoint)</span></p>
+
+<p class=ex><span lang=EN-US>GetXPoint2 cp = cp!p.x                             
+</span><span class=cleancom><span lang=EN-US>// selection of a record field</span></span></p>
+
+<h3><a name="_Toc311798051"></a><a name="_5.2.2_Record_Patterns"></a><span
+lang=EN-US>5.2.2 Record Patterns</span></h3>
+
+<p class=par><span lang=EN-US>An object of type <i>record</i></span><span lang=EN-US> can be specified as pattern. Only those fields which con­tents one
+would like to use in the right-hand side need to be mentioned in the pattern.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>RecordPattern</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>{</span></span><span lang=EN-US>[TypeName </span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US>] {FieldName [</span><span
+  class=cleanb><span lang=EN-US>=</span></span><span lang=EN-US>
+  GraphPattern]}-list</span><span class=cleanb><span lang=EN-US>}</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The type of the record must have been defined in a record type
+definition.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The field name</span><span
+lang=EN-US>s specified in the pattern must be identi­cal to the field names
+specified in the cor­re­spond­ing type.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>When matching a record, the type contructor which can be used to
+disambiguate the record from other records, can only be left out if there is <i>at
+least </i>one field name is speci­fied which is not being defined in some other
+record.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Use of record patterns.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Tree a     =    Node (RecTree a)</span></p>
+
+<p class=ex><span lang=EN-US>             |    Leaf a</span></p>
+
+<p class=ex><span lang=EN-US>::RecTree a  =    { elem   :: a</span></p>
+
+<p class=ex><span lang=EN-US>                  , left   :: Tree a</span></p>
+
+<p class=ex><span lang=EN-US>                  , right  :: Tree a</span></p>
+
+<p class=ex><span lang=EN-US>                  }</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Mirror:: (Tree a) -&gt; Tree a</span></p>
+
+<p class=ex><span lang=EN-US>Mirror (Node tree=:{left=l,right=r})    = Node
+{tree &amp; left=r,right=l}</span></p>
+
+<p class=ex><span lang=EN-US>Mirror leaf                             = leaf</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The first alternative of function </span><span
+lang=EN-US style='font-family:Courier'>Mirror</span><span lang=EN-US> defined
+in another equivalent way.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Mirror (Node tree) = Node {tree &amp;
+left=tree.right,right=tree.left}</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>or </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Mirror (Node tree=:{left,right}) = Node {tree
+&amp; left=right,right=left}</span></p>
+
+<h2><a name="_Toc311798052"></a><a name="_5.3_Defining_Synonym"></a><span
+lang=EN-US>5.3    Defining Synonym Types</span></h2>
+
+<p class=par><i><span lang=EN-US>Synonym types </span></i><span lang=EN-US>permit the programmer to
+introduce a new type name for an existing type.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>SynonymTypeDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span><span lang=EN-US>TypeLhs </span><span
+  class=cleanb><span lang=EN-US>:==</span></span><span lang=EN-US>
+  [UniversalQuantVariables]Type </span><span class=clean><span lang=EN-US
+  style='color:blue'>;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US> For the left-hand side the same restrictions hold as for algebraic
+types.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US> Cyclic definitions of synonym types (e.g. </span><span lang=EN-US
+style='font-family:Courier'>::T a b :== G a b; ::G a b :== T a b</span><span
+lang=EN-US>) are not al­lowed.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of a type synonym definition.</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>::Operator a :== a a -&gt; a</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>map2:: (Operator a) [a] [a] -&gt; [a]</span></p>
+
+<p class=ex>map2 op [] []             = []</p>
+
+<p class=ex>map2 op [f1:r1] [f2:r2]   = [op f1 f2 :map2 op r1 r2]</p>
+
+<p class=ex>&nbsp;</p>
+
+<p class=ex><span lang=EN-US>Start:: Int</span></p>
+
+<p class=ex><span lang=EN-US>Start = map2 (*) [2,3,4,5] [7,8,9,10]</span></p>
+
+<h2><a name="_Toc311798053"></a><a name="_Toc524343564"></a><a
+name="_4.2.4_Defining_Abstract"></a><a name="_5.4_Defining_Abstract"></a><span
+lang=EN-US>5.4    Defining Abstract Data Types</span></h2>
+
+<p class=par><span
+lang=EN-US>A type can be exported by defining the type in a C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> definition module (<a href="CleanRep.2.2_4.htm#_Defining_Modules">see Chapter 2</a>).
+For soft­ware engineering reasons it sometimes better only to export the name
+of a type but not its con­crete de­finition (the right-hand side of the type
+definition). The type then becomes an <i>abstract data type</i>. In C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> this is done by specifying only the left-hand-side of a type in the
+definition mo­dule while the concrete definition (the right-hand side of the
+type definition) is hidden in the imple­mentation mo­d­ule. So, C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US>’s module structure is used to hide the actual implementation. When
+one wants to do so­me­thing useful with objects of ab­stract types one needs to
+export func­tions that can create and mani­pu­late objects of this type as
+well.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Abstract data type def­initions are only allowed in definition
+module</span><span
+lang=EN-US>s, the con­crete definition has to be given in the corresponding
+implementation module<span style='display:none'>.i.implementation module;</span>.</span></p>
+
+<p class=nlopal><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>The left-hand side of the concrete type should be identical to
+(modulo alpha conversion for va­ri­a­ble names) the left-hand side of the
+abstract type definition (inclusive strictness and unique­ness type
+attributes).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AbstractTypeDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span><span lang=EN-US>TypeLhs </span><span class=clean><span
+  lang=EN-US style='color:blue'>;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of an abstract data type.</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>definition</span></span><span
+lang=EN-US> </span><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> stack</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Stack a</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Empty    ::   (Stack a)</span></p>
+
+<p class=ex><span lang=EN-US>isEmpty  ::   (Stack a) -&gt; Bool</span></p>
+
+<p class=ex><span lang=EN-US>Top      ::   (Stack a) -&gt; a</span></p>
+
+<p class=ex><span lang=EN-US>Push     :: a (Stack a) -&gt; Stack a</span></p>
+
+<p class=ex><span lang=EN-US>Pop      ::   (Stack a) -&gt; Stack a</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>implementation</span></span><span
+lang=EN-US> </span><span class=cleankw><span lang=EN-US>module</span></span><span
+lang=EN-US> stack</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::Stack a :== [a]</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Empty:: (Stack a)</span></p>
+
+<p class=ex><span lang=EN-US>Empty = []</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>isEmpty:: (Stack a) -&gt; Bool</span></p>
+
+<p class=ex><span lang=EN-US>isEmpty [] = True</span></p>
+
+<p class=ex><span lang=EN-US>isEmpty s  = False</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Top:: (Stack a) -&gt; a</span></p>
+
+<p class=ex><span lang=PT-BR>Top [e:s] = e</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Push:: a (Stack a) -&gt; Stack a</span></p>
+
+<p class=ex><span lang=PT-BR>Push e s = [e:s]</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Pop:: (Stack a) -&gt; Stack a</span></p>
+
+<p class=ex><span lang=PT-BR>Pop [e:s] = s<a name="_Toc524343569"></a><a
+name="_4.3_Typing_Functions"></a></span></p>
+
+<h3><a name="_Toc311798054"><span lang=EN-US>5.4.1 Defining Abstract Data Types
+with Synonym Type Definition</span></a></h3>
+
+<p class=par align=left style='text-align:left'><span lang=EN-US>Because the
+concrete definition of an abstract data type does not appear in the definition
+module, the compiler cannot generate optimal code. Therefore, if the concrete
+type is a synonym type, the right-hand-side of the definition may be included sur­rounded
+by brackets:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AbstractSynonymTypeDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><b><span lang=EN-US>=</span></b></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span><span lang=EN-US>TypeLhs ( </span><span
+  class=cleanb><span lang=EN-US>:==</span></span><span lang=EN-US>
+  [UniversalQuantVariables] Type ) </span><span class=clean><span lang=EN-US
+  style='color:#3366FF'>;</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par align=left style='text-align:left'><span lang=EN-US>The type of
+the implementation is still hidden as for other abstract data types, except
+that the compiler uses it only to generate the same code as for a synonym type.</span></p>
+
+</div>
+
+</body>
+</html>

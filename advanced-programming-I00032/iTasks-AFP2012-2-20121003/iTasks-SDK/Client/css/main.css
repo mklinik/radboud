@@ -1,0 +1,227 @@
+body {
+   font: normal 12px Verdana;
+   margin: 0;
+   padding: 0;
+   border: 0 none;
+   overflow: hidden;
+   height: 100%;
+}
+.error {
+	font-weight: bold;
+	color: red;
+}
+.icon-bool-true{
+	background-image: url('../img/icons/tick.png') !important;
+}
+
+.icon-bool-false{
+	background-image: url('../img/icons/cancel.png') !important;
+}
+.icon-hint {
+	background-image: url('../img/icons/information.png') !important;
+}
+.icon-valid {
+	background-image: url('../img/icons/accept.png') !important;
+}
+.icon-invalid {
+	background-image: url('../img/icons/exclamation.png') !important;
+}
+button.icon-log-out, .icon-log-out {
+	background-image: url('../img/icons/door_in.png');
+}
+button.icon-refresh, .icon-refresh {
+	background-image: url('../img/icons/refresh.png');
+}
+button.icon-services, .icon-services {
+	background-image: url('../img/icons/table_gear.png');
+}
+button.icon-states, .icon-states {
+	background-image: url('../img/icons/table_gear.png');
+}
+button.icon-manage-process, .icon-manage-process {
+	background-image: url('../img/icons/table_gear.png');
+}
+button.icon-events, .icon-events {
+	background-image: url('../img/icons/table_lightning.png');
+}
+button.icon-ok, button.icon-yes, button.icon-finish, .icon-ok, .icon-yes, .icon-finish {
+	background-image: url('../img/icons/tick.png');
+}
+button.icon-no, button.icon-cancel, .icon-no, .icon-cancel {
+	background-image: url('../img/icons/cancel.png');
+}
+button.icon-close, .icon-close {
+	background-image: url('../img/icons/cancel.png');
+}
+button.icon-previous, .icon-previous {
+	background-image: url('../img/icons/arrow_left.png');
+}
+button.icon-next, .icon-next, button.icon-continue, .icon-continue, button.icon-login, .icon-login {
+	background-image: url('../img/icons/arrow_right.png');
+}
+button.icon-view, .icon-view {
+	background-image: url('../img/icons/page.png');
+}
+button.icon-edit, .icon-edit {
+	background-image: url('../img/icons/pencil.png');
+}
+button.icon-accept, .icon-accept {
+	background-image: url('../img/icons/accept.png');
+}
+button.icon-file, .icon-file {
+	background-image: url('../img/icons/application_xp.png');
+}
+button.icon-new, .icon-new {
+	background-image: url('../img/icons/document-new.png');
+}
+button.icon-open, .icon-open {
+	background-image: url('../img/icons/document-open.png');
+}
+button.icon-save, .icon-save {
+	background-image: url('../img/icons/document-save.png');
+}
+button.icon-save-as, .icon-save-as {
+	background-image: url('../img/icons/document-save-as.png');
+}
+button.icon-exit, .icon-exit {
+	background-image: url('../img/icons/exit.png');
+}
+button.icon-quit, .icon-quit {
+	background-image: url('../img/icons/exit.png');
+}
+button.icon-help, .icon-help {
+	background-image: url('../img/icons/help.png');
+}
+button.icon-about, .icon-about {
+	background-image: url('../img/icons/help.png');
+}
+button.icon-find, .icon-find {
+	background-image: url('../img/icons/find.png');
+}
+button.icon-collapse-tree, .icon-collapse-tree {
+	background-image: url('../img/icons/collapse-all.gif') !important;
+}
+button.icon-expand-tree, .icon-expand-tree {
+	background-image: url('../img/icons/expand-all.gif') !important;
+}
+.icon-update-task {
+	background-image: url('../img/icons/page_edit.png') !important;
+}
+.icon-input-task {
+	background-image: url('../img/icons/pencil.png') !important;
+}
+.icon-parallel-task {
+	background-image: url('../img/icons/application_double.png') !important;
+}
+.icon-message-task {
+	background-image: url('../img/icons/information.png') !important;
+}
+.icon-instruction-task {
+	background-image: url('../img/icons/instruction.png') !important;
+}
+.icon-monitor-task {
+	background-image: url('../img/icons/hourglass.png') !important;
+}
+.icon-control-task {
+	background-image: url('../img/icons/user_suit.png') !important;
+}
+.icon-bool-true{
+	background-image: url('../img/icons/tick.png') !important;
+}
+.icon-bool-false{
+	background-image: url('../img/icons/cancel.png') !important;
+}
+.icon-task-tree {
+	background-image: url('../img/icons/chart_organisation.png');
+}
+.icon-debug {
+	background-image: url('../img/icons/bug.png') !important;
+}
+.icon-currentwork {
+	background-image: url('../img/icons/report_edit.png') !important;	
+}
+.icon-newwork {
+	background-image: url('../img/icons/report_add.png') !important;	
+}
+.icon-home {
+	background-image: url('../img/icons/house.png') !important;	
+}
+.icon-task {
+	background-image: url('../img/icons/page_edit.png') !important;	
+}
+.icon-task-result {
+	background-image: url('../img/icons/page_white_magnify.png') !important;	
+}
+.icon-waiting {
+	background-image: url('../img/icons/hourglass.png') !important;	
+}
+.icon-workflow {
+	background-image: url('../img/icons/page_edit.png') !important;	
+}
+.icon-folder {
+	background-image: url('../img/icons/folder.png') !important;	
+}
+.icon-overview{
+	background-image: url('../img/icons/application_view_list.png') !important;	
+}
+.icon-unpin{
+	background-image: url('../img/icons/unpin.gif') !important;	
+}
+.icon-edit {
+	background-image: url('../img/icons/pencil.png') !important;
+}
+.icon-add {
+	background-image: url('../img/icons/add.png') !important;
+}
+
+.icon-properties{
+	background-image: url('../img/icons/table_gear.png') !important;
+}
+.icon-chat{
+	background-image: url('../img/icons/comment.png') !important;
+}
+.icon-trash, button.icon-delete, .icon-delete {
+	background-image: url('../img/icons/trash.png') !important;
+}
+.icon-description {
+	background-image: url('../img/icons/page_white_text.png') !important;
+}
+.icon-play {
+	background-image: url('../img/icons/control_play_blue.png') !important;
+}
+.list-button-up{
+	background-image: url('../img/icons/move-up.png') !important;
+}
+.list-button-down{
+	background-image: url('../img/icons/move-down.png') !important;
+}
+.list-button-add{
+	background-image: url('../img/icons/add.png') !important;
+}
+.list-button-rem{
+	background-image: url('../img/icons/delete.png') !important;
+}
+.list-msg-field{
+	background-image: url('../img/light-blue-background.png') !important;
+}
+.file-type-image-icon{
+	background-image: url('../img/icons/image.png') !important;
+}
+.file-type-plain-icon{
+	background-image: url('../img/icons/page_white.png') !important;
+}
+.file-type-video-icon{
+	background-image: url('../img/icons/film.png') !important;
+}
+.file-type-audio-icon{
+	background-image: url('../img/icons/music.png') !important;
+}
+.file-type-text-icon{
+	background-image: url('../img/icons/page.png') !important;
+}
+.file-type-application-icon{
+	background-image: url('../img/icons/application_xp.png') !important;
+}
+.file-type-application-pdf-icon{
+	background-image: url('../img/icons/page_white_acrobat.png') !important;
+}

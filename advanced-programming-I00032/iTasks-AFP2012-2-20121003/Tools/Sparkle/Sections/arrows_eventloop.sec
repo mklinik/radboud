@@ -1,0 +1,33 @@
+SECTION DEPENDENCIES:
+  SYMBOL eventloop                :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) ([(({#Char}, {#Char}), {#Char})], a) [(({#Char}, {#Char}), {#Char})] -> [(({#Char}, {#Char}), {#Char})]"
+  SYMBOL drop_status              :: "((a, b, c) -> (a, b))"
+  SYMBOL >>>                      :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) ((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)"
+  SYMBOL arr                      :: "(a -> b) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)"
+  SYMBOL dupl                     :: "(a -> (a, a))"
+  SYMBOL first                    :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], (a, c), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], (b, c), EventStatus)"
+  SYMBOL pop                      :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], (a, !b), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus))"
+  SYMBOL Pending                  :: "EventStatus"
+
+SECTION DEFINES:
+  THEOREM eventloop_end            : (All f (All data (All a (= (@ 0 eventloop f (TUPLE data a) []) data))))
+  THEOREM eventloop_next           : (All f (All data (All a (All ev (All evs (= (@ 0 eventloop f (TUPLE data a) [ev:evs]) (@ 0 eventloop f (@ 1 drop_status (@ 2 >>> (@ 3 arr (@ 4 dupl)) (@ 2 >>> (@ 5 first f) (@ 6 pop)) ev (TUPLE data a (@ 7 Pending)))) evs)))))))
+
+THEOREM:
+  eventloop_end
+DEPENDS:
+  0
+PROOF:
+  Introduce f data a.
+  Reduce NF All (  ).
+  Reflexive.
+
+THEOREM:
+  eventloop_next
+DEPENDS:
+  0 1 2 3 4 5 6 7
+PROOF:
+  Introduce f data a ev evs.
+  Reduce NF All (  ).
+  Reflexive.
+
+

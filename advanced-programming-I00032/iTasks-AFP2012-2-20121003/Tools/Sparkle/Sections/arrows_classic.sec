@@ -1,0 +1,417 @@
+SECTION DEPENDENCIES:
+  THEOREM decompose_evalEState       (arrows_definedness)
+  THEOREM decompose_evalTuple        (arrows_definedness)
+  SYMBOL evalEState               :: "(a -> Bool) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> Bool"
+  SYMBOL evalEvent                :: "(({#Char}, {#Char}), {#Char}) -> Bool"
+  SYMBOL evalEither               :: "(a -> Bool) (b -> Bool) (Either a b) -> Bool"
+  SYMBOL >>>                      :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) ((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], c, EventStatus)"
+  SYMBOL left                     :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], Either a c, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], Either b c, EventStatus)"
+  SYMBOL arr                      :: "(a -> b) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)"
+  SYMBOL assocsum                 :: "!(Either (Either a b) c) -> Either a (Either b c)"
+  SYMBOL Left                     :: "a -> Either a b"
+  SYMBOL id                       :: "!a -> a"
+  SYMBOL o                        :: "(a -> b) (c -> a) -> c -> b"
+  SYMBOL isEither                 :: "!(Either a b) -> Bool"
+  SYMBOL app_either               :: "(a -> b) (c -> d) !(Either a c) -> Either b d"
+  SYMBOL evalTuple                :: "(a -> Bool) (b -> Bool) (a, b) -> Bool"
+  SYMBOL first                    :: "((({#Char}, {#Char}), {#Char}) -> ([(({#Char}, {#Char}), {#Char})], a, EventStatus) -> ([(({#Char}, {#Char}), {#Char})], b, EventStatus)) (({#Char}, {#Char}), {#Char}) ([(({#Char}, {#Char}), {#Char})], (a, c), EventStatus) -> ([(({#Char}, {#Char}), {#Char})], (b, c), EventStatus)"
+  SYMBOL fst                      :: "!(!a, b) -> a"
+  SYMBOL isTuple                  :: "!(a, b) -> Bool"
+  SYMBOL app_tuple                :: "(a -> b) (c -> d) (a, c) -> (b, d)"
+  SYMBOL assoc                    :: "((a, b), c) -> (a, (b, c))"
+
+SECTION DEFINES:
+  THEOREM assoc_eliminates_first   : (All ev (All A (All C (All D (All state (All B (All f {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState (@ 12 evalTuple (@ 12 evalTuple A C) D) state) (BOOL True)) -> {(All e (All s {(= (@ 1 evalEvent e) (BOOL True)) -> {(= (@ 0 evalEState A s) (BOOL True)) -> (= (@ 0 evalEState B {f @ e s}) (BOOL True))}})) -> (= (@ 3 >>> (@ 13 first (@ 13 first f)) (@ 5 arr (@ 17 assoc)) ev state) (@ 3 >>> (@ 5 arr (@ 17 assoc)) (@ 13 first f) ev state))}}})))))))
+  THEOREM associativity_seq        : (All ev (All A (All state (All B (All f (All g (All h {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState A state) (BOOL True)) -> {(All e (All s {(= (@ 1 evalEvent e) (BOOL True)) -> {(= (@ 0 evalEState A s) (BOOL True)) -> (= (@ 0 evalEState B {f @ e s}) (BOOL True))}})) -> (= (@ 3 >>> f (@ 3 >>> g h) ev state) (@ 3 >>> (@ 3 >>> f g) h ev state))}}})))))))
+  THEOREM first_extension          : (All ev (All state (All f {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState (@ 15 isTuple) state) (BOOL True)) -> (= (@ 13 first (@ 5 arr f) ev state) (@ 5 arr (@ 16 app_tuple f (@ 8 id)) ev state))}})))
+  THEOREM first_preserves_seq      : (All ev (All A (All D (All state (All B (All f (All g {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState (@ 12 evalTuple A D) state) (BOOL True)) -> {(All e (All s {(= (@ 1 evalEvent e) (BOOL True)) -> {(= (@ 0 evalEState A s) (BOOL True)) -> (= (@ 0 evalEState B {f @ e s}) (BOOL True))}})) -> (= (@ 13 first (@ 3 >>> f g) ev state) (@ 3 >>> (@ 13 first f) (@ 13 first g) ev state))}}})))))))
+  THEOREM first_swap               : (All ev (All A (All C (All state (All B (All f (All g {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState (@ 15 isTuple) state) (BOOL True)) -> (= (@ 3 >>> (@ 13 first f) (@ 5 arr (@ 16 app_tuple (@ 8 id) g)) ev state) (@ 3 >>> (@ 5 arr (@ 16 app_tuple (@ 8 id) g)) (@ 13 first f) ev state))}})))))))
+  THEOREM fst_eliminates_first     : (All ev (All A (All C (All state (All B (All f {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState (@ 12 evalTuple A C) state) (BOOL True)) -> {(All e (All s {(= (@ 1 evalEvent e) (BOOL True)) -> {(= (@ 0 evalEState A s) (BOOL True)) -> (= (@ 0 evalEState B {f @ e s}) (BOOL True))}})) -> (= (@ 3 >>> (@ 13 first f) (@ 5 arr (@ 14 fst)) ev state) (@ 3 >>> (@ 5 arr (@ 14 fst)) f ev state))}}}))))))
+  THEOREM left_association         : (All ev (All A (All C (All D (All state (All B (All f {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState (@ 2 evalEither (@ 2 evalEither A C) D) state) (BOOL True)) -> {(All e (All s {(= (@ 1 evalEvent e) (BOOL True)) -> {(= (@ 0 evalEState A s) (BOOL True)) -> (= (@ 0 evalEState B {f @ e s}) (BOOL True))}})) -> (= (@ 3 >>> (@ 4 left (@ 4 left f)) (@ 5 arr (@ 6 assocsum)) ev state) (@ 3 >>> (@ 5 arr (@ 6 assocsum)) (@ 4 left f) ev state))}}})))))))
+  THEOREM left_exchange            : (All ev (All A (All state (All f (All g {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState A state) (BOOL True)) -> (= (@ 3 >>> (@ 4 left f) (@ 5 arr (@ 11 app_either (@ 8 id) g)) ev state) (@ 3 >>> (@ 5 arr (@ 11 app_either (@ 8 id) g)) (@ 4 left f) ev state))}})))))
+  THEOREM left_extension           : (All ev (All state (All f {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState (@ 10 isEither) state) (BOOL True)) -> (= (@ 4 left (@ 5 arr f) ev state) (@ 5 arr (@ 11 app_either f (@ 8 id)) ev state))}})))
+  THEOREM left_functor             : (All ev (All A (All C (All state (All B (All f (All g {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState (@ 2 evalEither A C) state) (BOOL True)) -> {(All e (All s {(= (@ 1 evalEvent e) (BOOL True)) -> {(= (@ 0 evalEState A s) (BOOL True)) -> (= (@ 0 evalEState B {f @ e s}) (BOOL True))}})) -> (= (@ 4 left (@ 3 >>> f g) ev state) (@ 3 >>> (@ 4 left f) (@ 4 left g) ev state))}}})))))))
+  THEOREM left_left_unit           : (All ev (All A (All state (All B (All f {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState A state) (BOOL True)) -> {(All e (All s {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState A s) (BOOL True)) -> (= (@ 0 evalEState B {f @ e s}) (BOOL True))}})) -> (= (@ 3 >>> (@ 5 arr (@ 7 Left)) (@ 4 left f) ev state) (@ 3 >>> f (@ 5 arr (@ 7 Left)) ev state))}}})))))
+  THEOREM left_unit                : (All ev (All A (All state (All f {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState A state) (BOOL True)) -> (= (@ 3 >>> (@ 5 arr (@ 8 id)) f ev state) {f @ ev state})}}))))
+  THEOREM o_preserves_seq          : (All ev (All A (All state (All g (All f {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState A state) (BOOL True)) -> (= (@ 5 arr (@ 9 o g f) ev state) (@ 3 >>> (@ 5 arr f) (@ 5 arr g) ev state))}})))))
+  THEOREM right_unit               : (All ev (All A (All state (All f {(= (@ 1 evalEvent ev) (BOOL True)) -> {(= (@ 0 evalEState A state) (BOOL True)) -> (= {f @ ev state} (@ 3 >>> f (@ 5 arr (@ 8 id)) ev state))}}))))
+
+THEOREM:
+  assoc_eliminates_first
+DEPENDS:
+  0 1 12 3 13 5 17
+PROOF:
+  Introduce ev A C D state B f H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x3 to status.
+     Rewrite -> All "decompose_evalEState" in H2.
+     Split Deep H2.
+     Cases x2.
+     1. ReduceH NF All in H5 (  ).
+        Definedness.
+     2. UncurryH in H5.
+        Rewrite -> All "decompose_evalTuple" in H5.
+        Split Shallow H5.
+        RenameE x2 to d.
+        Cases x1.
+        1. ReduceH NF All in H7 (  ).
+           Definedness.
+        2. UncurryH in H7.
+           Rewrite -> All "decompose_evalTuple" in H7.
+           Split Shallow H7.
+           RenameE x1 to a.
+           RenameE x2 to c.
+           Reduce NF All (  ).
+           Unshare True 1 _x All.
+           Unshare True 1 _x All.
+           Unshare True 1 _x All.
+           Reduce NF All (  ).
+           Assume (= (@ 0 evalEState B {f @ ev (TUPLE data a status)}) (BOOL True)).
+           1. Cases {f @ ev (TUPLE data a status)}.
+              1. ReduceH NF All in H11 (  ).
+                 Definedness.
+              2. Reflexive.
+           2. Apply H3.
+              Split Shallow.
+              1. Exact H1.
+              2. Rewrite -> All "decompose_evalEState".
+                 Split Deep.
+                 1. Exact H4.
+                 2. Exact H9.
+                 3. Exact H6.
+
+THEOREM:
+  associativity_seq
+DEPENDS:
+  1 0 3
+PROOF:
+  Introduce ev A state B f g h H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data1.
+     RenameE x2 to a.
+     RenameE x3 to status1.
+     Reduce NF All (  ).
+     SpecializeE H3 with ev.
+     SpecializeE H3 with (TUPLE data1 a status1).
+     Apply H3 to H1.
+     Apply H4 to H2.
+     Cases {f @ ev (TUPLE data1 a status1)}.
+     1. ReduceH NF All in H5 (  ).
+        Definedness.
+     2. Reduce NF All (  ).
+        Reflexive.
+
+THEOREM:
+  first_extension
+DEPENDS:
+  1 0 15 13 5 16 8
+PROOF:
+  Introduce ev state f H1 H2.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x3 to status.
+     Rewrite -> All "decompose_evalEState" in H2.
+     Split Deep H2.
+     Cases x2.
+     1. ReduceH NF All in H3 (  ).
+        Definedness.
+     2. Discard 0 0 1 H3.
+        RenameE x1 to a.
+        RenameE x2 to b.
+        Reduce NF All (  ).
+        Reflexive.
+
+THEOREM:
+  first_preserves_seq
+DEPENDS:
+  0 1 12 13 3
+PROOF:
+  Introduce ev A D state B f g H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data1.
+     RenameE x3 to status1.
+     Rewrite -> All "decompose_evalEState" in H2.
+     Split Deep H2.
+     Cases x2.
+     1. ReduceH NF All in H5 (  ).
+        Definedness.
+     2. RenameE x1 to a.
+        RenameE x2 to d.
+        Rewrite -> All "decompose_evalTuple" in H5.
+        Split Shallow H5.
+        Assume (= (@ 0 evalEState B {f @ ev (TUPLE data1 a status1)}) (BOOL True)).
+        1. Reduce NF All (  ).
+           Cases {f @ ev (TUPLE data1 a status1)}.
+           1. ReduceH NF All in H9 (  ).
+              Definedness.
+           2. Unshare True 1 _x All.
+              Unshare True 1 _x All.
+              Unshare True 1 _x All.
+              Reduce NF All (  ).
+              Reflexive.
+        2. Apply H3.
+           Split Shallow.
+           1. Exact H1.
+           2. Rewrite -> All "decompose_evalEState".
+              Split Deep.
+              1. Exact H4.
+              2. Exact H7.
+              3. Exact H6.
+
+THEOREM:
+  first_swap
+DEPENDS:
+  1 0 15 3 13 5 16 8
+PROOF:
+  Introduce ev A C state B f g H1 H2.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. Cases x2.
+     1. Rewrite -> All "decompose_evalEState" in H2.
+        Split Deep H2.
+        ReduceH NF All in H3 (  ).
+        Definedness.
+     2. Reduce NF All (  ).
+        Reflexive.
+
+THEOREM:
+  fst_eliminates_first
+DEPENDS:
+  0 1 12 3 13 5 14
+PROOF:
+  Introduce ev A C state B f H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x3 to status.
+     Rewrite -> All "decompose_evalEState" in H2.
+     Split Deep H2.
+     Cases x2.
+     1. ReduceH NF All in H5 (  ).
+        Definedness.
+     2. RenameE x1 to a.
+        RenameE x2 to c.
+        UncurryH in H5.
+        Rewrite -> All "decompose_evalTuple" in H5.
+        Split Shallow H5.
+        Reduce NF All (  ).
+        Assume (= (@ 0 evalEState B {f @ ev (TUPLE data a status)}) (BOOL True)).
+        1. Cases {f @ ev (TUPLE data a status)}.
+           1. ReduceH NF All in H9 (  ).
+              Definedness.
+           2. Unshare True 1 _x All.
+              Reduce NF All (  ).
+              Reflexive.
+        2. Apply H3.
+           Split Shallow.
+           1. Exact H1.
+           2. Rewrite -> All "decompose_evalEState".
+              Split Deep.
+              1. Exact H4.
+              2. Exact H7.
+              3. Exact H6.
+
+THEOREM:
+  left_association
+DEPENDS:
+  0 1 2 3 4 5 6
+PROOF:
+  Introduce ev A C D state B f H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x3 to status.
+     Rewrite -> All "decompose_evalEState" in H2.
+     Split Deep H2.
+     Cases x2.
+     1. ReduceH NF All in H5 (  ).
+        Definedness.
+     2. Cases x1.
+        1. ReduceH NF All in H5 (  ).
+           Definedness.
+        2. RenameE x1 to a.
+           ReduceH NF All in H5 (  ).
+           Reduce NF All (  ).
+           Assume (= (@ 0 evalEState B {f @ ev (TUPLE data a status)}) (BOOL True)).
+           1. Cases {f @ ev (TUPLE data a status)}.
+              1. ReduceH NF All in H7 (  ).
+                 Definedness.
+              2. Unshare True 2 _x All.
+                 Unshare True 1 _x All.
+                 Unshare True 1 _x All.
+                 Reduce NF All (  ).
+                 Reflexive.
+           2. Apply H3.
+              Split Shallow.
+              1. Exact H1.
+              2. Rewrite -> All "decompose_evalEState".
+                 Split Deep.
+                 1. Exact H4.
+                 2. Exact H5.
+                 3. Exact H6.
+        3. Reduce NF All (  ).
+           Reflexive.
+     3. Reduce NF All (  ).
+        Reflexive.
+
+THEOREM:
+  left_exchange
+DEPENDS:
+  1 0 3 4 5 11 8
+PROOF:
+  Introduce ev A state f g H1 H2.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. Cases x2.
+     1. Reduce NF All (  ).
+        Reflexive.
+     2. Reduce NF All (  ).
+        Reflexive.
+     3. Reduce NF All (  ).
+        Reflexive.
+
+THEOREM:
+  left_extension
+DEPENDS:
+  1 0 10 4 5 11 8
+PROOF:
+  Introduce ev state f H1 H2.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x3 to status.
+     Rewrite -> All "decompose_evalEState" in H2.
+     Split Deep H2.
+     Cases x2.
+     1. ReduceH NF All in H3 (  ).
+        Definedness.
+     2. Reduce NF All (  ).
+        Reflexive.
+     3. Reduce NF All (  ).
+        Reflexive.
+
+THEOREM:
+  left_functor
+DEPENDS:
+  0 1 2 4 3
+PROOF:
+  Introduce ev A C state B f g H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x3 to status.
+     Rewrite -> All "decompose_evalEState" in H2.
+     Split Deep H2.
+     Cases x2.
+     1. ReduceH NF All in H5 (  ).
+        Definedness.
+     2. UncurryH in H5.
+        ReduceH NF All in H5 (  ).
+        RenameE x1 to a.
+        Reduce NF All (  ).
+        Assume (= (@ 0 evalEState B {f @ ev (TUPLE data a status)}) (BOOL True)).
+        1. Cases {f @ ev (TUPLE data a status)}.
+           1. ReduceH NF All in H7 (  ).
+              Definedness.
+           2. Unshare True 1 _x All.
+              Unshare True 1 _x All.
+              Unshare True 1 _x All.
+              Reduce NF All (  ).
+              Reflexive.
+        2. Apply H3.
+           Split Shallow.
+           1. Exact H1.
+           2. Rewrite -> All "decompose_evalEState".
+              Split Deep.
+              1. Exact H4.
+              2. Exact H5.
+              3. Exact H6.
+     3. RenameE x1 to c.
+        ReduceH NF All in H5 (  ).
+        Reduce NF All (  ).
+        Reflexive.
+
+THEOREM:
+  left_left_unit
+DEPENDS:
+  0 1 3 5 7 4
+PROOF:
+  Introduce ev A state B f H1 H2 H3.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x3 to status.
+     RenameE x2 to a.
+     Reduce NF All (  ).
+     Assume (= (@ 0 evalEState B {f @ ev (TUPLE data a status)}) (BOOL True)).
+     1. Cases {f @ ev (TUPLE data a status)}.
+        1. ReduceH NF All in H4 (  ).
+           Definedness.
+        2. Unshare True 1 _x All.
+           Reduce NF All (  ).
+           Reflexive.
+     2. Apply H3.
+        Split Shallow.
+        1. Exact H1.
+        2. Exact H2.
+
+THEOREM:
+  left_unit
+DEPENDS:
+  1 0 3 5 8
+PROOF:
+  Introduce ev A state f H1 H2.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. RenameE x1 to data.
+     RenameE x2 to a.
+     RenameE x3 to status.
+     Reduce NF All (  ).
+     Reflexive.
+
+THEOREM:
+  o_preserves_seq
+DEPENDS:
+  1 0 5 9 3
+PROOF:
+  Introduce ev A state g f H1 H2.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     Reflexive.
+
+THEOREM:
+  right_unit
+DEPENDS:
+  1 0 3 5 8
+PROOF:
+  Introduce ev A state f H1 H2.
+  Cases state.
+  1. ReduceH NF All in H2 (  ).
+     Definedness.
+  2. Reduce NF All (  ).
+     Cases {f @ ev (TUPLE x1 x2 x3)}.
+     1. Reduce NF All (  ).
+        Reflexive.
+     2. Reduce NF All (  ).
+        Reflexive.
+
+

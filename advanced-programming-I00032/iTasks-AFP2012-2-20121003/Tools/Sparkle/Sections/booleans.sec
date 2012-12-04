@@ -1,0 +1,195 @@
+SECTION DEPENDENCIES:
+  SYMBOL ||                       :: "!Bool Bool -> Bool"
+  SYMBOL &&                       :: "!Bool Bool -> Bool"
+  SYMBOL not                      :: "!Bool -> Bool"
+
+SECTION DEFINES:
+  THEOREM &&_x_True                : (All x (= (@ 1 && x (BOOL True)) x))
+  THEOREM associative_&&           : (All a (All b (All c (= (@ 1 && (@ 1 && a b) c) (@ 1 && a (@ 1 && b c))))))
+  THEOREM associative_||           : (All a (All b (All c (= (@ 0 || (@ 0 || a b) c) (@ 0 || a (@ 0 || b c))))))
+  THEOREM move_not                 : (All b (All c {(= (@ 2 not b) c) <-> (= b (@ 2 not c))}))
+  THEOREM not_not                  : (All b (= (@ 2 not (@ 2 not b)) b))
+  THEOREM split_&&                 : (All b (All c {(= (@ 1 && b c) (BOOL True)) <-> {(= b (BOOL True)) /\ (= c (BOOL True))}}))
+  THEOREM split_||                 : (All a (All b {~(= a BOTTOM) -> {(= (@ 0 || a b) (BOOL True)) <-> {(= a (BOOL True)) \/ (= b (BOOL True))}}}))
+
+THEOREM:
+  &&_x_True
+DEPENDS:
+  1
+PROOF:
+  Introduce x.
+  Cases x.
+  1. Reduce NF All (  ).
+     Reflexive.
+  2. Reduce NF All (  ).
+     Reflexive.
+  3. Reduce NF All (  ).
+     Reflexive.
+
+THEOREM 0-0-95-0:
+  associative_&&
+DEPENDS:
+  1
+PROOF:
+  Introduce a b c.
+  Cases a.
+  1. Reduce+ NF All (  ).
+     Reflexive.
+  2. Reduce+ NF All (  ).
+     Reflexive.
+  3. Reduce+ NF All (  ).
+     Reflexive.
+
+THEOREM 0-0-95-0:
+  associative_||
+DEPENDS:
+  0
+PROOF:
+  Introduce a b c.
+  Cases a.
+  1. Reduce+ NF All (  ).
+     Reflexive.
+  2. Reduce+ NF All (  ).
+     Reflexive.
+  3. Reduce+ NF All (  ).
+     Reflexive.
+
+THEOREM:
+  move_not
+DEPENDS:
+  2
+PROOF:
+  Introduce b c.
+  Cases b.
+  1. Cases c.
+     1. Reduce+ NF All (  ).
+        Reflexive.
+     2. Reduce+ NF All (  ).
+        SplitIff.
+        1. Introduce H1.
+           Definedness.
+        2. Introduce H1.
+           Definedness.
+     3. Reduce+ NF All (  ).
+        SplitIff.
+        1. Introduce H1.
+           Definedness.
+        2. Introduce H1.
+           Definedness.
+  2. Cases c.
+     1. Reduce+ NF All (  ).
+        SplitIff.
+        1. Introduce H1.
+           Definedness.
+        2. Introduce H1.
+           Definedness.
+     2. Reduce+ NF All (  ).
+        SplitIff.
+        1. Introduce H1.
+           AbsurdEqualityH H1.
+        2. Introduce H1.
+           AbsurdEqualityH H1.
+     3. Reduce+ NF All (  ).
+        SplitIff.
+        1. Reflexive.
+        2. Reflexive.
+  3. Cases c.
+     1. Reduce+ NF All (  ).
+        SplitIff.
+        1. Introduce H1.
+           Definedness.
+        2. Introduce H1.
+           Definedness.
+     2. Reduce+ NF All (  ).
+        SplitIff.
+        1. Reflexive.
+        2. Reflexive.
+     3. Reduce+ NF All (  ).
+        SplitIff.
+        1. Introduce H1.
+           AbsurdEqualityH H1.
+        2. Introduce H1.
+           AbsurdEqualityH H1.
+
+THEOREM:
+  not_not
+DEPENDS:
+  2
+PROOF:
+  Introduce b.
+  Cases b.
+  1. Reduce+ NF All (  ).
+     Reflexive.
+  2. Reduce+ NF All (  ).
+     Reflexive.
+  3. Reduce+ NF All (  ).
+     Reflexive.
+
+THEOREM 0-0-90-0:
+  split_&&
+DEPENDS:
+  1
+PROOF:
+  Introduce b c.
+  Cases b.
+  1. Reduce+ NF All (  ).
+     SplitIff.
+     1. Introduce H1.
+        Definedness.
+     2. Introduce H1.
+        Definedness.
+  2. Cases c.
+     1. Reduce+ NF All (  ).
+        SplitIff.
+        1. Introduce H1.
+           Definedness.
+        2. Introduce H1.
+           Split Shallow H1.
+           Definedness.
+     2. Reduce+ NF All (  ).
+        SplitIff.
+        1. Introduce H1.
+           Split Shallow.
+           1. Reflexive.
+           2. Reflexive.
+        2. Reflexive.
+     3. Reduce+ NF All (  ).
+        SplitIff.
+        1. Introduce H1.
+           AbsurdEqualityH H1.
+        2. Introduce H1.
+           Split Shallow H1.
+           AbsurdEqualityH H2.
+  3. Reduce+ NF All (  ).
+     SplitIff.
+     1. Introduce H1.
+        AbsurdEqualityH H1.
+     2. Introduce H1.
+        Split Shallow H1.
+        AbsurdEqualityH H1.
+
+THEOREM:
+  split_||
+DEPENDS:
+  0
+PROOF:
+  Introduce a b H1.
+  Cases a.
+  1. Definedness.
+  2. Reduce NF All (  ).
+     SplitIff.
+     1. Introduce H2.
+        Case Shallow 1.
+        Reflexive.
+     2. Reflexive.
+  3. Reduce NF All (  ).
+     SplitIff.
+     1. Introduce H2.
+        Case Shallow 2.
+        Exact H2.
+     2. Introduce H2.
+        Case Deep H2.
+        1. AbsurdEqualityH H2.
+        2. Exact H2.
+
+

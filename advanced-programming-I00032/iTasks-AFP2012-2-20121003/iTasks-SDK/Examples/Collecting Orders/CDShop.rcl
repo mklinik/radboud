@@ -1,0 +1,71 @@
+relation module CDShop
+
+// Customers
+$$ Customer
+@@ CustomerName
+## Customer has CustomerName
+
+// Suppliers
+$$ Supplier
+@@ SupplierName
+## Supplier has SupplierName
+
+// CD's 
+$$ CD
+@@ CDName
+@@ Price
+@@ Artist
+## CD has CDName
+## CD is of Artist
+## CD has Price
+## CD can be supplied by Supplier
+
+// Requests from customers
+$$ Request
+@@ RequestedQuantity
+## Customer makes Request on Date
+## Request contains RequestedQuantity copies of CD 
+
+// Quotes for customers
+$$ Quote
+@@ QuotePrice
+@@ QuoteQuantity
+@@ Date
+## Quote is given in response to Request
+## Quote includes QuoteQuantity copies of CD
+## Quote has QuotePrice 					
+## Quote is opened on Date
+
+$$ RejectedQuote [Quote]
+## RejectedQuote is rejected on Date
+
+$$ AcceptedQuote [Quote]
+## AcceptedQuote is accepted on Date
+## invoice is sent for AcceptedQuote
+## products are shipped for AcceptedQuote
+
+// Orders for suppliers
+$$ Order
+## Order is placed at Supplier
+## Order contains OrderItem
+## Order is sent to supplier on Date
+## Order is shipped on Date
+## invoice was received for Order on Date
+
+$$ OrderItem
+@@ OrderedQuantity
+## OrderItem = OrderedQuantity copies of CD are intended for Quote 
+## OrderItem is deliverable
+
+// Payments
+$$ SupplierPayment
+@@ OrderPrice
+## SupplierPayment = OrderPrice is paid to Supplier for Order
+## SupplierPayment is sent on Date
+## SupplierPayment is received on Date
+
+$$ CustomerPayment
+@@ FinalQuotePrice
+## CustomerPayment = Customer pays FinalQuotePrice for Quote
+## CustomerPayment is sent on Date
+## CustomerPayment is received on Date

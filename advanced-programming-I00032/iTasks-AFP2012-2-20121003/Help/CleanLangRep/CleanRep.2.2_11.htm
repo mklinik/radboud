@@ -1,0 +1,1993 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Clean 2.2 Ref Man</title>
+<link rel="stylesheet" href="CleanRep.2.2.css" type="text/css">
+</head>
+
+<body lang=NL link=blue vlink=purple>
+<div class=WordSection12>
+
+<p class=Heading1Chapter><span style='position:absolute;z-index:251676160;
+left:0px;margin-left:38px;margin-top:19px;width:200px;height:97px'><img
+width=200 height=97 src="CleanRep.2.2_files/image001.jpg"></span><a
+name="_Toc311798092"></a><span lang=EN-US style='font-size:12.0pt;font-family:
+"New York","serif"'><br>
+</span><span lang=EN-US>Chapter 9<a name="_Uniqueness_Typing"></a><br>
+Uniqueness Typ</span><span lang=EN-US>ing</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr style='page-break-inside:avoid'>
+  <td width="50%" valign=bottom style='width:50.32%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>9.1</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_9.1_Basic_Ideas">Basic Ideas behind Uniqueness Typing</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>9.2</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_9.2_Attribute_Propagation">Attribute Propagation</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>9.3</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_9.3_Defining_New">Defining New Types with Uniqueness
+    Attributes</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>9.4</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_9.4_Uniqueness_and">Uniqueness and Sharing</a></span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+  <td width="49%" valign=bottom style='width:49.68%;padding:0cm 4.0pt 0cm 4.0pt'>
+  <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+   style='width:100.0%;background:#9999FF;border-collapse:collapse'>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>9.5</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_9.5_Combining_Uniqueness">Combining Uniqueness Typing
+    and Overloading</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>9.6</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_9.6_Higher-Order_Type">Higher-Order Type Definitions</a></span></p>
+    </td>
+   </tr>
+   <tr>
+    <td width="11%" valign=top style='width:11.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm'><span
+    lang=EN-US>9.7</span></p>
+    </td>
+    <td width="89%" valign=top style='width:89.0%;padding:0cm 5.4pt 0cm 5.4pt'>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US><a href="#_9.7_Destructive_Updates">Destructive Updates using
+    Uniqueness Typing</a></span></p>
+    <p class=introtable style='margin-left:0cm;text-indent:0cm;background:transparent'><span
+    lang=EN-US>&nbsp;</span></p>
+    </td>
+   </tr>
+  </table>
+  <p class=introtable></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>Although C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+is purely functional, operations with side-effects (I/O operations, for
+instance) are permitted. To achieve this without violating the semantics, the
+classical types are supplied with so cal­led uniqueness attributes. If an
+argument of a function is indicated as unique, it is guaranteed that at
+run-time the corresponding actual object is local, i.e. there are no other
+references to it. Clearly, a de­structive update of such a “unique object” can
+be performed safely.</span></p>
+
+<p class=par><span lang=EN-US>The uniqueness type system makes it possible to
+define di­rect interfaces with an operating sys­tem, a file system (updating
+per­sis­tent data), with GUI’s libra­ries, it allows to create ar­rays, records
+or user defined data struc­tures that can be updated de­structively. The time
+and space behavior of a functional pro­gram therefore greatly benefits from the
+unique­ness typ­ing.</span></p>
+
+<p class=par><span lang=EN-US>Uniqueness types are deduced automatically. Type
+attributes are poly­mor­p­hic: attribute variables and inequalities on these
+variables can be used to indicate relations between and restrictions on the
+corre­s­ponding concrete attribute values.</span></p>
+
+<p class=par><span lang=EN-US>Sometimes the inferred ty­pe attributes give some
+extra information on the run-time behavior of a function. The uniqueness type
+system is a transparent extension of classical typing that means that if one is
+not interested in the uniqueness information one can simply ignore it.</span></p>
+
+<p class=par><span lang=EN-US>Since the uniqueness typing is a rather complex
+matter we ex­plain this type system and the mo­tivation behind it in more
+detail. The first Section (<a href="#_4.5.1_Basic_Ideas">9.1</a>) explains the
+basic motivation for and ideas behind uni­queness typing. Section <a
+href="#_4.5.2_Attribute_Propagation">9.2</a> focuses on the so-called
+uniqueness propagation property of (algebraic) type constructors. Then we show how
+new data structures can be defined containing unique objects (<a
+href="#_4.5.3_Defining_New">Section 9.3</a>). Sharing may destroy locality
+properties of objects. In <a href="#_4.5.4_Uniqueness_and">Section 9.4</a> we
+describe the ef­fect of sharing on uniqueness types. In order to maintain
+referential transparency, it appears that func­tion ty­pes have to be treated
+specially. The last Section (<a href="#_4.5.5_Combining_Uniqueness">9.5</a>)
+describes the combination of unique­ness typing and overloading. Especially,
+the subsections on constructor classes and higher-oder type defini­tions are
+very complex: we suggest that the reader skips these sections at first
+instance. </span></p>
+
+<h2><a name="_Toc311798093"></a><a name="_Toc524343583"></a><a
+name="_4.5.1_Basic_Ideas"></a><a name="_9.1_Basic_Ideas"></a><span lang=EN-US>9.1    Basic
+Ideas behind Uniqueness Typing</span></h2>
+
+<p class=par><span lang=EN-US>The <i>uniqueness typing</i> is an extension of
+classical Milner/Mycroft typing. In the unique­ness type sys­tem <i>u­niqueness
+type attributes</i> </span><span
+lang=EN-US> are attached to the classical types. Uniqueness type at­tributes
+appear in the <i>type speci­fi­cations of func­tions</i> (<a
+href="#_4.5.4_Uniqueness_and">see 9.4</a>) but are also permitted in the
+definitions of <i>new data types </i>(<a href="#_4.5.3_Defining_New">see 9.3</a>).
+A classical type can be prefixed by one of the follo­w­ing unique­ness type at­tributes:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="99%"
+ style='width:99.22%;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>Type</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{BrackType}+</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[UniversalQuantVariables]
+  [Strict] [UnqTypeAttrib] SimpleType</span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UnqTypeAttrib</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>*</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// type
+  attribute “unique”</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UniqueTypeVariable</span><span
+  class=cleanb><span lang=EN-US>:</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// a type
+  attribute variable</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span></p>
+  </td>
+  <td width="39%" valign=top style='width:39.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>// an
+  anonymous type attribute variable</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>The basic idea behind uniqueness typing is the
+following. Suppose a function, say </span><span class=clean><span lang=EN-US>F</span></span><span
+lang=EN-US>, has a unique ar­gument (an argument with type *</span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US>, for some </span><span lang=EN-US style='font-size:10.0pt;
+font-family:Symbol'>s</span><span lang=EN-US>). This attribute imposes an ad­ditional
+re­striction on applications of</span><span class=clean><span lang=EN-US> F</span></span><span
+lang=EN-US>. </span></p>
+
+<p class=par><span lang=EN-US>It is <i>guaranteed</i> that </span><span
+class=clean><span lang=EN-US>F</span></span><span lang=EN-US> will have private
+(“unique”) access to this particular argument (see Barendsen and Smet­sers,
+1993; Plasmeijer and Van Eeke­len, 1993): the object will have a refer­ence
+count of 1</span><a href="CleanRep.2.2_17.htm#_ftn1" name="_ftnref1" title=""><span
+class=MsoFootnoteReference><sup><span lang=EN-US style='font-size:8.0pt;
+position:relative;top:0pt'>1</span></sup></span></a><span lang=EN-US> <i>at the
+moment </i>it is in­spected by the func­tion. It is important to know that
+there can be more than 1 reference to the ob­ject before this specific ac­cess
+takes place. If a uniquely typed argument is not used to construct the function
+re­sult it will be­come garbage (the reference has dropped to zero). Due to the
+fact that this analysis is performed statically the object can be garbage
+collected (<a href="CleanRep.2.2_3.htm#_Basic_Semantics">see Chapter 1</a>) at compile-time. It
+is harmless to reuse the space occupied by the argu­ment to create the func­tion
+re­sult. In other words: <i>it is allowed to up­date the unique ob­ject de­struc­tively
+without any conse­quences for referential transparency.</i></span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Example</span></b><span lang=EN-US>: the I/O
+library function </span><span lang=EN-US style='font-family:Courier'>fwritec</span><span
+lang=EN-US> is used to write a character to a file yielding a new file as
+result. In gen­eral it is se­mantically not allowed to overwrite the argument
+file with the given character to construct the re­sult­ing file. Howe­ver, by
+demanding the argument file to be unique by specifying</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>fwritec:: Char *File -&gt; *File</span></p>
+
+<p class=par><span lang=EN-US>It is guaranteed by the type system that </span><span
+class=clean><span lang=EN-US>fwritec</span></span><span lang=EN-US> has private
+access to the file such that overwriting the file can be done without violating
+the functional semantics of the program. The result­ing file is unique as well
+and can therefore be passed as continuation to another call of e.g. </span><span
+class=clean><span lang=EN-US>fwritec</span></span><span lang=EN-US> to make
+further writ­ing possi­ble.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>WriteABC:: *File -&gt; *File</span></p>
+
+<p class=ex><span lang=EN-US>WriteABC file = fwritec 'c' (fwritec 'b' (fwritec
+'a' file))</span></p>
+
+<p class=par><span lang=EN-US>Observe that a unique file is passed in a single
+threaded way (as a kind of unique token) from one func­tion to another where
+each function can safely modify the file knowing that is has private ac­cess to
+that file. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>One can make these intermediate files more
+vissible by by writing the </span><span lang=EN-US style='font-family:Courier'>WriteABC</span><span
+lang=EN-US> as follows.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>WriteABC file = file3</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    file1 = fwritec 'a' file</span></p>
+
+<p class=ex><span lang=EN-US>    file2 = fwritec 'b' file1</span></p>
+
+<p class=ex><span lang=EN-US>    file3 = fwritec 'c' file2</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>or, alternatively (to avoid the explicit
+numbering of the files),</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>WriteABC file</span></p>
+
+<p class=ex><span lang=EN-US>    #   file = fwritec 'a' file</span></p>
+
+<p class=ex><span lang=EN-US>        file = fwritec 'b' file</span></p>
+
+<p class=ex><span lang=EN-US>    =   fwritec 'c' file</span></p>
+
+<p class=par><span lang=EN-US>The type system makes it possible to make no
+distinction between a C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> file and a physical file
+of the real world: file I/O can be treated as efficiently as in imperative lan­guages.
+The uniqueness typing prevents writing while other readers/writers are active.
+E.g. one can­not ap­ply </span><span lang=EN-US style='font-family:Courier'>fwritec</span><span
+lang=EN-US> to a file being used elsewhere.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>For instance, the following expression is <i>not</i>
+approved by the type system:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>(file, fwritec 'a' file)</span></p>
+
+<p class=nlop><span lang=EN-US style='font-size:12.0pt;font-family:"Times New Roman";
+color:#FFCC99'><img src="square_8.png" /></span><span style="margin-left:20px"></span><span
+lang=EN-US>Function arguments with no uniqueness attributes added to the
+classical type are considered as “non-unique”: there are no reference
+requirements for these arguments. The function is only al­lowed to have <i>read
+access</i> (as usual in a func­tional lan­guage) even if in some of the
+function appli­cations the actual ar­gu­ment ap­pears to have reference count
+1.</span></p>
+
+<p class=lopal><span lang=EN-US>&#x2005;</span></p>
+
+<p class=ex><span lang=EN-US>freadc:: File -&gt; (Char, File)</span></p>
+
+<p class=par><span lang=EN-US>The function </span><span lang=EN-US
+style='font-family:Courier'>freadc</span><span lang=EN-US> can be applied to
+both a unique as well as non-unique file. This is fine since the function only
+wants read ac­cess on the file. The type indicates that the result is always a
+non-unique file. Such a file can be passed for further reading, but not for
+further writing.</span></p>
+
+<p class=par><span lang=EN-US>To indicate that functions don’t change
+uniqueness properties of arguments, one can use <i>attribute variables</i>.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The simplest example is the identity functions
+that can be typed as follows:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>id:: u:a -&gt; u:a</span></p>
+
+<p class=ex><span lang=EN-US>id x = x</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Here </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> is an ordinary type variable, whereas </span><span lang=EN-US
+style='font-family:Courier'>u</span><span lang=EN-US> is an attribute variable.
+If </span><span class=clean><span lang=EN-US>id</span></span><span lang=EN-US>
+is applied to an unique object the result is also unique (in that case </span><span
+lang=EN-US style='font-family:Courier'>u</span><span lang=EN-US> is
+instantiated with the concrete attribute </span><span class=clean><span
+lang=EN-US>*</span></span><span lang=EN-US>). Of course, if </span><span
+class=clean><span lang=EN-US>id</span></span><span lang=EN-US> is applied to a
+non-unique object, the result remains non-unique. As with ordinary type
+variables, attribute variables should be instantiated uniformly.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>A more interesting example is the function </span><span
+lang=EN-US style='font-family:Courier'>freadc</span><span lang=EN-US> that is
+typed as</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>freadc:: u:File -&gt; u:(Char, u:File)</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Again </span><span lang=EN-US style='font-family:
+Courier'>freadc</span><span lang=EN-US> can be applied to both unique and
+non-unique files. In the first case the resulting file is also unique and can,
+for example, be used for further reading or writing. Moreover, observe that not
+only the resulting file is attributed, but also the tuple containing that file
+and the charac­ter that has been read. This is due to the so called <i>uniqueness
+propagation rule</i>; see below.</span></p>
+
+<p class=par><span lang=EN-US>To summarize, uniqueness typing makes it possible
+to update objects destructively within a purely functional lan­guage. For the
+development of real world applications (which manipulate files, windows,
+arrays, data­bases, states etc.) this is an indispensable property.</span></p>
+
+<h2><a name="_Toc311798094"></a><a name="_Toc524343584"></a><a
+name="_4.5.2_Attribute_Propagation"></a><a name="_9.2_Attribute_Propagation"></a><span
+lang=EN-US>9.2    Attribute Propagation</span></h2>
+
+<p class=par><span lang=EN-US>Having explained the general ideas of uniqueness
+typing, we can now focus on some details of this ty­ping system.</span></p>
+
+<p class=par><span lang=EN-US>If a unique object is stored in a data structure,
+the data structure itself becomes unique as well. This <i>uniqueness
+propagation rule</i> prevents that unique objects are shared indirectly via the
+data structure in which these objects are stored. To explain this form of
+hidden sharing, consider the following defini­tion of the function head</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>head:: [*a] -&gt; *a</span></p>
+
+<p class=ex><span lang=EN-US>head [hd:tl] = hd</span></p>
+
+<p class=par><span lang=EN-US>The pattern causes head to have access to the
+“deeper” arguments </span><span class=clean><span lang=EN-US>hd</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>tl</span></span><span
+lang=EN-US>. Note that head does not have any uniqueness requirements on its
+direct list argument. This means that in an application of head the list might
+be shared, as can be seen in the following function heads</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>heads list = (head list, head list)</span></p>
+
+<p class=par><span lang=EN-US>If one wants to formulate uniqueness requirements
+on, for instance, the </span><span class=clean><span lang=EN-US>hd</span></span><span
+lang=EN-US> argument of </span><span class=clean><span lang=EN-US>head</span></span><span
+lang=EN-US>, it is <i>not</i> sufficient to attribute the corresponding type
+variable </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> with </span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>; the surrounding list itself should also be­come unique. One can
+easily see that, without this additional requirement the </span><span
+class=clean><span lang=EN-US>heads</span></span><span lang=EN-US> example with
+type</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>heads:: [*a] -&gt; (*a,*a) </span></p>
+
+<p class=ex><span lang=EN-US>heads list = (head list, head list) </span></p>
+
+<p class=par><span lang=EN-US>would still be valid although it delivers the
+same object twice. By demanding that the surrounding list becomes unique as
+well, (so the type of </span><span class=clean><span lang=EN-US>head</span></span><span
+lang=EN-US> becomes </span><span class=clean><span lang=EN-US>head</span></span><span
+lang=EN-US>:: </span><span class=clean><span lang=EN-US>*[*a]</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>-&gt;</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>*a)</span></span><span
+lang=EN-US> the function </span><span class=clean><span lang=EN-US>heads</span></span><span
+lang=EN-US> is re­jected. In general one could say that uniqueness <i>propa­gates
+outwards.</i></span></p>
+
+<p class=par><span lang=EN-US>Some of the readers will have noticed that, by
+using attribute variables, one can assign a more general uniqueness type to
+head:</span></p>
+
+<p class=ex><span lang=EN-US>head:: u:[u:a] -&gt; u:a</span></p>
+
+<p class=par><span lang=EN-US>The above propagation rule imposes additional
+(implicit) restrictions on the attributes appearing in type specifications of
+functions.</span></p>
+
+<p class=par><span lang=EN-US>Another explicit way of indicating restrictions
+on attributes is by using <i>coercion statements.</i> These state­ments consist
+of attribute variable inequalities of the form </span><span class=clean><span
+lang=EN-US>u</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>&lt;=</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>v</span></span><span lang=EN-US>. The idea is that attribute
+substituti­ons are only allowed if the resulting attribute inequalities are
+valid, i.e. not resulting in an equality of the form</span></p>
+
+<p class=par><span lang=EN-US>‘non-unique &#8804; unique’.</span></p>
+
+<p class=par><span lang=EN-US>The use of coercion statements is illustrated by
+the next example in which the uniqueness type of the well-known append function
+is shown.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex>append:: v:[u:a] w:[u:a] -&gt; x:[u:a],     [v&lt;=u, w&lt;=u,
+x&lt;=u,w&lt;=x]</p>
+
+<p class=par><span lang=EN-US>The first three coercion statements express the
+uniqueness propagation for lists: if the elements </span><span class=clean><span
+lang=EN-US>a</span></span><span lang=EN-US> are unique (by choosing </span><span
+class=clean><span lang=EN-US>*</span></span><span lang=EN-US> for </span><span
+class=clean><span lang=EN-US>u</span></span><span lang=EN-US>) these statements
+force </span><span class=clean><span lang=EN-US>v</span></span><span
+lang=EN-US>,</span><span class=clean><span lang=EN-US>w</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>x</span></span><span
+lang=EN-US> to be instantiated with </span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US> also. (Note that </span><span class=clean><span lang=EN-US>u</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>&lt;=</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US> iff </span><span class=clean><span lang=EN-US>u</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>=</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>.</span><span class=clean><span lang=EN-US>)</span></span><span
+lang=EN-US> The statement </span><span class=clean><span lang=EN-US>w</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>&lt;=</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>x</span></span><span
+lang=EN-US> expresses that the spine uniqueness of </span><span class=clean><span
+lang=EN-US>append</span></span><span lang=EN-US>’s result depends only on the
+spine attribute </span><span class=clean><span lang=EN-US>w</span></span><span
+lang=EN-US> of the second argument.</span></p>
+
+<p class=par><span lang=EN-US>In C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> it is permitted to
+omit attribute variables and attribute inequalities that arise from propaga­tion
+properties; these will be added automatically by the type system. As a
+consequence, the following type for </span><span class=clean><span lang=EN-US>append</span></span><span
+lang=EN-US> is also valid.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>append:: [u:a] w:[u:a] -&gt; x:[u:a],       [w&lt;=x]</span></p>
+
+<p class=par><span lang=EN-US>Of course, it is always allowed to specify a more
+specific type (by instantiating type or attribute vari­a­bles). All types given
+below are valid types for </span><span class=clean><span lang=EN-US>append</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>append:: [u:a] x:[u:a] -&gt; x:[u:a],</span></p>
+
+<p class=ex><span lang=EN-US>append:: *[*Int] *[*Int] -&gt; *[*Int],</span></p>
+
+<p class=ex><span lang=EN-US>append:: [a] *[a] -&gt; *[a].</span></p>
+
+<p class=par><span lang=EN-US>To make types more readable, C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> offers the possibility to use <i>anonymous</i> attribute variables.
+These can be used as a shorthand for indicating attribute variables of which
+the actual names are not essential. This allows us to specify the type for </span><span
+class=clean><span lang=EN-US>append</span></span><span lang=EN-US> as follows.<i>
+</i></span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>append:: [.a] w:[.a] -&gt; x:[.a],      [w&lt;=x]</span></p>
+
+<p class=par><span lang=EN-US>The type system of C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+will substitute real attribute variables for the anonymous ones. Each dot gives
+rise to a new attribute variable except for the dots attached to type
+variables: type variables are at­tribu­ted uniformly in the sense that all
+occurrences of the same type variable will obtain the same at­tribute. In the
+above example this means that all dots are replaced by one and the same new
+attribute variable.</span></p>
+
+<h2><a name="_Toc311798095"></a><a name="_Toc524343585"></a><a
+name="_4.5.3_Defining_New"></a><a name="_9.3_Defining_New"></a><span
+lang=EN-US>9.3    Defining New Types with Uniqueness Attributes</span></h2>
+
+<p class=par><span lang=EN-US>Although one mostly uses uniqueness attributes in
+type specifications of functions, they are also al­lo­wed in the definition of
+new data types.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%"
+ style='width:100.0%;border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>AlgebraicTypeDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>::</span></span><span lang=EN-US>TypeLhs</span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>= </span></span><span lang=EN-US>ConstructorDef</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="13%" valign=top style='width:13.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="62%" valign=top style='width:62.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>{</span><span
+  class=cleanb><span lang=EN-US>|</span></span><span lang=EN-US>
+  ConstructorDef} </span><span class=clean><span lang=EN-US style='color:blue'>;</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ConstructorDef</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="13%" colspan=2 valign=top style='width:13.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US> [ExistentalQuantVariables]
+  </span><span class=clean><span lang=EN-US>ConstructorName</span></span><span
+  lang=EN-US> {BrackType}</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="13%" colspan=2 valign=top style='width:13.0%;background:#FFCC99;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[ExistentalQuantVariables]
+  (</span><span class=clean><span lang=EN-US>ConstructorName</span></span><span
+  lang=EN-US>) [Fix][Prec] {BrackType}</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeLhs</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[</span><span
+  class=cleanb><span lang=EN-US>*</span></span><span lang=EN-US>]TypeConstructor
+  {TypeVariable} </span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>TypeConstructor
+  </span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=clean><span
+  lang=EN-US>TypeName</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>ExistentalQuantVariables</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>E.</span></span><span lang=EN-US>{TypeVariable }+</span><span
+  class=cleanb><span lang=EN-US>:</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UniversalQuantVariables</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>A.</span></span><span lang=EN-US>{TypeVariable }+</span><span
+  class=cleanb><span lang=EN-US>:</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>BrackType</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>[UniversalQuantVariables]
+  [Strict] [UnqTypeAttrib] SimpleType</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UnqTypeAttrib</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>=</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>*</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>UniqueTypeVariable</span><span
+  class=cleanb><span lang=EN-US>:</span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width="24%" valign=top style='width:24.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>&nbsp;</span></p>
+  </td>
+  <td width="1%" valign=top style='width:1.0%;background:#FFCC99;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span lang=EN-US>|</span></p>
+  </td>
+  <td width="75%" valign=top style='width:75.0%;background:#FFCC99;padding:
+  0cm 5.4pt 0cm 5.4pt'>
+  <p class=syntaxb style='background:transparent'><span class=cleanb><span
+  lang=EN-US>.</span></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=par><span lang=EN-US>As can be inferred from the syntax, the
+attributes that are actually allowed in data type definitions are ‘</span><span
+class=clean><span lang=EN-US>*</span></span><span lang=EN-US>’ and ‘</span><span
+class=clean><span lang=EN-US>.</span></span><span lang=EN-US>’; attribute
+variables are not permitted. The (unique) </span><span class=clean><span
+lang=EN-US>*</span></span><span lang=EN-US> attribute can be used at any
+subtype whereas the (anonymous). attribute is restricted to non-variable
+positions.</span></p>
+
+<p class=par><span lang=EN-US>If no uniqueness attributes are specified, this
+does not mean that one can only build non-unique in­stances of such a data
+type. Attributes not explicitly specified by the programmer are added automati­cally
+by the type system. To explain this standard uniqueness attribution mechanism,
+first remember that the types of data constructors are not specified by the
+programmer but derived from their corre­s­ponding data type definition. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>For example, the (classical) definition of the </span><span
+class=clean><span lang=EN-US>List</span></span><span lang=EN-US> type</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: List a = Cons a (List a) | Nil</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>leads to the following types for its data
+constructors:</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Cons:: a (List a) -&gt; List a</span></p>
+
+<p class=ex><span lang=EN-US>Nil:: List a</span></p>
+
+<p class=par><span lang=EN-US>To be able to create unique instances of data
+types, the standard attribution of C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> will automati­cally
+derive ap­propriate uniqueness variants for the types of the corresponding data
+constructors. Such a uniqueness variant is obtained via a consistent
+attribution of all types and subtypes appearing in a data type defini­tion.
+Here, consistency means that such an attribution obeys the following rules
+(assume that we have a type definition for some type </span><span class=clean><span
+lang=EN-US>T</span></span><span lang=EN-US>).</span></p>
+
+<p class=nlopal style='text-indent:-18.0pt'><span lang=EN-US>1)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>Attributes that are explicitly specified are adopted.</span></p>
+
+<p class=nlopal style='text-indent:-18.0pt'><span lang=EN-US>2)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>Each (unattributed) type variable and each occurrence of </span><span
+lang=EN-US style='font-family:Courier'>T</span><span lang=EN-US> will receive
+an attribute variable. This is done in a uniform way: equal type variables will
+receive equal attributes, and all occurrence of </span><span lang=EN-US
+style='font-family:Courier'>T</span><span lang=EN-US> are also equally
+attributed.</span></p>
+
+<p class=nlopal style='text-indent:-18.0pt'><span lang=EN-US>3)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>Attribute variables are added at non-variable positions if they are
+required by the propagation pro­perties of the corresponding type constructor.
+The attribute variable that is chosen depends on the argument types of this
+constructor: the attribution scheme takes the attribute variable of first ar­gument
+appearing on a propagating position (see example below).</span></p>
+
+<p class=nlopal style='text-indent:-18.0pt'><span lang=EN-US>4)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>All occurrences of the. attribute are replaced by the attribute
+variable assigned to the occurrences of </span><span lang=EN-US
+style='font-family:Courier'>T</span><span lang=EN-US>.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of standard attribution for data
+constructors. For </span><span lang=EN-US style='font-family:Courier'>Cons</span><span
+lang=EN-US> the standard attribution leads to the type</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Cons:: u:a v:(List u:a) -&gt; v:List u:a,
+[v&lt;=u]</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The type of </span><span lang=EN-US
+style='font-family:Courier'>Nil</span><span lang=EN-US> becomes</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex>Nil:: v:List u:a, [v&lt;=u]</p>
+
+<p class=exb>&nbsp;</p>
+
+<p class=exth><span lang=EN-US>Consider the following Tree definition</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: Tree a     =    Node a [Tree a]</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The type of the data constructor </span><span
+lang=EN-US style='font-family:Courier'>Node</span><span lang=EN-US> is</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Node:: u:a v:[v:Tree u:a] -&gt; v:Tree u:a,
+[v&lt;=u]</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Another </span><span lang=EN-US
+style='font-family:Courier'>Tree</span><span lang=EN-US> variant.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>:: Tree *a    =    Node *a [Tree *a]</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>leading to </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Node:: *a *[*Tree *a] -&gt; *Tree *a</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Note that, due to propagation, all subtypes have
+become unique.</span></p>
+
+<p class=par><span lang=EN-US>Next, we will formalize the notion of uniqueness
+propagation. We say that an argument of a type con­structor, say </span><span
+class=clean><span lang=EN-US>T</span></span><span lang=EN-US>, is propagating
+if the corresponding type variable appears on a propagating position in one of
+the types used in the right-hand side of </span><span class=clean><span
+lang=EN-US>T</span></span><span lang=EN-US>’s definition. A propagating
+position is characterized by the fact that it is not surrounded by an arrow
+type or by a type constructor with non-propaga­t­ing arguments. Observe that
+the definition of propagation is cyclic: a general way to solve this problem is
+via a fixed-point construction.</span></p>
+
+<p class=par><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example of the propagation rule. Consider the
+(record) type definition for </span><span lang=EN-US style='font-family:Courier'>Object</span><span
+lang=EN-US>.</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Object a b::  {state:: a, fun:: b -&gt; a}</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>The argument </span><span lang=EN-US
+style='font-family:Courier'>a</span><span lang=EN-US> is propagating. Since </span><span
+lang=EN-US style='font-family:Courier'>b</span><span lang=EN-US> does not
+appear on a propagating position inside this definition, </span><span
+lang=EN-US style='font-family:Courier'>Object</span><span lang=EN-US> is not
+propagating in its second argument.</span></p>
+
+<h2><a name="_Toc311798096"></a><a name="_Toc524343586"></a><a
+name="_4.5.4_Uniqueness_and"></a><a name="_9.4_Uniqueness_and"></a><span
+lang=EN-US>9.4    Uniqueness and Sharing</span></h2>
+
+<p class=par><span lang=EN-US>The type inference system of C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> will derive uniqueness information <i>after</i> the classical Mil­ner/Mycroft
+ty­pes of func­tions have been inferred (<a href="CleanRep.2.2_7.htm#_4.3_Typing_Functions">see
+4.3</a>). As explained in <a href="#_4.5.1_Basic_Ideas">Section 9.1</a>, a
+function may require a <i>non-unique</i> object, a <i>unique</i> object or a <i>possi­bly
+unique</i> ob­ject. Uniqueness of the result of a func­tion will de­pend on the
+attributes of its arguments and how the result is constructed. Until now, we
+distinguished objects with reference count 1 from objects with a larger
+reference count: only the former might be unique (depending on the uniqueness
+type of the object itself). In practice, how­ever, one can be more liberal if
+one takes the evaluation order into account. The idea is that mul­tiple refer­ence
+to an (unique) object are harmless if one knows that only one of the references
+will be present at the moment it is accessed destructively. This has been used
+in the following function.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>AppendAorB:: *File -&gt; *File</span></p>
+
+<p class=ex><span lang=EN-US>AppendAorB file</span></p>
+
+<p class=ex><span lang=EN-US>|   fc == 'a' = fwritec 'a' file</span></p>
+
+<p class=ex><span lang=EN-US>              = fwritec 'b' file</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    (fc,nf)   = freadc file</span></p>
+
+<p class=par><span lang=EN-US>When the right-hand side of </span><span
+class=clean><span lang=EN-US>AppendAorB</span></span><span lang=EN-US> is evaluated,
+the guard is determined first (so access from </span><span class=clean><span
+lang=EN-US>freadc</span></span><span lang=EN-US> to </span><span class=clean><span
+lang=EN-US>file</span></span><span lang=EN-US> is not unique), and subsequently
+one of the alternatives is chosen and evaluated. De­pending on </span><span
+class=clean><span lang=EN-US>cond</span></span><span lang=EN-US>, either the
+reference from the first </span><span class=clean><span lang=EN-US>fwritec</span></span><span
+lang=EN-US> application to function </span><span class=clean><span lang=EN-US>file</span></span><span
+lang=EN-US> or that of the second application is left and therefore unique.</span></p>
+
+<p class=par><span lang=EN-US>For this reason, the uniqueness type system uses
+a kind of <i>shar­ing analysis</i></span><span
+lang=EN-US>. This sharing analy­sis is in­put for the uniqueness type system
+itself to check uniqueness type consis­tency (<a href="#_4.5.3_Defining_New">see
+9.3</a>). The analysis will label each <i>refer­ence</i> in the right-hand side
+of a function definition as <i>read-only</i> (if destructive access might be
+dangerous) or <i>write-permitted</i> (otherwise). Objects accessed via a
+read-only reference are al­ways non-unique. On the other hand, uniqueness of
+objects accessed via a reference labeled with <i>write-permitted</i> solely
+depends on the types of the objects themselves. </span></p>
+
+<p class=par><span lang=EN-US>Before describing the labeling mechanism of C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> we mention that the “lifetime” of references is de­termined on a
+syntactical basis. For this reason we classify references to the same
+expression in a func­tion definition (say for </span><span class=clean><span
+lang=EN-US>f</span></span><span lang=EN-US>) according to their estimated
+run-time use, as <i>alternative</i>, <i>observing</i> and <i>paral­lel</i>.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Two references are <i>alternative</i>
+if they belong to different alternatives of </span><span lang=EN-US
+style='font-family:Courier'>f</span><span lang=EN-US>. Note that alternatives
+are distinguished by patterns (including </span><span lang=EN-US
+style='font-family:Courier'>case</span><span lang=EN-US> expressions) or by
+guards.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;A reference </span><span lang=EN-US
+style='font-family:Courier'>r</span><span lang=EN-US> is <i>observing</i>
+w.r.t. a reference </span><span lang=EN-US style='font-family:Courier'>r</span><span
+lang=EN-US>’ if the expression containing </span><span lang=EN-US
+style='font-family:Courier'>r</span><span lang=EN-US>’ is either (1) guarded by
+an expression or (2) preceded by a strict let before expression containing </span><span
+lang=EN-US style='font-family:Courier'>r</span><span lang=EN-US>.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Otherwise, references are in <i>parallel</i>.</span></p>
+
+<p class=par><span lang=EN-US>The rules used by the sharing analysis to label
+each reference are the following.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;A reference, say </span><span
+lang=EN-US style='font-family:Courier'>r</span><span lang=EN-US>, to a certain
+object is labeled with read-only if there exist another reference, say </span><span
+lang=EN-US style='font-family:Courier'>r’</span><span lang=EN-US>, to the same
+object such that either </span><span lang=EN-US style='font-family:Courier'>r</span><span
+lang=EN-US> is observing w.r.t </span><span lang=EN-US style='font-family:Courier'>r’</span><span
+lang=EN-US> or </span><span lang=EN-US style='font-family:Courier'>r</span><span
+lang=EN-US> and </span><span lang=EN-US style='font-family:Courier'>r’</span><span
+lang=EN-US> are in parallel.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Multiple references to <i>cyclic
+structures</i> are always labeled as read-only.</span></p>
+
+<p class=lopal><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;All other references are labeled with
+write-permitted.</span></p>
+
+<p class=par><span lang=EN-US>Unfortunately, there is still a subtlety that has
+to be dealt with. Observing references belonging in a strict context do not
+always vanish totally after the expression containing the reference has been
+evalu­ated: further analysis appears to be necessary to ensure their
+disappearance. More concretely, suppose </span><span class=clean><span
+lang=EN-US>e[r]</span></span><span lang=EN-US> denotes the expression
+containing </span><span class=clean><span lang=EN-US>r</span></span><span
+lang=EN-US>. If the type of </span><span class=clean><span lang=EN-US>e[r]</span></span><span
+lang=EN-US> is a basic type then, after evaluation, </span><span class=clean><span
+lang=EN-US>e[r]</span></span><span lang=EN-US> will be reference-free. In
+particular, it does not contain the reference </span><span class=clean><span
+lang=EN-US>r</span></span><span lang=EN-US> any­more. However, If the type of </span><span
+class=clean><span lang=EN-US>e[r]</span></span><span lang=EN-US> is not a basic
+type it is assumed that, after evaluation, </span><span class=clean><span
+lang=EN-US>e[r]</span></span><span lang=EN-US> might still refer to </span><span
+class=clean><span lang=EN-US>r</span></span><span lang=EN-US>. But even in the
+latter case a further refinement is possible. The idea is, depending on </span><span
+class=clean><span lang=EN-US>e[r]</span></span><span lang=EN-US>, to correct
+the type of the object to which </span><span class=clean><span lang=EN-US>r</span></span><span
+lang=EN-US> refers partially in such way that only the parts of this object
+that are still shared lose their uniqueness.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Consider, for example, the following rule</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>f l =</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>#! </span></span><span
+lang=EN-US>x = hd (hd l)</span></p>
+
+<p class=ex><span lang=EN-US>= (x, l)</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Clearly, </span><span lang=EN-US
+style='font-family:Courier'>x</span><span lang=EN-US> and </span><span
+lang=EN-US style='font-family:Courier'>l</span><span lang=EN-US> share a common
+substructure; </span><span lang=EN-US style='font-family:Courier'>x</span><span
+lang=EN-US> is even part of </span><span lang=EN-US style='font-family:Courier'>l</span><span
+lang=EN-US>. But the whole “spine” of </span><span lang=EN-US style='font-family:
+Courier'>l</span><span lang=EN-US> (of type </span><span lang=EN-US
+style='font-family:Courier'>[[...]]</span><span lang=EN-US>) does not contain
+any new external references. Thus, if </span><span lang=EN-US style='font-family:
+Courier'>l</span><span lang=EN-US> was spine-unique originally, it re­mains
+spine unique in the result of </span><span lang=EN-US style='font-family:Courier'>f</span><span
+lang=EN-US>. Apparently, the access to </span><span lang=EN-US
+style='font-family:Courier'>l</span><span lang=EN-US> only affected part of </span><span
+lang=EN-US style='font-family:Courier'>l</span><span lang=EN-US>’s structure.
+More technically, the type of </span><span lang=EN-US style='font-family:Courier'>l</span><span
+lang=EN-US> itself is corrected to take the partial access on l into account.
+In the pre­vious example, </span><span lang=EN-US style='font-family:Courier'>x</span><span
+lang=EN-US>, regarded as a function on </span><span lang=EN-US
+style='font-family:Courier'>l</span><span lang=EN-US> has type </span><span
+lang=EN-US style='font-family:Courier'>[[a]]</span><span lang=EN-US> </span><span
+lang=EN-US style='font-family:Courier'>-&gt;</span><span lang=EN-US> </span><span
+lang=EN-US style='font-family:Courier'>a</span><span lang=EN-US>. In </span><span
+lang=EN-US style='font-family:Courier'>f</span><span lang=EN-US>’s definition
+the part of </span><span lang=EN-US style='font-family:Courier'>l</span><span
+lang=EN-US>’s type corresponding to the variable </span><span lang=EN-US
+style='font-family:Courier'>a</span><span lang=EN-US> is made non-unique. This
+is clearly reflected in the derived type for </span><span lang=EN-US
+style='font-family:Courier'>f</span><span lang=EN-US>, being</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>f:: u:[w:[a]] -&gt; (a,v:[x:[a]]), [w &lt;= x, u
+&lt;= v]</span></p>
+
+<p class=par><span lang=EN-US>In C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> this principle has
+been generalized: If the strict let expression </span><span class=clean><span
+lang=EN-US>e[r]</span></span><span lang=EN-US> regarded as a function on </span><span
+class=clean><span lang=EN-US>r</span></span><span lang=EN-US> has type</span></p>
+
+<p class=ex><span lang=EN-US>T (... a...) -&gt; a</span></p>
+
+<p class=par><span lang=EN-US>Then the a-part of the type of the object to
+which r refers becomes non-unique; the rest of the type re­mains unaffected. If
+the type of </span><span class=clean><span lang=EN-US>e[r]</span></span><span
+lang=EN-US> is not of the indicated form, </span><span class=clean><span
+lang=EN-US>r</span></span><span lang=EN-US> is not considered as an observing
+reference (w.r.t. some reference </span><span class=clean><span lang=EN-US>r’</span></span><span
+lang=EN-US>), but, instead, as in parallel with </span><span class=clean><span
+lang=EN-US>r’</span></span><span lang=EN-US>.</span></p>
+
+<h3><a name="_Toc311798097"></a><a name="_Toc524343587"><span lang=EN-US>9.4.1 Higher
+Order Uniqueness Typing</span></a></h3>
+
+<p class=par><span lang=EN-US>Higher-order functions give rise to partial
+(often called <i>Curried</i>) applications, i.e. applications in which the
+actual number of arguments is less than the arity of the corresponding symbol.
+If these partial ap­plications contain unique sub-expressions one has to be
+careful. </span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Consider, for example the following the function
+</span><span class=clean><span lang=EN-US>fwritec</span></span><span
+lang=EN-US> with type</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>fwritec:: *File Char -&gt; *File </span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>in the application</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>fwritec unifile</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>(assuming that </span><span class=clean><span
+lang=EN-US>unifile</span></span><span lang=EN-US> returns a unique file).
+Clearly, the type of this application is of the form </span><span class=clean><span
+lang=EN-US>o:(Char</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>-&gt;</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>*File)</span></span><span lang=EN-US>. The question is: what kind of
+attribute is </span><span class=clean><span lang=EN-US>o</span></span><span
+lang=EN-US>? Is it a variable, is it </span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>, or, is it not uni­que? Before making a decision, one should notice
+that it is dangerous to allow the above application to be shared. For example,
+if the expression </span><span class=clean><span lang=EN-US>fwritec</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>unifile</span></span><span
+lang=EN-US> is passed to a function</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>WriteAB write_fun = (write_fun 'a', write_fun 'b')</span></p>
+
+<p class=par><span lang=EN-US>Then the argument of </span><span class=clean><span
+lang=EN-US>fwritec</span></span><span lang=EN-US> is no longer unique at the
+moment one of the two write operations take place. Apparently, the </span><span
+class=clean><span lang=EN-US>fwritec</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>unifile</span></span><span lang=EN-US> expression
+is <i>essentially </i>unique: its reference count should never become greater
+than 1. To prevent such an essentially unique expression from being co­pied, C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> considers the </span><span class=clean><span lang=EN-US>-&gt;</span></span><span
+lang=EN-US> type constructor in combination with the </span><span class=clean><span
+lang=EN-US>*</span></span><span lang=EN-US> attribute as special: it is not
+permitted to discard its uniqueness. Now, the question about the attribute </span><span
+class=clean><span lang=EN-US>o</span></span><span lang=EN-US> can be answered:
+it is set to </span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>. If </span><span class=clean><span lang=EN-US>WriteAB</span></span><span
+lang=EN-US> is typed as follows</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>WriteAB:: (Char -&gt; u:File) -&gt; (u:File, u:File)</span></p>
+
+<p class=ex><span lang=EN-US>WriteAB write_fun = (write_fun 'a', write_fun 'b')</span></p>
+
+<p class=par><span lang=EN-US>the expression </span><span class=clean><span
+lang=EN-US>WriteAB</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>(fwritec</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>unifile)</span></span><span lang=EN-US style='font-size:10.0pt'> </span><span
+lang=EN-US>is rejected by the type system because it does not allow the ar­gument
+of type </span><span class=clean><span lang=EN-US>*(Char</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>-&gt;</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>*File)</span></span><span
+lang=EN-US style='font-size:7.0pt'> </span><span lang=EN-US>to be coerced to </span><span
+class=clean><span lang=EN-US>(Char</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>-&gt;</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>u:File)</span></span><span lang=EN-US
+style='font-size:10.0pt'>.</span><span lang=EN-US> One can easily see that it is
+im­possi­ble to type </span><span class=clean><span lang=EN-US>WriteAB</span></span><span
+lang=EN-US> in such a way that the expression becomes typable.</span></p>
+
+<p class=par><span lang=EN-US>To define data structures containing Curried
+applications it is often convenient to use the (anonymous). attribute. Example</span></p>
+
+<p class=ex><span lang=EN-US>:: Object a b = { state:: a, fun::.(b -&gt; a) }</span></p>
+
+<p class=ex><span lang=EN-US>new:: * Object *File Char</span></p>
+
+<p class=ex><span lang=EN-US>new = { state = unifile, fun = fwritec unifile }</span></p>
+
+<p class=par><span lang=EN-US>By adding an attribute variable to the function
+type in the definition of </span><span class=clean><span lang=EN-US>Object</span></span><span
+lang=EN-US>, it is possible to store unique functions in this data structure.
+This is shown by the function </span><span class=clean><span lang=EN-US>new</span></span><span
+lang=EN-US>. Since </span><span class=clean><span lang=EN-US>new</span></span><span
+lang=EN-US> contains an es­sen­tially unique expression it becomes essentially
+unique itself. So, </span><span class=clean><span lang=EN-US>new</span></span><span
+lang=EN-US> can never lose its uniqueness, and hence, it can only be used in a
+context in which a unique object is demanded.</span></p>
+
+<p class=par><span lang=EN-US>Determining the type of a Curried application of
+a function (or data constructor) is somewhat more involved if the type of that
+function contains attribute variables instead of concrete attributes. Mostly,
+these variables will result in additional coercion statements. as can be seen
+in the example below.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>Prepend:: u:[.a] [.a] -&gt; v:[.a],     [u&lt;=v]</span></p>
+
+<p class=ex><span lang=EN-US>Prepend a b = Append b a</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>PrependList:: u:[.a] -&gt; w:([.a] -&gt; v:[.a]),       [u&lt;=v,
+w&lt;=u]</span></p>
+
+<p class=ex><span lang=EN-US>PrependList a = Prepend a</span></p>
+
+<p class=par><span lang=EN-US>Some explanation is in place. The expression </span><span
+class=clean><span lang=EN-US>(PrependList</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>some_list)</span></span><span lang=EN-US> yields a
+function that, when applied to another list, say </span><span class=clean><span
+lang=EN-US>other_list</span></span><span lang=EN-US>, delivers a new list
+extended consisting of the concatenation of </span><span class=clean><span
+lang=EN-US>other_list</span></span><span lang=EN-US> and </span><span
+class=clean><span lang=EN-US>some_list</span></span><span lang=EN-US>. Let’s
+call this final result </span><span class=clean><span lang=EN-US>new_list</span></span><span
+lang=EN-US>. If </span><span class=clean><span lang=EN-US>new_list</span></span><span
+lang=EN-US> should be unique (i.e. </span><span class=clean><span lang=EN-US>v</span></span><span
+lang=EN-US> be­comes </span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>) then, because of the coercion statement </span><span class=clean><span
+lang=EN-US>u&lt;=v</span></span><span lang=EN-US> the attribute </span><span
+class=clean><span lang=EN-US>u</span></span><span lang=EN-US> also becomes </span><span
+class=clean><span lang=EN-US>*</span></span><span lang=EN-US>. But, if </span><span
+class=clean><span lang=EN-US>u</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>=</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>*</span></span><span lang=EN-US style='font-size:
+10.0pt'> </span><span lang=EN-US>then also </span><span class=clean><span
+lang=EN-US>w</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>=</span></span><span lang=EN-US style='font-size:7.0pt'> </span><span
+class=clean><span lang=EN-US>*</span></span><span lang=EN-US>, for, </span><span
+class=clean><span lang=EN-US>w&lt;=u</span></span><span lang=EN-US>. This
+implies that (arrow) type of the original expression </span><span class=clean><span
+lang=EN-US>(PrependList</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>some_list)</span></span><span lang=EN-US> becomes
+unique, and hence this expression cannot be shared.</span></p>
+
+<h3><a name="_Toc311798098"></a><a name="_Toc524343588"><span lang=EN-US>9.4.2 Uniqueness
+Type Coercions</span></a></h3>
+
+<p class=par><span lang=EN-US>As said before, offering a unique object to a
+function that requires a non-unique argument is safe (unless we are dealing
+with unique arrow types; see above). The technical tool to express this is via
+a co­ercion (subtype) relation based on the ordering</span></p>
+
+<p class=par><span lang=EN-US>‘unique’ &#8804; ‘non-unique’</span></p>
+
+<p class=par><span lang=EN-US>on attributes. Roughly, the validity of </span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US> &#8804; </span><span lang=EN-US style='font-size:10.0pt;font-family:
+Symbol'>s</span><span lang=EN-US>’ depends subtype-wise on the validity of </span><span
+class=clean><span lang=EN-US>u</span></span><span lang=EN-US> &#8804; </span><span
+class=clean><span lang=EN-US>u’</span></span><span lang=EN-US> with </span><span
+class=clean><span lang=EN-US>u</span></span><span lang=EN-US>,</span><span
+class=clean><span lang=EN-US>u</span></span><span lang=EN-US>’ at­tributes in </span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US>,</span><span lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US>’. One has, for example</span></p>
+
+<p class=par><span class=clean><span lang=EN-US>u:[v:[w:Int]]</span></span><span
+lang=EN-US> &#8804; </span><span class=clean><span lang=EN-US>u’:[v’:[w’:Int]]</span></span><span
+lang=EN-US> iff </span><span class=clean><span lang=EN-US>u</span></span><span
+lang=EN-US> &#8804; </span><span class=clean><span lang=EN-US>u’</span></span><span
+lang=EN-US>, </span><span class=clean><span lang=EN-US>v</span></span><span
+lang=EN-US> &#8804; </span><span class=clean><span lang=EN-US>v’</span></span><span
+lang=EN-US>, </span><span class=clean><span lang=EN-US>w</span></span><span
+lang=EN-US> &#8804; </span><span class=clean><span lang=EN-US>w’</span></span><span
+lang=EN-US>.</span></p>
+
+<p class=par><span lang=EN-US>However, a few refinements are necessary.
+Firstly, the uniqueness constraints expressed in terms of co­ercion statements
+(on attribute variables) have to be taken into account. Secondly, the coercion
+re­stric­tion on arrow types should be handled correctly. And thirdly, due to
+the so-called <i>contravariance</i> of </span><span class=clean><span
+lang=EN-US>-&gt;</span></span><span lang=EN-US> in its first argument we have
+that</span></p>
+
+<p class=par><span class=clean><span lang=EN-US>u:</span></span><span
+lang=EN-US>(</span><span lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>-&gt;</span></span><span
+lang=EN-US> </span><span lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US>’) &#8804; </span><span class=clean><span lang=EN-US>u:</span></span><span
+lang=EN-US>(</span><span lang=EN-US style='font-size:10.0pt;font-family:Symbol'>t</span><span
+lang=EN-US> -&gt; </span><span lang=EN-US style='font-size:10.0pt;font-family:
+Symbol'>t</span><span lang=EN-US>’) iff </span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'>t</span><span lang=EN-US> &#8804; </span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US>, </span><span lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US>’ &#8804; </span><span lang=EN-US style='font-size:10.0pt;
+font-family:Symbol'>t</span><span lang=EN-US>’</span></p>
+
+<p class=par><span lang=EN-US>Since </span><span class=clean><span lang=EN-US>-&gt;</span></span><span
+lang=EN-US> may appear in the definitions of algebraic type constructors, these
+constructors may inherit the co- and contravariant subtyping behavior with
+respect to their arguments. We can classify the ‘sign’ of the arguments of each
+type constructor as + (positive, covariant), - (negative, contravariant) or top
+(both positive and negative). In general this is done by analysing the
+(possible mutually recursive) alge­braic type definitions by a fixed-point
+construction, with basis <i>sign</i>(</span><span class=clean><span lang=EN-US>-</span></span><span
+lang=EN-US>&gt;) = (-,+).</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><b><span lang=EN-US>Example</span></b><span lang=EN-US>: </span><span
+lang=EN-US style='font-family:Courier'>a</span><span lang=EN-US> has sign </span><span
+lang=EN-US style='font-family:Courier'>T</span><span lang=EN-US>, </span><span
+lang=EN-US style='font-family:Courier'>b</span><span lang=EN-US> has sign </span><span
+lang=EN-US style='font-family:Courier'>+</span><span lang=EN-US> in</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::FunList a b = FunCons (a, a -&gt; b) (FunList a
+b)</span></p>
+
+<p class=ex><span lang=EN-US>              | FunNil</span></p>
+
+<p class=par><span lang=EN-US>This leads to the following coercion rules</span></p>
+
+<p class=nlopal style='text-indent:-18.0pt'><span lang=EN-US>5)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>Attributes of two corresponding type variables as well as of two corresponding
+arrow types must be equal.</span></p>
+
+<p class=nlopal style='text-indent:-18.0pt'><span lang=EN-US>6)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>The sign classification of each type constructor is obeyed. If, for
+instance, the sign of </span><span lang=EN-US style='font-size:10.0pt;
+font-family:Symbol'>T</span><span lang=EN-US>’s argument is negative, then</span></p>
+
+<p class=lopal align=center style='text-align:center'><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'>T</span><span lang=EN-US> </span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US> &#8804; </span><span lang=EN-US style='font-size:10.0pt;font-family:
+Symbol'>T</span><span lang=EN-US> </span><span lang=EN-US style='font-size:
+10.0pt;font-family:Symbol'>s</span><span lang=EN-US>’ iff </span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US>’ &#8804; </span><span lang=EN-US style='font-size:10.0pt;
+font-family:Symbol'>s</span></p>
+
+<p class=nlopal style='text-indent:-18.0pt'><span lang=EN-US>7)<span
+style='font:7.0pt "Times New Roman"'>&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;</span></span><span
+lang=EN-US>In all other cases, the validity of a coercion relation depends on
+the validity of </span><span lang=EN-US style='font-family:Courier'>u</span><span
+lang=EN-US> &#8804; </span><span lang=EN-US style='font-family:Courier'>u</span><span
+lang=EN-US>’, where </span><span lang=EN-US style='font-family:Courier'>u</span><span
+lang=EN-US>,</span><span lang=EN-US style='font-family:Courier'>u</span><span
+lang=EN-US>’ are attributes of the two corresponding subtypes.</span></p>
+
+<p class=par><span lang=EN-US>The presence of sharing inherently causes a
+(possibly unique) object to become non-unique, if it is ac­cessed via a
+read-only reference. In C</span><span lang=EN-US style='font-size:8.0pt;
+text-transform:uppercase'>lean</span><span lang=EN-US> this is achieved by a
+type correction operation that con­verts each unique type S to its smallest
+non-unique supertype, simply by making the outermost at­tribute of S
+non-unique. Note that this operation fails if S is a function type.</span></p>
+
+<h2><a name="_Toc311798099"></a><a name="_Toc524343589"></a><a
+name="_4.5.5_Combining_Uniqueness"></a><a name="_9.5_Combining_Uniqueness"></a><span
+lang=EN-US>9.5    Combining Uniqueness Typing and Overloading</span></h2>
+
+<p class=par><span lang=EN-US>An overloaded function actually stands for a
+collection of real functions. The types of these real functi­ons are obtained
+from the type of the overloaded function by substituting the corresponding
+instance type for the class variable. These instance types may contain
+uniqueness information, and, due to the propagation requirement, the
+above-mentioned substitution might give rise to uniqueness attributes
+overloaded type specification.</span></p>
+
+<p class=par><span lang=EN-US>Consider, for instance, the identity class</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> id a:: a -&gt; a</span></p>
+
+<p class=par><span lang=EN-US>If we want to define an instance of </span><span
+class=clean><span lang=EN-US>id</span></span><span lang=EN-US> for lists, say </span><span
+class=clean><span lang=EN-US>id L</span></span><span lang=EN-US>, which leaves
+uniqueness of the list elements in­tact, the (fully expanded) type of </span><span
+class=clean><span lang=EN-US>idL</span></span><span lang=EN-US> becomes</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> id L v:[u:a] -&gt; v:[u:a]</span></p>
+
+<p class=par><span lang=EN-US>However, as said before, the type specification
+of such an instance is not specified completely: it is deri­ved from the
+overloaded type in combination with the instance type (i.e. </span><span
+class=clean><span lang=EN-US>[...]</span></span><span lang=EN-US
+style='font-size:10.0pt'> </span><span lang=EN-US>in this particular ex­am­ple).</span></p>
+
+<p class=par><span lang=EN-US>In C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> we require that
+the type specification of an overloaded operator anticipates on attributes ari­sing
+from uniqueness propagation, that is, the uniqueness attribute of the class
+variable should be cho­sen in such a way that for any instance type this ‘class
+attribute’ does not conflict with the correspon­d­ing uniqueness attribute(s)
+in the fully expanded type of this instance. In the above example this means
+that the type of </span><span class=clean><span lang=EN-US>id</span></span><span
+lang=EN-US> becomes</span></p>
+
+<p class=exb><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> id a:: a -&gt; a</span></p>
+
+<p class=par><span lang=EN-US>Another possibility is </span></p>
+
+<p class=exb><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> id a:: *a -&gt; *a</span></p>
+
+<p class=par><span lang=EN-US>However, the latter version of </span><span
+class=clean><span lang=EN-US>id</span></span><span lang=EN-US> will be more
+restrictive in its use, since it will always require that its argument is
+unique.</span></p>
+
+<h3><a name="_Toc311798100"></a><a name="_Toc524343590"><span lang=EN-US>9.5.1 Constructor
+Classes</span></a></h3>
+
+<p class=par><span lang=EN-US>The combination of uniqueness typing and
+constructor classes (with their higher-order class variables) introduces
+another difficulty. Consider, for example, the overloaded map function.</span></p>
+
+<p class=exb><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> map m:: (a -&gt; b) (m a) -&gt; m b</span></p>
+
+<p class=par><span lang=EN-US>Suppose we would add (distinct) attribute
+variables to the type variables </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> and </span><span class=clean><span lang=EN-US>b</span></span><span
+lang=EN-US> (to allow ‘unique in­stances’ of </span><span class=clean><span
+lang=EN-US>map</span></span><span lang=EN-US>)</span></p>
+
+<p class=exb><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> map m:: (.a -&gt;.b) (m.a) -&gt; m.b</span></p>
+
+<p class=par><span lang=EN-US>The question that arises is: Which attributes
+should be added to the two applications of the class va­ri­able </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US>? Clearly, this
+depends on the actual instance type filled in for </span><span class=clean><span
+lang=EN-US>m</span></span><span lang=EN-US>. E.g., if </span><span class=clean><span
+lang=EN-US>m</span></span><span lang=EN-US> is instantiated with a propagating
+type constructor (like </span><span class=clean><span lang=EN-US>[]</span></span><span
+lang=EN-US>), the attributes of the applications of </span><span class=clean><span
+lang=EN-US>m</span></span><span lang=EN-US> are either attribute vari­a­bles or
+the concrete attribute ‘unique’. Otherwise, one can choose anything.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>Example</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> map []</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    map f l = [ f x // x &lt;- l ]</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::  T a = C (Int -&gt; a)</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> map T</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=PT-BR>    map f (C g) = C (f o g)</span></p>
+
+<p class=ex><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=exth><span lang=EN-US>In this example, the respective expanded types
+of the instances are</span></p>
+
+<p class=ex><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex>map:: (u:a -&gt; v:b) w:[u:a] -&gt; x:[v:b], w &lt;= u, x &lt;= v</p>
+
+<p class=ex><span lang=EN-US>map:: (u:a -&gt; v:b) (T u:a) -&gt; T v:b</span></p>
+
+<p class=par><span lang=EN-US>The type system of C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+requires that a possible propagation attribute is explicitly indicated in the
+type specification of the overloaded function. In order to obtain versions of </span><span
+class=clean><span lang=EN-US>map</span></span><span lang=EN-US> producing spine
+uni­que data structures, its overloaded type should be specified as follows:</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> map m:: (.a -&gt;.b).(m.a) -&gt;.(m.b)</span></p>
+
+<p class=par><span lang=EN-US>This type will provide that for an application
+like</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>map inc [1,2,3] </span></p>
+
+<p class=par><span lang=EN-US>indeed yields a spine unique list.</span></p>
+
+<p class=par><span lang=EN-US>Observe that if you would omit the (anonymous)
+attribute variable of the second argument, the input data structure cannot
+contain unique data on propagating positions, e.g. one could not use such a ver­sion
+of </span><span class=clean><span lang=EN-US>map</span></span><span lang=EN-US>
+for mapping a destructive write operator on a list of unique files.</span></p>
+
+<p class=par><span lang=EN-US>In fact, the propagation rule is used to
+translate uniqueness properties of objects into uniqueness pro­p­erties of the
+data structures in which these objects are stored. As said before, in some
+cases the actual data structures are unknown.</span></p>
+
+<p class=par><span lang=EN-US>Consider the following function</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>DoubleMap f l = (map f l, map f l) </span></p>
+
+<p class=par><span lang=EN-US>The type of this function is something like</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>DoubleMap:: (.a -&gt;.b) (m.a) -&gt;
+(.(m.b),.(m.b))</span></p>
+
+<p class=par><span lang=EN-US>Clearly, </span><span class=clean><span
+lang=EN-US>l</span></span><span lang=EN-US> is duplicated. However, this does
+not necessarily mean that </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> cannot be unique anymore. If, for instance, </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US> is instantiated
+with a non-propagating type constructor (like </span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'>T</span><span lang=EN-US
+style='font-size:10.0pt'> </span><span lang=EN-US>as defined on the pre­vi­ous
+page) then uniqueness of a is still permitted. On the other hand, if </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US> is instantiated
+with a propa­gat­ing type constructor, a unique instantiation of a should be
+disapproved. In C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US>, the type system ‘remembers’ sharing of
+objects (like </span><span class=clean><span lang=EN-US>l</span></span><span
+lang=EN-US> in the above example) by making the corresponding type at­tri­bute
+non-unique. Thus, the given type for </span><span class=clean><span lang=EN-US>DoubleMap</span></span><span
+lang=EN-US> is exactly the type inferred by C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>’s
+type sys­tem. If one tries to instantiate </span><span class=clean><span
+lang=EN-US>m</span></span><span lang=EN-US> with a propagating type
+constructor, and, at the same type, </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> with some unique type, this will fail.</span></p>
+
+<p class=par><span lang=EN-US>The presence of higher-order class variables, not
+only influences propagation properties of types, but also the coercion relation
+between types. These type coercions depend on the sign classification of type
+constructors. The problem with higher-order polymorphism is that in some cases
+the actual type con­structors substituted for the higher order type variables
+are unknown, and therefore one cannot decide whether coercions in which
+higher-order type variable are involved, are valid.</span></p>
+
+<p class=par><span lang=EN-US>Consider the functions</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>double x = (x,x)</span></p>
+
+<p class=ex><span lang=EN-US>dm f l = double (map f l)</span></p>
+
+<p class=par><span lang=EN-US>Here, </span><span class=clean><span lang=EN-US>map</span></span><span
+lang=EN-US>’s result (of type.</span><span class=clean><span lang=EN-US>(m.a)</span></span><span
+lang=EN-US>) is coerced to the non-unique supertype </span><span class=clean><span
+lang=EN-US>(m.a).</span></span><span lang=EN-US> However, this is only allowed
+if </span><span class=clean><span lang=EN-US>m</span></span><span lang=EN-US>
+is instantiated with type constructors that have no coercion restrictions.
+E.g., if one tries to substitute </span><span class=clean><span lang=EN-US>*WriteFun</span></span><span
+lang=EN-US> for </span><span class=clean><span lang=EN-US>m</span></span><span
+lang=EN-US>, where</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>WriteFun a = C.(a -&gt; *File)</span></p>
+
+<p class=par><span lang=EN-US>this should fail, for, </span><span class=clean><span
+lang=EN-US>*WriteFun</span></span><span lang=EN-US> is <i>essentially</i>
+unique. The to solve this problem is to restrict coercion properties of type
+variable applications </span><span class=clean><span lang=EN-US>(m</span></span><span
+lang=EN-US> </span><span lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+class=clean><span lang=EN-US>)</span></span><span lang=EN-US> to</span></p>
+
+<p class=par><span class=clean><span lang=EN-US>u</span></span><span
+lang=EN-US>:(</span><span class=clean><span lang=EN-US>m</span></span><span
+lang=EN-US> </span><span lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US>) &#8804; </span><span class=clean><span lang=EN-US>u</span></span><span
+lang=EN-US>:(</span><span class=clean><span lang=EN-US>m</span></span><span
+lang=EN-US> </span><span lang=EN-US style='font-size:10.0pt;font-family:Symbol'>t</span><span
+lang=EN-US>) iff </span><span lang=EN-US style='font-size:10.0pt;font-family:
+Symbol'>s</span><span lang=EN-US> &#8804; </span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'>t</span><span lang=EN-US>
+&amp;&amp; </span><span lang=EN-US style='font-size:10.0pt;font-family:Symbol'>t</span><span
+lang=EN-US> &#8804; </span><span lang=EN-US style='font-size:10.0pt;font-family:
+Symbol'>s</span></p>
+
+<p class=par><span lang=EN-US>A slightly modified version of this solution has
+been adopted in C</span><span lang=EN-US style='font-size:8.0pt;text-transform:
+uppercase'>lean</span><span lang=EN-US>. For convenience, we have added the
+following refinement. The instances of type constructors classes are restricted
+to type con­structors with no coercion restrictions. Moreover, it is assumed
+that these type constructors are uniqueness pro­pagating. This means that the </span><span
+class=clean><span lang=EN-US>WriteFun</span></span><span lang=EN-US> cannot be
+used as an instance for </span><span class=clean><span lang=EN-US>map</span></span><span
+lang=EN-US>. Consequently, our coercion relation we can be more liberal if it
+involves such class variable applica­tions.</span></p>
+
+<p class=par><span lang=EN-US>Overruling this requirement can be done adding
+the anonymous attribute. the class variable. E.g.</span></p>
+
+<p class=exb><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> map.m:: (.a -&gt;.b).(m.a) -&gt;.(m.b)</span></p>
+
+<p class=par><span lang=EN-US>Now</span></p>
+
+<p class=exb><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>instance</span></span><span
+lang=EN-US> map WriteFun</span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>where</span></span></p>
+
+<p class=ex><span lang=EN-US>    map...</span></p>
+
+<p class=par><span lang=EN-US>is valid, but the coercions in which (parts of) </span><span
+class=clean><span lang=EN-US>map</span></span><span lang=EN-US>’s type are
+involved are now restricted as explained above.</span></p>
+
+<p class=par><span lang=EN-US>To see the difference between the two indicated
+variants of constructor variables, we slightly modify </span><span class=clean><span
+lang=EN-US>map</span></span><span lang=EN-US>’s type.</span></p>
+
+<p class=exb><span class=cleankw><span lang=EN-US>&nbsp;</span></span></p>
+
+<p class=ex><span class=cleankw><span lang=EN-US>class</span></span><span
+lang=EN-US> map m:: (.a -&gt;.b) *(m.a) -&gt;.(m.b)</span></p>
+
+<p class=par><span lang=EN-US>Without overruling the instance requirement for </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US> the type of </span><span
+class=clean><span lang=EN-US>dm</span></span><span lang=EN-US> (</span><span
+class=clean><span lang=EN-US>dm</span></span><span lang=EN-US> as given on the
+previous page) be­comes.</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>dm:: (.a -&gt;.b) *(m.a) -&gt;.(m b, m b)</span></p>
+
+<p class=par><span lang=EN-US>Observe that the attribute of disappeared due to
+the fact that each type constructor substituted for </span><span class=clean><span
+lang=EN-US>m</span></span><span lang=EN-US> is assumed to be propagating. </span></p>
+
+<p class=par><span lang=EN-US>If one explicitly indicates that there are no
+instance restriction for the class variable </span><span class=clean><span
+lang=EN-US>m</span></span><span lang=EN-US> (by attributing </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US> with.), the
+function </span><span class=clean><span lang=EN-US>dm</span></span><span
+lang=EN-US> becomes untypable.</span></p>
+
+<h2><a name="_Toc311798101"></a><a name="_Toc524343591"></a><a
+name="_9.6_Higher-Order_Type"></a><span lang=EN-US>9.6    Higher-Order Type
+Definitions</span></h2>
+
+<p class=par><span lang=EN-US>We will describe the effect of uniqueness typing
+on type definitions containing higher-order type va­ri­ables. At it turns out,
+this combination introduces a number of difficulties which would make a full
+description very complex. But even after skipping a lot of details we have to
+warn the reader that some of the remaining parts are still hard to understand. </span></p>
+
+<p class=par><span lang=EN-US>As mentioned earlier, two properties of newly
+defined type constructor concerning uniqueness typing are important, namely,
+propagation and sign classification. One can probably image that, when dealing
+with higher-order types the determination on these properties becomes more
+involved. Consider, for example, the following type definition.</span></p>
+
+<p class=exb><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>::  T m a = C (m a)</span></p>
+
+<p class=par><span lang=EN-US>The question whether </span><span class=clean><span
+lang=EN-US>T</span></span><span lang=EN-US> is propagating in its second
+argument cannot be decided by examining this definition only; it depends on the
+actual instantiation of the (higher-order) type variable </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US>. If </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US> is in­stantiated
+with a propagating type constructor, like </span><span class=clean><span
+lang=EN-US>[]</span></span><span lang=EN-US>, then </span><span class=clean><span
+lang=EN-US>T</span></span><span lang=EN-US> becomes propagating in its second
+ar­gu­ment as well. Actually, propagation is not only a property of type constructors,
+but also of types them­selves, particularly of ‘partial types’ For example, the
+partial type </span><span class=clean><span lang=EN-US>[]</span></span><span
+lang=EN-US> is propagating in its (only) argu­ment (Note that the number of
+arguments a partial type expects, directly follows from the kinds of the type
+constructors that have been used). The type </span><span class=clean><span
+lang=EN-US>T</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>[]</span></span><span lang=EN-US> is also propagating in its
+argument, so is the type </span><span class=clean><span lang=EN-US>T</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>((,)</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>Int)).</span></span><span
+lang=EN-US> </span></p>
+
+<p class=par><span lang=EN-US>The analysis in C</span><span lang=EN-US
+style='font-size:8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US>
+that determines propagation properties of (partial) types has been split into
+two phases. During the first phase, new type definitions are examined in order
+to determine the propaga­tion dependencies between the arguments of each new
+type constructor. To explain the idea, we return to our previous example.</span></p>
+
+<p class=exb><span lang=PT-BR>&nbsp;</span></p>
+
+<p class=ex><span lang=PT-BR>::  T m a = C (m a)</span></p>
+
+<p class=par><span lang=EN-US>First observe that the propagation of the type
+variable </span><span class=clean><span lang=EN-US>m</span></span><span
+lang=EN-US> is not interesting because </span><span class=clean><span
+lang=EN-US>m</span></span><span lang=EN-US> does not stand for ‘real data’
+(which is always of kind </span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>). We associate the propagation of </span><span class=clean><span
+lang=EN-US>m</span></span><span lang=EN-US> in </span><span class=clean><span
+lang=EN-US>T</span></span><span lang=EN-US> with the position(s) of the
+occurrence(s) of </span><span class=clean><span lang=EN-US>m</span></span><span
+lang=EN-US>’s applications. So in general, </span><span class=clean><span
+lang=EN-US>T</span></span><span lang=EN-US> is propagating in a higher-order
+variable </span><span class=clean><span lang=EN-US>m</span></span><span
+lang=EN-US> if one of </span><span class=clean><span lang=EN-US>m</span></span><span
+lang=EN-US>’s applications appears on a propagating position in the definition
+of </span><span class=clean><span lang=EN-US>T</span></span><span lang=EN-US>.
+Moreover, for each higher order type variable, we determine the propagation
+properties of all first order type variables in the fol­lowing way: </span><span
+class=clean><span lang=EN-US>m</span></span><span lang=EN-US> is propagating in
+</span><span class=clean><span lang=EN-US>a</span></span><span lang=EN-US>, where
+</span><span class=clean><span lang=EN-US>m</span></span><span lang=EN-US> and </span><span
+class=clean><span lang=EN-US>a</span></span><span lang=EN-US> are higher-order
+respectively first-order type variables of </span><span class=clean><span
+lang=EN-US>T</span></span><span lang=EN-US>, if </span><span class=clean><span
+lang=EN-US>a</span></span><span lang=EN-US> appears on a propagating position
+in one of </span><span class=clean><span lang=EN-US>m</span></span><span
+lang=EN-US>’s applications. In the above example, </span><span class=clean><span
+lang=EN-US>m</span></span><span lang=EN-US> is pro­p­agating in </span><span
+class=clean><span lang=EN-US>a</span></span><span lang=EN-US>, since </span><span
+class=clean><span lang=EN-US>a</span></span><span lang=EN-US> is on a
+propagating position in the application </span><span class=clean><span
+lang=EN-US>(m</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>a)</span></span><span lang=EN-US>. During the second phase, the
+propaga­tion properties of (partial) types are determined using the results of
+the first phase. This (roughly) pro­ceeds as follows. Consider the type </span><span
+class=clean><span lang=EN-US>T</span></span><span lang=EN-US> </span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US> for some (partial) type </span><span lang=EN-US style='font-size:
+10.0pt;font-family:Symbol'>s</span><span lang=EN-US>, and </span><span
+class=clean><span lang=EN-US>T</span></span><span lang=EN-US> as defined
+earlier. First, deter­mine (recursively) the propagation of </span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US>. Then the type </span><span class=clean><span lang=EN-US>T</span></span><span
+lang=EN-US> </span><span lang=EN-US style='font-size:10.0pt;font-family:Symbol'>s</span><span
+lang=EN-US> is propagating if (1) </span><span lang=EN-US style='font-size:
+10.0pt;font-family:Symbol'>s</span><span lang=EN-US> is propa­gating, (2) </span><span
+class=clean><span lang=EN-US>T</span></span><span lang=EN-US> is propagating in
+</span><span class=clean><span lang=EN-US>m</span></span><span lang=EN-US>, and
+moreover (3) </span><span class=clean><span lang=EN-US>m</span></span><span
+lang=EN-US> is propagating in </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> (the second argument of the type construc­tor). With </span><span
+class=clean><span lang=EN-US>T</span></span><span lang=EN-US> as defined above,
+(2) and (3) are fulfilled. Thus, for example </span><span class=clean><span
+lang=EN-US>T</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>[]</span></span><span lang=EN-US> is propa­gating and there­fore
+also </span><span class=clean><span lang=EN-US>T</span></span><span lang=EN-US>
+</span><span class=clean><span lang=EN-US>(T</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>[]).</span></span><span lang=EN-US> Now define</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::  T2 a = C2 (a -&gt; Int)</span></p>
+
+<p class=par><span lang=EN-US>Then </span><span class=clean><span lang=EN-US>T</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>T2</span></span><span
+lang=EN-US> is not propagating.</span></p>
+
+<p class=par><span lang=EN-US>The adjusted uniqueness propagation rule (see
+also...) becomes:</span></p>
+
+<p class=lop><span lang=EN-US>•&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;&#x2005;Let </span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'>s</span><span lang=EN-US>,</span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>t</span><span
+lang=EN-US> be two uniqueness types. Suppose </span><span lang=EN-US
+style='font-size:10.0pt;font-family:Symbol'>s</span><span lang=EN-US> has
+attribute </span><span lang=EN-US style='font-family:Courier'>u</span><span
+lang=EN-US>. Then, if </span><span lang=EN-US style='font-size:10.0pt;
+font-family:Symbol'>t</span><span lang=EN-US> is propagating the applica­tion (</span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>t s</span><span
+lang=EN-US>) should have an attribute </span><span lang=EN-US style='font-family:
+Courier'>v</span><span lang=EN-US> such that </span><span lang=EN-US
+style='font-family:Courier'>v</span><span lang=EN-US> &#8804; </span><span
+lang=EN-US style='font-family:Courier'>u</span><span lang=EN-US>.</span></p>
+
+<p class=par><span lang=EN-US>Some of the readers might have inferred that this
+propagation rule is a ‘higher-order’ generalization of the old ‘first-order’
+propagation rule.</span></p>
+
+<p class=par><span lang=EN-US>As to the sign classification, we restrict
+ourselves to the remark that that sign analysis used in C</span><span
+lang=EN-US style='font-size:8.0pt;text-transform:uppercase'>lean</span><span
+lang=EN-US> is adjusted in a similar way as described above for the propagation
+case.</span></p>
+
+<p class=par><span lang=EN-US>Example</span></p>
+
+<p class=exb><span lang=EN-US>&nbsp;</span></p>
+
+<p class=ex><span lang=EN-US>::  T m a = C ((m a) -&gt; Int)</span></p>
+
+<p class=par><span lang=EN-US>The sign classification of </span><span
+class=clean><span lang=EN-US>T</span></span><span lang=EN-US> if (-,</span><span
+lang=EN-US style='font-size:10.0pt;font-family:Symbol'>^</span><span
+lang=EN-US>). Here </span><span lang=EN-US style='font-size:10.0pt;font-family:
+Symbol'>^</span><span lang=EN-US> denotes the fact the </span><span
+class=clean><span lang=EN-US>a</span></span><span lang=EN-US> is neither
+directly used on a positive nor on a negative position. The sign classification
+of </span><span class=clean><span lang=EN-US>m</span></span><span lang=EN-US>
+w.r.t. </span><span class=clean><span lang=EN-US>a</span></span><span
+lang=EN-US> is +. The partial type </span><span class=clean><span lang=EN-US>T</span></span><span
+lang=EN-US> </span><span class=clean><span lang=EN-US>[]</span></span><span
+lang=EN-US> has sign -, which e.g. implies that</span></p>
+
+<p class=exb><span lang=EN-US>T [] Int &#8804; T [] *Int</span></p>
+
+<p class=par><span lang=EN-US>The type </span><span class=clean><span
+lang=EN-US>T</span></span><span lang=EN-US> </span><span class=clean><span
+lang=EN-US>T2</span></span><span lang=EN-US> (with </span><span class=clean><span
+lang=EN-US>T2</span></span><span lang=EN-US> as defined on the previous page)
+has sign +, so</span></p>
+
+<p class=exb><span lang=EN-US>T T2 Int &#8805; T T2 *Int</span></p>
+
+<p class=par><span lang=EN-US>It will be clear that combining uniqueness typing
+with higher-order types is far from trivial: the de­scription given above is
+complex and moreover incomplete. However explaining all the details of this
+combination is far beyond the scope of the reference manual.</span></p>
+
+<h2><a name="_Toc311798102"></a><a name="_Toc524343592"></a><a
+name="_9.7_Destructive_Updates"></a><span lang=EN-US>9.7    Destructive Updates
+using Uniqueness Typing</span></h2>
+
+<p class=par><span lang=EN-US>So, it is <i>allowed</i> to update a uniquely
+typed function argument (</span><span class=clean><span lang=EN-US>*</span></span><span
+lang=EN-US>) destructively when the ar­gument does not reappear in the function
+result. The question is: when does the compiler indeed make use of this
+possibility.</span></p>
+
+<p class=par><span lang=EN-US>Destructive updates takes place in some
+predefined functions and operators which work on predefined data structures
+such arrays (&amp;-operator) and files (writing to a file). Arrays and files
+are intended to be updated destructively and their use can have a big influence
+on the space and time behavior of your application (a new node does not have to
+be clai­med and fil­led, the garbage collec­tor is invoked less often and the
+locality of memory references is in­creased).</span></p>
+
+<p class=par><span lang=EN-US>Performing destructive updates is only sensible
+when informa­tion is stored in nodes. Arguments of basic type (</span><span
+class=clean><span lang=EN-US>Int,</span></span><span lang=EN-US> </span><span
+class=clean><span lang=EN-US>Real</span></span><span lang=EN-US>, </span><span
+class=clean><span lang=EN-US>Char</span></span><span lang=EN-US> or </span><span
+class=clean><span lang=EN-US>Bool</span></span><span lang=EN-US>) are stored on
+the B-stack or in registers and it therefore does not make sense to make them
+unique.</span></p>
+
+<p class=par><span lang=EN-US>The C</span><span lang=EN-US style='font-size:
+8.0pt;text-transform:uppercase'>lean</span><span lang=EN-US> compiler also has
+an option to re-use user-defined unique data structures: the space being
+occupied by a function argument of unique type will under certain conditions be
+reused de­struc­tively to con­struct the function result when (part of) this
+result is of the same type. So, a more space and time efficient program can be
+obtained by turning heavily used data structures into unique data structures.
+This is not just a matter of changing the uniqueness type attributes (like turning
+a lazy data structure into a strict one). A unique data structure also has to
+be used in a “single threaded” way (see Chapter 4). This means that one might
+have to restructure parts of the program to maintain the unicity of objects.</span></p>
+
+<p class=par><span lang=EN-US>The compiler will do compile-time garbage
+collection for user defined unique data-structures only in certain cases. In
+that case run-time garbage collection time is reduced. It might even drop to
+zero. It is also possible that you gain even more than just garbage collection
+time due to better cache behavior.</span></p>
+
+</div>
+
+</body>
+</html>

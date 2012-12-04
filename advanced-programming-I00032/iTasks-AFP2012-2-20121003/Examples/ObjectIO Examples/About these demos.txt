@@ -1,0 +1,44 @@
+About these demos
+=================
+
+This folder contains the sources of example programs that demonstrate the features of the Clean Object I/O System.
+
+The following example programs have been converted from the 0.8 I/O library to the Object I/O library
+to give you some impression of the differences between the two libraries. We intend to convert all
+0.8 example programs in time. 
+	* 'gui utilities':	This folder contains a number of useful modules for interactive applications:
+		* Help:			A function to create a Dialog that displays information about the application and 
+						a function to create a Window that displays information about the use of the application.
+						Both the 'about' and 'help' information reside in the same file. 
+		* Highscore:	Functions to read and write high scores to disk, and to present a list of high scores
+						in a dialog.
+		* Random:		Functions to generate random numbers. 
+	* hanoi:			Hanoi gives a graphical representation of the famous 'towers of hanoi'.
+	* life:				Life gives a graphical user interface to play with Conway's Game of Life.
+	* simple database:	This program browses and changes one database at a time.
+	* turing:			This program is a simple programming environment and interpreter for Turing Machines.
+	* worm:				This program is a simple game with a worm having to eat food. No fancy graphics involved.
+
+New example programs that demonstrate more typical Object I/O features such as process creation, message passing,
+and local state, are the following:
+	* bounce:			This program creates two interactive processes. Each process contains a barrel in which
+						balls are bouncing against the walls and each other. When a ball leaves the barrel it is
+						sent to the other process.
+	* clipboard viewer:	This program shows the current content of the clipboard and lets you change it.
+	* compare:			This program compares two different text files. 
+	* counter:			This program opens a window with a composite counter control with a local integer state.
+	* 'gui utilities':	Two new modules have been added to this folder:
+		* ListBox:		A new Controls instance that can be used in windows and dialogues to display a list of
+						items in a scrollable control. 
+		* Notice:		A new Dialogs instance that can be used to display simple messages and have button 
+						alternatives.
+	* hello world:		The famous "Hello World!" example program as an interactive program.
+	* rgb selector:		This program opens a dialog to create RGB colours. 
+	* scrabble:			A more extensive application which implements the well-known game Scrabble. 
+	* slidegame:		This program makes use of bitmaps for a simple slide game.
+	* talk:				This program creates two interactive processes. Each process contains a window in which the
+						user can type text that is being sent to the other process. In the window the received 
+						text from the other process is also displayed.
+	* typist:			This program creates two interactive processes. One process presents a window in which text
+						can be typed. The other process monitors the typing speed of the other process during a
+						session of one minute. 

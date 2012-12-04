@@ -1,0 +1,80 @@
+\About
+\DScrabble
+
+\cThis application is developed using the Concurrent Clean System, 
+\ca programming environment for the functional programming 
+\clanguage Concurrent Clean. This system is developed by the 
+\cresearch group Parallel Systems and Computational Models at the
+\cUniversity of Nijmegen.
+
+\cOriginal program written by Paul de Mast in the functional 
+\cprogramming language Amanda.
+\cConverted to Clean by the above mentioned research group.
+
+\dThe Concurrent Clean System is freelyavailable via FTP for 
+\dMacintoshes, Suns, and PCs (OS/2, Windows95)
+\d(see ftp.cs.kun.nl and http://www.cs.kun.nl/~clean/).
+\EndAbout
+
+\Help
+\DScrabble Help
+
+This game can be played by two persons, or versus the computer, or
+the computer versus itself. Players take turns to place words on the 
+board. The letters that make up new words are provided by the program
+and those that are already on the board. The first word needs one of its 
+letters to be placed in the center of the board. Words can be placed across 
+or down only. Except for the first word all new words need to adjoin the
+current words that are on the board. 
+
+To allow the computer to play and to determine the correctness of words 
+the program is equipped with a (limited) dictionary. If you intend to place 
+new words on the board that do not occur in the dictionary the program 
+will ask you to verify the correctness of the word. If confirmed, the new 
+words will be added to the dictionary and the game continues with the next
+player. If cancelled, no words are added and you need to think of something
+new. 
+
+If you want to place a word on the board you need to click on the board on the
+square where the word should start (this square is hilited from the other
+squares). You should fill in the text field after the label "Player Word" with 
+the full word. Furthermore you should select the direction in which the new
+word should be placed on the board (either the "Horizontal" or "Vertical"
+alternative of "Direction"). The word will be placed on the board when the
+"Place Word" button has been pressed.  
+
+If you are not content with your current set of available letters you can trade 
+them all by clearing the text field after the label "Player Word". The program
+will then provide you with a new set of letters, but note that your turn is over.
+
+The set of available letters is displayed at the left of the game window. 
+
+The game is over as soon as there are no more letters available and both players
+can't think of any new words. You can ofcourse always start a new game during
+a match. 
+
+When quitting the program it is checked if any new words have been added to the
+dictionary. If this is the case the program will ask you if you want to save them
+to the dictionary in order to memorise them. If confirmed they will be added to
+the dictionary, if cancelled they are not. If no words were added then the program
+simply quits quietly.
+
+\bCustomising scrabble
+The source code of this program has been set up to be customised to language and
+platform. The language and platform independent code is formed by the following
+modules:
+
+scrabble.icl (the main module)
+board.(d/i)cl
+graphics.(d/i)cl
+state.(d/i)cl
+types.(d/i)cl
+
+The platform dependent code can be found in the module systemsettings.(d/i)cl.
+The language dependent code is formed by the module language.(d/i)cl which contains
+the name of the appropriate dictionary file and the help file that you are now
+reading. 
+
+The scrabble project needs to locate these files. Set up the appropriate paths locating
+the platform and language dependent modules and recompile the scrabble program.
+\EndHelp

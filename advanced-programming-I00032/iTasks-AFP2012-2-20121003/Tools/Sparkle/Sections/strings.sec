@@ -1,0 +1,14 @@
+SECTION DEPENDENCIES:
+  SYMBOL ==_uarray                :: "!{#Char} !{#Char} -> Bool"
+
+SECTION DEFINES:
+  THEOREM string_==                : (All x (All y {~(= x BOTTOM) -> {~(= y BOTTOM) -> {(= (@ 0 ==_uarray x y) (BOOL True)) <-> (= x y)}}}))
+
+THEOREM:
+  string_==
+DEPENDS:
+  0
+PROOF:
+  Axiom.
+
+
