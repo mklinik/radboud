@@ -2,6 +2,7 @@ module assignment11klinik
 
 import confSM
 import iTask_semantics
+import derived_combinators
 
 // simple example to remember how it worked:
 
@@ -37,23 +38,39 @@ impl 30 = \input -> ([0], 30 + input)
 impl state = \input -> ([state + input], state + input)
 
 
-Start world =
-  testConfSM
-    [ Nsequences 10
-    , InputFun (const (const [1..100]))
-    ] // options
-    spec
-    specStartState
-    impl
-    implStartState
-    implResetFunction
-    world
+//Start world =
+  //testConfSM
+    //[ Nsequences 10
+    //, InputFun (const (const [1..100]))
+    //] // options
+    //spec
+    //specStartState
+    //impl
+    //implStartState
+    //implResetFunction
+    //world
+
+initState = { State | mem = [], taskNo = 0, timeStamp = 0 }
+
+taskNoOfEditor responses label =
+  hd [taskNo \\ (taskNo, EditorResponse er) <- responses | er.EditorResponse.description == label]
+
+labelOfTask responses taskNo =
+  hd [er.EditorResponse.description \\ (currentTaskNo, EditorResponse er) <- responses | taskNo == currentTaskNo]
+
+Start = labelOfTask responses 1
+  where
+    (_, responses, _) = tasks (RefreshEvent`) initState
+    tasks = (simplified_edit "edit1" 42 .||. simplified_edit "edit2" (-42))
 
 //taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
 //taskConformance world task1 task2
   //= snd (testConfSM options
-                    //specTask (task1, initState)
-                    //iutTask  (task2, initState) (const (task2, initState))
+                    //specTask
+                    //(task1, initState)
+                    //iutTask
+                    //(task2, initState)
+                    //(const (task2, initState))
                     //world
         //)
   //where
