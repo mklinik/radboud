@@ -84,7 +84,7 @@ properEvents (task, state) =
   ,  value <- [0, 1, 42]
   ]
   ++
-  // ... and action events of all available actions
+  // ... and action events of all available actions.
   // Actions belong to the sequential combinator task, which is not labelled
   // and hence must be addressed by its taskId.  At least that's what I
   // think.
@@ -96,10 +96,17 @@ properEvents (task, state) =
 where
   (_, responses, _) = task RefreshEvent` state
 
-specTask :: (Task` a, State) UserEvent -> [Trans UserEvent (Task` a, State)]
-specTask (task, state) input = case input of
-  UserEditEvent label _ = [Pt [input] (task, state)]
-  = [Pt [input] (task, state)]
+toRealEvent :: UserEvent (Task` a, State) -> Event`
+toRealEvent (UserEditEvent label value) (task, state) = EditEvent` taskId (serialize` value)
+where
+  taskId = hd [taskNo \\ (taskNo, EditorResponse er) <- responses | er.EditorResponse.description == label]
+  (_, responses, _) = task RefreshEvent` state
+toRealEvent (UserActionEvent taskId action) _ = ActionEvent` taskId action
+
+specTask :: (Task` a, State) UserEvent -> [Trans Response (Task` a, State)]
+specTask (task, state) input
+  # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task (toRealEvent input (task, state)) state
+  = [Pt (map snd responses) (newTask, newState)]
 
 //taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
 //taskConformance world task1 task2
