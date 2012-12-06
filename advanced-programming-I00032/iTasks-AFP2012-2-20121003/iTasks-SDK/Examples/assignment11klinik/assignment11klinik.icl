@@ -33,8 +33,7 @@ properEvents (task, state) =
   ++
   // ... and action events of all available actions.
   // Actions belong to the sequential combinator (>>>*) task, which is not
-  // labelled and hence must be addressed by its taskId.  At least that's what
-  // I think.
+  // labelled and hence must be addressed by its taskId.
   [  UserActionEvent action
   \\ (_, ActionResponse` actionResponses) <- responses
   ,  (action, enabled) <- actionResponses
@@ -65,28 +64,30 @@ eventTaskId event = case event of
   ActionEvent` taskId _ = taskId
 
 errorResponse = EditorResponse { EditorResponse
-                               | description = "invalid input"
+                               | description = "no transition for input"
                                , editValue = (serialize` False, serialize` False)
                                , editing = Displaying
                                }
 
-specTask :: (Task` a, State) UserEvent -> [Trans Response (Task` a, State)]
-specTask (task, state) input =
+// specTask and iutTask are essentially the same, only the type of the result
+// is a bit different. We pass a function for that.
+stepTask :: (Task` a, State) UserEvent ([Response] (Task` a, State) -> b) -> b
+stepTask (task, state) input mkResult =
   case (toRealEvent input (task, state)) of
-    Nothing = [Pt [errorResponse] (task, state)]
-    (Just realEvent)
-      # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task realEvent state
-      = [Pt [response \\ (senderTaskId, response) <- responses | senderTaskId == eventTaskId realEvent] (newTask, newState)]
+    // The task does not have an editor of action to whom the input event may be sent
+    Nothing = mkResult [errorResponse] (task, state)
+    (Just realInput)
+      # ((Reduct (ValRes` _ _) newTask), responses, newState) = task realInput state
+      // return only the responses from the task where we sent the input to
+      = mkResult [response \\ (senderTaskId, response) <- responses
+                            | senderTaskId == eventTaskId realInput]
+                 (newTask, newState)
+
+specTask :: (Task` a, State) UserEvent -> [Trans Response (Task` a, State)]
+specTask state input = stepTask state input (\responses newState -> [Pt responses newState])
 
 iutTask :: (Task` a, State) -> UserEvent -> ([Response], (Task` a, State))
-iutTask (task, state) = iutTask` (task, state)
-
-iutTask` (task, state) input =
-  case (toRealEvent input (task, state)) of
-    Nothing = ([errorResponse], (task, state))
-    Just (realEvent)
-      # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task realEvent state
-      = ([response \\ (senderTaskId, response) <- responses | senderTaskId == eventTaskId realEvent], (newTask, newState))
+iutTask state = \input -> stepTask state input (\responses newState -> (responses, newState))
 
 taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
 taskConformance world task1 task2
