@@ -113,23 +113,27 @@ derive genShow Event`, State, Reduct, Response, UserEvent, Action,
 
 genShow{|SerializedValue|} _ _ _ c = c
 
-//Start world = taskConformance world task5 task6 // should pass, does
-//Start world = taskConformance world task1 task2 // should pass, does
-//Start world = taskConformance world task2 task1 // should fail, does
-//Start world = taskConformance world task3 task4 // should pass, does
-//Start world = taskConformance world task4 task3 // should pass, does
-//Start world = taskConformance world task5 task6 // should pass, does
-//Start world = taskConformance world task6 task5 // should pass, does
-Start world = taskConformance world taskX taskY // should fail, does
+//Start world = taskConformance world task5 task6 // should pass, passes
+//Start world = taskConformance world task1 task2 // should pass, passes
+//Start world = taskConformance world task2 task1 // should fail, fails
+//Start world = taskConformance world task3 task4 // should pass, passes
+//Start world = taskConformance world task4 task3 // should pass, passes
+//Start world = taskConformance world task5 task6 // should pass, passes
+//Start world = taskConformance world task6 task5 // should pass, passes
+//Start world = taskConformance world taskX taskY // should fail, fails
+//Start world = taskConformance world (return` 0) (task1 .||. return` 0) // should pass, passes
+//Start world = taskConformance world (return` 0) (return` 0 .||. task1) // should pass, passes
+//Start world = taskConformance world (return` 0 .||. task1) (return` 0) // should fail, fails
 
-task1 = (simplified_edit "edit500" 42)
-task2 = (simplified_edit "edit500" 42) >>>* [OnAction` (Action "Ok") (isValue) (return` o getValue)]
 
-taskX = (simplified_edit "edit500" 42)
-taskY = (simplified_edit "edit501" 42) >>>* [OnAction` (Action "Ok") (isValue) (return` o getValue)]
+task1 = (simplified_edit "edit1" 42)
+task2 = (simplified_edit "edit1" 42) >>>* [OnAction` (Action "Ok") (isValue) (return` o getValue)]
+
+taskX = (simplified_edit "edit1" 42)
+taskY = (simplified_edit "edit2" 42) >>>* [OnAction` (Action "Ok") (isValue) (return` o getValue)]
 
 task3 = (taskX .||. taskY)
 task4 = (taskY .||. taskX)
 
-task5 = (simplified_edit "foo" 42    .||. simplified_edit "bar" (-42))
-task6 = (simplified_edit "bar" (-42) .||. simplified_edit "foo" 42)
+task5 = (simplified_edit "edit1" 42    .||. simplified_edit "edit2" (-42))
+task6 = (simplified_edit "edit2" (-42) .||. simplified_edit "edit1" 42)
