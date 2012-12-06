@@ -43,20 +43,20 @@ properEvents (task, state) =
 where
   (_, responses, _) = task RefreshEvent` state
 
-toRealEvent :: UserEvent (Task` a, State) -> Event`
-toRealEvent (UserEditEvent label value) (task, state) = EditEvent` taskId (serialize` value)
+toRealEvent :: UserEvent (Task` a, State) -> Maybe Event`
+toRealEvent (UserEditEvent label value) (task, state) =
+  case [taskId \\ (taskId, EditorResponse er) <- responses
+                | er.EditorResponse.description == label] of
+    [] = Nothing
+    [taskId:_] = Just (EditEvent` taskId (serialize` value))
 where
-  taskId = case [taskId \\ (taskId, EditorResponse er) <- responses
-                         | er.EditorResponse.description == label] of
-    [] = -1 // abort ("toRealEvent: no such editor:" +++ label)
-    [x:_] = x
   (_, responses, _) = task RefreshEvent` state
-toRealEvent (UserActionEvent action) (task, state) = ActionEvent` taskId action
+toRealEvent (UserActionEvent action) (task, state) =
+  case [taskId \\ (taskId, ActionResponse` actions) <- responses
+                | isMember action (map fst actions)] of
+    [] = Nothing
+    [taskId:_] = Just (ActionEvent` taskId action)
 where
-  taskId = case [taskId \\ (taskId, ActionResponse` actions) <- responses
-                         | isMember action (map fst actions)] of
-    [] = -1 // abort ("toRealEvent: no such action.")
-    [x:_] = x
   (_, responses, _) = task RefreshEvent` state
 
 eventTaskId :: Event` -> TaskNo
@@ -64,19 +64,29 @@ eventTaskId event = case event of
   EditEvent`   taskId _ = taskId
   ActionEvent` taskId _ = taskId
 
+errorResponse = EditorResponse { EditorResponse
+                               | description = "invalid input"
+                               , editValue = (serialize` False, serialize` False)
+                               , editing = Displaying
+                               }
+
 specTask :: (Task` a, State) UserEvent -> [Trans Response (Task` a, State)]
-specTask (task, state) input
-  # realEvent = (toRealEvent input (task, state))
-  # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task realEvent state
-  = [Pt [response \\ (senderTaskId, response) <- responses | senderTaskId == eventTaskId realEvent] (newTask, newState)]
+specTask (task, state) input =
+  case (toRealEvent input (task, state)) of
+    Nothing = [Pt [errorResponse] (task, state)]
+    (Just realEvent)
+      # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task realEvent state
+      = [Pt [response \\ (senderTaskId, response) <- responses | senderTaskId == eventTaskId realEvent] (newTask, newState)]
 
 iutTask :: (Task` a, State) -> UserEvent -> ([Response], (Task` a, State))
 iutTask (task, state) = iutTask` (task, state)
 
-iutTask` (task, state) input
-  # realEvent = (toRealEvent input (task, state))
-  # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task realEvent state
-  = ([response \\ (senderTaskId, response) <- responses | senderTaskId == eventTaskId realEvent], (newTask, newState))
+iutTask` (task, state) input =
+  case (toRealEvent input (task, state)) of
+    Nothing = ([errorResponse], (task, state))
+    Just (realEvent)
+      # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task realEvent state
+      = ([response \\ (senderTaskId, response) <- responses | senderTaskId == eventTaskId realEvent], (newTask, newState))
 
 taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
 taskConformance world task1 task2
@@ -104,16 +114,12 @@ genShow{|SerializedValue|} _ _ _ c = c
 
 //Start world = taskConformance world task5 task6 // should pass, does
 //Start world = taskConformance world task1 task2 // should pass, does
-Start world = taskConformance world task2 task1 // should fail, does
+//Start world = taskConformance world task2 task1 // should fail, does
 //Start world = taskConformance world task3 task4 // should pass, does
 //Start world = taskConformance world task4 task3 // should pass, does
 //Start world = taskConformance world task5 task6 // should pass, does
 //Start world = taskConformance world task6 task5 // should pass, does
-//Start world = taskConformance world taskX taskY // should fail, does
-
-//Start world = iutTask (task3, initState) (UserActionEvent (Action "Ok"))
-//Start world = specTask (task3, initState) (UserActionEvent (Action "Ok"))
-
+Start world = taskConformance world taskX taskY // should fail, does
 
 task1 = (simplified_edit "edit500" 42)
 task2 = (simplified_edit "edit500" 42) >>>* [OnAction` (Action "Ok") (isValue) (return` o getValue)]
