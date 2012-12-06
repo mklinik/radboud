@@ -19,7 +19,7 @@ labelOfTask responses taskNo =
 
 :: UserEvent
   = UserEditEvent String Int
-  | UserActionEvent Int Action
+  | UserActionEvent Action
 
 // I always wondered what list comprehensions are good for when you have map,
 // fold and filter.  Thank's for teaching me, Peter!
@@ -32,11 +32,11 @@ properEvents (task, state) =
   ]
   ++
   // ... and action events of all available actions.
-  // Actions belong to the sequential combinator task, which is not labelled
-  // and hence must be addressed by its taskId.  At least that's what I
-  // think.
-  [  UserActionEvent taskId action
-  \\ (taskId, ActionResponse` actionResponses) <- responses
+  // Actions belong to the sequential combinator (>>>*) task, which is not
+  // labelled and hence must be addressed by its taskId.  At least that's what
+  // I think.
+  [  UserActionEvent action
+  \\ (_, ActionResponse` actionResponses) <- responses
   ,  (action, enabled) <- actionResponses
   |  enabled
   ]
@@ -46,32 +46,37 @@ where
 toRealEvent :: UserEvent (Task` a, State) -> Event`
 toRealEvent (UserEditEvent label value) (task, state) = EditEvent` taskId (serialize` value)
 where
-  taskId = case [taskId \\ (taskId, EditorResponse er) <- responses | er.EditorResponse.description == label] of
-    [] = abort ("toRealEvent: no such editor:" +++ label)
+  taskId = case [taskId \\ (taskId, EditorResponse er) <- responses
+                         | er.EditorResponse.description == label] of
+    [] = -1 // abort ("toRealEvent: no such editor:" +++ label)
     [x:_] = x
   (_, responses, _) = task RefreshEvent` state
-toRealEvent (UserActionEvent taskId action) _ = ActionEvent` taskId action
+toRealEvent (UserActionEvent action) (task, state) = ActionEvent` taskId action
+where
+  taskId = case [taskId \\ (taskId, ActionResponse` actions) <- responses
+                         | isMember action (map fst actions)] of
+    [] = -1 // abort ("toRealEvent: no such action.")
+    [x:_] = x
+  (_, responses, _) = task RefreshEvent` state
 
-eventTaskId :: UserEvent (Task` a, State) -> TaskNo
-eventTaskId event state = case toRealEvent event state of
+eventTaskId :: Event` -> TaskNo
+eventTaskId event = case event of
   EditEvent`   taskId _ = taskId
   ActionEvent` taskId _ = taskId
 
 specTask :: (Task` a, State) UserEvent -> [Trans Response (Task` a, State)]
 specTask (task, state) input
-  # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task (toRealEvent input (task, state)) state
-  = [Pt [response \\ (senderTaskId, response) <- responses | senderTaskId == receiverTaskId] (newTask, newState)]
-where
-  receiverTaskId = eventTaskId input (task, state)
+  # realEvent = (toRealEvent input (task, state))
+  # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task realEvent state
+  = [Pt [response \\ (senderTaskId, response) <- responses | senderTaskId == eventTaskId realEvent] (newTask, newState)]
 
 iutTask :: (Task` a, State) -> UserEvent -> ([Response], (Task` a, State))
 iutTask (task, state) = iutTask` (task, state)
 
 iutTask` (task, state) input
-  # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task (toRealEvent input (task, state)) state
-  = ([response \\ (senderTaskId, response) <- responses | senderTaskId == receiverTaskId], (newTask, newState))
-where
-  receiverTaskId = eventTaskId input (task, state)
+  # realEvent = (toRealEvent input (task, state))
+  # ((Reduct (ValRes` _ taskValue) newTask), responses, newState) = task realEvent state
+  = ([response \\ (senderTaskId, response) <- responses | senderTaskId == eventTaskId realEvent], (newTask, newState))
 
 taskConformance :: *World (Task` a) (Task` a) -> *World  | gEq {| * |} a & genShow {| * |} a
 taskConformance world task1 task2
@@ -95,15 +100,19 @@ derive bimap []
 derive genShow Event`, State, Reduct, Response, UserEvent, Action,
   TaskResult`, EditorResponse, Value`, EditMode, Stability`
 
-genShow{|JSONNode|} _ _ _ c = c
+genShow{|SerializedValue|} _ _ _ c = c
 
 //Start world = taskConformance world task5 task6 // should pass, does
 //Start world = taskConformance world task1 task2 // should pass, does
-//Start world = taskConformance world task2 task1 // should fail, does
-//Start world = taskConformance world task3 task4 // should pass, but doesn't
-//Start world = taskConformance world task4 task3 // should pass, but doesn't
+Start world = taskConformance world task2 task1 // should fail, does
+//Start world = taskConformance world task3 task4 // should pass, does
+//Start world = taskConformance world task4 task3 // should pass, does
 //Start world = taskConformance world task5 task6 // should pass, does
-Start world = taskConformance world task6 task5 // should pass, does
+//Start world = taskConformance world task6 task5 // should pass, does
+//Start world = taskConformance world taskX taskY // should fail, does
+
+//Start world = iutTask (task3, initState) (UserActionEvent (Action "Ok"))
+//Start world = specTask (task3, initState) (UserActionEvent (Action "Ok"))
 
 
 task1 = (simplified_edit "edit500" 42)
