@@ -16,6 +16,8 @@
 % Or whatever. Note that the encoding and the font should match. If T1
 % does not look nice, try deleting the line with the fontenc.
 
+\usepackage{tikz}
+\usetikzlibrary{positioning}
 
 \title[Short Paper Title] % (optional, use only with long paper titles)
 {A Domain for the Coinductive Natural Numbers With Computation Steps}
@@ -124,6 +126,34 @@
 \subsection{Previous Work}
 
 \begin{frame}{Make Titles Informative.}
+  \begin{columns}
+    \column{.5\textwidth}
+
+\begin{tikzpicture}[scale=1.2]
+  \node {$\bot$} [grow'=up, sibling distance=4.0em, level distance=1.8em]
+    child { node {$0$} }
+    child
+    {
+      node {$S\bot$}
+      child { node {$S0$} }
+      child
+      {
+        node {$SS\bot$}
+        child { node {$SS0$} }
+        child [thick, dotted]
+        {
+          node {$S^n\bot$}
+          child [thin, solid] { node {$S^n0$} }
+          child { node {$\infty$} }
+        }
+      }
+    }
+  ;
+\end{tikzpicture}
+
+    \column{.5\textwidth}
+    blahbar
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Make Titles Informative.}
