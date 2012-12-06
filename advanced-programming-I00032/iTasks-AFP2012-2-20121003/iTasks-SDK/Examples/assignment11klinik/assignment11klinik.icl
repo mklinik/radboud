@@ -135,7 +135,10 @@ Start world = taskConformance world task5 task6 // should pass, passes
 //Start world = taskConformance world taskX taskY // should fail, fails
 //Start world = taskConformance world (return` 0) (task1 .||. return` 0) // should pass, passes
 //Start world = taskConformance world (return` 0) (return` 0 .||. task1) // should pass, passes
-//Start world = taskConformance world (return` 0 .||. task1) (return` 0) // should fail, fails
+// Interestingly, the following fails. The left task takes exactly one edit
+// event, then return kicks in.  In the right task, return kicks in
+// immediately.
+//Start world = taskConformance world (return` 0 .||. task1) (return` 0)
 
 task1 = (simplified_edit "edit1" 42)
 task2 = (simplified_edit "edit1" 42) >>>* [OnAction` (Action "Ok") (isValue) (return` o getValue)]
