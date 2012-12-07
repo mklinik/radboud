@@ -45,6 +45,8 @@
 
 %\beamerdefaultoverlayspecification{<+->}
 
+\newcommand{\arr}{\rightarrow}
+\newcommand{\Arr}{\Rightarrow}
 
 \begin{document}
 
@@ -77,18 +79,21 @@
 
 \section{Motivation}
 
-\subsection{The Basic Problem That We Studied}
+\subsection{FPC: The Fixed Point Calculus}
 
-\begin{frame}{Make Titles Informative. Use Uppercase Letters.}{Subtitles are optional.}
+\begin{frame}{Syntax of the Fixed Point Calculus}
   % - A title should summarize the slide in an understandable fashion
   %   for anyone how does not follow everything on the slide itself.
 
-  \begin{itemize}
-  \item
-    Use \texttt{itemize} a lot.
-  \item
-    Use very short sentences or short phrases.
-  \end{itemize}
+  \begin{eqnarray*}
+  t & ::= & \text{unit}\ |\ t \arr t\ |\ t \times t\ |\ t + t\ |\ a\ |\ \mu a.t \\
+  M & ::= & x\ |\ \lambda x : t . M \ |\ MM \ | \\
+    &     & \text{unity}\ |\ (M, M)\ |\ \text{fst}(M)\ |\ \text{snd}(M)\ | \\
+    &     & \text{inl}[t + t](M)\ |\ \text{inr}[t + t](M)\ | \\
+    &     & \text{case}\ M\ \text{of}\ \text{inl}(x) \Arr M\ \text{or}\ \text{inr}(x) \Arr M\ | \\
+    &     & \text{intro}[\mu a.t]M\ |\ \text{elim}[\mu a.t]M
+  \end{eqnarray*}
+
 \end{frame}
 
 \begin{frame}{Make Titles Informative.}
