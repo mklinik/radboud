@@ -47,6 +47,7 @@
 
 \newcommand{\arr}{\rightarrow}
 \newcommand{\Arr}{\Rightarrow}
+\newcommand{\nat}{nat}
 
 \begin{document}
 
@@ -153,7 +154,7 @@
 
   \begin{itemize}
     \item We would like to have: \\
-          ``A value of the type \emph{nat} is either \emph{left} or
+          ``A value of the type \emph{\nat} is either \emph{left} or
           \emph{right(left)} or \emph{right(right(left))} or \ldots''
     \item We would need to write: $unit + unit + unit + \ldots$
   \end{itemize}
@@ -172,6 +173,27 @@
         }
       }
     ;
+  \end{tikzpicture}
+  \end{center}
+
+\end{frame}
+
+
+\begin{frame}{Recursive Types to the Rescue!}
+
+  \begin{itemize}
+    \item We write: $\mu a . unit + a$
+    \item We mean: ``The least fixed point that satisfies the equation $a = unit + a$ ''
+  \end{itemize}
+
+  \begin{center}
+  \begin{tikzpicture}[scale=1.2]
+    \node (root) {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
+      child { node {$unit$} }
+      child[missing] {}
+    ;
+    \draw [->] (root.south east) .. controls (0.5, -0.5) and (1, 0) .. (0.7, 0.4) .. controls (0.5, 0.7) and (0, 0.6) .. (root.north);
+    %\draw [gray] (root.south east) -- (0.5, -0.5) -- (1, 0) -- (0.5, 0.7) -- (0, 0.6) -- (root.north);
   \end{tikzpicture}
   \end{center}
 
