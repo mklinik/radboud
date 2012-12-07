@@ -101,7 +101,7 @@
 \begin{frame}{With Sums and Unit We Can Simulate Booleans}
 
   \begin{itemize}
-    \item We write: $unit + unit$
+    \item We write: $\text{unit} + \text{unit}$
     \item We mean: ``A value of this type is either of the form \\
           \emph{inl(unit)} or \emph{inr(unit)} ''
   \end{itemize}
@@ -109,8 +109,8 @@
   \begin{center}
   \begin{tikzpicture}[scale=1.2]
     \node {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
-      child { node {$unit$} }
-      child { node {$unit$} } ;
+      child { node {$\text{unit}$} }
+      child { node {$\text{unit}$} } ;
   \end{tikzpicture}
   \end{center}
 
@@ -120,7 +120,7 @@
 \begin{frame}{With Sums and Unit We Can Simulate Weekdays}
 
   \begin{itemize}
-    \item We write: $unit + unit + unit + unit + unit + unit + unit$
+    \item We write: $\text{unit} + \text{unit} + \text{unit} + \text{unit} + \text{unit} + \text{unit} + \text{unit}$
     \item We mean: ``A value of this type is either \emph{left}, or
     \emph{right(left)}, or \ldots, or \emph{right(right(right(right(right(right)))))}.''
   \end{itemize}
@@ -128,18 +128,18 @@
   \begin{center}
   \begin{tikzpicture}[scale=1.0]
     \node {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
-      child { node {$unit$} }
+      child { node {$\text{unit}$} }
       child { node {$+$}
-        child { node {$unit$} }
+        child { node {$\text{unit}$} }
         child { node {$+$}
-          child { node {$unit$} }
+          child { node {$\text{unit}$} }
           child { node {$+$}
-            child { node {$unit$} }
+            child { node {$\text{unit}$} }
             child { node {$+$}
-              child { node {$unit$} }
+              child { node {$\text{unit}$} }
               child { node {$+$}
-                child { node {$unit$} }
-                child { node {$unit$} }
+                child { node {$\text{unit}$} }
+                child { node {$\text{unit}$} }
               }
             }
           }
@@ -158,7 +158,7 @@
     \item We would like to have: \\
           ``A value of this type is either \emph{left} or
           \emph{right(left)} or \emph{right(right(left))} or \ldots''
-    \item We would need to write: $unit + unit + unit + \ldots$
+    \item We would need to write: $\text{unit} + \text{unit} + \text{unit} + \ldots$
   \end{itemize}
 
   \begin{center}
@@ -166,11 +166,11 @@
     , and so on/.style={thick, dotted}
     ]
     \node {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
-      child { node {$unit$} }
+      child { node {$\text{unit}$} }
       child { node {$+$}
-        child { node {$unit$} }
+        child { node {$\text{unit}$} }
         child { node {$+$}
-          child { node {$unit$} }
+          child { node {$\text{unit}$} }
           child[and so on] { node {} }
         }
       }
@@ -186,14 +186,14 @@
 \begin{frame}{Recursive Types to the Rescue!}
 
   \begin{itemize}
-    \item We write: $\mu a . unit + a$
-    \item We mean: ``The least fixed point that satisfies the equation $a = unit + a$ ''
+    \item We write: $\mu a . \text{unit} + a$
+    \item We mean: ``The least fixed point that satisfies the equation $a = \text{unit} + a$ ''
   \end{itemize}
 
   \begin{center}
   \begin{tikzpicture}[scale=1.2]
     \node (root) {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
-      child { node {$unit$} }
+      child { node {$\text{unit}$} }
       child[missing] {}
     ;
     \draw [->] (root.south east) .. controls (0.5, -0.5) and (1, 0) .. (0.7, 0.4) .. controls (0.5, 0.7) and (0, 0.6) .. (root.north);
@@ -207,7 +207,7 @@
 \begin{frame}{Things We Would Like to Know}
 
   \begin{itemize}
-    \item What is a solution of the equation $a = unit + a$ ?
+    \item What is a solution of the equation $a = \text{unit} + a$ ?
     \item Is it a fixed point?
     \item Is it the least fixed point?
     \item Is this still, somehow, the natural numbers?
@@ -222,14 +222,14 @@
 
   \begin{itemize}
     \item Spend two or more slides on:
-    \item Claim: $\mu a . unit + a$, that is: The set of all finite paths which
+    \item Claim: $\mu a . \text{unit} + a$, that is: The set of all finite paths which
           start at the root and end in a leaf, is a solution to this equation.
     \item How to prove that we have a fixed point?
     \begin{itemize}
       \item We need to prove: there are functions
-            $\Phi : \llbracket \mu a . unit + a \rrbracket \arr \llbracket unit + (\mu a . unit + a) \rrbracket$
+            $\Phi : \llbracket \mu a . \text{unit} + a \rrbracket \arr \llbracket \text{unit} + (\mu a . \text{unit} + a) \rrbracket$
             and
-            $\Psi : \llbracket unit + (\mu a . unit + a) \rrbracket \arr \llbracket \mu a . unit + a \rrbracket$ \\
+            $\Psi : \llbracket \text{unit} + (\mu a . \text{unit} + a) \rrbracket \arr \llbracket \mu a . \text{unit} + a \rrbracket$ \\
             such that: \\
             $\Phi \circ \Psi = \text{id}$ and $\Psi \circ \Phi = \text{id}$
     \end{itemize}
@@ -247,9 +247,9 @@
 \begin{frame}{Fixpoint Enlargement Right Now}
 
   \begin{itemize}
-    \item Claim: $\nu a . unit + a$, that is: The set of all paths that start
+    \item Claim: $\nu a . \text{unit} + a$, that is: The set of all paths that start
           at the root and either end at an arbitrary node or are infinite, is
-          the \emph{largest} fixed point of $a = unit + a$.
+          the \emph{largest} fixed point of $a = \text{unit} + a$.
     \item Is it a fixed point?
     \item Is it the largest fixed point?
     \item How does it relate to the natural numbers?
@@ -268,7 +268,7 @@
 
   \begin{itemize}
     \item
-      Let's consider $\nu a . unit + a + a$
+      Let's consider $\nu a . \text{unit} + a + a$
     \item
       How can we interpret this datatype? (Successor and Underscore)
     \item
@@ -301,7 +301,7 @@
     $\mu a . t$ and $\nu a . t$ denote the least and largest solutions to such
     equations
   \item
-    My plan is to answer some questions regarding $\nu a . unit + a + a$
+    My plan is to answer some questions regarding $\nu a . \text{unit} + a + a$
   \end{itemize}
 
 \end{frame}
