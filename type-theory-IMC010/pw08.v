@@ -25,13 +25,11 @@ Section deptypes.
 (* exercise 2 *)
 (* complete the following dependently typed lambda terms *)
 
-Definition pred1 := (*! term *)
-(* fun (l : Set -> Set) (A : ?) (B : ?) (f : l A -> l B) (x : ?) => f x. *)
-  .
+Definition pred1 :=
+  fun (l : Set -> Set) (A : Set) (B : Set) (f : l A -> l B) (x : l A) => f x.
 
-Definition pred2 := (*! term *)
-(* fun (e : nat -> nat -> ?) (n : ?) => forall m : ?, e n m. *)
-  .
+Definition pred2 :=
+  fun (e : nat -> nat -> Set) (n : nat) => forall m : nat, e n m.
 
 End deptypes.
 
