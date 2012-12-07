@@ -81,7 +81,7 @@
 
 \section{Motivation}
 
-\subsection{FPC: The Fixed Point Calculus}
+\subsection{The Fixed Point Calculus}
 
 
 \begin{frame}{Syntax of the Fixed Point Calculus}
@@ -151,6 +151,7 @@
 
 \end{frame}
 
+
 \begin{frame}{What About Natural Numbers?}
 
   \begin{itemize}
@@ -179,6 +180,8 @@
 
 \end{frame}
 
+
+\subsection{Inductive Types}
 
 \begin{frame}{Recursive Types to the Rescue!}
 
@@ -239,6 +242,8 @@
 \end{frame}
 
 
+\subsection{Coinductive Types}
+
 \begin{frame}{Fixpoint Enlargement Right Now}
 
   \begin{itemize}
@@ -255,6 +260,36 @@
 \end{frame}
 
 
+\section{The Plan}
+
+\subsection{The Coinductive Natural Numbers With Computation Steps}
+
+\begin{frame}{The Coinductive Natural Numbers With Computation Steps}
+
+  \begin{itemize}
+    \item
+      Let's consider $\nu a . unit + a + a$
+    \item
+      How can we interpret this datatype? (Successor and Underscore)
+    \item
+      What kinds of objects are in the largest fixed point?
+  \end{itemize}
+
+  \begin{center}
+  \begin{tikzpicture}[scale=1.2]
+    \node {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
+      child { node {$\text{unit}$} }
+      child { node {$+$}
+        child { node {todo} }
+        child { node {todo} }
+      }
+    ;
+  \end{tikzpicture}
+  \end{center}
+
+\end{frame}
+
+
 \section*{Summary}
 
 \begin{frame}{Summary}
@@ -266,7 +301,7 @@
     $\mu a . t$ and $\nu a . t$ denote the least and largest solutions to such
     equations
   \item
-    My plan is to answer some obvious questions for $\nu a . unit + a + a$
+    My plan is to answer some questions regarding $\nu a . unit + a + a$
   \end{itemize}
 
 \end{frame}
