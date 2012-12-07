@@ -81,9 +81,8 @@
 
 \subsection{FPC: The Fixed Point Calculus}
 
+
 \begin{frame}{Syntax of the Fixed Point Calculus}
-  % - A title should summarize the slide in an understandable fashion
-  %   for anyone how does not follow everything on the slide itself.
 
   \begin{eqnarray*}
   t & ::= & \text{unit}\ |\ t \arr t\ |\ t \times t\ |\ t + t\ |\ a\ |\ \mu a.t \\
@@ -96,73 +95,90 @@
 
 \end{frame}
 
-\begin{frame}{Make Titles Informative.}
 
-  You can create overlays\dots
+\begin{frame}{With Sums and Unit We Can Simulate Booleans}
+
   \begin{itemize}
-  \item using the \texttt{pause} command:
-    \begin{itemize}
-    \item
-      First item.
-      \pause
-    \item    
-      Second item.
-    \end{itemize}
-  \item
-    using overlay specifications:
-    \begin{itemize}
-    \item<3->
-      First item.
-    \item<4->
-      Second item.
-    \end{itemize}
-  \item
-    using the general \texttt{uncover} command:
-    \begin{itemize}
-      \uncover<5->{\item
-        First item.}
-      \uncover<6->{\item
-        Second item.}
-    \end{itemize}
+    \item We write: $unit + unit$
+    \item We mean: ``A value of this type is either of the form \\
+          \emph{inl(unit)} or \emph{inr(unit)} ''
   \end{itemize}
+
+  \begin{center}
+  \begin{tikzpicture}[scale=1.2]
+    \node {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
+      child { node {$unit$} }
+      child { node {$unit$} } ;
+  \end{tikzpicture}
+  \end{center}
+
 \end{frame}
 
+
+\begin{frame}{With Sums and Unit We Can Simulate Weekdays}
+
+  \begin{itemize}
+    \item We write: $unit + unit + unit + unit + unit + unit + unit$
+    \item We mean: ``A value of this type is either \emph{left}, or
+    \emph{right(left)}, or \ldots, or \emph{right(right(right(right(right(right)))))}.''
+  \end{itemize}
+
+  \begin{center}
+  \begin{tikzpicture}[scale=1.0]
+    \node {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
+      child { node {$unit$} }
+      child { node {$+$}
+        child { node {$unit$} }
+        child { node {$+$}
+          child { node {$unit$} }
+          child { node {$+$}
+            child { node {$unit$} }
+            child { node {$+$}
+              child { node {$unit$} }
+              child { node {$+$}
+                child { node {$unit$} }
+                child { node {$unit$} }
+              }
+            }
+          }
+        }
+      }
+    ;
+  \end{tikzpicture}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}{What About Natural Numbers?}
+
+  \begin{itemize}
+    \item We would like to have: \\
+          ``A value of the type \emph{nat} is either \emph{left} or
+          \emph{right(left)} or \emph{right(right(left))} or \ldots''
+    \item We would need to write: $unit + unit + unit + \ldots$
+  \end{itemize}
+
+  \begin{center}
+  \begin{tikzpicture}[scale=1.2
+    , and so on/.style={thick, dotted}
+    ]
+    \node {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
+      child { node {$unit$} }
+      child { node {$+$}
+        child { node {$unit$} }
+        child { node {$+$}
+          child { node {$unit$} }
+          child[and so on] { node {} }
+        }
+      }
+    ;
+  \end{tikzpicture}
+  \end{center}
+
+\end{frame}
 
 \subsection{Previous Work}
 
-\begin{frame}{Make Titles Informative.}
-  \begin{columns}
-    \column{.5\textwidth}
-
-\begin{tikzpicture}[scale=1.2]
-  \node {$\bot$} [grow'=up, sibling distance=4.0em, level distance=1.8em]
-    child { node {$0$} }
-    child
-    {
-      node {$S\bot$}
-      child { node {$S0$} }
-      child
-      {
-        node {$SS\bot$}
-        child { node {$SS0$} }
-        child [thick, dotted]
-        {
-          node {$S^n\bot$}
-          child [thin, solid] { node {$S^n0$} }
-          child { node {$\infty$} }
-        }
-      }
-    }
-  ;
-\end{tikzpicture}
-
-    \column{.5\textwidth}
-    blahbar
-  \end{columns}
-\end{frame}
-
-\begin{frame}{Make Titles Informative.}
-\end{frame}
 
 
 
