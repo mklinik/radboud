@@ -8,8 +8,10 @@
 }
 
 \usepackage[english]{babel}
-
 \usepackage[latin1]{inputenc}
+
+% needs debian package texlive-math-extra
+\usepackage{stmaryrd} % for \llbracket, \rrbracket
 
 \usepackage{times}
 \usepackage[T1]{fontenc}
@@ -47,7 +49,6 @@
 
 \newcommand{\arr}{\rightarrow}
 \newcommand{\Arr}{\Rightarrow}
-\newcommand{\nat}{nat}
 
 \begin{document}
 
@@ -154,7 +155,7 @@
 
   \begin{itemize}
     \item We would like to have: \\
-          ``A value of the type \emph{\nat} is either \emph{left} or
+          ``A value of this type is either \emph{left} or
           \emph{right(left)} or \emph{right(right(left))} or \ldots''
     \item We would need to write: $unit + unit + unit + \ldots$
   \end{itemize}
@@ -196,6 +197,30 @@
     %\draw [gray] (root.south east) -- (0.5, -0.5) -- (1, 0) -- (0.5, 0.7) -- (0, 0.6) -- (root.north);
   \end{tikzpicture}
   \end{center}
+
+\end{frame}
+
+
+\begin{frame}{Things We Would Like to Know}
+
+  \begin{itemize}
+    \item What is a solution of the equation $a = unit + a$ ?
+    \begin{itemize}
+      \item Claim: The set of all finite paths which start at the root and end
+            in a leaf, is a solution to this equation.
+    \end{itemize}
+    \item Is it a fixed point?
+    \begin{itemize}
+      \item We need to prove: there are functions
+            $\Phi : \llbracket \mu a . unit + a \rrbracket \arr \llbracket unit + (\mu a . unit + a) \rrbracket$
+            and
+            $\Psi : \llbracket unit + (\mu a . unit + a) \rrbracket \arr \llbracket \mu a . unit + a \rrbracket$ \\
+            such that: \\
+            $\Phi \circ \Psi = \text{id}$ and $\Psi \circ \Phi = \text{id}$
+    \end{itemize}
+    \item Is it the least fixed point?
+    \item Is this still, somehow, the natural numbers?
+  \end{itemize}
 
 \end{frame}
 
