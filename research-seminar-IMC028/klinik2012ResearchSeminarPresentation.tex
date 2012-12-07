@@ -103,7 +103,10 @@
   \begin{itemize}
     \item We write: $\text{unit} + \text{unit}$
     \item We mean: ``A value of this type is either of the form \\
-          \emph{inl(unit)} or \emph{inr(unit)} ''
+          $\text{inl}[\text{unit} + \text{unit}](\text{unity})$
+          or
+          $\text{inr}[\text{unit} + \text{unit}](\text{unity})$''
+    \item For brevity, let's just say ``left'' and ``right''
   \end{itemize}
 
   \begin{center}
@@ -122,7 +125,7 @@
   \begin{itemize}
     \item We write: $\text{unit} + \text{unit} + \text{unit} + \text{unit} + \text{unit} + \text{unit} + \text{unit}$
     \item We mean: ``A value of this type is either \emph{left}, or
-    \emph{right(left)}, or \ldots, or \emph{right(right(right(right(right(right)))))}.''
+    \emph{right;left}, or \ldots, or \emph{right;right;right;right;right;right}.''
   \end{itemize}
 
   \begin{center}
@@ -157,7 +160,7 @@
   \begin{itemize}
     \item We would like to have: \\
           ``A value of this type is either \emph{left} or
-          \emph{right(left)} or \emph{right(right(left))} or \ldots''
+          \emph{right;left} or \emph{right;right;left} or \ldots''
     \item We would need to write: $\text{unit} + \text{unit} + \text{unit} + \ldots$
   \end{itemize}
 
