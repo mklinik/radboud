@@ -168,16 +168,19 @@ Parameter imp_elimination : forall p q : prop, T (p => q) -> T p -> T q.
 (* exercise 7 : prove the following lemma *)
 Lemma I : forall p : prop, T (p => p).
 Proof.
-(*! proof *)
-
+intro p. apply imp_introduction. intro Tp. apply Tp.
 Qed.
 
 (* exercise 8 : prove the following lemma *)
 Lemma transitivity :
  forall p q r : prop, T (p => q) -> T (q => r) -> T (p => r).
 Proof.
-(*! proof *)
-
+intros p q r.
+intros p_implies_q q_implies_r.
+apply imp_introduction. intro Tp.
+apply imp_elimination with q. assumption.
+apply imp_elimination with p. assumption.
+assumption.
 Qed.
 
 Parameter conjunction : prop -> prop -> prop.
@@ -186,20 +189,23 @@ Infix "X" := conjunction (no associativity, at level 90).
 (* exercise 9 : define variables that model the introduction
    rule for conjuction on prop, and both elimination rules *)
 
-Parameter conjunction_introduction : (*! term *)
-  .
+Parameter conjunction_introduction :
+  forall p q : prop, T p -> T q -> T (p X q).
 
-Parameter conjunction_elimination_l : (*! term *)
-  .
+Parameter conjunction_elimination_l :
+  forall p q : prop, T (p X q) -> T p.
 
-Parameter conjunction_elimination_r : (*! term *)
-  .
+Parameter conjunction_elimination_r :
+  forall p q : prop, T (p X q) -> T q.
 
 (* exercise 10: prove the following lemma *)
 Lemma weak : forall a b c : prop, T (a => c) -> T ((a X b) => c).
 Proof.
-(*! proof *)
-
+intros a b c a_implies_c.
+apply imp_introduction. intro a_conj_b.
+apply imp_elimination with a. assumption.
+apply conjunction_elimination_l with b.
+assumption.
 Qed.
 
 
@@ -215,8 +221,12 @@ Definition not (p : prop) := p => bot.
 (* exercise 11 : prove the following lemma *)
 Lemma contrapositive : forall p q : prop, T (p => q) -> T (not q => not p).
 Proof.
-(*! proof *)
-
+intros p q p_implies_q.
+apply imp_introduction. unfold not. intro not_q.
+apply imp_introduction. intro Tp.
+apply imp_elimination with q. apply not_q.
+apply imp_elimination with p. assumption.
+assumption.
 Qed.
 
 End logical_framework.
