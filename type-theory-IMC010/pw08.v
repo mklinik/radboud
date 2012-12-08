@@ -16,7 +16,10 @@ Definition prop3 :=
   fun (x : (A -> A) -> A -> A) (y : A) => x (fun z : A => y) y.
 
 Definition prop4 :=
-  fun (x : A -> B -> C) (y : (A -> B -> C) -> A) (z : (A -> B -> C) -> B) => x (y x) (z x).
+  fun (x : A -> B -> C) 
+      (y : (A -> B -> C) -> A)
+      (z : (A -> B -> C) -> B) => 
+        x (y x) (z x).
 
 End proplogic.
 
@@ -26,7 +29,11 @@ Section deptypes.
 (* complete the following dependently typed lambda terms *)
 
 Definition pred1 :=
-  fun (l : Set -> Set) (A : Set) (B : Set) (f : l A -> l B) (x : l A) => f x.
+  fun (l : Set -> Set)
+      (A : Set)
+      (B : Set)
+      (f : l A -> l B) 
+      (x : l A) => f x.
 
 Definition pred2 :=
   fun (e : nat -> nat -> Set) (n : nat) => forall m : nat, e n m.
@@ -59,8 +66,10 @@ Parameter dn: forall p:Prop, ~~p -> p.
    use dn twice, first time quite soon *)
 Lemma aux : (~ forall x:D, drinks x) -> (exists x:D, ~drinks x).
 Proof.
-(*! proof *)
-
+unfold not. intro.
+apply dn. unfold not. intro.
+apply H. intro x. apply dn. unfold not. intro.
+apply H0. exists x. exact H1.
 Qed.
 
 
@@ -71,8 +80,13 @@ Qed.
 
 Theorem drinker : exists x:D, (drinks x) -> (forall y:D, drinks y).
 Proof.
-(*! proof *)
+elim em with (forall y : D, drinks y).
 
+intro H. exists d. intro Hd. apply H.
+
+intro H. apply aux in H.
+inversion H. exists x. intro H1. elimtype False. destruct H0.
+exact H1.
 Qed.
 
 
@@ -83,9 +97,11 @@ Qed.
    using dn in the first step and then yet another time *)
 Theorem drinker2 : exists x:D, (drinks x) -> (forall y:D, drinks y).
 Proof.
-(*! proof *)
+apply dn. unfold not. intro. apply H. exists d. intro.
+apply dn. unfold not. intro.
+apply H1. intro y. apply dn.
 
-Qed.
+
 
 End drinker.
 
