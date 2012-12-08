@@ -16,9 +16,9 @@ Definition prop3 :=
   fun (x : (A -> A) -> A -> A) (y : A) => x (fun z : A => y) y.
 
 Definition prop4 :=
-  fun (x : A -> B -> C) 
+  fun (x : A -> B -> C)
       (y : (A -> B -> C) -> A)
-      (z : (A -> B -> C) -> B) => 
+      (z : (A -> B -> C) -> B) =>
         x (y x) (z x).
 
 End proplogic.
@@ -32,7 +32,7 @@ Definition pred1 :=
   fun (l : Set -> Set)
       (A : Set)
       (B : Set)
-      (f : l A -> l B) 
+      (f : l A -> l B)
       (x : l A) => f x.
 
 Definition pred2 :=
@@ -97,9 +97,8 @@ Qed.
    using dn in the first step and then yet another time *)
 Theorem drinker2 : exists x:D, (drinks x) -> (forall y:D, drinks y).
 Proof.
-apply dn. unfold not. intro. apply H. exists d. intro.
-apply dn. unfold not. intro.
-apply H1. intro y. apply dn.
+apply dn. unfold not. exists d.
+exists d. intro. apply dn. unfold not. intro.
 
 
 
