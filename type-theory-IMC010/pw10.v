@@ -145,10 +145,13 @@ Check polylistb_ind.
 (* test it using Eval compute on an example *)
 
 Fixpoint polyappend (X:Set) (k l : polylist X) {struct k} : (polylist X) :=
-    (*! term *)
+  match k with
+  | polynil => l
+  | polycons h t => polycons X h (polyappend X t l)
+  end
   .
 
-Eval compute in (*! term *)
+Eval compute in polyappend nat (co 1 (co 2 ni)) (co 42 (co 43 ni))
   .
 
 (* prove the following lemma, to be used later*)
@@ -156,8 +159,9 @@ Lemma append_nil :
   forall X:Set, forall l: polylist X,
   polyappend X l (polynil X) = l.
 Proof.
-(*! proof *)
-
+intros X l. induction l.
+simpl. reflexivity.
+simpl. rewrite -> IHl. reflexivity.
 Qed.
 
 
@@ -166,8 +170,26 @@ Qed.
 Lemma append_assoc : forall X, forall k l m,
   (polyappend X (polyappend X k l) m) = (polyappend X k (polyappend X l m)).
 Proof.
-(*! proof *)
+intros X k l m.
 
+(* k = nil *)
+induction k as [| kh kt].
+simpl. reflexivity.
+
+(* k = cons h t *)
+simpl. induction l as [| lh lt].
+
+(* l = nil *)
+simpl. rewrite append_nil. reflexivity.
+
+(* l = cons lh lt *)
+simpl. rewrite IHkt. induction m as [| mh mt].
+
+(* m = nil *)
+simpl. reflexivity.
+
+(* m = cons mh mt *)
+simpl. reflexivity.
 Qed.
 
 
@@ -177,8 +199,14 @@ Lemma length_append :
  forall X:Set, forall k l : (polylist X),
   polylength X (polyappend X k l) = plus (polylength X k) (polylength X l).
 Proof.
-(*! proof *)
+intros X k l.
+induction k as [| kh kt].
 
+(* k = nil *)
+simpl. reflexivity.
+
+(* k = cons kh kt *)
+simpl. rewrite IHkt. reflexivity.
 Qed.
 
 
@@ -187,9 +215,13 @@ Qed.
 (* test it using Eval compute on an example *)
 
 Fixpoint polyreverse (X:Set) (l : polylist X) {struct l} :(polylist X) :=
-    (*! term *)
+  match l with
+  | ni => ni
+  | co h t => polyappend X (polyreverse X t) (co h ni)
+  end
   .
 
+Eval compute in (polyreverse nat (co 1 (co 2 (co 3 ni)))).
 
 (* exercise 6 *)
 (* prove the following lemma *)
@@ -198,10 +230,28 @@ Lemma reverse_append :
   polyreverse X (polyappend X k l) =
   polyappend X (polyreverse X l) (polyreverse X k).
 Proof.
-(*! proof *)
+intros X.
+induction k as [| kh kt].
 
+(* k = nil *)
+simpl. induction l as [| lh lt].
+
+(* l = nil *)
+simpl. reflexivity.
+
+(* l = co lh lt *)
+simpl. rewrite append_nil. reflexivity.
+
+(* k = co kh kt *)
+simpl. induction l as [| lh lt].
+
+(* l = nil *)
+simpl. rewrite IHkt. simpl. reflexivity.
+
+(* l = co lh lt *)
+simpl. rewrite IHkt. simpl. rewrite append_assoc.
+reflexivity.
 Qed.
-
 
 (* exercise 7 *)
 (* prove the following lemma *)
@@ -211,8 +261,25 @@ Lemma rev_cons_app :
   polyappend X (polyreverse X (polycons X x k)) l =
   polyappend X (polyreverse X k) (polycons X x l).
 Proof.
-(*! proof *)
+intro X.
+induction k as [| kh kt]. induction l.
 
+(* k = nil, l = nil *)
+simpl. reflexivity.
+
+(* k = nil, l = h t *)
+simpl. reflexivity.
+
+induction l as [| lh lt].
+
+(* k = co kh kt, l = nil *)
+intro x. simpl. rewrite append_nil. reflexivity.
+
+(* k = co kh kt, l = co lh lt *)
+intro x. simpl. rewrite <- IHkt. rewrite append_nil.
+rewrite append_assoc.
+
+simpl. reflexivity.
 Qed.
 
 
@@ -250,17 +317,21 @@ Eval compute in (natprodsecond (natpair 1 2)).
    where the first element comes from a set X
    and the second element comes from a set Y    *)
 
-Inductive prod (X Y :Set) : Set := (*! term *)
-  .
+Inductive prod (X Y :Set) : Set :=
+  | pair : forall (x : X) (y : Y), prod X Y.
 
 (* exercise 9 *)
 (* give definitions of the first and second projection *)
 
-Definition fst (X Y : Set) (p: prod X Y) : X := (*! term *)
-  .
+Definition fst (X Y : Set) (p: prod X Y) : X :=
+  match p with
+  | pair x y => x
+  end.
 
-Definition snd (X Y : Set) (p : prod X Y) : Y := (*! term *)
-  .
+Definition snd (X Y : Set) (p : prod X Y) : Y :=
+  match p with
+  | pair x y => y
+  end.
 
 
 (*        exercises about polymorphic trees       *)
@@ -289,7 +360,9 @@ Check (natnode 2 (natnode 1 natleaf natleaf) (natnode 3 natleaf natleaf)).
    with labels on the nodes
    you may introduce handy notation *)
 
-Inductive polybintree (X : Set) : Set := (*! term *)
+Inductive polybintree (X : Set) : Set :=
+  | leaf : polybintree X
+  | node : forall x:X, polybintree X -> polybintree X -> polybintree X
   .
 
 
@@ -299,16 +372,16 @@ Inductive polybintree (X : Set) : Set := (*! term *)
    polyflatten puts the labels of a polybintree from left to right in a polylist *)
 
 Fixpoint polyflatten (X:Set) (t:polybintree X) {struct t} : (polylist X) :=
-  (*! term *)
-(*
 match t with
-| polyleaf =>
-| polynode x l r =>
+| leaf => polynil X
+| node x l r => polyappend X (polyappend X (polyflatten X l) (co x ni)) (polyflatten X r)
 end
-*)
-  .
+.
 
 (* perform some tests using the trees above *)
+
+Definition tree123 := (node nat 2 (node nat 1 (leaf nat) (leaf nat)) (node nat 3 (leaf nat) (leaf nat))).
+Eval compute in polyflatten nat tree123.
 
 (*
 vim: filetype=coq
