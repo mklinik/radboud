@@ -139,7 +139,8 @@ Proof.
 Theorem proj2 : forall P Q : Prop, 
   P /\ Q -> Q.
 Proof.
-  (* FILL IN HERE *) Admitted.
+intros P Q H. inversion H as [HP HQ]. apply HQ.
+Qed.
 (** [] *)
 
 Theorem and_commut : forall P Q : Prop, 
@@ -178,7 +179,8 @@ Theorem and_assoc : forall P Q R : Prop,
 Proof.
   intros P Q R H.
   inversion H as [HP [HQ HR]].
-(* FILL IN HERE *) Admitted.
+split. split. assumption. assumption. assumption.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars, recommended (even__ev) *)
@@ -195,14 +197,29 @@ Theorem even__ev : forall n : nat,
   (even n -> ev n) /\ (even (S n) -> ev (S n)).
 Proof.
   (* Hint: Use induction on [n]. *)
-  (* FILL IN HERE *) Admitted.
+induction n.
+
+split. intro. apply ev_0.
+
+intro. inversion H.
+
+split. intro. inversion IHn. apply H1. apply H.
+intro. inversion IHn. apply ev_SS. apply H0. apply H.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars, optional (conj_fact) *)
 (** Construct a proof object demonstrating the following proposition. *)
 
 Definition conj_fact : forall P Q R, P /\ Q -> Q /\ R -> P /\ R :=
-  (* FILL IN HERE *) admit.
+fun (P Q R : Prop) (Hpq : P /\ Q) (Hqr : Q /\ R) =>
+  match Hpq with
+  | conj Hp Hq =>
+    match Hqr with
+    | conj Hq Hr => conj P R Hp Hr
+    end
+  end.
+
 (** [] *)
 
 (* ###################################################### *)
@@ -239,12 +256,21 @@ Proof.
 Theorem iff_refl : forall P : Prop, 
   P <-> P.
 Proof. 
-  (* FILL IN HERE *) Admitted.
+intro P. unfold iff. split.
+intro. assumption.
+intro. assumption.
+Qed.
 
 Theorem iff_trans : forall P Q R : Prop, 
   (P <-> Q) -> (Q <-> R) -> (P <-> R).
 Proof.
-  (* FILL IN HERE *) Admitted.
+intros P Q R Hpq Hqr. unfold iff.
+inversion Hpq.
+inversion Hqr.
+split.
+intro. apply H1. apply H. apply H3.
+intro. apply H0. apply H2. apply H3.
+Qed.
 
 (** Hint: If you have an iff hypothesis in the context, you can use
     [inversion] to break it into two separate implications.  (Think
@@ -260,9 +286,21 @@ Proof.
     using tactics. (_Hint_: if you make use of previously defined
     theorems, you should only need a single line!) *)
 
+Theorem foo : forall n, beautiful n <-> gorgeous n.
+Proof.
+intro n.
+apply conj.
+apply (beautiful__gorgeous n).
+apply (gorgeous__beautiful n).
+Qed.
+Print foo.
+
 Definition beautiful_iff_gorgeous :
   forall n, beautiful n <-> gorgeous n :=
-  (* FILL IN HERE *) admit.
+fun (n:nat) => conj (beautiful n -> gorgeous n) 
+                    (gorgeous n -> beautiful n)
+                    (beautiful__gorgeous n)
+                    (gorgeous__beautiful n).
 (** [] *)
 
 (** Some of Coq's tactics treat [iff] statements specially, thus
@@ -331,8 +369,12 @@ Proof.
 (** **** Exercise: 2 stars, optional (or_commut'') *)
 (** Try to write down an explicit proof object for [or_commut] (without
     using [Print] to peek at the ones we already defined!). *)
-
-(* FILL IN HERE *)
+Definition or_commut'' := fun (P Q : Prop) (Hpq : P \/ Q) =>
+  match Hpq with
+  | or_introl Hp => or_intror Q P Hp
+  | or_intror Hq => or_introl Q P Hq
+  end.
+Check or_commut''.
 (** [] *)
 
 Theorem or_distributes_over_and_1 : forall P Q R : Prop,
@@ -350,14 +392,24 @@ Proof.
 Theorem or_distributes_over_and_2 : forall P Q R : Prop,
   (P \/ Q) /\ (P \/ R) -> P \/ (Q /\ R).
 Proof.
-  (* FILL IN HERE *) Admitted.
+intros P Q R H.
+inversion H as [[Hp1 | Hq] [Hp2 | Hr]].
+apply or_introl. apply Hp1.
+apply or_introl. apply Hp1.
+apply or_introl. apply Hp2.
+apply or_intror. apply conj. apply Hq. apply Hr.
+Qed.
 (** [] *)
 
 (** **** Exercise: 1 star, optional (or_distributes_over_and) *)
 Theorem or_distributes_over_and : forall P Q R : Prop,
   P \/ (Q /\ R) <-> (P \/ Q) /\ (P \/ R).
 Proof.
-  (* FILL IN HERE *) Admitted.
+intros P Q R.
+apply conj.
+apply or_distributes_over_and_1.
+apply or_distributes_over_and_2.
+Qed.
 (** [] *)
 
 (* ################################################### *)
@@ -395,17 +447,35 @@ Proof.
 Theorem andb_false : forall b c,
   andb b c = false -> b = false \/ c = false.
 Proof. 
-  (* FILL IN HERE *) Admitted.
+intros b c H.
+destruct b. destruct c. inversion H.
+right. reflexivity.
+left. reflexivity.
+Qed.
+
 
 Theorem orb_true : forall b c,
   orb b c = true -> b = true \/ c = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+intros b c H.
+destruct b.
+left. reflexivity.
+destruct c.
+right. reflexivity.
+inversion H.
+Qed.
 
 Theorem orb_false : forall b c,
   orb b c = false -> b = false /\ c = false.
 Proof. 
-  (* FILL IN HERE *) Admitted.
+intros b c H.
+destruct b. destruct c. inversion H.
+split. inversion H.
+reflexivity.
+split. reflexivity.
+destruct c.
+inversion H. reflexivity.
+Qed.
 (** [] *)
 
 (* ################################################### *)
@@ -422,7 +492,7 @@ Inductive False : Prop := .
 (** **** Exercise: 1 star (False_ind_principle) *)
 (** Can you predict the induction principle for falsehood? *)
 
-(* Check False_ind. *)
+Check False_ind.
 (** [] *)
 
 (** Since [False] has no constructors, inverting an assumption
@@ -479,7 +549,8 @@ Proof.
     to start with the induction principle and work backwards to the
     inductive definition.) *)
 
-(* FILL IN HERE *)
+Inductive True : Prop := Truth : True.
+Check True_ind.
 (** [] *)
 
 (** However, unlike [False], which we'll use extensively, [True] is
@@ -542,14 +613,18 @@ Proof.
 Theorem contrapositive : forall P Q : Prop,
   (P -> Q) -> (~Q -> ~P).
 Proof.
-  (* FILL IN HERE *) Admitted.
+intros P Q H. unfold not. intros NQ P2. apply NQ.
+apply H. apply P2.
+Qed. 
 (** [] *)
 
 (** **** Exercise: 1 star (not_both_true_and_false) *)
 Theorem not_both_true_and_false : forall P : Prop,
   ~ (P /\ ~P).
 Proof. 
-  (* FILL IN HERE *) Admitted.
+unfold not. intros P H.
+inversion H. apply H1. apply H0.
+Qed.
 (** [] *)
 
 (** **** Exercise: 1 star (informal_not_PNP) *)
@@ -574,7 +649,9 @@ Theorem ev_not_ev_S : forall n,
   ev n -> ~ ev (S n).
 Proof. 
   unfold not. intros n H. induction H. (* not n! *)
-  (* FILL IN HERE *) Admitted.
+intro Hev1. inversion Hev1.
+intro HevSSS. inversion HevSSS. apply IHev. assumption.
+Qed.
 (** [] *)
 
 (** Note that some theorems that are true in classical logic are _not_
@@ -643,15 +720,34 @@ Proof.
 Theorem not_eq_beq_false : forall n n' : nat,
      n <> n' ->
      beq_nat n n' = false.
-Proof. 
-  (* FILL IN HERE *) Admitted.
+Proof.
+induction n.
+intros n' H.
+induction n'.
+simpl. elimtype False. apply H. reflexivity.
+
+simpl. reflexivity.
+
+intros n' H. simpl. induction n'. reflexivity.
+apply IHn. intro. apply H. rewrite H0. reflexivity.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 2 stars, optional (beq_false_not_eq) *)
 Theorem beq_false_not_eq : forall n m,
   false = beq_nat n m -> n <> m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+induction m.
+induction n.
+simpl. intro. inversion H.
+simpl. intro. intro. inversion H0.
+induction n.
+simpl. intro. intro. inversion H0.
+simpl. intro. intro. apply IHm. rewrite H0.
+symmetry.
+apply not_eq_beq_false. intro.
+Admitted. 
 (** [] *)
 
 (* ############################################################ *)
