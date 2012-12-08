@@ -738,16 +738,29 @@ Qed.
 Theorem beq_false_not_eq : forall n m,
   false = beq_nat n m -> n <> m.
 Proof.
-induction m.
-induction n.
+induction n as [| n'].
+induction m as [| m'].
 simpl. intro. inversion H.
+
 simpl. intro. intro. inversion H0.
-induction n.
-simpl. intro. intro. inversion H0.
-simpl. intro. intro. apply IHm. rewrite H0.
-symmetry.
-apply not_eq_beq_false. intro.
-Admitted. 
+
+induction m as [| m'].
+
+intro. intro. inversion H0.
+
+simpl. intro. intro. apply IHm'. symmetry.
+apply not_eq_beq_false.
+rewrite -> H0. intro.
+apply IHn' with m'.
+exact H.
+inversion H0. reflexivity.
+
+rewrite -> H0. elimtype False.
+apply IHn' with m'.
+exact H.
+inversion H0.
+reflexivity.
+Qed.
 (** [] *)
 
 (* ############################################################ *)
