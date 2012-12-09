@@ -85,43 +85,41 @@ Fixpoint models (f:form) (m:model) {struct f} : bool :=
  end
  .
 
-(*
 Example models_var :
- models (1::nil) (f_var 1) = true.
+ models (f_var 1) (1::nil) = true.
 Proof. simpl. reflexivity. Qed.
 
 Example models_and :
- models (1::2::nil) (f_and (f_var 2) (f_var 1)) = true.
+ models (f_and (f_var 2) (f_var 1)) (1::2::nil) = true.
 Proof. simpl. reflexivity. Qed.
 
 Example not_models_and :
- models (1::nil) (f_and (f_var 2) (f_var 1)) = false.
+ models (f_and (f_var 2) (f_var 1)) (1::nil) = false.
 Proof. simpl. reflexivity. Qed.
 
 Example model_or :
- models (1::nil) (f_or (f_var 42) (f_var 1)) = true.
+ models (f_or (f_var 42) (f_var 1)) (1::nil) = true.
 Proof. simpl. reflexivity. Qed.
 
 Example not_models_or :
- models (1::2::nil) (f_or (f_var 42) (f_var 43)) = false.
+ models (f_or (f_var 42) (f_var 43)) (1::2::nil) = false.
 Proof. simpl. reflexivity. Qed.
 
 Example models_imp :
- models nil (f_imp (f_var 1) (f_var 1)) = true.
+ models (f_imp (f_var 1) (f_var 1)) nil = true.
 Proof. simpl. reflexivity. Qed.
 
 Example not_models_imp :
- models (1::nil) (f_imp (f_var 1) (f_var 42)) = false.
+ models (f_imp (f_var 1) (f_var 42)) (1::nil) = false.
 Proof. simpl. reflexivity. Qed.
 
 Example models_neg :
- models nil (f_neg (f_var 42)) = true.
+ models (f_neg (f_var 42)) nil = true.
 Proof. simpl. reflexivity. Qed.
 
 Example not_models_neg :
- models (1::nil) (f_neg (f_var 1)) = false.
+ models (f_neg (f_var 1)) (1::nil) = false.
 Proof. simpl. reflexivity. Qed.
-*)
 
 (* Returns all possible sublists of a given list *)
 Fixpoint sublists {A:Type} (l:list A) : (list (list A)) :=
