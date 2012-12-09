@@ -67,8 +67,8 @@ Example findvars_all :
 Proof. reflexivity. Qed.
 
 
-(* Checks whether the given number x is in the list l *)
-Definition bin_nat (x:nat) (l:list nat) : bool :=
+(* Checks whether the given number x is an element of the list l *)
+Definition elem_nat (x:nat) (l:list nat) : bool :=
  existsb (fun y => beq_nat x y) l.
 
 
@@ -77,7 +77,7 @@ Definition bin_nat (x:nat) (l:list nat) : bool :=
 *)
 Fixpoint models (f:form) (m:model) : bool :=
  match f with
- | f_var x   => bin_nat x m
+ | f_var x   => elem_nat x m
  | f_and l r => andb  (models l m) (models r m)
  | f_or  l r => orb   (models l m) (models r m)
  | f_imp l r => implb (models l m) (models r m)
