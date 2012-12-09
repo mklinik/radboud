@@ -97,10 +97,17 @@ Qed.
    using dn in the first step and then yet another time *)
 Theorem drinker2 : exists x:D, (drinks x) -> (forall y:D, drinks y).
 Proof.
-apply dn. unfold not. exists d.
-exists d. intro. apply dn. unfold not. intro.
+apply dn. (* en nu? *)
+Abort.
 
-
+(* The last part of the proof. But how to get here? *)
+Goal ~ (forall x:D, drinks x /\ ~(forall y:D, drinks y)).
+Proof.
+intro.
+elim H with d.
+unfold not. intro. intro.
+apply H1. apply H.
+Qed.
 
 End drinker.
 
@@ -124,8 +131,14 @@ Theorem barber : ~ exists x : V ,
    /\
   (forall y:V, (~ shaves y y -> shaves x y)).
 Proof.
-(*! proof *)
+unfold not.
+intro. inversion H. inversion H0. apply H1 with x.
+elim em with (shaves x x).
+intro. apply H3.
 
+unfold not. intro. apply H2. exact H3.
+
+apply H2. intro. apply H1 with x. exact H3. exact H3.
 Qed.
 
 
@@ -133,11 +146,18 @@ Qed.
    prove the more elegant formulation of the barber's paradox
    with the forall inside the /\ *)
 
-Theorem barber2 : (*! term *)
+Theorem barber2 : ~ exists x : V,
+  forall y:V, (shaves x y -> ~ shaves y y) /\ (~ shaves y y -> shaves x y)
   .
 Proof.
-(*! proof *)
+unfold not. intro. inversion H.
+elim em with (shaves x x).
+intro. elim H0 with x. intros. apply H2. exact H1. exact H1.
 
+unfold not. intro.
+elim H0 with x. intros. apply H2. apply H3. intro.
+apply H2. exact H4. exact H4. apply H3. intro. apply H2. exact H4.
+exact H4.
 Qed.
 
 End barber.
