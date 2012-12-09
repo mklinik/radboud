@@ -87,39 +87,39 @@ Fixpoint models (f:form) (m:model) {struct f} : bool :=
 
 Example models_var :
  models (f_var 1) (1::nil) = true.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example models_and :
  models (f_and (f_var 2) (f_var 1)) (1::2::nil) = true.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example not_models_and :
  models (f_and (f_var 2) (f_var 1)) (1::nil) = false.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example model_or :
  models (f_or (f_var 42) (f_var 1)) (1::nil) = true.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example not_models_or :
  models (f_or (f_var 42) (f_var 43)) (1::2::nil) = false.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example models_imp :
  models (f_imp (f_var 1) (f_var 1)) nil = true.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example not_models_imp :
  models (f_imp (f_var 1) (f_var 42)) (1::nil) = false.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example models_neg :
  models (f_neg (f_var 42)) nil = true.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Example not_models_neg :
  models (f_neg (f_var 1)) (1::nil) = false.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 (* Returns all possible sublists of a given list *)
 Fixpoint sublists {A:Type} (l:list A) : (list (list A)) :=
@@ -131,7 +131,7 @@ Fixpoint sublists {A:Type} (l:list A) : (list (list A)) :=
 
 Example sublists_1 :
  sublists (1::nil) = (1::nil)::(nil)::nil.
-Proof. simpl. reflexivity.
+Proof. reflexivity. Qed.
 
 Example sublists_123 :
  sublists (1::2::3::nil) =
@@ -143,12 +143,12 @@ Example sublists_123 :
   (   2   ::nil) ::
   (      3::nil) ::
   (         nil) :: nil.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 Definition nilnat : list nat := nil.
 Example sublists_nil :
  sublists nilnat = nil::nil.
-Proof. simpl. reflexivity. Qed.
+Proof. reflexivity. Qed.
 
 
 Definition find_model (f:form) : option model :=
