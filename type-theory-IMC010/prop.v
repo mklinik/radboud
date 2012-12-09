@@ -22,15 +22,16 @@ Definition model := list nat.
 
 (* Helper function for find_variables *)
 Fixpoint find_variables' (f:form) (vars:list nat) {struct f} : list nat :=
-  match f with
-  | f_var x   => cons x vars
-  | f_and l r => find_variables' r (find_variables' l vars)
-  | f_or  l r => find_variables' r (find_variables' l vars)
-  | f_imp l r => find_variables' r (find_variables' l vars)
-  | f_neg g   => find_variables' g vars
-  end
-  .
+ match f with
+ | f_var x   => cons x vars
+ | f_and l r => find_variables' r (find_variables' l vars)
+ | f_or  l r => find_variables' r (find_variables' l vars)
+ | f_imp l r => find_variables' r (find_variables' l vars)
+ | f_neg g   => find_variables' g vars
+ end
+ .
 
+(* Put all free variables found in the given term into a list *)
 Definition find_variables : form -> list nat :=
  fun (f:form) => find_variables' f nil.
 
