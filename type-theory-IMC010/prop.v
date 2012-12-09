@@ -150,3 +150,15 @@ Definition nilnat : list nat := nil.
 Example sublists_nil :
  sublists nilnat = nil::nil.
 Proof. simpl. reflexivity. Qed.
+
+
+Definition find_model (f:form) : option model :=
+ find (fun m => models m f) (sublists (find_variables f)).
+
+Example findmodel_var :
+ find_model (f_var 42) = Some (42::nil).
+Proof. reflexivity. Qed.
+
+Example findmodel_fail :
+ find_model (f_and (f_var 1) (f_neg (f_var 1))) = None.
+Proof. reflexivity. Qed.
