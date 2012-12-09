@@ -126,7 +126,7 @@ Proof. simpl. reflexivity. Qed.
 Fixpoint sublists {A:Type} (l:list A) : (list (list A)) :=
  match l with
  | nil    => nil::nil
- | h :: t => app (map (cons h) (sublists t)) (sublists t)
+ | h :: t => let subtails := (sublists t) in app (map (cons h) subtails) subtails
  end
  .
 
