@@ -120,3 +120,33 @@ Proof. simpl. reflexivity. Qed.
 Example not_models_neg :
  models (1::nil) (f_neg (f_var 1)) = false.
 Proof. simpl. reflexivity. Qed.
+
+
+(* Returns all possible sublists of a given list *)
+Fixpoint sublists {A:Type} (l:list A) : (list (list A)) :=
+ match l with
+ | nil    => nil::nil
+ | h :: t => app (map (cons h) (sublists t)) (sublists t)
+ end
+ .
+
+Example sublists_1 :
+ sublists (1::nil) = (1::nil)::(nil)::nil.
+Proof. simpl. reflexivity.
+
+Example sublists_123 :
+ sublists (1::2::3::nil) =
+  (1::2::3::nil) ::
+  (1::2   ::nil) ::
+  (1   ::3::nil) ::
+  (1      ::nil) ::
+  (   2::3::nil) ::
+  (   2   ::nil) ::
+  (      3::nil) ::
+  (         nil) :: nil.
+Proof. simpl. reflexivity. Qed.
+
+Definition nilnat : list nat := nil.
+Example sublists_nil :
+ sublists nilnat = nil::nil.
+Proof. simpl. reflexivity. Qed.
