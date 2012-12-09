@@ -75,16 +75,17 @@ Definition bin_nat (x:nat) (l:list nat) : bool :=
 
    read: m |= f
 *)
-Fixpoint models (m:model) (f:form) {struct f} : bool :=
+Fixpoint models (f:form) (m:model) {struct f} : bool :=
  match f with
  | f_var x   => bin_nat x m
- | f_and l r => andb  (models m l) (models m r)
- | f_or  l r => orb   (models m l) (models m r)
- | f_imp l r => implb (models m l) (models m r)
- | f_neg g   => negb  (models m g)
+ | f_and l r => andb  (models l m) (models r m)
+ | f_or  l r => orb   (models l m) (models r m)
+ | f_imp l r => implb (models l m) (models r m)
+ | f_neg g   => negb  (models g m)
  end
  .
 
+(*
 Example models_var :
  models (1::nil) (f_var 1) = true.
 Proof. simpl. reflexivity. Qed.
@@ -120,7 +121,7 @@ Proof. simpl. reflexivity. Qed.
 Example not_models_neg :
  models (1::nil) (f_neg (f_var 1)) = false.
 Proof. simpl. reflexivity. Qed.
-
+*)
 
 (* Returns all possible sublists of a given list *)
 Fixpoint sublists {A:Type} (l:list A) : (list (list A)) :=
@@ -153,7 +154,7 @@ Proof. simpl. reflexivity. Qed.
 
 
 Definition find_model (f:form) : option model :=
- find (fun m => models m f) (sublists (find_variables f)).
+ find (models f) (sublists (find_variables f)).
 
 Example findmodel_var :
  find_model (f_var 42) = Some (42::nil).
@@ -162,3 +163,31 @@ Proof. reflexivity. Qed.
 Example findmodel_fail :
  find_model (f_and (f_var 1) (f_neg (f_var 1))) = None.
 Proof. reflexivity. Qed.
+
+Lemma found_x_satisfies_predicate :
+ forall (A:Type) (P:A -> bool) (l:list A) (x:A), find P l = Some x -> P x = true.
+Proof.
+intros A P. induction l as [| h t].
+(* l = nil *)
+intros x H. inversion H.
+(* l = h::t *)
+intros x H. inversion H.
+(* 'Some x' comes either from the 'then' part, or from the 'else' part *)
+remember (P h) as Ph. destruct (Ph).
+(* 'then' part: P holds for h in the first place. We only have to convince Coq. *)
+assert (x = h). inversion H1. reflexivity. rewrite H0. symmetry.  exact HeqPh.
+(* 'else' part: P holds for some element in the tail. But that's just the
+   induction hypothesis. *)
+apply IHt. exact H1.
+Qed.
+
+Theorem find_model_works :
+ forall (f:form) (m:model), find_model f = Some m -> models f m = true.
+Proof.
+intros f m. unfold find_model.
+apply found_x_satisfies_predicate.
+Qed.
+
+(*
+vim: ft=coq
+*)
