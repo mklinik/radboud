@@ -14,7 +14,7 @@ Inductive form : Set :=
  | f_or  : form -> form -> form
  | f_imp : form -> form -> form
  | f_neg : form -> form
- .
+.
 
 (* If a nat is contained in the model, it's truth value is 'true'
    If a nat is not contained in a model, it's truth value is 'false'
@@ -22,7 +22,7 @@ Inductive form : Set :=
 Definition model := list nat.
 
 (* Helper function for find_variables *)
-Fixpoint find_variables' (f:form) (vars:list nat) {struct f} : list nat :=
+Fixpoint find_variables' (f:form) (vars:list nat) : list nat :=
  match f with
  | f_var x   => cons x vars
  | f_and l r => find_variables' r (find_variables' l vars)
@@ -30,13 +30,14 @@ Fixpoint find_variables' (f:form) (vars:list nat) {struct f} : list nat :=
  | f_imp l r => find_variables' r (find_variables' l vars)
  | f_neg g   => find_variables' g vars
  end
- .
+.
 
 (* Put all free variables found in the given term into a list *)
 Definition find_variables : form -> list nat :=
  fun (f:form) => find_variables' f nil.
 
-(* some tests *)
+
+(* some examples *)
 
 Eval compute in find_variables (f_and (f_var 1) (f_var 2)).
 
@@ -71,11 +72,10 @@ Definition bin_nat (x:nat) (l:list nat) : bool :=
  existsb (fun y => beq_nat x y) l.
 
 
-(* Given a model and a formula f, checks whether the model satisfies the formula.
-
-   read: m |= f
+(* Given a model and a formula f, checks whether the model satisfies the
+   formula.
 *)
-Fixpoint models (f:form) (m:model) {struct f} : bool :=
+Fixpoint models (f:form) (m:model) : bool :=
  match f with
  | f_var x   => bin_nat x m
  | f_and l r => andb  (models l m) (models r m)
@@ -83,7 +83,7 @@ Fixpoint models (f:form) (m:model) {struct f} : bool :=
  | f_imp l r => implb (models l m) (models r m)
  | f_neg g   => negb  (models g m)
  end
- .
+.
 
 Example models_var :
  models (f_var 1) (1::nil) = true.
@@ -121,13 +121,14 @@ Example not_models_neg :
  models (f_neg (f_var 1)) (1::nil) = false.
 Proof. reflexivity. Qed.
 
+
 (* Returns all possible sublists of a given list *)
 Fixpoint sublists {A:Type} (l:list A) : (list (list A)) :=
  match l with
  | nil    => nil::nil
  | h :: t => let subtails := (sublists t) in app (map (cons h) subtails) subtails
  end
- .
+.
 
 Example sublists_1 :
  sublists (1::nil) = (1::nil)::(nil)::nil.
