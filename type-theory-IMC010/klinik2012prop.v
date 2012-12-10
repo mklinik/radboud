@@ -100,7 +100,7 @@ Definition elem_nat (x:nat) (l:list nat) : bool :=
 
    This is your standard way of defining the denotational semantics of an
    object language in the host language.  It corresponds nicely to the
-   definition of truth in your favourite book about logic, where the meaning of
+   definition of truth in your favourite book on logic, where the meaning of
    the connectives are explained in terms of their meta-language equivalents.
 
    The Coq standard library has all the sentential connectives we need.  The
@@ -166,7 +166,7 @@ Proof. reflexivity. Qed.
    list [[]].
 
    All sublists of a non-empty list [h:t] are all sublists of the tail, one
-   time with the head, and one time without.
+   time including h, and one time without.
 
 *)
 Fixpoint sublists {A:Type} (l:list A) : (list (list A)) :=
@@ -202,10 +202,10 @@ Proof. reflexivity. Qed.
    otherwise.
 
    With all the definitions above, the definition of find_model is rather
-   concise now.  We first compute all possible models of a given formula, that
-   is all possible combinations of truth values of the variables occuring in
-   the formula.  With our definition of truth, this corresponds to the list of
-   all sublists of the variables of the formula.  Then, we let `find` pick the
+   concise.  We first compute all possible models of a given formula, that is
+   all possible combinations of truth values of the variables occuring in the
+   formula.  With our definition of truth, this corresponds to the list of all
+   sublists of the variables of the formula.  Then, we let `find` pick the
    first model that satisfies the formula.  If none of the models satisfies the
    formula, `find` returns `None`.
 
