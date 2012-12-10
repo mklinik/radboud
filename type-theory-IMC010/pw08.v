@@ -97,16 +97,9 @@ Qed.
    using dn in the first step and then yet another time *)
 Theorem drinker2 : exists x:D, (drinks x) -> (forall y:D, drinks y).
 Proof.
-apply dn. (* en nu? *)
-Abort.
-
-(* The last part of the proof. But how to get here? *)
-Goal ~ (forall x:D, drinks x /\ ~(forall y:D, drinks y)).
-Proof.
-intro.
-elim H with d.
-unfold not. intro. intro.
-apply H1. apply H.
+apply dn. intros H. apply H. exists d. intros ddrinks.
+intros y. apply dn. intros H2. apply H. exists y.
+intros H3. elimtype False. apply H2. exact H3.
 Qed.
 
 End drinker.
