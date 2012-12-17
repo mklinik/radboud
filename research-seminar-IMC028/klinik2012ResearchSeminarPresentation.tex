@@ -9,6 +9,7 @@
 
 \usepackage[english]{babel}
 \usepackage[latin1]{inputenc}
+\usepackage{bussproofs}
 
 % needs debian package texlive-math-extra
 \usepackage{stmaryrd} % for \llbracket, \rrbracket
@@ -94,6 +95,36 @@
     &     & \text{case}\ M\ \text{of}\ \text{inl}(x) \Arr M\ \text{or}\ \text{inr}(x) \Arr M\ | \\
     &     & \text{intro}[\mu a.t]M\ |\ \text{elim}[\mu a.t]M
   \end{eqnarray*}
+
+\end{frame}
+
+
+\begin{frame}{Typing rules of the Fixed Point Calculus}
+
+ \begin{prooftree}
+  \AxiomC{}
+  \RightLabel{[Unit]}
+  \UnaryInfC{unity : unit}
+ \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{$\Gamma \vdash M : s$}
+  \AxiomC{$\Gamma \vdash N : t$}
+  \RightLabel{$[Pairing]$}
+  \BinaryInfC{$\Gamma \vdash (M, N) : s \times t$}
+ \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{$\Gamma \vdash M : s \times t$}
+  \RightLabel{$[First]$}
+  \UnaryInfC{$\Gamma \vdash fst(M) : s$}
+ \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{$\Gamma \vdash M : s \times t$}
+  \RightLabel{$[Second]$}
+  \UnaryInfC{$\Gamma \vdash snd(M) : t$}
+ \end{prooftree}
 
 \end{frame}
 
