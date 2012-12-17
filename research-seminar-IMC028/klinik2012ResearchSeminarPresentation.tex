@@ -104,26 +104,26 @@
 
  \begin{prooftree}
   \AxiomC{}
-  \RightLabel{[Unit]}
+  %\RightLabel{[Unit]}
   \UnaryInfC{unity : unit}
  \end{prooftree}
 
  \begin{prooftree}
   \AxiomC{$\Gamma \vdash M : s$}
   \AxiomC{$\Gamma \vdash N : t$}
-  \RightLabel{$[Pairing]$}
+  %\RightLabel{$[Pairing]$}
   \BinaryInfC{$\Gamma \vdash (M, N) : s \times t$}
  \end{prooftree}
 
  \begin{prooftree}
   \AxiomC{$\Gamma \vdash M : s \times t$}
-  \RightLabel{$[First]$}
+  %\RightLabel{$[First]$}
   \UnaryInfC{$\Gamma \vdash fst(M) : s$}
  \end{prooftree}
 
  \begin{prooftree}
   \AxiomC{$\Gamma \vdash M : s \times t$}
-  \RightLabel{$[Second]$}
+  %\RightLabel{$[Second]$}
   \UnaryInfC{$\Gamma \vdash snd(M) : t$}
  \end{prooftree}
 
@@ -134,13 +134,13 @@
 
  \begin{prooftree}
   \AxiomC{$\Gamma \vdash M : s$}
-  \RightLabel{$[Left]$}
+  %\RightLabel{$[Left]$}
   \UnaryInfC{$\Gamma \vdash inl[s + t](M) : s + t$}
  \end{prooftree}
 
  \begin{prooftree}
   \AxiomC{$\Gamma \vdash M : t$}
-  \RightLabel{$[Right]$}
+  %\RightLabel{$[Right]$}
   \UnaryInfC{$\Gamma \vdash inr[s + t](M) : s + t$}
  \end{prooftree}
 
@@ -148,7 +148,7 @@
   \AxiomC{$\Gamma \vdash M : s + t$}
   \AxiomC{$\Gamma, x : s \vdash P : u$}
   \AxiomC{$\Gamma, y : t \vdash Q : u$}
-  \RightLabel{$[Case]$}
+  %\RightLabel{$[Case]$}
   \TrinaryInfC{$\Gamma \vdash
     \text{case}\ M\ \text{of}
       \ \text{inl}(x) \Arr P
