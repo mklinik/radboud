@@ -252,7 +252,7 @@
 
   \begin{itemize}
     \item We write: $\mu a . \text{unit} + a$
-    \item We mean: ``The least fixed point that satisfies the equation $a = \text{unit} + a$ ''
+    \item We mean: ``The least fixed point which satisfies the equation $a = \text{unit} + a$ ''
   \end{itemize}
 
   \begin{center}
@@ -335,9 +335,13 @@
     \item
       Let's consider $\nu a . \text{unit} + a + a$
     \item
-      How can we interpret this datatype? (Successor and Underscore)
+      Three constructors $0 : a$, $S : a \arr a$, $\_ : a \arr a$
     \item
-      What kinds of objects are in the largest fixed point?
+      Values are
+      \begin{itemize}
+        \item infinite sequences of $S$ and $\_$
+        \item finite sequences of $S$ and $\_$, terminated by $0$
+      \end{itemize}
   \end{itemize}
 
   \begin{center}
@@ -366,8 +370,7 @@
   \item
     Recursive datatypes are type expressions of the form $a = t(a)$
   \item
-    $\mu a . t$ and $\nu a . t$ denote the least and largest solutions to such
-    equations
+    $\mu a . t$ and $\nu a . t$ denote the least and largest fixed points of such equations
   \item
     My plan is to answer some questions regarding $\nu a . \text{unit} + a + a$
   \end{itemize}
