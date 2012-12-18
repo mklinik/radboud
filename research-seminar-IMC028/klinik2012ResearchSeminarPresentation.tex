@@ -250,8 +250,10 @@
       child { node {$\text{unit}$} }
       child[missing] {}
     ;
-    \draw (root.south east) .. controls (0.5, -0.5) and (1, 0) .. (0.7, 0.4) .. controls (0.5, 0.7) and (0, 0.6) .. (root.north);
-    %\draw [gray] (root.south east) -- (0.5, -0.5) -- (1, 0) -- (0.5, 0.7) -- (0, 0.6) -- (root.north);
+    \draw (root)
+     to[out=320, in=225] ($(root) + (0.6, -0.2)$)
+     to[out=45, in=315] ($(root) + (0.6, 0.3)$)
+     to[out=135, in=60] (root);
   \end{tikzpicture}
   \end{center}
 
@@ -294,6 +296,43 @@
           $\Phi \circ \Psi = \text{id}$ and $\Psi \circ \Phi = \text{id}$
       \end{itemize}
   \end{itemize}
+
+  \begin{columns}[totalwidth=.7\textwidth]
+
+  \begin{column}{.5\textwidth}
+  \begin{center}
+    \begin{tikzpicture}[scale=1.2]
+      \node (root) {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
+        child { node {$\text{unit}$} }
+        child[missing] {}
+      ;
+      \draw (root)
+       to[out=320, in=225] ($(root) + (0.6, -0.2)$)
+       to[out=45, in=315] ($(root) + (0.6, 0.3)$)
+       to[out=135, in=60] (root);
+    \end{tikzpicture}
+  \end{center}
+  \end{column}
+
+  \begin{column}{.5\textwidth}
+  \begin{center}
+    \begin{tikzpicture}[scale=1.2]
+     \node (root) {$+$} [grow=down, sibling distance=4.0em, level distance=1.8em]
+        child { node {unit} }
+        child { node (plus) {$+$}
+          child { node {unit} }
+          child[missing] {}
+        }
+      ;
+      \draw (plus)
+       to[out=320, in=225] ($(plus) + (0.6, -0.2)$)
+       to[out=45, in=315] ($(plus) + (0.6, 0.3)$)
+       to[out=135, in=60] (plus);
+    \end{tikzpicture}
+  \end{center}
+  \end{column}
+
+  \end{columns}
 
 \end{frame}
 
