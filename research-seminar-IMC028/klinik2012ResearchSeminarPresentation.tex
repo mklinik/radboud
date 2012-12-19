@@ -281,8 +281,7 @@
       What is a solution of the equation $a = \text{unit} + a$ ?
       \begin{itemize}
         \item
-          Claim: The set of all finite paths which start at the root and end in
-          a leaf
+          Some nifty set.
       \end{itemize}
     \item
       How to prove that it is a fixed point?
@@ -337,12 +336,22 @@
 \end{frame}
 
 
-\begin{frame}{Foobar}
+\begin{frame}{How to Answer More Questions?}
 
  \begin{itemize}
   \item How to prove that we have a least fixed point?
-  \item What is an information ordering?
-  \item What is a domain?
+  \item Can we define an information ordering?
+  \begin{itemize}
+    \item Reflexive, symmetric, transitive ordering $\sqsubseteq$ that
+      characterizes the \emph{definedness} of values
+  \end{itemize}
+  \item Is it a domain?
+    \begin{itemize}
+      \item
+        Every non-decreasing $\omega$-sequence has a least upper bound
+      \item
+        There is a least element $\bot$
+    \end{itemize}
  \end{itemize}
 
 \end{frame}
@@ -353,11 +362,11 @@
 \begin{frame}{Fixpoint Enlargement Right Now}
 
   \begin{itemize}
-    \item Claim: $\nu a . \text{unit} + a$, that is: The set of all paths that start
-          at the root and either end at an arbitrary node or are infinite, is
-          the \emph{largest} fixed point of $a = \text{unit} + a$.
+    \item
+      Can we find a solution to $\nu a . \text{unit} + a$,
+      the \emph{greatest} fixed point of $a = \text{unit} + a$.
     \item Is it a fixed point?
-    \item Is it the largest fixed point?
+    \item Is it the greatest fixed point?
     \item How does it relate to the natural numbers?
     \item Can we define an information ordering on this set?
     \item Is this ordering a domain?
@@ -411,7 +420,7 @@
   \item
     Recursive datatypes are type expressions of the form $a = t(a)$
   \item
-    $\mu a . t$ and $\nu a . t$ denote the least and largest fixed points of such equations
+    $\mu a . t$ and $\nu a . t$ denote the least and greatest fixed points of such equations
   \item
     My plan is to answer some questions regarding $\nu a . \text{unit} + a + a$
   \end{itemize}
