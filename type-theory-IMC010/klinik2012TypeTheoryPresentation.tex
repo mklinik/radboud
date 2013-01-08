@@ -1,0 +1,249 @@
+\documentclass{beamer}
+
+\beamertemplatenavigationsymbolsempty
+
+\mode<presentation>
+{
+  \usetheme{default}
+}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{bussproofs}
+
+% needs debian package texlive-math-extra
+\usepackage{stmaryrd} % for \llbracket, \rrbracket
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+\title
+{Syntax Directed Type Checking for Pure~Type~Systems}
+
+\author
+{Markus~Klinik}
+
+\institute[Radboud University Nijmegen] % (optional, but mostly needed)
+{
+  Radboud University Nijmegen
+}
+
+\date
+{Type Theory and Proof Assistants 2012}
+
+
+\newcommand{\arr}{\rightarrow}
+\newcommand{\Arr}{\Rightarrow}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+
+% Structuring a talk is a difficult task and the following structure
+% may not be suitable. Here are some rules that apply for this
+% solution:
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+% - A conference audience is likely to know very little of what you
+%   are going to talk about. So *simplify*!
+% - In a 20min talk, getting the main ideas across is hard
+%   enough. Leave out details, even if it means being less precise than
+%   you think necessary.
+% - If you omit details that are vital to the proof/implementation,
+%   just say so once. Everybody will be happy with that.
+
+\section{Explaining the Title}
+
+\subsection{What is Type Checking?}
+
+
+\begin{frame}{What is Type Checking?}
+
+
+\end{frame}
+
+
+\subsection{What Does ``Syntax Directed'' Mean?}
+
+
+\begin{frame}{What Does ``Syntax Directed'' Mean?}
+
+ \begin{prooftree}
+  \AxiomC{}
+  %\RightLabel{[Unit]}
+  \UnaryInfC{unity : unit}
+ \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{$\Gamma \vdash M : s$}
+  \AxiomC{$\Gamma \vdash N : t$}
+  %\RightLabel{$[Pairing]$}
+  \BinaryInfC{$\Gamma \vdash (M, N) : s \times t$}
+ \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{$\Gamma \vdash M : s \times t$}
+  %\RightLabel{$[First]$}
+  \UnaryInfC{$\Gamma \vdash fst(M) : s$}
+ \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{$\Gamma \vdash M : s \times t$}
+  %\RightLabel{$[Second]$}
+  \UnaryInfC{$\Gamma \vdash snd(M) : t$}
+ \end{prooftree}
+
+\end{frame}
+
+
+\subsection{What are PTSs?}
+
+\begin{frame}{Typing rules of the Fixed Point Calculus: Sums}
+
+ \begin{prooftree}
+  \AxiomC{$\Gamma \vdash M : s$}
+  %\RightLabel{$[Left]$}
+  \UnaryInfC{$\Gamma \vdash inl[s + t](M) : s + t$}
+ \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{$\Gamma \vdash M : t$}
+  %\RightLabel{$[Right]$}
+  \UnaryInfC{$\Gamma \vdash inr[s + t](M) : s + t$}
+ \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{$\Gamma \vdash M : s + t$}
+  \AxiomC{$\Gamma, x : s \vdash P : u$}
+  \AxiomC{$\Gamma, y : t \vdash Q : u$}
+  %\RightLabel{$[Case]$}
+  \TrinaryInfC{$\Gamma \vdash
+    \text{case}\ M\ \text{of}
+      \ \text{inl}(x) \Arr P
+      \ \text{or}
+      \ \text{inr}(y) \Arr Q : u$
+  }
+ \end{prooftree}
+
+\end{frame}
+
+
+\section{Syntax Directed Type Checking for PTSs}
+
+\subsection{The Problem}
+
+\begin{frame}{The Problem}
+
+  \begin{itemize}
+    \item
+      Foo
+    \item
+      Bar
+    \item
+      Baz
+  \end{itemize}
+
+\end{frame}
+
+
+\subsection{Step 1: The Weakening Rule}
+
+\begin{frame}{The Weakening Rule}
+
+  \begin{itemize}
+    \item
+      Foo
+    \item
+      Bar
+    \item
+      Baz
+  \end{itemize}
+
+\end{frame}
+
+
+\subsection{Step 2: The Second Step}
+
+\begin{frame}{The Second Step}
+
+  \begin{itemize}
+    \item
+      Foo
+    \item
+      Bar
+    \item
+      Baz
+  \end{itemize}
+
+\end{frame}
+
+
+\subsection{Step 3: The Third Step}
+
+\begin{frame}{The Third Step}
+
+  \begin{itemize}
+    \item
+      Foo
+    \item
+      Bar
+    \item
+      Baz
+  \end{itemize}
+
+\end{frame}
+
+
+\subsection{Step 4: The Fourth Step}
+
+\begin{frame}{The Fourth Step}
+
+  \begin{itemize}
+    \item
+      Foo
+    \item
+      Bar
+    \item
+      Baz
+  \end{itemize}
+
+\end{frame}
+
+
+\section*{Summary}
+
+\begin{frame}{Summary}
+
+  \begin{itemize}
+  \item
+    Conclusion A
+  \item
+    Conclusion B
+  \item
+    Conclusion C
+  \end{itemize}
+
+\end{frame}
+
+
+\end{document}
+
+
