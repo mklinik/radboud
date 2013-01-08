@@ -116,32 +116,19 @@
 
 \subsection{What are PTSs?}
 
-\begin{frame}{Typing rules of the Fixed Point Calculus: Sums}
+\begin{frame}{What are PTSs?}
 
- \begin{prooftree}
-  \AxiomC{$\Gamma \vdash M : s$}
-  %\RightLabel{$[Left]$}
-  \UnaryInfC{$\Gamma \vdash inl[s + t](M) : s + t$}
- \end{prooftree}
+  \begin{itemize}
+    \item
+      Generalized type systems
+    \item
+      Zoo $\Arr$ $\lambda$-cube $\Arr$ PTSs
+  \end{itemize}
 
- \begin{prooftree}
-  \AxiomC{$\Gamma \vdash M : t$}
-  %\RightLabel{$[Right]$}
-  \UnaryInfC{$\Gamma \vdash inr[s + t](M) : s + t$}
- \end{prooftree}
+\end{frame}
 
- \begin{prooftree}
-  \AxiomC{$\Gamma \vdash M : s + t$}
-  \AxiomC{$\Gamma, x : s \vdash P : u$}
-  \AxiomC{$\Gamma, y : t \vdash Q : u$}
-  %\RightLabel{$[Case]$}
-  \TrinaryInfC{$\Gamma \vdash
-    \text{case}\ M\ \text{of}
-      \ \text{inl}(x) \Arr P
-      \ \text{or}
-      \ \text{inr}(y) \Arr Q : u$
-  }
- \end{prooftree}
+
+\begin{frame}{The $\lambda$-Cube}
 
 \end{frame}
 
