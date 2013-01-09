@@ -573,6 +573,89 @@ typeSynthesis gamma (Prod x A B) = ...
 
 \end{frame}
 
+\newcommand{\lvtdash}{\vdash_{lvt}}
+\newcommand{\lvcdash}{\vdash_{lvc}}
+
+\begin{frame}{Maintaining Local Context Validity}
+
+  \vspace{-0.5em}
+
+  \begin{columns}
+
+    \begin{column}{0.4\textwidth}
+      \begin{prooftree}
+         \AxiomC{}
+         \LeftLabel{(valid-nil)}
+         \UnaryInfC{$\lvcdash \emptyset$}
+      \end{prooftree}
+    \end{column}
+
+    \begin{column}{0.6\textwidth}
+      \begin{prooftree}
+         \AxiomC{$\Gamma \lvtdash \oftype{A}{s}$}
+         \AxiomC{$x \notin \Gamma$}
+         \LeftLabel{(valid-cons)}
+         \BinaryInfC{$\lvcdash \Gamma,\oftype{x}{A}$}
+      \end{prooftree}
+    \end{column}
+
+  \end{columns}
+
+  \begin{columns}
+
+    \begin{column}{0.5\textwidth}
+      \begin{prooftree}
+         \AxiomC{$\mathcal{A}(s_1, s_2)$}
+         \LeftLabel{(axiom)}
+         \UnaryInfC{$\Gamma \lvtdash \oftype{s_1}{s_2}$}
+      \end{prooftree}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      \begin{prooftree}
+         \AxiomC{$\oftype{x}{A} \in \Gamma$}
+         \LeftLabel{(var)}
+         \UnaryInfC{$\Gamma \lvtdash \oftype{x}{A}$}
+      \end{prooftree}
+    \end{column}
+
+  \end{columns}
+
+  \begin{prooftree}
+    \AxiomC{$\Gamma \lvtdash \oftype{A}{s_1}$}
+    \AxiomC{$\Gamma , \oftype{x}{A} \lvtdash \oftype{B}{s_2}$}
+    \AxiomC{$\mathcal{R}(s_1, s_2, s_3)$}
+    \AxiomC{$x \notin \Gamma$}
+    \LeftLabel{(product)}
+    \QuaternaryInfC{$\Gamma \lvtdash \oftype{(\church{\Pi}{x}{A}{B})}{s_3}$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\Gamma , \oftype{x}{A} \lvtdash \oftype{M}{B}$}
+    \AxiomC{$\Gamma \lvtdash \oftype{(\church{\Pi}{x}{A}{B})}{s}$}
+    \AxiomC{$x \notin \Gamma$}
+    \LeftLabel{(abstraction)}
+    \TrinaryInfC{$\Gamma \lvtdash
+      \oftype{(\church{\lambda}{x}{A}{M})}
+             {(\church{\Pi}{x}{A}{B})}$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\Gamma \lvtdash \oftype{M}{(\church{\Pi}{x}{A}{B})}$}
+    \AxiomC{$\Gamma \lvtdash \oftype{N}{A}$}
+    \LeftLabel{(application)}
+    \BinaryInfC{$\Gamma \lvtdash \oftype{MN}{[N/x]B}$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\Gamma \lvtdash \oftype{M}{A}$}
+    \AxiomC{$A =_{\beta} B$}
+    \AxiomC{$\Gamma \lvtdash \oftype{B}{s}$}
+    \LeftLabel{(conversion)}
+    \TrinaryInfC{$\Gamma \lvtdash \oftype{M}{B}$}
+  \end{prooftree}
+
+\end{frame}
 
 \begin{frame}{The Conversion Rule}
 
