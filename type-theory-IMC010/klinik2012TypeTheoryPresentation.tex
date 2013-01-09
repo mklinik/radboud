@@ -487,6 +487,26 @@ typeSynthesis gamma (Prod x A B) = ...
 
 \end{frame}
 
+\begin{frame}{Valid Contexts}
+
+  A context is a sequence of the form $\oftype{x_1}{A_1}, \ldots, \oftype{x_n}{A_n}$
+
+  \smallskip
+
+  A context is valid iff:
+
+  \begin{itemize}
+    \item
+      The variable $x_i$ doesn't occur free in $A_1, \ldots, A_i$
+    \item
+      For each $i \leq n$, either $A_i \equiv s$ or
+        \begin{equation*}
+          \oftype{x_1}{A_1}, \ldots, \oftype{x_{i-1}}{A_{i-1}} \vdash \oftype{A_i}{s}
+        \end{equation*}
+  \end{itemize}
+
+\end{frame}
+
 \newcommand{\vcdash}{\vdash_{vc}}
 \newcommand{\vtdash}{\vdash_{vt}}
 
