@@ -47,6 +47,9 @@
 % church-style (explicit) abstraction. We adjust the spacing around the colon and dot
 \newcommand{\church}[4]{#1 #2\!:\!#3\,.\,#4}
 
+% something is of type something  x : A, we adjust the spacing
+\newcommand{\oftype}[2]{#1\!:\!#2}
+
 \begin{document}
 
 \begin{frame}
@@ -183,6 +186,111 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
      \BinaryInfC{$MN:\tau(N)$}
     \end{prooftree}
   \end{center}
+
+\end{frame}
+
+\newcommand{\ruleAxiom}{
+  \begin{prooftree}
+     \AxiomC{}
+     \LeftLabel{(axiom)}
+     \UnaryInfC{$\vdash \star : \square$}
+  \end{prooftree}
+}
+
+\newcommand{\ruleStart}{
+  \begin{prooftree}
+     \AxiomC{$\Gamma \vdash A : s$}
+     \LeftLabel{(start)}
+     \UnaryInfC{$\Gamma , \oftype{x}{A} \vdash \oftype{x}{A}$}
+  \end{prooftree}
+}
+
+\newcommand{\ruleWeakening}{
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vdash \oftype{M}{B}$}
+    \AxiomC{$\Gamma \vdash \oftype{A}{s}$}
+    \LeftLabel{(weakening)}
+    \BinaryInfC{$\Gamma , \oftype{x}{A} \vdash \oftype{M}{B}$}
+  \end{prooftree}
+}
+
+\newcommand{\ruleApplication}{
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vdash \oftype{M}{(\church{\Pi}{x}{A}{B})}$}
+    \AxiomC{$\Gamma \vdash \oftype{N}{A}$}
+    \LeftLabel{(application)}
+    \BinaryInfC{$\Gamma \vdash \oftype{MN}{[N/x]B}$}
+  \end{prooftree}
+}
+
+\newcommand{\ruleAbstraction}{
+  \begin{prooftree}
+    \AxiomC{$\Gamma , \oftype{x}{A} \vdash \oftype{M}{B}$}
+    \AxiomC{$\Gamma \vdash \oftype{(\church{\Pi}{x}{A}{B})}{s}$}
+    \LeftLabel{(abstraction)}
+    \BinaryInfC{$\Gamma \vdash \oftype{(\church{\lambda}{x}{A}{M})}
+                                      {(\church{\Pi}{x}{A}{B})}$}
+  \end{prooftree}
+}
+
+\newcommand{\ruleConversion}{
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vdash \oftype{M}{A}$}
+    \AxiomC{$A =_{\beta} B$}
+    \AxiomC{$\Gamma \vdash \oftype{B}{s}$}
+    \LeftLabel{(conversion)}
+    \TrinaryInfC{$\Gamma \vdash \oftype{M}{B}$}
+  \end{prooftree}
+}
+
+\newcommand{\ruleProduct}{
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vdash \oftype{A}{s_1}$}
+    \AxiomC{$\Gamma , \oftype{x}{A} \vdash \oftype{B}{s_2}$}
+    \LeftLabel{(product)}
+    \BinaryInfC{$\Gamma \vdash \oftype{(\church{\Pi}{x}{A}{B})}{s_2}$}
+  \end{prooftree}
+}
+
+\begin{frame}{$\lambda$-Cube Typing Rules}
+
+  \begin{columns}
+
+    \begin{column}{0.5\textwidth}
+      \ruleAxiom
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      \ruleStart
+    \end{column}
+
+  \end{columns}
+
+  \ruleWeakening
+
+  \ruleApplication
+
+  \ruleAbstraction
+
+  \ruleProduct
+
+  \ruleConversion
+
+\end{frame}
+
+\begin{frame}{$\lambda$-Cube Rules: Axiom, Start}
+
+  \begin{prooftree}
+     \AxiomC{}
+     \LeftLabel{(axiom)}
+     \UnaryInfC{$\vdash \star : \square$}
+  \end{prooftree}
+
+  \begin{prooftree}
+     \AxiomC{$\Gamma \vdash A : s$}
+     \LeftLabel{(start)}
+     \UnaryInfC{$\Gamma , \oftype{x}{A} \vdash \oftype{x}{A}$}
+  \end{prooftree}
 
 \end{frame}
 
