@@ -117,7 +117,7 @@
 
 \end{frame}
 
-\begin{frame}[fragile]{What Does ``Syntax Directed'' Mean?}
+\begin{frame}[fragile]{A Syntax Directed Function}
 
   \small{\begin{verbatim}
 data Term
@@ -142,11 +142,25 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
     \item
       Generalized type systems
     \item
-      Zoo $\arr$ $\lambda$-cube $\arr$ PTSs
+      $\lambda$-zoo $\arr$ $\lambda$-cube $\arr$ PTSs
     \item
       Identical syntax
     \item
       Parametrized typing rules
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{The Three Ingredients to Generalized Typing}
+
+  \begin{itemize}
+    \item
+      One syntactic category for terms and types
+    \item
+      Introduce \emph{sorts}
+    \item
+      Introduce \emph{dependent function types}
   \end{itemize}
 
 \end{frame}
