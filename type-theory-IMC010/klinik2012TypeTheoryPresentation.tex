@@ -14,6 +14,9 @@
 % needs debian package texlive-math-extra
 \usepackage{stmaryrd} % for \llbracket, \rrbracket
 
+% for IEEEeqnarray, needs debian package texlive-publishers
+\usepackage[retainorgcmds]{IEEEtrantools}
+
 \usepackage{times}
 \usepackage[T1]{fontenc}
 % Or whatever. Note that the encoding and the font should match. If T1
@@ -70,7 +73,7 @@
 % - If you omit details that are vital to the proof/implementation,
 %   just say so once. Everybody will be happy with that.
 
-\section{Explaining the Title}
+\section{What?}
 
 \subsection{What is Type Checking?}
 
@@ -79,8 +82,11 @@
 
   \begin{itemize}
     \item
-      Given a judgement $\Gamma \vdash M : \tau$, decide whether M has type
-      $\tau$ in $\Gamma$.
+      Type Checking: Given $\Gamma$, $M$ and $A$, decide whether the judgement
+      $\Gamma \vdash M : A$ is derivable
+    \item
+      Type Synthesis: Given $\Gamma$ and $M$, compute an $A$ such that $\Gamma
+      \vdash M : A$
     \item
       We need a type system
       \begin{itemize}
@@ -99,30 +105,31 @@
 
 \begin{frame}{What Does ``Syntax Directed'' Mean?}
 
- \begin{prooftree}
-  \AxiomC{}
-  %\RightLabel{[Unit]}
-  \UnaryInfC{unity : unit}
- \end{prooftree}
+  \begin{center}
+  $M ::= x\ |\ M M\ |\ \lambda x . M$
+  \end{center}
 
- \begin{prooftree}
-  \AxiomC{$\Gamma \vdash M : s$}
-  \AxiomC{$\Gamma \vdash N : t$}
-  %\RightLabel{$[Pairing]$}
-  \BinaryInfC{$\Gamma \vdash (M, N) : s \times t$}
- \end{prooftree}
+  \begin{IEEEeqnarray*}{rCl}
+    FV(x)   & = & \{x\} \\
+    FV(M N) & = & FV(M) \cup FV(N) \\
+    FV(\lambda x . M) & = & FV(M) \textbackslash \{x\}
+  \end{IEEEeqnarray*}
 
- \begin{prooftree}
-  \AxiomC{$\Gamma \vdash M : s \times t$}
-  %\RightLabel{$[First]$}
-  \UnaryInfC{$\Gamma \vdash fst(M) : s$}
- \end{prooftree}
+\end{frame}
 
- \begin{prooftree}
-  \AxiomC{$\Gamma \vdash M : s \times t$}
-  %\RightLabel{$[Second]$}
-  \UnaryInfC{$\Gamma \vdash snd(M) : t$}
- \end{prooftree}
+\begin{frame}[fragile]{What Does ``Syntax Directed'' Mean?}
+
+  \small{\begin{verbatim}
+data Term
+  = Var Char
+  | App Term Term
+  | Abs Char Term
+
+freeVars :: Term -> [Char]
+freeVars (Var v)   = [v]
+freeVars (App l r) = freeVars l `union` freeVars r
+freeVars (Abs v t) = filter (/= v) (freeVars t)
+  \end{verbatim}}
 
 \end{frame}
 
@@ -180,25 +187,9 @@
 \end{frame}
 
 
-\subsection{Step 2: The Second Step}
+\subsection{Step 2: Maintaining Context Validity}
 
-\begin{frame}{The Second Step}
-
-  \begin{itemize}
-    \item
-      Foo
-    \item
-      Bar
-    \item
-      Baz
-  \end{itemize}
-
-\end{frame}
-
-
-\subsection{Step 3: The Third Step}
-
-\begin{frame}{The Third Step}
+\begin{frame}{Maintaining Context Validity}
 
   \begin{itemize}
     \item
@@ -212,9 +203,9 @@
 \end{frame}
 
 
-\subsection{Step 4: The Fourth Step}
+\subsection{Step 3: The Conversion Rule}
 
-\begin{frame}{The Fourth Step}
+\begin{frame}{The Conversion Rule}
 
   \begin{itemize}
     \item
@@ -226,6 +217,38 @@
   \end{itemize}
 
 \end{frame}
+
+
+%\subsection{Step 4: The Abstraction Rule}
+
+%\begin{frame}{The Abstraction Rule}
+
+  %\begin{itemize}
+    %\item
+      %Foo
+    %\item
+      %Bar
+    %\item
+      %Baz
+  %\end{itemize}
+
+%\end{frame}
+
+
+%\subsection{Step 5: Regain Completeness}
+
+%\begin{frame}{Regain Completeness}
+
+  %\begin{itemize}
+    %\item
+      %Foo
+    %\item
+      %Bar
+    %\item
+      %Baz
+  %\end{itemize}
+
+%\end{frame}
 
 
 \section*{Summary}
