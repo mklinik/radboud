@@ -421,14 +421,13 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 
   \small{\begin{verbatim}
 data Term
-  = ...
-  | Pi Char Term Term
+  = Prod Char Term Term
   ...
 
 typeSyntesis :: Env -> Term -> Maybe Term
-typeSyntesis env (Pi x A B) =
-  let s1 = typeSyntesis env A
-      s2 = typeSyntesis (env ++ [(x,A)]) B
+typeSyntesis gamma (Prod x A B) =
+  let s1 = typeSyntesis gamma A
+      s2 = typeSyntesis (gamma ++ [(x,A)]) B
   in
     if (rel s1 s2 s3) then s3 else Nothing
   \end{verbatim}}
