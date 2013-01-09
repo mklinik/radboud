@@ -44,7 +44,9 @@
 \newcommand{\arr}{\rightarrow}
 \newcommand{\Arr}{\Rightarrow}
 
-\newcommand{\abs}[4]{#1 #2\!:\!#3\,.\,#4}
+% church-style (explicit) abstraction. We adjust the spacing around the colon and dot
+\newcommand{\church}[4]{#1 #2\!:\!#3\,.\,#4}
+
 \begin{document}
 
 \begin{frame}
@@ -167,10 +169,19 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 \end{frame}
 
 
-\begin{frame}{The $\lambda$-Cube}
+\begin{frame}{The $\lambda$-Cube: Syntax}
 
   \begin{center}
-    $M ::= x \ |\ \star \ |\ \square \ |\ MN \ |\ \abs{\lambda}{x}{M}{M} \ |\ \abs{\Pi}{x}{M}{M}$
+    $M ::= x \ |\ \star \ |\ \square \ |\ MM \ |\ \church{\lambda}{x}{M}{M} \ |\ \church{\Pi}{x}{M}{M}$
+  \end{center}
+
+  \begin{center}
+    \begin{prooftree}
+     \AxiomC{$M:(\church{\Pi}{x}{\sigma}{\tau(x)})$}
+     \AxiomC{$N:\sigma$}
+     %\RightLabel{[Unit]}
+     \BinaryInfC{$MN:\tau(N)$}
+    \end{prooftree}
   \end{center}
 
 \end{frame}
