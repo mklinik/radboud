@@ -283,11 +283,65 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 
 \end{frame}
 
+
 \begin{frame}{$\lambda$-Cube Rules: Axiom, Start}
 
   \ruleLambdaCubeAxiom
 
   \ruleLambdaCubeStart
+
+\end{frame}
+
+
+\begin{frame}{$\lambda$-Cube Rules: Weakening}
+
+  \ruleLambdaCubeStart
+
+  \ruleLambdaCubeWeakening
+
+\end{frame}
+
+
+\begin{frame}{$\lambda$-Cube Rules: Application, Abstraction}
+
+  \ruleLambdaCubeApplication
+
+  \ruleLambdaCubeAbstraction
+
+\end{frame}
+
+
+\begin{frame}{$\lambda$-Cube Rules: Product}
+
+  \ruleLambdaCubeAbstraction
+
+  \ruleLambdaCubeProduct
+
+\end{frame}
+
+
+\begin{frame}{$\lambda$-Cube Rules: Conversion}
+
+  \ruleLambdaCubeStart
+
+  \ruleLambdaCubeConversion
+
+\end{frame}
+
+\begin{frame}{$\lambda$-Cube Wrap Up}
+
+  A type system in the $\lambda$-cube consists of:
+
+  \begin{itemize}
+    \item
+      The set of pseudoterms
+    \item
+      Two sorts: $\star$ and $\square$
+    \item
+      A set $\mathcal{R}$ of \emph{special rules}
+    \item
+      The typing rules
+  \end{itemize}
 
 \end{frame}
 
