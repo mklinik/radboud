@@ -413,7 +413,7 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 
 \section{Syntax Directed Type Checking for PTSs}
 
-\subsection{The Problem}
+\subsection{The Plan}
 
 \begin{frame}[fragile]{The Plan}
 
@@ -424,10 +424,10 @@ data Term
   = Prod Char Term Term
   ...
 
-typeSyntesis :: Env -> Term -> Maybe Term
-typeSyntesis gamma (Prod x A B) =
-  let s1 = typeSyntesis gamma A
-      s2 = typeSyntesis (gamma ++ [(x,A)]) B
+typeSynthesis :: Env -> Term -> Maybe Term
+typeSynthesis gamma (Prod x A B) =
+  let s1 = typeSynthesis gamma A
+      s2 = typeSynthesis (gamma ++ [(x,A)]) B
   in
     if (rel s1 s2 s3) then s3 else Nothing
   \end{verbatim}}
@@ -435,21 +435,27 @@ typeSyntesis gamma (Prod x A B) =
 
 \end{frame}
 
-\begin{frame}{The Problem}
 
-  \begin{itemize}
-    \item
-      Foo
-    \item
-      Bar
-    \item
-      Baz
-  \end{itemize}
+\subsection{The Problem}
+
+\begin{frame}[fragile]{The Problem}
+
+  \ruleLambdaCubeConversion
+
+  \smallskip
+
+  \small{\begin{verbatim}
+...
+typeSynthesis gamma M            = ...
+typeSynthesis gamma (Prod x A B) = ...
+...
+  \end{verbatim}}
+
 
 \end{frame}
 
 
-\subsection{Step 1: The Weakening Rule}
+\subsection{The Solution}
 
 \begin{frame}{The Weakening Rule}
 
@@ -465,8 +471,6 @@ typeSyntesis gamma (Prod x A B) =
 \end{frame}
 
 
-\subsection{Step 2: Maintaining Context Validity}
-
 \begin{frame}{Maintaining Context Validity}
 
   \begin{itemize}
@@ -480,8 +484,6 @@ typeSyntesis gamma (Prod x A B) =
 
 \end{frame}
 
-
-\subsection{Step 3: The Conversion Rule}
 
 \begin{frame}{The Conversion Rule}
 
