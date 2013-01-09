@@ -1,5 +1,8 @@
 \documentclass{beamer}
 
+% required for QuaternaryInfC, something with dimension registers
+\usepackage{etex}
+
 \beamertemplatenavigationsymbolsempty
 
 \mode<presentation>
@@ -9,7 +12,9 @@
 
 \usepackage[english]{babel}
 \usepackage[latin1]{inputenc}
+
 \usepackage{bussproofs}
+\def\defaultHypSeparation{\hskip .1in}
 
 % needs debian package texlive-math-extra
 \usepackage{stmaryrd} % for \llbracket, \rrbracket
@@ -328,6 +333,27 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 
 \end{frame}
 
+
+\begin{frame}{$\lambda$-Cube Product Rule Again}
+
+  \ruleLambdaCubeProduct
+
+  \begin{center}
+    \begin{tabular}{|c|c|}
+    \hline
+    $(\star, \star)$ & terms depending on terms \\
+    \hline
+    $(\square, \star)$ & terms depending on types \\
+    \hline
+    $(\star, \square)$ & types depending on terms \\
+    \hline
+    $(\square, \square)$ & types depending on types \\
+    \hline
+    \end{tabular}
+  \end{center}
+
+\end{frame}
+
 \begin{frame}{$\lambda$-Cube Wrap Up}
 
   A type system in the $\lambda$-cube consists of:
@@ -336,12 +362,47 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
     \item
       The set of pseudoterms
     \item
-      Two sorts: $\star$ and $\square$
+      The set of sorts $\mathcal{S} = \{\star$, $\square$\}
     \item
-      A set $\mathcal{R}$ of \emph{special rules}
+      A set $\mathcal{R} \subseteq \mathcal{S} \times \mathcal{S}$ of \emph{product rules}
     \item
       The typing rules
   \end{itemize}
+
+\end{frame}
+
+\begin{frame}{And Now For Something Slightly Different}
+
+  A pure type system consists of:
+
+  \begin{itemize}
+    \item
+      The set of pseudoterms
+    \item
+      An arbitrary set $\mathcal{S}$ of sorts
+    \item
+      A set $\mathcal{A} \subseteq \mathcal{S} \times \mathcal{S}$ of axioms
+    \item
+      A set $\mathcal{R} \subseteq \mathcal{S} \times \mathcal{S} \times
+      \mathcal{S}$ of product rules
+    \item
+      The typing rules
+  \end{itemize}
+
+  \begin{prooftree}
+    \AxiomC{$(s_1, s_2) \in \mathcal{A}$}
+    \LeftLabel{(axiom)}
+    \UnaryInfC{$\oftype{s_1}{s_2}$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vdash \oftype{A}{s_1}$}
+    \AxiomC{$\Gamma , \oftype{x}{A} \vdash \oftype{B}{s_2}$}
+    \AxiomC{$(s_1, s_2, s_3) \in \mathcal{R}$}
+    \AxiomC{$x \notin \Gamma$}
+    \LeftLabel{(product)}
+    \QuaternaryInfC{$\Gamma \vdash \oftype{(\church{\Pi}{x}{A}{B})}{s_3}$}
+  \end{prooftree}
 
 \end{frame}
 
