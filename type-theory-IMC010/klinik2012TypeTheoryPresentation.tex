@@ -200,8 +200,9 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 \newcommand{\ruleLambdaCubeStart}{
   \begin{prooftree}
      \AxiomC{$\Gamma \vdash A : s$}
+     \AxiomC{$x \notin \Gamma$}
      \LeftLabel{(start)}
-     \UnaryInfC{$\Gamma , \oftype{x}{A} \vdash \oftype{x}{A}$}
+     \BinaryInfC{$\Gamma , \oftype{x}{A} \vdash \oftype{x}{A}$}
   \end{prooftree}
 }
 
@@ -209,8 +210,9 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
   \begin{prooftree}
     \AxiomC{$\Gamma \vdash \oftype{M}{B}$}
     \AxiomC{$\Gamma \vdash \oftype{A}{s}$}
+    \AxiomC{$x \notin \Gamma$}
     \LeftLabel{(weakening)}
-    \BinaryInfC{$\Gamma , \oftype{x}{A} \vdash \oftype{M}{B}$}
+    \TrinaryInfC{$\Gamma , \oftype{x}{A} \vdash \oftype{M}{B}$}
   \end{prooftree}
 }
 
@@ -227,9 +229,11 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
   \begin{prooftree}
     \AxiomC{$\Gamma , \oftype{x}{A} \vdash \oftype{M}{B}$}
     \AxiomC{$\Gamma \vdash \oftype{(\church{\Pi}{x}{A}{B})}{s}$}
+    \AxiomC{$x \notin \Gamma$}
     \LeftLabel{(abstraction)}
-    \BinaryInfC{$\Gamma \vdash \oftype{(\church{\lambda}{x}{A}{M})}
-                                      {(\church{\Pi}{x}{A}{B})}$}
+    \TrinaryInfC{$\Gamma \vdash
+      \oftype{(\church{\lambda}{x}{A}{M})}
+             {(\church{\Pi}{x}{A}{B})}$}
   \end{prooftree}
 }
 
@@ -247,8 +251,9 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
   \begin{prooftree}
     \AxiomC{$\Gamma \vdash \oftype{A}{s_1}$}
     \AxiomC{$\Gamma , \oftype{x}{A} \vdash \oftype{B}{s_2}$}
+    \AxiomC{$x \notin \Gamma$}
     \LeftLabel{(product)}
-    \BinaryInfC{$\Gamma \vdash \oftype{(\church{\Pi}{x}{A}{B})}{s_2}$}
+    \TrinaryInfC{$\Gamma \vdash \oftype{(\church{\Pi}{x}{A}{B})}{s_2}$}
   \end{prooftree}
 }
 
