@@ -327,7 +327,7 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 
 \begin{frame}{$\lambda$-Cube Rules: Conversion}
 
-  \ruleLambdaCubeStart
+  \ruleLambdaCubeApplication
 
   \ruleLambdaCubeConversion
 
@@ -451,6 +451,19 @@ typeSynthesis gamma (Prod x A B) = ...
 ...
   \end{verbatim}}
 
+\end{frame}
+
+
+\begin{frame}{The Concern}
+
+  \rulePtsProduct
+
+  \begin{itemize}
+    \item
+      Derivations are trees
+    \item
+      Context correctness is checked on every branch
+  \end{itemize}
 
 \end{frame}
 
