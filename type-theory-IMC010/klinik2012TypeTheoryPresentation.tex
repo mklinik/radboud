@@ -44,6 +44,7 @@
 \newcommand{\arr}{\rightarrow}
 \newcommand{\Arr}{\Rightarrow}
 
+\newcommand{\abs}[4]{#1 #2\!:\!#3\,.\,#4}
 \begin{document}
 
 \begin{frame}
@@ -152,7 +153,7 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 \end{frame}
 
 
-\begin{frame}{The Three Ingredients to Generalized Typing}
+\begin{frame}{The Ingredients to Generalized Typing}
 
   \begin{itemize}
     \item
@@ -167,6 +168,10 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 
 
 \begin{frame}{The $\lambda$-Cube}
+
+  \begin{center}
+    $M ::= x \ |\ \star \ |\ \square \ |\ MN \ |\ \abs{\lambda}{x}{M}{M} \ |\ \abs{\Pi}{x}{M}{M}$
+  \end{center}
 
 \end{frame}
 
