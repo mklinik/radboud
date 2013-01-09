@@ -371,6 +371,17 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 
 \end{frame}
 
+\newcommand{\rulePtsProduct}{
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vdash \oftype{A}{s_1}$}
+    \AxiomC{$\Gamma , \oftype{x}{A} \vdash \oftype{B}{s_2}$}
+    \AxiomC{$\mathcal{R}(s_1, s_2, s_3)$}
+    \AxiomC{$x \notin \Gamma$}
+    \LeftLabel{(product)}
+    \QuaternaryInfC{$\Gamma \vdash \oftype{(\church{\Pi}{x}{A}{B})}{s_3}$}
+  \end{prooftree}
+}
+
 \begin{frame}{And Now For Something Slightly Different}
 
   A pure type system consists of:
@@ -390,19 +401,12 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
   \end{itemize}
 
   \begin{prooftree}
-    \AxiomC{$(s_1, s_2) \in \mathcal{A}$}
+    \AxiomC{$\mathcal{A}(s_1, s_2)$}
     \LeftLabel{(axiom)}
     \UnaryInfC{$\oftype{s_1}{s_2}$}
   \end{prooftree}
 
-  \begin{prooftree}
-    \AxiomC{$\Gamma \vdash \oftype{A}{s_1}$}
-    \AxiomC{$\Gamma , \oftype{x}{A} \vdash \oftype{B}{s_2}$}
-    \AxiomC{$(s_1, s_2, s_3) \in \mathcal{R}$}
-    \AxiomC{$x \notin \Gamma$}
-    \LeftLabel{(product)}
-    \QuaternaryInfC{$\Gamma \vdash \oftype{(\church{\Pi}{x}{A}{B})}{s_3}$}
-  \end{prooftree}
+  \rulePtsProduct
 
 \end{frame}
 
@@ -410,6 +414,27 @@ freeVars (Abs v t) = filter (/= v) (freeVars t)
 \section{Syntax Directed Type Checking for PTSs}
 
 \subsection{The Problem}
+
+\begin{frame}[fragile]{The Plan}
+
+  \rulePtsProduct
+
+  \small{\begin{verbatim}
+data Term
+  = ...
+  | Pi Char Term Term
+  ...
+
+typeSyntesis :: Env -> Term -> Maybe Term
+typeSyntesis env (Pi x A B) =
+  let s1 = typeSyntesis env A
+      s2 = typeSyntesis (env ++ [(x,A)]) B
+  in
+    if (rel s1 s2 s3) then s3 else Nothing
+  \end{verbatim}}
+
+
+\end{frame}
 
 \begin{frame}{The Problem}
 
