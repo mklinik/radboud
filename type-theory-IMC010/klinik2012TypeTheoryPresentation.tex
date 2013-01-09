@@ -470,30 +470,106 @@ typeSynthesis gamma (Prod x A B) = ...
 
 \subsection{The Solution}
 
-\begin{frame}{The Weakening Rule}
+\begin{frame}{The Solution}
 
   \begin{itemize}
     \item
-      Foo
+      Restrict ourselves to certain PTSs
+      \begin{itemize}
+        \item Functional: $\mathcal{A}$ and $\mathcal{R}$ are right-unique
+        \item Strongly normalizing
+      \end{itemize}
     \item
-      Bar
+      Keep track of context correctness instead of repeatedly checking it
     \item
-      Baz
+      Absorb conversion rule into other rules where needed
   \end{itemize}
 
 \end{frame}
 
+\newcommand{\vcdash}{\vdash_{vc}}
+\newcommand{\vtdash}{\vdash_{vt}}
 
 \begin{frame}{Maintaining Context Validity}
 
-  \begin{itemize}
-    \item
-      Foo
-    \item
-      Bar
-    \item
-      Baz
-  \end{itemize}
+  \vspace{-0.5em}
+
+  \begin{columns}
+
+    \begin{column}{0.4\textwidth}
+      \begin{prooftree}
+         \AxiomC{}
+         \LeftLabel{(valid-nil)}
+         \UnaryInfC{$\vcdash \emptyset$}
+      \end{prooftree}
+    \end{column}
+
+    \begin{column}{0.6\textwidth}
+      \begin{prooftree}
+         \AxiomC{$\textcolor{red}{\Gamma \vtdash \oftype{A}{s}}$}
+         \AxiomC{$x \notin \Gamma$}
+         \LeftLabel{(valid-cons)}
+         \BinaryInfC{$\Gamma \vcdash \oftype{x}{A}$}
+      \end{prooftree}
+    \end{column}
+
+  \end{columns}
+
+  \begin{columns}
+
+    \begin{column}{0.5\textwidth}
+      \begin{prooftree}
+         \AxiomC{$\textcolor{red}{\vcdash \Gamma}$}
+         \AxiomC{$\mathcal{A}(s_1, s_2)$}
+         \LeftLabel{(axiom)}
+         \BinaryInfC{$\Gamma \vtdash \oftype{s_1}{s_2}$}
+      \end{prooftree}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      \begin{prooftree}
+         \AxiomC{$\textcolor{red}{\vcdash \Gamma}$}
+         \AxiomC{$\oftype{x}{A} \in \Gamma$}
+         \LeftLabel{(var)}
+         \BinaryInfC{$\Gamma \vtdash \oftype{x}{A}$}
+      \end{prooftree}
+    \end{column}
+
+  \end{columns}
+
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vtdash \oftype{A}{s_1}$}
+    \AxiomC{$\Gamma , \oftype{x}{A} \vtdash \oftype{B}{s_2}$}
+    \AxiomC{$\mathcal{R}(s_1, s_2, s_3)$}
+    \AxiomC{$x \notin \Gamma$}
+    \LeftLabel{(product)}
+    \QuaternaryInfC{$\Gamma \vtdash \oftype{(\church{\Pi}{x}{A}{B})}{s_3}$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\Gamma , \oftype{x}{A} \vtdash \oftype{M}{B}$}
+    \AxiomC{$\Gamma \vtdash \oftype{(\church{\Pi}{x}{A}{B})}{s}$}
+    \AxiomC{$x \notin \Gamma$}
+    \LeftLabel{(abstraction)}
+    \TrinaryInfC{$\Gamma \vtdash
+      \oftype{(\church{\lambda}{x}{A}{M})}
+             {(\church{\Pi}{x}{A}{B})}$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vtdash \oftype{M}{(\church{\Pi}{x}{A}{B})}$}
+    \AxiomC{$\Gamma \vtdash \oftype{N}{A}$}
+    \LeftLabel{(application)}
+    \BinaryInfC{$\Gamma \vtdash \oftype{MN}{[N/x]B}$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vtdash \oftype{M}{A}$}
+    \AxiomC{$A =_{\beta} B$}
+    \AxiomC{$\Gamma \vtdash \oftype{B}{s}$}
+    \LeftLabel{(conversion)}
+    \TrinaryInfC{$\Gamma \vtdash \oftype{M}{B}$}
+  \end{prooftree}
 
 \end{frame}
 
