@@ -707,6 +707,70 @@ typeSynthesis gamma (Prod x A B) = ...
 \end{frame}
 
 \begin{frame}{Finally Syntax Directed}
+
+  \vspace{-0.5em}
+
+  \begin{columns}
+
+    \begin{column}{0.4\textwidth}
+      \begin{prooftree}
+         \AxiomC{}
+         \LeftLabel{(valid-nil)}
+         \UnaryInfC{$\vdash \emptyset$}
+      \end{prooftree}
+    \end{column}
+
+    \begin{column}{0.6\textwidth}
+      \begin{prooftree}
+         \AxiomC{$\Gamma \vdash \oftypewhn{A}{s}$}
+         \AxiomC{$x \notin \Gamma$}
+         \LeftLabel{(valid-cons)}
+         \BinaryInfC{$\vdash \Gamma,\oftype{x}{A}$}
+      \end{prooftree}
+    \end{column}
+
+  \end{columns}
+
+  \begin{columns}
+
+    \begin{column}{0.5\textwidth}
+      \begin{prooftree}
+         \AxiomC{$\mathcal{A}(s_1, s_2)$}
+         \LeftLabel{(axiom)}
+         \UnaryInfC{$\Gamma \vdash s_1 \Arr s_2$}
+      \end{prooftree}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      \begin{prooftree}
+         \AxiomC{$\oftype{x}{A} \in \Gamma$}
+         \LeftLabel{(var)}
+         \UnaryInfC{$\Gamma \vdash x \Arr A$}
+      \end{prooftree}
+    \end{column}
+
+  \end{columns}
+
+  \begin{prooftree}
+    \def\defaultHypSeparation{\hskip .03in}
+    \AxiomC{$\Gamma \vdash \oftypewhn{A}{s_1}$}
+    \AxiomC{$\Gamma , \oftype{x}{A} \vdash \oftypewhn{B}{s_2}$}
+    \AxiomC{$\mathcal{R}(s_1, s_2, s_3)$}
+    \AxiomC{$x \notin \Gamma$}
+    \LeftLabel{(product)}
+    \QuaternaryInfC{$\Gamma \vdash (\church{\Pi}{x}{A}{B}) \Arr s_3$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\Gamma , \oftype{x}{A} \vdash M \Arr B$}
+    \AxiomC{$\Gamma \vdash (\church{\Pi}{x}{A}{B}) \Arr s$}
+    \AxiomC{$x \notin \Gamma$}
+    \LeftLabel{(abstraction)}
+    \TrinaryInfC{$\Gamma \vdash \church{\lambda}{x}{A}{M} \Arr \church{\Pi}{x}{A}{B}$}
+  \end{prooftree}
+
+  \ruleSyntaxDirectedApplication
+
 \end{frame}
 
 \section*{Summary}
