@@ -596,6 +596,15 @@ typeSynthesis gamma (Prod x A B) = ...
 \newcommand{\lvtdash}{\vdash_{lvt}}
 \newcommand{\lvcdash}{\vdash_{lvc}}
 
+\newcommand{\ruleValidContextApplication}{
+  \begin{prooftree}
+    \AxiomC{$\Gamma \lvtdash \oftype{M}{(\church{\Pi}{x}{A}{B})}$}
+    \AxiomC{$\Gamma \lvtdash \oftype{N}{A}$}
+    \LeftLabel{(application)}
+    \BinaryInfC{$\Gamma \lvtdash \oftype{MN}{[N/x]B}$}
+  \end{prooftree}
+}
+
 \begin{frame}{Maintaining Local Context Validity}
 
   \vspace{-0.5em}
@@ -660,12 +669,7 @@ typeSynthesis gamma (Prod x A B) = ...
              {(\church{\Pi}{x}{A}{B})}$}
   \end{prooftree}
 
-  \begin{prooftree}
-    \AxiomC{$\Gamma \lvtdash \oftype{M}{(\church{\Pi}{x}{A}{B})}$}
-    \AxiomC{$\Gamma \lvtdash \oftype{N}{A}$}
-    \LeftLabel{(application)}
-    \BinaryInfC{$\Gamma \lvtdash \oftype{MN}{[N/x]B}$}
-  \end{prooftree}
+  \ruleValidContextApplication
 
   \begin{prooftree}
     \AxiomC{$\Gamma \lvtdash \oftype{M}{A}$}
@@ -677,19 +681,33 @@ typeSynthesis gamma (Prod x A B) = ...
 
 \end{frame}
 
+\newcommand{\oftypewhn}[2]{#1 \Arr \twoheadrightarrow #2}
+
+\newcommand{\ruleSyntaxDirectedApplication}{
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vdash \oftypewhn{M}{\church{\Pi}{x}{A}{B}}$}
+    \AxiomC{$\Gamma \vdash N \Arr A'$}
+    \AxiomC{$A =_{\beta} A'$}
+    \LeftLabel{(application)}
+    \TrinaryInfC{$\Gamma \vdash MN \Arr [N/x]B$}
+  \end{prooftree}
+}
+
 \begin{frame}{The Conversion Rule}
 
-  \begin{itemize}
-    \item
-      Foo
-    \item
-      Bar
-    \item
-      Baz
-  \end{itemize}
+  \ruleValidContextApplication
+
+  \ruleSyntaxDirectedApplication
+
+  \smallskip
+
+  Notation: We write $\Gamma \vdash \oftypewhn{M}{A}$ for
+    $(\Gamma \vdash M \Arr X \wedge X \twoheadrightarrow A)$
 
 \end{frame}
 
+\begin{frame}{Finally Syntax Directed}
+\end{frame}
 
 \section*{Summary}
 
