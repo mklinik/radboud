@@ -137,9 +137,9 @@ data Term
   | Abs Char Term
 
 freeVars :: Term -> [Char]
-freeVars (Var v)   = [v]
-freeVars (App l r) = freeVars l `union` freeVars r
-freeVars (Abs v t) = filter (/= v) (freeVars t)
+freeVars (Var x)   = [x]
+freeVars (App m n) = freeVars m `union` freeVars n
+freeVars (Abs x m) = freeVars m \\ [x]
   \end{verbatim}}
 
 \end{frame}
