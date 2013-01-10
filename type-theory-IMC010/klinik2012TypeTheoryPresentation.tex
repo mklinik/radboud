@@ -362,7 +362,7 @@ freeVars (Abs x m) = freeVars m \\ [x]
     \item
       The set of pseudoterms
     \item
-      The set of sorts $\mathcal{S} = \{\star$, $\square$\}
+      The set of sorts $\mathcal{S} = \{\star, \square\}$
     \item
       A set $\mathcal{R} \subseteq \mathcal{S} \times \mathcal{S}$ of \emph{product rules}
     \item
@@ -446,9 +446,12 @@ typeSynthesis gamma (Prod x A B) =
 
   \small{\begin{verbatim}
 ...
-typeSynthesis gamma M            = ...
-typeSynthesis gamma (Prod x A B) = ...
+typeSynthesis gamma M           = ...
 ...
+typeSynthesis gamma (App M N)   = ...
+typeSynthesis gamma (Abs x A B) = ...
+...
+typeSynthesis gamma M           = ...
   \end{verbatim}}
 
 \end{frame}
@@ -477,12 +480,14 @@ typeSynthesis gamma (Prod x A B) = ...
       Restrict ourselves to certain PTSs
       \begin{itemize}
         \item Functional: $\mathcal{A}$ and $\mathcal{R}$ are right-unique
+        \item $\mathcal{R}(s_1, s_2, s_3)$ becomes \\
+              \texttt{s3 = R(s1, s2) :: Maybe Term}
         \item Strongly normalizing
       \end{itemize}
     \item
-      Keep track of context correctness instead of repeatedly checking it
-    \item
       Absorb conversion rule into other rules where needed
+    \item
+      Keep track of context correctness instead of repeatedly checking it
   \end{itemize}
 
 \end{frame}
@@ -529,7 +534,7 @@ typeSynthesis gamma (Prod x A B) = ...
          \AxiomC{$\textcolor{red}{\Gamma \vtdash \oftype{A}{s}}$}
          \AxiomC{$x \notin \Gamma$}
          \LeftLabel{(valid-cons)}
-         \BinaryInfC{$\Gamma \vcdash \oftype{x}{A}$}
+         \BinaryInfC{$\vcdash \Gamma , \oftype{x}{A}$}
       \end{prooftree}
     \end{column}
 
@@ -695,6 +700,8 @@ typeSynthesis gamma (Prod x A B) = ...
 
 \begin{frame}{The Conversion Rule}
 
+  \ruleLambdaCubeConversion
+
   \ruleValidContextApplication
 
   \ruleSyntaxDirectedApplication
@@ -722,7 +729,7 @@ typeSynthesis gamma (Prod x A B) = ...
 
     \begin{column}{0.6\textwidth}
       \begin{prooftree}
-         \AxiomC{$\Gamma \vdash \oftypewhn{A}{s}$}
+         \AxiomC{$\Gamma \vdash \textcolor{red}{\oftypewhn{A}{s}}$}
          \AxiomC{$x \notin \Gamma$}
          \LeftLabel{(valid-cons)}
          \BinaryInfC{$\vdash \Gamma,\oftype{x}{A}$}
@@ -753,8 +760,8 @@ typeSynthesis gamma (Prod x A B) = ...
 
   \begin{prooftree}
     \def\defaultHypSeparation{\hskip .03in}
-    \AxiomC{$\Gamma \vdash \oftypewhn{A}{s_1}$}
-    \AxiomC{$\Gamma , \oftype{x}{A} \vdash \oftypewhn{B}{s_2}$}
+    \AxiomC{$\Gamma \vdash \textcolor{red}{\oftypewhn{A}{s_1}}$}
+    \AxiomC{$\Gamma , \oftype{x}{A} \vdash \textcolor{red}{\oftypewhn{B}{s_2}}$}
     \AxiomC{$\mathcal{R}(s_1, s_2, s_3)$}
     \AxiomC{$x \notin \Gamma$}
     \LeftLabel{(product)}
@@ -769,7 +776,13 @@ typeSynthesis gamma (Prod x A B) = ...
     \TrinaryInfC{$\Gamma \vdash \church{\lambda}{x}{A}{M} \Arr \church{\Pi}{x}{A}{B}$}
   \end{prooftree}
 
-  \ruleSyntaxDirectedApplication
+  \begin{prooftree}
+    \AxiomC{$\Gamma \vdash \textcolor{red}{\oftypewhn{M}{\church{\Pi}{x}{A}{B}}}$}
+    \AxiomC{$\Gamma \vdash N \Arr A'$}
+    \AxiomC{$A =_{\beta} A'$}
+    \LeftLabel{(application)}
+    \TrinaryInfC{$\Gamma \vdash MN \Arr [N/x]B$}
+  \end{prooftree}
 
 \end{frame}
 
