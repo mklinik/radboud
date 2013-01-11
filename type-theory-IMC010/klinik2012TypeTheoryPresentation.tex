@@ -501,14 +501,14 @@ typeSynthesis gamma M           = ...
       Product rule and axioms might be ambiguous
 
       \begin{itemize}
-        \item Functional: $\mathcal{A}$ and $\mathcal{R}$ are right-unique
+        \item Require $\mathcal{A}$ and $\mathcal{R}$ to be \emph{functional} i.e. right-unique
         \item $\mathcal{R}(s_1, s_2, s_3)$ becomes \\
               \texttt{s3 = R(s1, s2) :: Maybe Term}
       \end{itemize}
 
     \item Computations on type level
       \begin{itemize}
-        \item Strong normalization
+        \item Require strong normalization
       \end{itemize}
 
     \item Contexts are checked repeatedly
@@ -518,7 +518,7 @@ typeSynthesis gamma M           = ...
 
     \item Conversion rule not syntax directed
       \begin{itemize}
-        \item Absorb conversion rule into other rules where needed
+        \item Absorb conversion rule into other rules
       \end{itemize}
   \end{itemize}
 
