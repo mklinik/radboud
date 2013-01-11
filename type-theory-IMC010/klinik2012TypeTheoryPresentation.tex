@@ -187,10 +187,25 @@ freeVars (Abs x m) = freeVars m \\ [x]
     \begin{prooftree}
      \AxiomC{$M:(\church{\Pi}{x}{\sigma}{\tau(x)})$}
      \AxiomC{$N:\sigma$}
-     %\RightLabel{[Unit]}
      \BinaryInfC{$MN:\tau(N)$}
     \end{prooftree}
   \end{center}
+
+  % example 1
+  \begin{prooftree}
+     \AxiomC{$\oftype{\text{zeros}}{(\church{\Pi}{n}{\text{nat}}{\text{vec}~n})}$}
+     \AxiomC{$\oftype{m}{\text{nat}}$}
+     \BinaryInfC{$\oftype{\text{zeros}~m}{\text{vec}~m}$}
+  \end{prooftree}
+
+  % example 2
+  \begin{prooftree}
+     \AxiomC{$ \oftype{\church{\lambda}{n}{\text{nat}}{Sn}}
+                      {(\church{\Pi}{n}{\text{nat}}{\text{nat}})}
+            $}
+     \AxiomC{$\oftype{m}{\text{nat}}$}
+     \BinaryInfC{$\oftype{(\church{\lambda}{n}{\text{nat}}{Sn})m}{\text{nat}}$}
+  \end{prooftree}
 
 \end{frame}
 
