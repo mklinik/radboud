@@ -496,18 +496,30 @@ typeSynthesis gamma M           = ...
 \begin{frame}{The Solution}
 
   \begin{itemize}
+
     \item
-      Restrict ourselves to certain PTSs
+      Product rule and axioms might be ambiguous
+
       \begin{itemize}
         \item Functional: $\mathcal{A}$ and $\mathcal{R}$ are right-unique
         \item $\mathcal{R}(s_1, s_2, s_3)$ becomes \\
               \texttt{s3 = R(s1, s2) :: Maybe Term}
-        \item Strongly normalizing
       \end{itemize}
-    \item
-      Absorb conversion rule into other rules where needed
-    \item
-      Keep track of context correctness instead of repeatedly checking it
+
+    \item Computations on type level
+      \begin{itemize}
+        \item Strong normalization
+      \end{itemize}
+
+    \item Contexts are checked repeatedly
+      \begin{itemize}
+        \item Keep track of context correctness
+      \end{itemize}
+
+    \item Conversion rule not syntax directed
+      \begin{itemize}
+        \item Absorb conversion rule into other rules where needed
+      \end{itemize}
   \end{itemize}
 
 \end{frame}
