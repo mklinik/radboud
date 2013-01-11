@@ -670,7 +670,7 @@ typeSynthesis gamma M           = ...
 
   \begin{prooftree}
     \AxiomC{$\Gamma \lvtdash \oftype{A}{s_1}$}
-    \AxiomC{$\Gamma , \oftype{x}{A} \lvtdash \oftype{B}{s_2}$}
+    \AxiomC{$\textcolor{red}{\Gamma , \oftype{x}{A}} \lvtdash \oftype{B}{s_2}$}
     \AxiomC{$\mathcal{R}(s_1, s_2, s_3)$}
     \AxiomC{$x \notin \Gamma$}
     \LeftLabel{(product)}
@@ -678,7 +678,7 @@ typeSynthesis gamma M           = ...
   \end{prooftree}
 
   \begin{prooftree}
-    \AxiomC{$\Gamma , \oftype{x}{A} \lvtdash \oftype{M}{B}$}
+    \AxiomC{$\textcolor{red}{\Gamma , \oftype{x}{A}} \lvtdash \oftype{M}{B}$}
     \AxiomC{$\Gamma \lvtdash \oftype{(\church{\Pi}{x}{A}{B})}{s}$}
     \AxiomC{$x \notin \Gamma$}
     \LeftLabel{(abstraction)}
