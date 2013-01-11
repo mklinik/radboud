@@ -354,16 +354,15 @@ freeVars (Abs x m) = freeVars m \\ [x]
   \ruleLambdaCubeProduct
 
   \begin{center}
-    \begin{tabular}{|c|c|}
-    \hline
-    $(\star, \star)$ & terms depending on terms \\
-    \hline
-    $(\square, \star)$ & terms depending on types \\
-    \hline
-    $(\star, \square)$ & types depending on terms \\
-    \hline
-    $(\square, \square)$ & types depending on types \\
-    \hline
+    \begin{tabular}{ccc}
+    \smallskip
+    $(\star, \star)$ & terms depending on terms & $\church{\lambda}{n}{\text{nat}}{Sn}$ \\
+    \smallskip
+    $(\square, \star)$ & terms depending on types & $\church{\lambda}{\alpha}{\star}{\church{\lambda}{x}{\alpha}{x}}$ \\
+    \smallskip
+    $(\star, \square)$ & types depending on terms & $\church{\Pi}{n}{\text{nat}}{\text{vec}~n}$ \\
+    \smallskip
+    $(\square, \square)$ & types depending on types & $\church{\Pi}{\alpha}{\star}{\alpha \arr \alpha}$ \\
     \end{tabular}
   \end{center}
 
