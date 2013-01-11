@@ -686,15 +686,15 @@ typeSynthesis gamma M           = ...
 
 \end{frame}
 
-\newcommand{\oftypewhn}[2]{#1 \Arr \twoheadrightarrow #2}
+\newcommand{\oftypewhn}[2]{#1\!: \twoheadrightarrow #2}
 
 \newcommand{\ruleSyntaxDirectedApplication}{
   \begin{prooftree}
     \AxiomC{$\Gamma \vdash \oftypewhn{M}{\church{\Pi}{x}{A}{B}}$}
-    \AxiomC{$\Gamma \vdash N \Arr A'$}
+    \AxiomC{$\Gamma \vdash \oftype{N}{A'}$}
     \AxiomC{$A =_{\beta} A'$}
     \LeftLabel{(application)}
-    \TrinaryInfC{$\Gamma \vdash MN \Arr [N/x]B$}
+    \TrinaryInfC{$\Gamma \vdash \oftype{MN}{[N/x]B}$}
   \end{prooftree}
 }
 
@@ -709,7 +709,7 @@ typeSynthesis gamma M           = ...
   \smallskip
 
   Notation: We write $\Gamma \vdash \oftypewhn{M}{A}$ for
-    $(\Gamma \vdash M \Arr X \wedge X \twoheadrightarrow A)$
+    $(\Gamma \vdash \oftype{M}{X} \wedge X \twoheadrightarrow A)$
 
 \end{frame}
 
@@ -744,7 +744,7 @@ typeSynthesis gamma M           = ...
       \begin{prooftree}
          \AxiomC{$\mathcal{A}(s_1, s_2)$}
          \LeftLabel{(axiom)}
-         \UnaryInfC{$\Gamma \vdash s_1 \Arr s_2$}
+         \UnaryInfC{$\Gamma \vdash \oftype{s_1}{s_2}$}
       \end{prooftree}
     \end{column}
 
@@ -752,7 +752,7 @@ typeSynthesis gamma M           = ...
       \begin{prooftree}
          \AxiomC{$\oftype{x}{A} \in \Gamma$}
          \LeftLabel{(var)}
-         \UnaryInfC{$\Gamma \vdash x \Arr A$}
+         \UnaryInfC{$\Gamma \vdash \oftype{x}{A}$}
       \end{prooftree}
     \end{column}
 
@@ -765,23 +765,23 @@ typeSynthesis gamma M           = ...
     \AxiomC{$\mathcal{R}(s_1, s_2, s_3)$}
     \AxiomC{$x \notin \Gamma$}
     \LeftLabel{(product)}
-    \QuaternaryInfC{$\Gamma \vdash (\church{\Pi}{x}{A}{B}) \Arr s_3$}
+    \QuaternaryInfC{$\Gamma \vdash \oftype{(\church{\Pi}{x}{A}{B})}{s_3}$}
   \end{prooftree}
 
   \begin{prooftree}
-    \AxiomC{$\Gamma , \oftype{x}{A} \vdash M \Arr B$}
-    \AxiomC{$\Gamma \vdash (\church{\Pi}{x}{A}{B}) \Arr s$}
+    \AxiomC{$\Gamma , \oftype{x}{A} \vdash \oftype{M}{B}$}
+    \AxiomC{$\Gamma \vdash \oftype{(\church{\Pi}{x}{A}{B})}{s}$}
     \AxiomC{$x \notin \Gamma$}
     \LeftLabel{(abstraction)}
-    \TrinaryInfC{$\Gamma \vdash \church{\lambda}{x}{A}{M} \Arr \church{\Pi}{x}{A}{B}$}
+    \TrinaryInfC{$\Gamma \vdash \oftype{(\church{\lambda}{x}{A}{M})}{(\church{\Pi}{x}{A}{B})}$}
   \end{prooftree}
 
   \begin{prooftree}
     \AxiomC{$\Gamma \vdash \textcolor{red}{\oftypewhn{M}{\church{\Pi}{x}{A}{B}}}$}
-    \AxiomC{$\Gamma \vdash N \Arr A'$}
+    \AxiomC{$\Gamma \vdash \oftype{N}{A'}$}
     \AxiomC{$A =_{\beta} A'$}
     \LeftLabel{(application)}
-    \TrinaryInfC{$\Gamma \vdash MN \Arr [N/x]B$}
+    \TrinaryInfC{$\Gamma \vdash \oftype{MN}{[N/x]B}$}
   \end{prooftree}
 
 \end{frame}
