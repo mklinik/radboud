@@ -5,7 +5,6 @@ import StdGeneric
 import StdMisc
 
 
-
 generic show a :: a [String] -> [String]
 
 show {|Int|} i c = [toString i: c]
@@ -21,6 +20,8 @@ show {|CONS of {gcd_name, gcd_arity} |} sa (CONS a) c
   = [gcd_name:sa a c]
 show {|OBJECT|} so (OBJECT o) c = so o c
 
+show {| (,) |} sa sb (a, b) c = ["(" : sa a ["," : sb b [")" : c]]]
+
 
 
 
@@ -29,6 +30,9 @@ generic parse a :: (a -> Parser b) b -> Parser b
 
 parse{|String|} sc fc = \[s:rest] -> sc s rest
 parse{|Int|} sc fc = \[i:rest] -> sc (toInt i) rest
+parse {|Bool|} sc fc = \input -> match "True" (sc True) (match "False" (sc False) fc input) input
+
+
 parse{|UNIT|} sc fc = sc UNIT
 parse{|EITHER|} parseL parseR sc fc = \input -> parseL (sc o LEFT) (parseR (sc o RIGHT) fc input) input
 parse{|PAIR|} parseA parseB sc fc = \input -> parseA (\a -> \input2 -> parseB (\b -> sc (PAIR a b)) fc input2) fc input
@@ -36,12 +40,22 @@ parse{|OBJECT|} parseO sc fc = \input -> parseO (sc o OBJECT) fc input
 
 parse{|CONS of {gcd_name}|} parseC sc fc = \[cons:rest] -> if (gcd_name == cons) (parseC (sc o CONS) fc rest) fc
 
+match :: String (Parser b) b [String] -> b
+match s yes no [a:x] = if (a == s) (yes x) no
+
+
+parse{| (,) |} parseA parseB sc fc =
+  \input -> match "(" doA fc input
+where
+  doA   = parseA (\a -> \input -> match "," (doB a) fc input) fc
+  doB a = parseB (\b -> \input -> match ")" (sc (a, b)) fc input) fc
+
 :: Color = Blue | Red | Green | Fail
 :: List a = Nil | Cons a (List a)
 :: Option a = None | Some a
 :: Foobar a b = Foobar a b
 
-derive parse Color, List, Option, Foobar, ([])
+derive parse Color, List, Option, Foobar
 derive show ([])
 
 nili :: List Int
@@ -89,4 +103,5 @@ derive gmap [], Tree
 
 tree1 = Bin (Tip 10) "foo" (Tip 20)
 
-Start = gmap{|* -> * -> *|} ((+) 1) (id) tree1
+//Start = gmap{|* -> * -> *|} ((+) 1) (id) tree1
+Start = parse{|*|} const (0, False) (show{|*|} (10, True) [])
