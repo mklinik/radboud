@@ -10,5 +10,8 @@ assignment08klinik: assignment08klinik.icl
 assignment09klinik: assignment09klinik.icl
 	clm ${CLEAN_FLAGS_GAST} -h 10M -b $@ -o $@
 
+exam2011_3: exam2011_3.icl
+	clm ${CLEAN_FLAGS_GAST} $@ -o $@
+
 %: %.icl
 	clm ${CLEAN_FLAGS} $@ -o $@
