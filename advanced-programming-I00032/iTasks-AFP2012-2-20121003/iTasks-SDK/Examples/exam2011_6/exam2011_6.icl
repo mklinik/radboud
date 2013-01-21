@@ -36,6 +36,7 @@ edit1by1 list = enterChoice "" [] (decorate list) @ snd >>*
       Value index _ = index
       NoValue       = 0))
   , OnAction (Action "Edit") hasValue (editElement list o getValue)
+  , OnAction (Action "Delete") hasValue (deleteElement list o getValue)
   ]
 
 decorate :: [a] -> [(a, Int)]
@@ -51,10 +52,16 @@ where
 
 editElement :: [a] Int -> Task [a] | iTask a
 editElement list index = updateInformation "" [] elem >>= (\x -> edit1by1 (init ++ [x] ++ end))
-  where
-    init = take index list
-    elem = hd (drop index list)
-    end = drop (index + 1) list
+where
+  init = take index list
+  elem = hd (drop index list)
+  end = drop (index + 1) list
+
+deleteElement :: [a] Int -> Task [a] | iTask a
+deleteElement list index = edit1by1 (init ++ end)
+where
+  init = take index list
+  end = drop (index + 1) list
 
 //* utility functions
 
