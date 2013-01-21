@@ -31,7 +31,7 @@ where
 
 edit1by1 :: [a] -> Task [a] | iTask a
 edit1by1 list = enterChoice "" [] (decorate list) @ snd >>*
-  [ OnAction ActionCancel always (const (return list))
+  [ OnAction ActionCancel (const (not (isEmpty list))) (const (return list))
   , OnAction (Action "Insert") always (\val -> insertElement list (case val of
       Value index _ = index
       NoValue       = 0))
