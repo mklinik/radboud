@@ -55,7 +55,7 @@ EWPrefs
 	EWInf:	1
 SWPrefs
 	EWPos
-		VX:	688
+		VX:	328
 		VY:	415
 	EWSiz
 		W:	696
@@ -162,6 +162,7 @@ ProjHist
 	Path:	Z:\home\mkl\sandbox\radboud\advanced-programming-I00032\iTasks-AFP2012-2-20121003\iTasks-SDK\Examples\exam2011_6\exam2011_6.prj
 	Path:	Z:\home\mkl\sandbox\radboud\advanced-programming-I00032\iTasks-AFP2012-2-20121003\iTasks-SDK\Examples\assignment11klinik\assignment11klinik.prj
 FileHist
+	Path:	Z:\home\mkl\sandbox\radboud\advanced-programming-I00032\iTasks-AFP2012-2-20121003\iTasks-SDK\Server\API\Common\InteractionTasks.dcl
 	Path:	Z:\home\mkl\sandbox\radboud\advanced-programming-I00032\iTasks-AFP2012-2-20121003\iTasks-SDK\Examples\exam2011_6\exam2011_6.icl
 	Path:	Z:\home\mkl\sandbox\radboud\advanced-programming-I00032\iTasks-AFP2012-2-20121003\iTasks-SDK\Examples\assignment11klinik\assignment11klinik.icl
 SwitchClose:	0
