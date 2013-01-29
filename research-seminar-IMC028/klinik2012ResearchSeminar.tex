@@ -143,6 +143,10 @@ grammar.
 
 \end{defNuF}
 
+Note that all finite words are finite sequences of $S$ and $\_$ which end with
+either $0$ or $\bot$. All infinite words are $\omega$-sequences of $S$ and $\_$.
+We write $|w|$ to denote the length of a word $w$.
+
 \begin{thmDomNuFisFixedPoint}
 
 The set $\delta$ is a fixed point of the functor $F(X) = 1 + X + X$.
@@ -151,10 +155,10 @@ The set $\delta$ is a fixed point of the functor $F(X) = 1 + X + X$.
 
 \begin{proof}
 
-We need to show that $F(X)$ is isomorphic to $F(F(X))$, that is, provide two
-functions $f : F(X) \arr F(F(X))$ and $g : F(F(X)) \arr F(X)$ such that their
-composition is the identity function, i.e. $f \circ g = \text{id}_{FFX}$ and $g
-\circ f = \text{id}_{FX}$.
+We need to show that $\delta$ is isomorphic to $F(\delta)$, that is, provide two
+functions $f : \delta \arr F(\delta)$ and $g : F(\delta) \arr \delta$ such that
+their composition is the identity function, i.e. $f \circ g = \text{id}$ and $g
+\circ f = \text{id}$.
 
 \end{proof}
 
@@ -162,10 +166,6 @@ Among those words are, for example, all peano numbers like $0$, $S0$, $SS0$.
 We also have arbitrary underscores mixed in between the successors: $\_0$,
 $S\_S\_0$.  Instead of $0$, words can be terminated by $\bot$, e.g.  $S\bot$,
 $S\_S\bot$.
-
-Note that all finite words are finite sequences of $S$ and $\_$ which end with
-either $0$ or $\bot$. All infinite words are $\omega$-sequences of $S$ and $\_$.
-We write $|w|$ to denote the length of a word $w$.
 
 \begin{defStrictOrderNuF}
 
