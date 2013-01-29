@@ -180,7 +180,7 @@ $S\_S\bot$.
 
 \begin{defStrictOrderNuF}
 
-Let the relation $\sqsubset$ on $\nu F \times \nu F$ be defined as: two
+Let the relation $\sqsubset$ on $\delta \times \delta$ be defined as: two
 terms $s$ and $t$ are in relation $s \sqsubset t$ iff $s$ is finite and $|s|
 \leq |t|$ and $s_{|s|-1} = \bot$ and for all $i < |s|-1: s_i = t_i$.
 
@@ -260,21 +260,21 @@ Let $\sqsubseteq$ be the reflexive closure of $\sqsubset$.
   ;
 \end{tikzpicture}
 \end{center}
-\caption{The domain of $\nu F$.}
+\caption{The domain of $\delta$.}
 \label{fig:DomainOfNuF}
 \end{figure}
 
-The definition of $\sqsubseteq$ is intended to define an information ordering
-on $\nu F$.  Its relation graph is shown in figure \ref{fig:DomainOfNuF}.
+The definition of $\sqsubseteq$ is intended to define an information ordering on
+$\delta$.  Its relation graph is shown in figure \ref{fig:DomainOfNuF}.
 Informally speaking, nodes closer to the root of the tree give less information
-than nodes further up the tree.  Consider a process that step-by-step
-calculates a value of type $\nu F$.  We want to interpret the result of the
-computation based on the output we have seen so far.  The root node can then be
-read as ``it could be any number''.  The value $S\bot$ can be read as ``it is
-at least one''.  Any value that ends with a $0$ tells us a concrete number,
-together with the fact that the process has terminated.  As with flat domains,
-concrete values are incomparable, so we don't distinguish between $1$ and $2$
-from the viewpoint of information ordering.
+than nodes further up the tree.  Consider a process that step-by-step calculates
+an element of $\delta$.  We want to interpret the result of the computation
+based on the output we have seen so far.  The root node can then be read as ``it
+could be any number''.  The value $S\bot$ can be read as ``it is at least one''.
+Any value that ends with a $0$ tells us a concrete number, together with the
+fact that the process has terminated.  As with flat domains, concrete values are
+incomparable, so we don't distinguish between $1$ and $2$ from the viewpoint of
+information ordering.
 
 When looking at the subtree of $\_\bot$, we see that its structure is similar
 to the whole domain itself, except that every value is prefixed with one additional
@@ -332,23 +332,23 @@ The relation $\sqsubseteq$ is chain complete.
 
 \end{thmPONuFisChainComplete}
 
-We need to show that every $\omega$-chain in $\nu F$ has a least upper bound.
-An $\omega$-chain in $\nu F$ is a sequence $f : \mathbb{N} \arr \nu F$ such
+We need to show that every $\omega$-chain in $\delta$ has a least upper bound.
+An $\omega$-chain in $\delta$ is a sequence $f : \mathbb{N} \arr \delta$ such
 that for all $i \in \mathbb{N}: f(i) \sqsubseteq f(i + 1)$.
 
 
 \begin{thmPONuFisADomain}
 
-The structure $(\nu F, \sqsubseteq)$ is a domain.
+The structure $(\delta, \sqsubseteq)$ is a domain.
 
 \end{thmPONuFisADomain}
 
-We need to show that $(\nu F, \sqsubseteq)$ has a least element, i.e. there is
-an element $s \in \nu F$ such that for any other element $t \in \nu F: s
+We need to show that $(\delta, \sqsubseteq)$ has a least element, i.e. there is
+an element $s \in \delta$ such that for any other element $t \in \delta: s
 \sqsubseteq t$.
 
 Next, we want to check if we can recover the lazy natural numbers, denoted by
-$L$, from the New Naturals by giving a continuous map between $\nu F$ and $L$.
+$L$, from the New Naturals by giving a continuous map between $\delta$ and $L$.
 The domain $(L, \sqsubseteq)$ is given informally in figure
 \ref{fig:DomainOfLazyNaturals}.
 
@@ -410,7 +410,7 @@ The domain $(L, \sqsubseteq)$ is given informally in figure
 
 \begin{defIMapsNuFToL}
 
-Define the function $I : \nu F \arr L$ as follows: \ldots
+Define the function $I : \delta \arr L$ as follows: \ldots
 
 \end{defIMapsNuFToL}
 
