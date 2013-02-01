@@ -325,7 +325,7 @@ step.
 
 The set $Z$ has as elements finite and infinite words, where we can see one word
 as the complete encoding of the behaviour of some $F$-coalgebra.  For example,
-if $C = \{\bot, a\}$ and $\gamma(a) = \kappa_0(*)$, then the coalgebra $(C,
+take $C = \{\bot, a\}$ and $\gamma(a) = \kappa_0(*)$, then the coalgebra $(C,
 \gamma)$, has a very simple behaviour on $a$:  It terminates in the first step.
 This behaviour is encoded in the singleton word $0$ in $Z$.
 
@@ -333,6 +333,12 @@ For another example, consider $C$ as above, but this time $\gamma(a) =
 \kappa_1(a)$, i.e.~the computation makes one step and yields the state $a$
 again.  From there, it continues with the same step, and so on, indefinitely.
 This behaviour is represented in $Z$ by the infinite word of only Ss.
+
+The function $\delta$ strips off the first letter of a word $w$, if possible,
+and yields as result the rest of the word.  This corresponds to the behaviour of
+$\gamma$ on some state $x$: $\gamma$ makes one step, and leaves us with the rest
+of it's behaviour.  Our goal is to map $x$ to $w$ such that $\delta$ and
+$\gamma$ coincide.
 
 The intrinsic structure of $Z$ makes it possible to embed the states of other
 $F$-coalgebras into $Z$. We map a state to the word which corresponds to the
