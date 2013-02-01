@@ -23,9 +23,12 @@
 \newtheorem{defF}[defNuF]{Definition}
 \newtheorem{thmDomNuFisFixedPoint}[defNuF]{Proposition}
 \newtheorem{defNuFCoalgebra}[defNuF]{Definition}
+\newtheorem{obsNuFCoalgebraIsInjective}[defNuF]{Observation}
 \newtheorem{defNuFCoalgebraPrime}[defNuF]{Definition}
 \newtheorem{thmDomNuFisFinal}[defNuF]{Proposition}
 \newtheorem{defSemantics}[defNuF]{Definition}
+\newtheorem{lemSemanticAfterDeltaIsIdentity}[defNuF]{Lemma}
+\newtheorem{lemSemanticAndFagreeOnOneStep}[defNuF]{Lemma}
 \newtheorem{defStrictOrderNuF}[defNuF]{Definition}
 \newtheorem{defPartialOrderNuF}[defNuF]{Definition}
 \newtheorem{thmPONuFisPartial}[defNuF]{Proposition}
@@ -283,6 +286,10 @@ These equations hold.
 
 \end{proof}
 
+\begin{obsNuFCoalgebraIsInjective}
+$\delta$ is injective.
+\end{obsNuFCoalgebraIsInjective}
+
 \begin{thmDomNuFisFinal}
 \label{thmDomNuFisFinal}
 
@@ -313,6 +320,9 @@ i.e.~it makes the following diagram commute.
 \end{tikzpicture}
 \end{center}
 \end{figure}
+
+Before we prove this proposition, let's briefly reflect on what it would mean
+for $(Z, \delta)$ to be the final coalgebra for $F$.
 
 The idea behind the definitions of $Z$ and $\delta$ is that $Z$ has intrinsic
 structure which resembles the structure of $F$.  We can regard $F$-coalgebras as
@@ -366,13 +376,45 @@ If it is clear from the context, we omit the subscript in
 $\semantics{-}_{\gamma}$ and write $\semantics{-}$.
 
 
-The informal idea of $(Z, \delta)$ encoding all possible behaviours of
+\begin{lemSemanticAfterDeltaIsIdentity}
+
+$\semantics{-}_{F\delta} \circ \delta = \text{id}_{\delta}$
+
+\end{lemSemanticAfterDeltaIsIdentity}
+
+\begin{proof}
+Admitted.
+\end{proof}
+
+
+\begin{lemSemanticAndFagreeOnOneStep}
+
+Let $(C, \gamma)$ be an $F$-coalgebra. For all $a$ in $C$ and $w$ in $\{S,
+\_\}^*$:
+
+\begin{itemize}
+\item
+  if $\gamma(a) = \kappa_1(b)$ then $\delta(w\semantics{a}) = \delta(wS
+  \semantics{b})$ and $\delta(wf(a)) = \delta(wSf(b))$
+\item
+  if $\gamma(a) = \kappa_2(b)$ then $\delta(w\semantics{a}) =
+  \delta(w\_\semantics{b})$ and $\delta(wf(a)) = \delta(w\_f(b))$
+\end{itemize}
+
+\end{lemSemanticAndFagreeOnOneStep}
+
+\begin{proof}
+Admitted.
+\end{proof}
+
+
+The informal idea that $(Z, \delta)$ encodes all possible behaviours of
 $F$-coalgebras is made explicit in the following proof of proposition
 \ref{thmDomNuFisFinal}.
 
 \begin{proof}
 
-Let $(C, \gamma)$ be an $F$-coalgebra. We need to prove two things.
+We need to prove two things.
 
   \begin{enumerate}
   \item
