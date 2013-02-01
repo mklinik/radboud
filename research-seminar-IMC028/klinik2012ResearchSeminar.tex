@@ -234,9 +234,9 @@ Let $\delta : Z \arr FZ$ be defined as
   \\
   \delta(0) & = & \kappa_0(*) \nonumber
   \\
-  \delta(Sw) & = & \kappa_1(w) \nonumber
+  \delta(Sw) & = & \kappa_1(w) \text{, for all } w \in Z  \nonumber
   \\
-  \delta(\_w) & = & \kappa_2(w) \nonumber
+  \delta(\_w) & = & \kappa_2(w) \text{, for all } w \in Z  \nonumber
   \end{IEEEeqnarray}
 \end{defNuFCoalgebra}
 
@@ -247,34 +247,32 @@ Let $\delta' : FZ \arr Z$ be defined as
   \\
   \delta'(\kappa_0(*)) & = & 0 \nonumber
   \\
-  \delta'(\kappa_1(w)) & = & Sw \nonumber
+  \delta'(\kappa_1(w)) & = & Sw \text{, for all } w \in Z  \nonumber
   \\
-  \delta'(\kappa_2(w)) & = & \_w \nonumber
+  \delta'(\kappa_2(w)) & = & \_w \text{, for all } w \in Z  \nonumber
   \end{IEEEeqnarray}
 \end{defNuFCoalgebraPrime}
 
-We have:
+These equations hold.
 
 \begin{IEEEeqnarray}{rCl}
 \delta'(\delta(\bot)) & = & \delta'(\bot) = \bot \nonumber
 \\
 \delta'(\delta(0)) & = & \delta'(\kappa_0(*)) = 0 \nonumber
 \\
-\delta'(\delta(Sw)) & = & \delta'(\kappa_1(w)) = Sw \nonumber
+\delta'(\delta(Sw)) & = & \delta'(\kappa_1(w)) = Sw \text{, for all } w \in Z \nonumber
 \\
-\delta'(\delta(\_w)) & = & \delta'(\kappa_2(w)) = \_w \nonumber
+\delta'(\delta(\_w)) & = & \delta'(\kappa_2(w)) = \_w \text{, for all } w \in Z  \nonumber
 \end{IEEEeqnarray}
-
-and
 
 \begin{IEEEeqnarray}{rCl}
 \delta(\delta'(\bot)) & = & \delta(\bot) = \bot \nonumber
 \\
 \delta(\delta'(\kappa_0(*))) & = & \delta(0) = \kappa_0(*) \nonumber
 \\
-\delta(\delta'(\kappa_1(w))) & = & \delta(Sw)) = \kappa_1(w) \nonumber
+\delta(\delta'(\kappa_1(w))) & = & \delta(Sw)) = \kappa_1(w) \text{, for all } w \in Z  \nonumber
 \\
-\delta(\delta'(\kappa_2(w))) & = & \delta(\_w) = \kappa_2(w) \nonumber
+\delta(\delta'(\kappa_2(w))) & = & \delta(\_w) = \kappa_2(w) \text{, for all } w \in Z  \nonumber
 \end{IEEEeqnarray}
 
 \end{proof}
