@@ -84,11 +84,11 @@ The I-place separated sum functor is defined as follows.
 
 \begin{equation}
 \sum_{i \in I}{(f_i : X_i \arr Y_i)} :
-  \sum_{i \in I}{X_i} \arr \sum_{i \in I}{Y_i}
+  \sum_{i \in I}{X_i} \arr \sum_{i \in I}{Y_i} \nonumber
 \end{equation}
 
 \begin{equation*}
-(\sum_{i \in I}{f_i)(x)} = \left\{
+( \sum_{i \in I}f_i ) (x) = \left\{
   \begin{array}{rl}
      \langle i, f(a) \rangle & \text{if } x = \langle i, a \rangle
                                \text{ for some } i \in I \\
@@ -98,7 +98,7 @@ The I-place separated sum functor is defined as follows.
 
 \end{defNplaceSeparatedSum}
 
-That is, it takes a family of sets to their disjoint union and adds a bottom
+That is, $\Sigma$ takes a family of sets to their disjoint union and adds a bottom
 element to the result.  For a family of functions, it applies the corresponding
 function to an element of the disjoint union.  We write $\kappa_i(a)$ for
 $\langle i, a \rangle$.
