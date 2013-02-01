@@ -382,9 +382,23 @@ F\semantics{\kappa_2(b)} = F\semantics{\gamma(a)}
 2. Assume $f : C \arr Z$ is another $F$-coalgebra homomorphism, that is, it
 satisfies the equation $\delta \circ f = Ff \circ \gamma$.  We proceed by
 constructing a bisimulation relation between $\delta \circ f$ and $\delta \circ
-\semantics{-}$.  This gives us the equality $\delta \circ f = \delta \circ
-\semantics{-}$, from which, by injectivity of $\delta$, we infer $f =
-\semantics{-}$.
+\semantics{-}$.  Let
+
+\begin{equation*}
+R \subseteq FZ \times FZ =
+  \{ \langle \delta(wf(a)) , \delta(w\semantics{a}) \rangle
+   \ |\  a \in C, w \in \{ S, \_ \}^*
+  \}
+\end{equation*}
+
+\todo{Use lemmas \ref{lemSemanticAfterDeltaIsIdentity} and
+\ref{lemSemanticAndFagreeOnOneStep} to prove that R is a bisimulation relation.}
+
+For $w = \epsilon$, we have that $\langle \delta(f(a)) , \delta(\semantics{a})
+\rangle$ is in $R$ for all $a$ in $C$.  This gives us the equality $\delta \circ
+f = \delta \circ \semantics{-}$, from which, by injectivity of $\delta$, we
+infer $f = \semantics{-}$.
+
 
 \end{proof}
 
