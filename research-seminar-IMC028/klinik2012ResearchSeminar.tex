@@ -68,6 +68,9 @@ least element.
 
 \section{A Domain for 1+X+X}
 
+\todo{We are currently on vacation in the land of CPOs and strict maps between them.
+Or somesuch.}
+
 \begin{defNplaceSeparatedSum}
 
 The I-place separated sum functor is defined as follows.
@@ -115,7 +118,7 @@ FX = \sum{(1, X, X)}
 F(f : X \arr Y) = \sum{(\text{id}, f, f)}
 \end{equation*}
 
-Where $1 = \{*\}$ is the singleton cpo.
+Where $1 = \{*\}$ is the singleton CPO.
 
 \end{defF}
 
@@ -248,11 +251,11 @@ for $(Z, \delta)$ to be the final coalgebra for $F$.
 The idea behind the definitions of $Z$ and $\delta$ is that $Z$ has intrinsic
 structure which resembles the structure of $F$.  We can regard $F$-coalgebras as
 calculations that either diverge, terminate, or make one of two different
-computation steps.  This is encoded as $\gamma(a)$ yielding $\bot$, $\kappa_0(*)$,
-$\kappa_1(b)$ or $\kappa_2(b)$ respectively, where $a$ and $b$ are elements of
-$C$, which we regard as internal states of the computation. The computation can
-continue from $b$, yielding another one of the possible outcomes in the next
-step.
+computation steps.  This is encoded as $\gamma(a)$ yielding $\bot$,
+$\kappa_0(*)$, $\kappa_1(b)$ or $\kappa_2(b)$ respectively, where $a$ and $b$
+are elements of $C$, which we regard as internal states of the computation. In
+the latter two cases, the computation can continue from $b$, yielding another
+one of the possible outcomes in the next step.
 
 The set $Z$ has as elements finite and infinite words, where we can see one word
 as the complete encoding of the behaviour of some $F$-coalgebra.  For example,
@@ -282,7 +285,7 @@ Let $(C, \gamma)$ be an $F$-coalgebra.  The function $\semantics{-}_{\gamma} : C
 \begin{IEEEeqnarray}{rCl}
 \semantics{a}_{\gamma} & = & \text{ case } \gamma(a) \text{ of} \nonumber
 \\
-\bot & = & \bot \nonumber
+\bot_C & = & \bot_Z \nonumber
 \\
 \kappa_0(*) & = & 0 \nonumber
 \\
@@ -298,6 +301,7 @@ $\semantics{-}_{\gamma}$ and write $\semantics{-}$.
 
 
 \begin{lemSemanticAfterDeltaIsIdentity}
+\label{lemSemanticAfterDeltaIsIdentity}
 
 $\semantics{-}_{F\delta} \circ \delta = \text{id}_{\delta}$
 
@@ -309,6 +313,7 @@ Admitted.
 
 
 \begin{lemSemanticAndFagreeOnOneStep}
+\label{lemSemanticAndFagreeOnOneStep}
 
 Let $(C, \gamma)$ be an $F$-coalgebra. For all $a$ in $C$ and $w$ in $\{S,
 \_\}^*$:
@@ -333,7 +338,7 @@ The informal idea that $(Z, \delta)$ encodes all possible behaviours of
 $F$-coalgebras is made explicit in the following proof of proposition
 \ref{thmDomNuFisFinal}.
 
-\begin{proof}
+\begin{proof}{(Proposition \ref{thmDomNuFisFinal})}
 
 We need to prove two things.
 
@@ -465,7 +470,7 @@ Let $\sqsubseteq$ be the reflexive closure of $\sqsubset$.
   ;
 \end{tikzpicture}
 \end{center}
-\caption{The domain of $Z$.}
+\caption{The domain $(Z, \sqsubseteq)$.}
 \label{fig:DomainOfNuF}
 \end{figure}
 
@@ -647,6 +652,8 @@ F-coalgebras?
 
 Lorem ipsum \cite{Pierce1991} \cite{Gunter1992} \cite{Bird1997}
 \cite{Mitchell1996} \cite{Allison1986} \cite{Capretta2002}
+
+\todo{Barr and Wells "Cats for CompSci", Escardo "On lazy nats"}
 
 \bibliographystyle{plain}
 \bibliography{computer_science}
