@@ -13,6 +13,8 @@
 %\newcommand{\todo}[1]{}
 
 \newtheorem{defNuF}{Definition}[section]
+\newtheorem{defNplaceSeparatedSum}[defNuF]{Definition}
+\newtheorem{defF}[defNuF]{Definition}
 \newtheorem{thmDomNuFisFixedPoint}[defNuF]{Proposition}
 \newtheorem{thmDomNuFisFinal}[defNuF]{Proposition}
 \newtheorem{defStrictOrderNuF}[defNuF]{Definition}
@@ -132,6 +134,52 @@ indeed a valid denotation.
 \end{itemize}
 
 \section{A domain for the New Naturals}
+
+\begin{defNplaceSeparatedSum}
+
+The I-place separated sum functor is defined as follows.
+
+\begin{equation}
+\sum : \mathbf{Cpo}^I \arr \mathbf{Cpo} \nonumber
+\end{equation}
+
+\begin{equation}
+\sum_{i \in I}{X_i} =
+  \bigcup_{i \in I} \{ \langle i, a \rangle | a \in X_i \}
+  \cup \{ \bot \} \nonumber
+\end{equation}
+
+\begin{equation}
+\sum_{i \in I}{(f_i : X_i \arr Y_i)} :
+  \sum_{i \in I}{X_i} \arr \sum_{i \in I}{Y_i}
+\end{equation}
+
+\begin{equation*}
+(\sum_{i \in I}{f_i)(x)} = \left\{
+  \begin{array}{rl}
+     \langle i, f(a) \rangle & \text{if } x = \langle i, a \rangle
+                               \text{ for some } i \in I \\
+    \bot                     & \text{if } x = \bot
+  \end{array} \right.
+\end{equation*}
+
+\end{defNplaceSeparatedSum}
+
+That is, it takes a family of sets to their disjoint union and adds a bottom
+element to the result.  For a family of functions, it applies the corresponding
+function to an element of the disjoint union.  We write $\kappa_i(a)$ for
+$\langle i, a \rangle$.
+
+Our functor F is then defined as follows.
+
+\begin{defF}
+\begin{equation*}
+F(X) = \sum{(1, X, X)}
+\end{equation*}
+\begin{equation*}
+F(f : X \arr Y) = \sum{(id_1, f, f)}
+\end{equation*}
+\end{defF}
 
 \begin{defNuF}
 
