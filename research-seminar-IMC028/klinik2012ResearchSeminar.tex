@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage[retainorgcmds]{IEEEtrantools}
 %\usepackage[square]{natbib}
 
 \usepackage{tikz}
@@ -16,6 +17,8 @@
 \newtheorem{defNplaceSeparatedSum}[defNuF]{Definition}
 \newtheorem{defF}[defNuF]{Definition}
 \newtheorem{thmDomNuFisFixedPoint}[defNuF]{Proposition}
+\newtheorem{defNuFCoalgebra}[defNuF]{Definition}
+\newtheorem{defNuFCoalgebraPrime}[defNuF]{Definition}
 \newtheorem{thmDomNuFisFinal}[defNuF]{Proposition}
 \newtheorem{defStrictOrderNuF}[defNuF]{Definition}
 \newtheorem{defPartialOrderNuF}[defNuF]{Definition}
@@ -218,11 +221,61 @@ $\delta : Z \arr FZ$ and $\delta' : FZ \arr Z$ such that their composition is
 the identity function, i.e. $\delta \circ \delta' = \text{id}_{FZ}$ and $\delta'
 \circ \delta = \text{id}_Z$.
 
+\begin{defNuFCoalgebra}
+Let $\delta : Z \arr FZ$ be defined as
+  \begin{IEEEeqnarray}{rCl}
+  \delta(\bot) & = & \bot \nonumber
+  \\
+  \delta(0) & = & \kappa_0(*) \nonumber
+  \\
+  \delta(Sw) & = & \kappa_1(w) \nonumber
+  \\
+  \delta(\_w) & = & \kappa_2(w) \nonumber
+  \end{IEEEeqnarray}
+\end{defNuFCoalgebra}
+
+\begin{defNuFCoalgebraPrime}
+Let $\delta' : FZ \arr Z$ be defined as
+  \begin{IEEEeqnarray}{rCl}
+  \delta'(\bot) & = & \bot \nonumber
+  \\
+  \delta'(\kappa_0(*)) & = & 0 \nonumber
+  \\
+  \delta'(\kappa_1(w)) & = & Sw \nonumber
+  \\
+  \delta'(\kappa_2(w)) & = & \_w \nonumber
+  \end{IEEEeqnarray}
+\end{defNuFCoalgebraPrime}
+
+We have:
+
+\begin{IEEEeqnarray}{rCl}
+\delta'(\delta(\bot)) & = & \delta'(\bot) = \bot \nonumber
+\\
+\delta'(\delta(0)) & = & \delta'(\kappa_0(*)) = 0 \nonumber
+\\
+\delta'(\delta(Sw)) & = & \delta'(\kappa_1(w)) = Sw \nonumber
+\\
+\delta'(\delta(\_w)) & = & \delta'(\kappa_2(w)) = \_w \nonumber
+\end{IEEEeqnarray}
+
+and
+
+\begin{IEEEeqnarray}{rCl}
+\delta(\delta'(\bot)) & = & \delta(\bot) = \bot \nonumber
+\\
+\delta(\delta'(\kappa_0(*))) & = & \delta(0) = \kappa_0(*) \nonumber
+\\
+\delta(\delta'(\kappa_1(w))) & = & \delta(Sw)) = \kappa_1(w) \nonumber
+\\
+\delta(\delta'(\kappa_2(w))) & = & \delta(\_w) = \kappa_2(w) \nonumber
+\end{IEEEeqnarray}
+
 \end{proof}
 
 \begin{thmDomNuFisFinal}
 
-The set $Z$ is the largest fixed point for FX = 1 + X + X.
+The set $Z$ is the largest fixed point for the functor $F$.
 
 \end{thmDomNuFisFinal}
 
