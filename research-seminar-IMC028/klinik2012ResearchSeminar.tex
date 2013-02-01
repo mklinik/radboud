@@ -201,14 +201,18 @@ Z ::= 0 \ |\ \bot \ |\ S Z \ |\ \_ Z
 
 \end{defNuF}
 
-Among those words are, for example, all peano numbers like $0$, $S0$, $SS0$.
+Among those words are, for example, all Peano numbers like $0$, $S0$, $SS0$.
 We also have arbitrary underscores mixed in between the successors: $\_0$,
 $S\_S\_0$.  Instead of $0$, words can be terminated by $\bot$, e.g.  $S\bot$,
 $S\_S\bot$.
 
 Note that all finite words are finite sequences of $S$ and $\_$ which end with
 either $0$ or $\bot$. All infinite words are $\omega$-sequences of $S$ and $\_$.
-We write $|w|$ to denote the length of a word $w$.
+
+We write $|w|$ to denote the length of a word $w$.  The concatenation of two
+words $w$, $v$ is denoted by their juxtaposition $wv$.  If $w$ or $v$ are
+singleton words, we regard them sometimes as letters, sometimes as words, as the
+situation requires.  The meaning should always be clear from the context.
 
 \begin{thmDomNuFisFixedPoint}
 
