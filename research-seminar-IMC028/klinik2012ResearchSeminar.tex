@@ -229,7 +229,7 @@ The set $Z$ is a fixed point of the functor $F$.
 
 We need to show that $Z$ is isomorphic to $FZ$, that is, provide two functions
 $\delta : Z \arr FZ$ and $\delta' : FZ \arr Z$ such that their composition is
-the identity function, i.e. $\delta \circ \delta' = \text{id}_{FZ}$ and $\delta'
+the identity function, i.e.~$\delta \circ \delta' = \text{id}_{FZ}$ and $\delta'
 \circ \delta = \text{id}_Z$.
 
 \begin{defNuFCoalgebra}
@@ -312,7 +312,7 @@ if $C = \{\bot, a\}$ and $\gamma(a) = \kappa_0(*)$, then the coalgebra $(C,
 This behaviour is encoded in the singleton word $0$ in $Z$.
 
 For another example, consider $C$ as above, but this time $\gamma(a) =
-\kappa_1(a)$, i.e. the computation makes one step and yields the state $a$
+\kappa_1(a)$, i.e.~the computation makes one step and yields the state $a$
 again.  From there, it continues with the same step, and so on, indefinitely.
 This behaviour is represented in $Z$ by the infinite word of only Ss.
 
@@ -347,16 +347,45 @@ behaviours of $F$-coalgebras is made explicit in the following proof of TODO.
 
 \begin{proof}
 
-We need to prove two things.
+Let $(C, \gamma)$ be an $F$-coalgebra. We need to prove two things.
 
-  \begin{itemize}
+  \begin{enumerate}
   \item
-    The function $\semantics{-}$ makes the diagram commute.
+    The function $\semantics{-}$ is an $F$-coalgebra homomorphism.
   \item
     The function $\semantics{-}$ is unique, i.e.~any other function $f : C \arr
     Z$ which makes the diagram commute, agrees with $\semantics{-}$ on every
     value of C.
-  \end{itemize}
+  \end{enumerate}
+
+1. For $\semantics{-}$ to be an
+$F$-coalgebra homomorphism, it has to satisfy the equation $\delta \circ
+\semantics{-} = F\semantics{-} \circ \gamma$.  Let $a$ be an element of $C$. We
+proceed by case distinction on $\gamma(a)$.
+
+Case $\gamma(a) = \bot$:
+\begin{equation*}
+\delta(\semantics{a}) = \delta(\bot) = \bot =
+F\semantics{\bot} = F\semantics{\gamma(a)}
+\end{equation*}
+
+Case $\gamma(a) = \kappa_0(*)$:
+\begin{equation*}
+\delta(\semantics{a}) = \delta(0) = \kappa_0(*)
+= \kappa_0(\text{id}(*)) = F\semantics{\kappa_0(*)} = F\semantics{\gamma(a)}
+\end{equation*}
+
+Case $\gamma(a) = \kappa_1(b)$:
+\begin{equation*}
+\delta(\semantics{a}) = \delta(S \semantics{b}) = \kappa_1(\semantics{b}) =
+F\semantics{\kappa_1(b)} = F\semantics{\gamma(a)}
+\end{equation*}
+
+Case $\gamma(a) = \kappa_2(b)$:
+\begin{equation*}
+\delta(\semantics{a}) = \delta(\_ \semantics{b}) = \kappa_2(\semantics{b}) =
+F\semantics{\kappa_2(b)} = F\semantics{\gamma(a)}
+\end{equation*}
 
 \end{proof}
 
@@ -525,7 +554,7 @@ The structure $(Z, \sqsubseteq)$ is a domain.
 
 \end{thmPONuFisADomain}
 
-We need to show that $(Z, \sqsubseteq)$ has a least element, i.e. there is
+We need to show that $(Z, \sqsubseteq)$ has a least element, i.e.~there is
 an element $s \in Z$ such that for any other element $t \in Z s
 \sqsubseteq t$.
 
