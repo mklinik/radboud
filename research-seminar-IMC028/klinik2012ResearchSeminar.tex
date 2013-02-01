@@ -173,13 +173,17 @@ $\langle i, a \rangle$.
 Our functor F is then defined as follows.
 
 \begin{defF}
+
 \begin{equation*}
 F(X) = \sum{(1, X, X)}
 \end{equation*}
+
 \begin{equation*}
-F(f : X \arr Y) = \sum{(id_1, f, f)}
+F(f : X \arr Y) = \sum{(\text{id}, f, f)}
 \end{equation*}
+
 \end{defF}
+
 
 \begin{defNuF}
 
@@ -203,7 +207,7 @@ We write $|w|$ to denote the length of a word $w$.
 
 \begin{thmDomNuFisFixedPoint}
 
-The set $Z$ is a fixed point of the functor $F(X) = 1 + X + X$.
+The set $Z$ is a fixed point of the functor $F$.
 
 \end{thmDomNuFisFixedPoint}
 
