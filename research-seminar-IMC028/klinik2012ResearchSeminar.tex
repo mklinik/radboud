@@ -40,7 +40,7 @@
 
 \begin{document}
 
-\title{A domain for the New Naturals}
+\title{A Domain For The Natural Numbers With Computation Steps}
 \author{Markus Klinik}
 \maketitle
 
@@ -48,72 +48,14 @@
 %Lorem ipsum.
 %\end{abstract}
 
-\section{What are the New Naturals?}
+\section{What Are The Natural Numbers With Computation Steps?}
 
-
-\begin{itemize}
-\item Explain inductive data types, F-algebras.
-\item Give Examples.
-\item Explain coinductive data types, F-coalgebras.
-\item Give Examples.
-\item The New Naturals are the coinductive data type associated with the
-functor $FX = 1 + X + X$.
-\end{itemize}
-
-
-Most programming languages offer the possibility to create new data types,
-together with functions that operate on them.  In C there are structures, in
-Java there are classes, and in contemporary functional programming languages
-like Haskell, Clean and OCaml there are algebraic data types.  In this article,
-we take a closer look at algebraic data types and their underlying mathematical
-ideas.
-
-The definition of an algebraic data type consists of the name of that type,
-together with a list of constructors possibly taking parameters.  When supplied
-with the correct number and types of arguments, a constructor yields a new
-value of that type.
-
-For example, the following piece of Clean code defines a new data type that
-could be used to track whether the user of an application has successfully used
-the application's authentication functionality before.  The type definition is
-to be read as: a user is either a guest or logged in, in which case we know the
-username.
-
-\begin{verbatim}
-:: User = Guest | LoggedIn String
-\end{verbatim}
-
-The first constructor, \verb+Guest+, takes no parameters, and when used as an
-expression, it has type \verb+User+.  It can be regarded as a constant value of
-type \verb+User+.  The other constructor, \verb+LoggedIn+, takes a
-\verb+String+ as its single parameter, so it has type \verb+String -> User+.
-In general, each constructor of an algebraic data type $A$ takes some number of
-parameters, say n, of type $t_1, t_2, \ldots, t_n$, and the constructor's type
-is then the function type that takes all these parameters and yields a value of
-the data type: $t_1 \arr t_2 \arr \ldots \arr t_n \arr A$.
-
-\todo{ADTs can be recursive, which means any of the $t_n$ can be A. Trees,
-Lists, yadda.}
-
-\todo{Give another example that has the same structure as User, to motivate
-different interpretations of inductive types having the same structure.}
-
-When thinking about algebraic data types in general, we're not interested in
-names: neither the name of the data type nor the names of the constructors.
-What matters is the data type's structure, that is how many different
-constructors there are and which type they have.  The idea is similar to lambda
-notation, where we denote functions without naming them.
-
-When looking at the above examples of algebraic data types, we can see a
-pattern emerge.
-
-The structure of algebraic data types is described with sums of products and
-constants.
-
-\section{What is a domain?}
+\section{What Is a Domain?}
 
 \begin{itemize}
+
 \item A domain is a CPO with a least element.
+
 \item And what is a CPO?  A partial order where every chain has a least upper bound.
 
 \item Finding a domain for the New Naturals means finding a suitable CPO
@@ -121,27 +63,6 @@ together with a mapping from the New Naturals to that CPO.
 
 \item We then need to prove that the given construction is indeed a CPO with
 least element.
-
-\end{itemize}
-
-\section{Why do we want a domain for the New Naturals?}
-
-\begin{itemize}
-
-\item We want to use the New Naturals in a programming language.
-
-\item We want to be able to reason about this programming language.
-
-\item One way to reason about a programming language is to give it a
-denotational semantics and then reason about that.
-
-\item In order to do this, every language construct needs a corresponding
-construct in the denotational semantics.
-
-\item Just because we define something, doesn't mean it exists.  Think halting
-problem, think Russel's paradox. If we manage to let programs denote domains,
-we can apply Tarski's fixed point theorem to be sure that every program has
-indeed a valid denotation.
 
 \end{itemize}
 
