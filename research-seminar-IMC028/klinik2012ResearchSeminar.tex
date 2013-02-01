@@ -192,6 +192,11 @@ grammar.
 
 \end{defNuF}
 
+Among those words are, for example, all peano numbers like $0$, $S0$, $SS0$.
+We also have arbitrary underscores mixed in between the successors: $\_0$,
+$S\_S\_0$.  Instead of $0$, words can be terminated by $\bot$, e.g.  $S\bot$,
+$S\_S\bot$.
+
 Note that all finite words are finite sequences of $S$ and $\_$ which end with
 either $0$ or $\bot$. All infinite words are $\omega$-sequences of $S$ and $\_$.
 We write $|w|$ to denote the length of a word $w$.
@@ -221,15 +226,10 @@ The set $\delta$ is the largest fixed point for F(X) = 1 + X + X.
 What do we need to show?
 \end{proof}
 
-Among those words are, for example, all peano numbers like $0$, $S0$, $SS0$.
-We also have arbitrary underscores mixed in between the successors: $\_0$,
-$S\_S\_0$.  Instead of $0$, words can be terminated by $\bot$, e.g.  $S\bot$,
-$S\_S\bot$.
-
 \begin{defStrictOrderNuF}
 
 Let the relation $\sqsubset$ on $\delta \times \delta$ be defined as: two
-terms $s$ and $t$ are in relation $s \sqsubset t$ iff $s$ is finite and $|s|
+words $s$ and $t$ are in relation $s \sqsubset t$ iff $s$ is finite and $|s|
 \leq |t|$ and $s_{|s|-1} = \bot$ and for all $i < |s|-1: s_i = t_i$.
 
 \end{defStrictOrderNuF}
@@ -351,7 +351,7 @@ antisymmetric.
 Reflexive: by definition.
 
 Transitive: We have to prove that if $s \sqsubseteq t$ and $t \sqsubseteq u$
-then $s \sqsubseteq u$ for all terms $s$, $t$, $u$. We do so by distinguishing
+then $s \sqsubseteq u$ for all words $s$, $t$, $u$. We do so by distinguishing
 four cases.
 
 1. If $s = t = u$ then $s \sqsubseteq u$ follows from reflexivity.
