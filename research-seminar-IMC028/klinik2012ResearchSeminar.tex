@@ -15,7 +15,7 @@
 \newcommand{\arr}{\rightarrow}
 \newcommand{\todo}[1]{\bigskip \noindent \emph{todo: #1}}
 %\newcommand{\todo}[1]{}
-\newcommand{\semantics}{\llbracket - \rrbracket}
+\newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
 
 \newtheorem{defNuF}{Definition}[section]
 \newtheorem{defNplaceSeparatedSum}[defNuF]{Definition}
@@ -24,6 +24,7 @@
 \newtheorem{defNuFCoalgebra}[defNuF]{Definition}
 \newtheorem{defNuFCoalgebraPrime}[defNuF]{Definition}
 \newtheorem{thmDomNuFisFinal}[defNuF]{Proposition}
+\newtheorem{defSemantics}[defNuF]{Definition}
 \newtheorem{defStrictOrderNuF}[defNuF]{Definition}
 \newtheorem{defPartialOrderNuF}[defNuF]{Definition}
 \newtheorem{thmPONuFisPartial}[defNuF]{Proposition}
@@ -290,8 +291,8 @@ The set $Z$ is the largest fixed point for the functor $F$.
 We need to show that any other fixed point of $F$ can be embedded into $Z$.  We
 prove this by showing that $(Z, \delta)$ is a final coalgebra for $F$, that is,
 for any other $F$-coalgebra $(C, \gamma : C \arr FC)$ there is a unique function
-$\semantics : C \arr Z$ such that $F\semantics \circ \gamma = \delta \circ
-\semantics$.
+$\semantics{-} : C \arr Z$ such that $F\semantics{-} \circ \gamma = \delta \circ
+\semantics{-}$.
 
 \todo{which makes the following diagram commute}
 
@@ -319,13 +320,43 @@ The intrinsic structure of $Z$ makes it possible to embed the states of other
 $F$-coalgebras into $Z$. We map a state to the word which corresponds to the
 state's behaviour.
 
+\begin{defSemantics}
+
+Let $(C, \gamma)$ be an $F$-coalgebra.  The function $\semantics{-}_{\gamma} : C
+\arr Z$ is defined as follows.
+\begin{IEEEeqnarray}{rCl}
+\semantics{a}_{\gamma} & = & \text{ case } \gamma(a) \text{ of} \nonumber
+\\
+\bot & = & \bot \nonumber
+\\
+\kappa_0(*) & = & 0 \nonumber
+\\
+\kappa_1(b) & = & S \semantics{b}_{\gamma} \nonumber
+\\
+\kappa_2(b) & = & \_ \semantics{b}_{\gamma} \nonumber
+\end{IEEEeqnarray}
+
+\end{defSemantics}
+
+If it is clear from the context, we leave out the subscript in
+$\semantics{-}_{\gamma}$ and just write $\semantics{-}$.
+
 
 The informal idea of $(Z, \delta)$ encoding all possible
 behaviours of $F$-coalgebras is made explicit in the following proof of TODO.
 
 \begin{proof}
 
-42.
+We need to prove two things.
+
+  \begin{itemize}
+  \item
+    The function $\semantics{-}$ makes the diagram commute.
+  \item
+    The function $\semantics{-}$ is unique, i.e.~any other function $f : C \arr
+    Z$ which makes the diagram commute, agrees with $\semantics{-}$ on every
+    value of C.
+  \end{itemize}
 
 \end{proof}
 
