@@ -336,7 +336,7 @@ Case $w = Sw'$:
    & \semanticsFd{\kappa_1(w')} \\
  = & \text{(definition of $\semantics{-}$)} \\
    & \text{case } F\delta(\kappa_1(w')) \text{ of } \ldots \\
- = & \text{(definition of F)} \\
+ = & \text{(definition of $F$)} \\
    & \text{case } \kappa_1(\delta(w')) \text{ of } \ldots \\
  = & \text{(definition of $\semantics{-}$)} \\
    & S\semanticsFd{\delta(w')} \\
@@ -356,19 +356,68 @@ $\kappa_1$.
 Let $(C, \gamma)$ be an $F$-coalgebra. For all $a$ in $C$ and $w$ in $\{S,
 \_\}^*$:
 
-\begin{itemize}
+\begin{enumerate}
 \item
-  if $\gamma(a) = \kappa_1(b)$ then $\delta(w\semantics{a}) = \delta(wS
-  \semantics{b})$ and $\delta(wf(a)) = \delta(wSf(b))$
+  If $\gamma(a) = \kappa_1(b)$ then $\delta(w\semantics{a}) = \delta(wS
+  \semantics{b})$ and $\delta(wf(a)) = \delta(wSf(b))$.
 \item
-  if $\gamma(a) = \kappa_2(b)$ then $\delta(w\semantics{a}) =
-  \delta(w\_\semantics{b})$ and $\delta(wf(a)) = \delta(w\_f(b))$
-\end{itemize}
+  If $\gamma(a) = \kappa_2(b)$ then $\delta(w\semantics{a}) =
+  \delta(w\_\semantics{b})$ and $\delta(wf(a)) = \delta(w\_f(b))$.
+
+\end{enumerate}
 
 \end{lemSemanticAndFagreeOnOneStep}
 
 \begin{proof}
-Admitted.
+
+1. By induction on the length of $w$.
+
+Case $w = \varepsilon$:
+\begin{IEEEeqnarray*}{r.l}
+    & \delta(\semantics{a}) \\
+  = & \text{(definition of $\semantics{-}$)} \\
+    & \delta(S\semantics{b})
+\end{IEEEeqnarray*}
+
+\begin{IEEEeqnarray*}{r.l}
+    & \delta(f(a)) \\
+  = & \text{(f is an $F$-coalgebra homomorphism)} \\
+    & Ff(\gamma(a)) \\
+  = & \text{(assumption)} \\
+    & Ff(\kappa_1(b)) \\
+  = & \text{(definition of $F$)} \\
+    & \kappa_1(f(b)) \\
+  = & \text{(definition of $\delta$)} \\
+    & \delta(Sf(b))
+\end{IEEEeqnarray*}
+
+Case $w = Sw'$:
+
+\begin{IEEEeqnarray*}{r.l}
+    & \delta(w\semantics{a}) \\
+  = & \text{(definition of $\semantics{-}$)} \\
+    & \delta(wS\semantics{b})
+\end{IEEEeqnarray*}
+
+\begin{IEEEeqnarray*}{r.l}
+    & \delta(Sw'f(a)) \\
+  = & \text{(definition of $\delta$)} \\
+    & \kappa_1(w'f(a)) \\
+  = & \text{(Lemma \ref{lemSemanticAfterDeltaIsIdentity})} \\
+    & \kappa_1(\semanticsFd{\delta(w'f(a))}) \\
+  = & \text{(induction hypothesis)} \\
+    & \kappa_1(\semanticsFd{\delta(w'Sf(b))}) \\
+  = & \text{(Lemma \ref{lemSemanticAfterDeltaIsIdentity})} \\
+    & \kappa_1(w'Sf(b)) \\
+  = & \text{(definition of $\delta$)} \\
+    & \delta(Sw'Sf(b)) \\
+  = & \delta(wSf(b))
+\end{IEEEeqnarray*}
+
+Case $w = \_w'$:
+
+2. Similar to the case $w = Sw'$ but with $\kappa_2$ instead of $\kappa_1$.
+
 \end{proof}
 
 
@@ -435,7 +484,7 @@ R \subseteq FZ \times FZ =
 For $w = \epsilon$, we have that $\langle \delta(f(a)) , \delta(\semantics{a})
 \rangle$ is in $R$ for all $a$ in $C$.  This gives us the equality $\delta \circ
 f = \delta \circ \semantics{-}$, from which, by injectivity of $\delta$, we
-infer $f = \semantics{-}$.
+get $f = \semantics{-}$.
 
 
 \end{proof}
