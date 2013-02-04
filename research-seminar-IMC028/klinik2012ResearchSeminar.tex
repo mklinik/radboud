@@ -211,7 +211,7 @@ These equations hold.
 \end{proof}
 
 \begin{obsNuFCoalgebraIsInjective}
-$\delta$ is injective.
+$\delta$ is injective. \qed
 \end{obsNuFCoalgebraIsInjective}
 
 \begin{thmDomNuFisFinal}
@@ -303,12 +303,50 @@ $\semantics{-}_{\gamma}$ and write $\semantics{-}$.
 \begin{lemSemanticAfterDeltaIsIdentity}
 \label{lemSemanticAfterDeltaIsIdentity}
 
-$\semantics{-}_{F\delta} \circ \delta = \text{id}_{\delta}$
+$\semantics{-}_{F\delta} \circ \delta = \text{id}_{Z}$
 
 \end{lemSemanticAfterDeltaIsIdentity}
 
+\newcommand{\semanticsFd}[1]{\semantics{#1}_{F\delta}}
+
 \begin{proof}
-Admitted.
+
+By induction on the length of $w \in Z$.
+
+Case $w = \bot$:
+\begin{equation*}
+\semanticsFd{\delta(\bot)}
+  = \semanticsFd{\bot}
+  = \bot
+\end{equation*}
+
+Case $w = 0$:
+\begin{equation*}
+\semanticsFd{\delta(0)}
+  = \semanticsFd{\kappa_0(*)}
+  = \text{case } F\delta(\kappa_0(*)) \text{ of } \ldots
+  = \text{case } \kappa_0(\text{id}(*)) \text{ of } \ldots
+  = 0
+\end{equation*}
+
+Case $w = Sw'$:
+\begin{IEEEeqnarray*}{r.l}
+   & \semanticsFd{\delta(Sw')} \\
+ = & \text{(definition of $\delta$)} \\
+   & \semanticsFd{\kappa_1(w')} \\
+ = & \text{(definition of $\semantics{-}$)} \\
+   & \text{case } F\delta(\kappa_1(w')) \text{ of } \ldots \\
+ = & \text{(definition of F)} \\
+   & \text{case } \kappa_1(\delta(w')) \text{ of } \ldots \\
+ = & \text{(definition of $\semantics{-}$)} \\
+   & S\semanticsFd{\delta(w')} \\
+ = & \text{(induction hypothesis)} \\
+   & Sw'
+\end{IEEEeqnarray*}
+
+Case $w = \_w'$: Similar to the case $w = Sw'$ but with $\kappa_2$ instead of
+$\kappa_1$.
+
 \end{proof}
 
 
