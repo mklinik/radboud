@@ -434,7 +434,7 @@ Similar to the case $w = Sw'$ but with $\kappa_2$ instead of $\kappa_1$.
 % \gamma(a) = \kappa_1
 \item
 By induction on the length of $w$.  Again, the steps are the same, but with
-different base case.
+a different base case.
 
 Case $w = \varepsilon$:
 \begin{IEEEeqnarray*}{r.l}
@@ -514,10 +514,10 @@ Case $\gamma(a) = \kappa_2(b)$:
 F\semantics{\kappa_2(b)} = F\semantics{\gamma(a)}
 \end{equation*}
 
-2. Assume $f : C \arr Z$ is another $F$-coalgebra homomorphism, that is, it
-satisfies the equation $\delta \circ f = Ff \circ \gamma$.  We proceed by
-constructing a bisimulation relation between $\delta \circ f$ and $\delta \circ
-\semantics{-}$.  Let
+2. For the uniqueness of $\semantics{-}$, assume $f : C \arr Z$ is another
+$F$-coalgebra homomorphism, that is, it satisfies the equation $\delta \circ f =
+Ff \circ \gamma$.  We proceed by constructing a bisimulation relation between
+$\delta \circ f$ and $\delta \circ \semantics{-}$.  Let
 
 \begin{equation*}
 R \subseteq FZ \times FZ =
@@ -526,8 +526,35 @@ R \subseteq FZ \times FZ =
   \}
 \end{equation*}
 
-\todo{Use lemmas \ref{lemSemanticAfterDeltaIsIdentity} and
-\ref{lemSemanticAndFagreeOnOneStep} to prove that R is a bisimulation relation.}
+The proof that $R$ is a bisimulation relation goes by case distinction on
+$\gamma(a)$.  All cases use the definition of $\semantics{-}$ for the first
+equality, and lemma \ref{lemSemanticAndFagreeOnOneStep} for the second one.
+
+Case $\gamma(a) = \bot$:
+\begin{IEEEeqnarray*}{C}
+  \delta(w\semantics{a}) = \delta(w\bot) = \delta(wf(a))
+\end{IEEEeqnarray*}
+
+Case $\gamma(a) = \kappa_0(*)$:
+\begin{IEEEeqnarray*}{C}
+  \delta(w\semantics{a}) = \delta(w0) = \delta(wf(a))
+\end{IEEEeqnarray*}
+
+Case $\gamma(a) = \kappa_1(b)$:
+\begin{IEEEeqnarray*}{rCl}
+  \delta(w\semantics{a}) & = & \delta(wS\semantics{b}) \\
+  \delta(wf(a)) & = & \delta(wSf(b))
+\end{IEEEeqnarray*}
+
+Case $\gamma(a) = \kappa_2(b)$:
+\begin{IEEEeqnarray*}{rCl}
+  \delta(w\semantics{a}) & = & \delta(w\_\semantics{b}) \\
+  \delta(wf(a)) & = & \delta(w\_f(b))
+\end{IEEEeqnarray*}
+
+In the first two cases, the functions are identical, in the latter two cases,
+the functions are again in $R$.  This proves that $R$ is a bisimulation
+relation.
 
 For $w = \epsilon$, we have that $\langle \delta(f(a)) , \delta(\semantics{a})
 \rangle$ is in $R$ for all $a$ in $C$.  This gives us the equality $\delta \circ
