@@ -718,9 +718,63 @@ The relation $\sqsubseteq$ is chain complete.
 
 \end{thmPONuFisChainComplete}
 
-We need to show that every $\omega$-chain in $Z$ has a least upper bound.
-An $\omega$-chain in $Z$ is a sequence $f : \mathbb{N} \arr Z$ such
-that for all $i \in \mathbb{N}: f(i) \sqsubseteq f(i + 1)$.
+\begin{proof}
+
+We need to show that every ascending chain in $Z$ has a least upper bound.  An
+ascending chain in $Z$ is a sequence $x : \mathbb{N} \arr Z$ such that for all
+$i \in \mathbb{N}: x(i) \sqsubseteq x(i + 1)$.
+
+There are two cases.
+
+\begin{enumerate}
+  \item
+    \label{blahhhh}
+    Either the sequence stops growing at some point, i.e.~there is a $j$ such
+    that for all $k > j$, $x(j) = x(k)$.
+  \item
+    The sequence keeps strictly growing, that is, for every $j$ there is a $k$
+    such that $k > j$ and $x(j) \sqsubset x(k)$.
+\end{enumerate}
+
+In the first case, the element $x(j)$ is the least upper bound of the sequence.
+
+In the second case, we construct an infinite word $w$ as follows.  Observe that
+all elements $x(j)$ are finite, and consist of a prefix in $\{S, \_\}^*$,
+terminated by $\bot$.  This stems from the definition of $\sqsubset$ and the
+fact that every $x(j)$ is strictly below some $x(k)$.  The sequence $x$ may
+contain repetitions, so we first need to get rid of them. Define the sequence
+$x'$ as follows.
+\begin{IEEEeqnarray*}{rCl}
+x'(0) & = & x(0) \\
+x'(n+1) & = & \text{the first } x(j) \text{ such that } x'(n) \sqsubset x(j)
+\end{IEEEeqnarray*}
+We now take the word $w$ to be the diagonal of $x'$, offset by one, that is,
+\begin{equation*}
+  w_i = x'(i+1)_i
+\end{equation*}
+
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes]
+  {
+     x'(0) & \bot \\
+     x'(1) & S & \bot \\
+     x'(2) & S & \_ & \bot \\
+     x'(3) & S & \_ & \_ & S & \_ & S & \bot \\
+     x'(4) & S & \_ & \_ & S & \_ & S & S & S \\
+  };
+  \draw (m-1-1.north east) -- (m-5-1.south east);
+  \path (m-2-2.center) -- (m-5-5.center) [draw,line cap=round,line
+  width=1.3em,opacity=0.2];
+\end{tikzpicture}
+\end{center}
+\caption{Example sequence without repetitions. The first few elements of $w$ are
+highlighted.}
+\label{fig:exampleXprime}
+\end{figure}
+
+\end{proof}
 
 
 \begin{thmPONuFisADomain}
