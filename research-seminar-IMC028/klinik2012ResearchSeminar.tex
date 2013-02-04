@@ -357,12 +357,15 @@ Let $(C, \gamma)$ be an $F$-coalgebra. For any $F$-coalgebra homomorphism $f : C
 \arr Z$, all $a$ in $C$ and $w$ in $\{S, \_\}^*$:
 
 \begin{enumerate}
+
 \item
-  If $\gamma(a) = \kappa_1(b)$ then $\delta(w\semantics{a}) = \delta(wS
-  \semantics{b})$ and $\delta(wf(a)) = \delta(wSf(b))$.
+  If $\gamma(a) = \bot$ then $\delta(wf(a)) = \delta(w\bot)$.
 \item
-  If $\gamma(a) = \kappa_2(b)$ then $\delta(w\semantics{a}) =
-  \delta(w\_\semantics{b})$ and $\delta(wf(a)) = \delta(w\_f(b))$.
+  If $\gamma(a) = \kappa_0(*)$ then $\delta(wf(a)) = \delta(w0)$.
+\item
+  If $\gamma(a) = \kappa_1(b)$ then $\delta(wf(a)) = \delta(wSf(b))$.
+\item
+  If $\gamma(a) = \kappa_2(b)$ then $\delta(wf(a)) = \delta(w\_f(b))$.
 
 \end{enumerate}
 
@@ -370,35 +373,26 @@ Let $(C, \gamma)$ be an $F$-coalgebra. For any $F$-coalgebra homomorphism $f : C
 
 \begin{proof}
 
-1. By induction on the length of $w$.
+\begin{enumerate}
+
+% \gamma(a) = \bot
+\item
+By induction on the length of $w$.
 
 Case $w = \varepsilon$:
 \begin{IEEEeqnarray*}{r.l}
-    & \delta(\semantics{a}) \\
-  = & \text{(definition of $\semantics{-}$)} \\
-    & \delta(S\semantics{b})
-\end{IEEEeqnarray*}
-
-\begin{IEEEeqnarray*}{r.l}
     & \delta(f(a)) \\
-  = & \text{(f is an $F$-coalgebra homomorphism)} \\
+  = & \text{($f$ is a homomorphism)} \\
     & Ff(\gamma(a)) \\
   = & \text{(assumption)} \\
-    & Ff(\kappa_1(b)) \\
+    & Ff(\bot) \\
   = & \text{(definition of $F$)} \\
-    & \kappa_1(f(b)) \\
+    & \bot \\
   = & \text{(definition of $\delta$)} \\
-    & \delta(Sf(b))
+    & \delta(\bot)
 \end{IEEEeqnarray*}
 
 Case $w = Sw'$:
-
-\begin{IEEEeqnarray*}{r.l}
-    & \delta(w\semantics{a}) \\
-  = & \text{(definition of $\semantics{-}$)} \\
-    & \delta(wS\semantics{b})
-\end{IEEEeqnarray*}
-
 \begin{IEEEeqnarray*}{r.l}
     & \delta(Sw'f(a)) \\
   = & \text{(definition of $\delta$)} \\
@@ -406,17 +400,71 @@ Case $w = Sw'$:
   = & \text{(Lemma \ref{lemSemanticAfterDeltaIsIdentity})} \\
     & \kappa_1(\semanticsFd{\delta(w'f(a))}) \\
   = & \text{(induction hypothesis)} \\
-    & \kappa_1(\semanticsFd{\delta(w'Sf(b))}) \\
+    & \kappa_1(\semanticsFd{\delta(w'0)}) \\
   = & \text{(Lemma \ref{lemSemanticAfterDeltaIsIdentity})} \\
-    & \kappa_1(w'Sf(b)) \\
+    & \kappa_1(w'0) \\
   = & \text{(definition of $\delta$)} \\
-    & \delta(Sw'Sf(b)) \\
+    & \delta(Sw'0) \\
+  = & \delta(w0)
+\end{IEEEeqnarray*}
+
+Case $w = \_w'$:
+Similar to the case $w = Sw'$ but with $\kappa_2$ instead of $\kappa_1$.
+
+% \gamma(a) = \kappa_0
+\item
+By induction on the length of $w$.  The steps are the same as above, only the
+base case now produces a 0.
+
+Case $w = \varepsilon$:
+\begin{equation*}
+  \delta(f(a)) = Ff(\gamma(a)) = Ff(\kappa_0(*)) = \kappa_0(*) = \delta(0)
+\end{equation*}
+
+Case $w = Sw'$:
+\begin{IEEEeqnarray*}{r.l}
+  \delta(Sw'f(a)) & = \kappa_1(w'f(a)) = \kappa_1(\semanticsFd{\delta(w'f(a))}) \\
+  & = \kappa_1(\semanticsFd{\delta(w'0)}) = \kappa_1(w'0) \\
+  & = \delta(Sw'0)
+\end{IEEEeqnarray*}
+
+Case $w = \_w'$:
+Similar to the case $w = Sw'$ but with $\kappa_2$ instead of $\kappa_1$.
+
+% \gamma(a) = \kappa_1
+\item
+By induction on the length of $w$.  Again, the steps are the same, but with
+different base case.
+
+Case $w = \varepsilon$:
+\begin{IEEEeqnarray*}{r.l}
+    \delta(f(a))
+  = Ff(\gamma(a))
+  = Ff(\kappa_1(b))
+  = \kappa_1(f(b))
+  = \delta(Sf(b))
+\end{IEEEeqnarray*}
+
+Case $w = Sw'$:
+\begin{IEEEeqnarray*}{r.l}
+    \delta(Sw'f(a)) = &
+    \kappa_1(w'f(a)) =
+    \kappa_1(\semanticsFd{\delta(w'f(a))}) \\
+  = & \kappa_1(\semanticsFd{\delta(w'Sf(b))}) \\
+  = & \kappa_1(w'Sf(b))
+  = \delta(Sw'Sf(b)) \\
   = & \delta(wSf(b))
 \end{IEEEeqnarray*}
 
 Case $w = \_w'$:
+Similar to the case $w = Sw'$ but with $\kappa_2$ instead of $\kappa_1$.
 
-2. Similar to the case $w = Sw'$ but with $\kappa_2$ instead of $\kappa_1$.
+% \gamma(a) = \kappa_2
+\item
+Similar to the case $\gamma(a) = \kappa_1(b)$, but now the base case produces an
+underscore instead of an $S$.
+
+\end{enumerate}
 
 \end{proof}
 
