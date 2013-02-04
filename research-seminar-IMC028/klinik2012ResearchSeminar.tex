@@ -738,7 +738,7 @@ There are two cases.
 
 In the first case, the element $x(j)$ is the least upper bound of the sequence.
 
-In the second case, we construct an infinite word $w$ as follows.  Observe that
+In the second case, we define the infinite word $w$ as follows.  Observe that
 all elements $x(j)$ are finite, and consist of a prefix in $\{S, \_\}^*$,
 terminated by $\bot$.  This stems from the definition of $\sqsubset$ and the
 fact that every $x(j)$ is strictly below some $x(k)$.  The sequence $x$ may
@@ -752,6 +752,8 @@ We now take the word $w$ to be the diagonal of $x'$, offset by one, that is,
 \begin{equation*}
   w_i = x'(i+1)_i
 \end{equation*}
+Figure \ref{fig:exampleXprime} shows an example of such a condensed sequence
+$x'$, with the corresponding $w$ highlighted.
 
 \begin{figure}
 \begin{center}
