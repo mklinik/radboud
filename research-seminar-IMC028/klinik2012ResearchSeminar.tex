@@ -40,13 +40,19 @@
 
 \begin{document}
 
-\title{A Domain For The Natural Numbers With Computation Steps}
+\title{A Domain For The Lazy Natural Numbers With Computation Steps}
 \author{Markus Klinik}
 \maketitle
 
-%\begin{abstract}
-%Lorem ipsum.
-%\end{abstract}
+\begin{abstract}
+
+The type 1+X+X can be used to model general recursive functions on natural
+numbers. This work defines a model for that type. It is then shown that this
+model is the greatest fixed point of the functor FX=1+X+X, and that the model is
+a domain.  Finally, a projection of the model onto the model of the lazy natural
+numbers is given.
+
+\end{abstract}
 
 \section{What Are The Natural Numbers With Computation Steps?}
 
@@ -954,10 +960,17 @@ where $F$ is a polynomial functor.
 
 \section{Bibliographic notes}
 
-Lorem ipsum \cite{Pierce1991} \cite{Gunter1992} \cite{Bird1997}
-\cite{Mitchell1996} \cite{Allison1986} \cite{Capretta2002}
+This work is based on chapter 7 of the PhD thesis of Venanzio Capretta
+\cite{Capretta2002}, where coinductive natural numbers with computation steps
+are discussed.  Some treatment of lazy naturals can be found in
+\cite{Escardo1993}.
 
-\todo{Barr and Wells "Cats for CompSci", Escardo "On lazy nats"}
+An short introduction to dentotational semantics can be found in
+\cite{Allison1986}, while \cite{Gunter1992} is a more comprehensive treatment of
+that topic.  A view on domain theory and denotational semantics from the
+category theoretical perspective can be found in \cite{Pierce1991},
+\cite{Bird1997}, \cite{Mitchell1996} and \cite{BarrWells1990}.
+
 
 \bibliographystyle{plain}
 \bibliography{computer_science}
