@@ -31,7 +31,7 @@
 \newtheorem{lemSemanticAndFagreeOnOneStep}[defNuF]{Lemma}
 \newtheorem{defStrictOrderNuF}[defNuF]{Definition}
 \newtheorem{defPartialOrderNuF}[defNuF]{Definition}
-\newtheorem{thmPONuFisPartial}[defNuF]{Proposition}
+\newtheorem{thmPONuFisPartialOrder}[defNuF]{Proposition}
 \newtheorem{thmPONuFisChainComplete}[defNuF]{Proposition}
 \newtheorem{thmPONuFisADomain}[defNuF]{Proposition}
 \newtheorem{defIMapsNuFToL}[defNuF]{Definition}
@@ -675,11 +675,12 @@ infinity?}
 
 \todo{Are the two infinities in the picture the same?}
 
-\begin{thmPONuFisPartial}
+\begin{thmPONuFisPartialOrder}
+\label{thmPONuFisPartialOrder}
 
 The relation $\sqsubseteq$ is a partial order.
 
-\end{thmPONuFisPartial}
+\end{thmPONuFisPartialOrder}
 
 
 \begin{proof}
@@ -714,6 +715,7 @@ and agree in all elements, hence $s = t$.
 \end{proof}
 
 \begin{thmPONuFisChainComplete}
+\label{thmPONuFisChainComplete}
 
 The relation $\sqsubseteq$ is chain complete.
 
@@ -792,9 +794,27 @@ The structure $(Z, \sqsubseteq)$ is a domain.
 
 \end{thmPONuFisADomain}
 
-We need to show that $(Z, \sqsubseteq)$ has a least element, i.e.~there is
-an element $s \in Z$ such that for any other element $t \in Z s
-\sqsubseteq t$.
+\begin{proof}
+
+We need to show that $(Z, \sqsubseteq)$:
+
+\begin{enumerate}
+
+  \item is a partial order
+
+  \item is chain-complete
+
+  \item has a least element, i.e.~there is an element $s \in Z$ such that for
+    any other element $t \in Z, s \sqsubseteq t$.
+
+The first two points have been shown in propositions
+\ref{thmPONuFisPartialOrder} and \ref{thmPONuFisChainComplete}.  For the last
+point, observe that the word $\bot$ is below any other word.  It is finite, ends
+with $\bot$, and the empty word is a prefix of any word.
+
+\end{enumerate}
+
+\end{proof}
 
 Next, we want to check if we can recover the lazy natural numbers, denoted by
 $L$, from the 1+X+X by giving a continuous map between $Z$ and $L$.
