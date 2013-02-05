@@ -34,9 +34,9 @@
 \newtheorem{thmPONuFisPartialOrder}[defNuF]{Proposition}
 \newtheorem{thmPONuFisChainComplete}[defNuF]{Proposition}
 \newtheorem{thmPONuFisADomain}[defNuF]{Proposition}
-\newtheorem{defIMapsNuFToL}[defNuF]{Definition}
-\newtheorem{thmIIsMonotone}[defNuF]{Proposition}
-\newtheorem{thmIIsContinuous}[defNuF]{Proposition}
+\newtheorem{defPMapsNuFToL}[defNuF]{Definition}
+\newtheorem{thmPIsMonotone}[defNuF]{Proposition}
+\newtheorem{thmPIsContinuous}[defNuF]{Proposition}
 
 \begin{document}
 
@@ -848,25 +848,35 @@ $L$ from $Z$ by giving a continuous map between $Z$ and $L$.  The domain $(L,
 \label{figDomainOfLazyNaturals}
 \end{figure}
 
-\begin{defIMapsNuFToL}
+\begin{defPMapsNuFToL}
 
-Define the function $I : Z \arr L$ as follows: \ldots
+Assuming that we can recognize the word of infinitely many underscores, denoted
+by $z$, define the function $p : Z \arr L$ by case distinction on words $w
+\in Z$ as follows.
 
-\end{defIMapsNuFToL}
+\begin{IEEEeqnarray*}{rCl}
+p(\bot) & = & \bot \\
+p(z) & = & \bot \\
+p(0) & = & 0 \\
+p(Sw') & = & Sp(w') \\
+p(\_w') & = & p(w')
+\end{IEEEeqnarray*}
+
+\end{defPMapsNuFToL}
 
 
-\begin{thmIIsMonotone}
+\begin{thmPIsMonotone}
 
-The function $I$ is monotone.
+The function $p$ is monotone.
 
-\end{thmIIsMonotone}
+\end{thmPIsMonotone}
 
 
-\begin{thmIIsContinuous}
+\begin{thmPIsContinuous}
 
-The function $I$ is continuous.
+The function $p$ is continuous.
 
-\end{thmIIsContinuous}
+\end{thmPIsContinuous}
 
 \section{Further directions}
 
