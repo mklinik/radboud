@@ -145,7 +145,8 @@ either $0$ or $\bot$. All infinite words are $\omega$-sequences of $S$ and $\_$.
 We write $|w|$ to denote the length of a word $w$.  The concatenation of two
 words $w$, $v$ is denoted by their juxtaposition $wv$.  If $w$ or $v$ are
 singleton words, we regard them sometimes as letters, sometimes as words, as the
-situation requires.  The meaning should always be clear from the context.
+situation requires.  If $w$ is of length at least $n+1$ then $w_n$ denotes the
+$n$th letter of $w$.
 
 \begin{thmDomNuFisFixedPoint}
 
@@ -777,7 +778,10 @@ $w$ are highlighted.}
 \label{fig:exampleXprime}
 \end{figure}
 
-The $w$ defined like this is the least upper bound of the sequence $x$.
+The word $w$ is the least upper bound of the sequence $x$. We have that for
+every $i$: $x(i) \sqsubseteq w$, that is, $x(i)$ is finitie, terminated by
+$\bot$, and $|x(i)| < |w|$, and $w$ and $x(i)$ agree on all but the last letter
+of $x(i)$.
 
 \end{proof}
 
