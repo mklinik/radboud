@@ -864,12 +864,42 @@ p(\_w') & = & p(w')
 
 \end{defPMapsNuFToL}
 
+The function $p$, which projects $Z$ to $L$, discards all underscores which
+appear inside words.  If a word ends with the infinite sequence of
+underscores, this end part is replaced by $\bot$.  For example, $p(S0) = S0$ and
+$p(S\_Sz) = SS\bot$.
+
+From a computational point of view, this means $p$ disregards internal
+computation steps, and a process which computes $z$ is equivalent to a diverging
+computation.
 
 \begin{thmPIsMonotone}
 
 The function $p$ is monotone.
 
 \end{thmPIsMonotone}
+
+\begin{proof}
+
+We need to prove: for all $s, t \in Z:$ if $s \sqsubseteq t$ then $p(s)
+\sqsubseteq p(t)$.  Consider two cases separately:
+
+\begin{enumerate}
+
+  \item
+    $s = t$. Because p is a function, $p(s) = p(t)$, hence $p(s) \sqsubseteq
+    p(t)$
+
+  \item
+    $s \sqsubset t$. We have that $s$ is finite and terminated by $\bot$, and so
+    is $p(s)$.  As the initial segments of $s$ and $t$ up to length $|s|-1$
+    coincide, so do the initial segments of $p(s)$ and $p(t)$ up to length
+    $|p(s)|-1$.  But every word that starts with the same initial segment as
+    $p(s)$, no matter how it continues, is above $p(s)$.
+
+\end{enumerate}
+
+\end{proof}
 
 
 \begin{thmPIsContinuous}
