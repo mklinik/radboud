@@ -842,7 +842,7 @@ $L$ from $Z$ by giving a continuous map between $Z$ and $L$.  The domain $(L,
   ;
 \end{tikzpicture}
 \end{center}
-\caption{The domain of the lazy natural numbers.}
+\caption{The domain of $L$, the lazy natural numbers.}
 \label{figDomainOfLazyNaturals}
 \end{figure}
 
@@ -893,7 +893,8 @@ We need to prove: for all $s, t \in Z:$ if $s \sqsubseteq t$ then $p(s)
     is $p(s)$.  As the initial segments of $s$ and $t$ up to length $|s|-1$
     coincide, so do the initial segments of $p(s)$ and $p(t)$ up to length
     $|p(s)|-1$.  But every word that starts with the same initial segment as
-    $p(s)$, no matter how it continues, is above $p(s)$.
+    $p(s)$, no matter how it continues, is above $p(s)$ in $L$, hence $p(s)
+    \sqsubseteq p(t)$.
 
 \end{enumerate}
 
@@ -905,6 +906,41 @@ We need to prove: for all $s, t \in Z:$ if $s \sqsubseteq t$ then $p(s)
 The function $p$ is continuous.
 
 \end{thmPIsContinuous}
+
+\begin{proof}
+
+Let $x$ be an ascending chain of words in $Z$.  Consider the two cases:
+
+\begin{enumerate}
+
+  \item The chain $x$ stops growing at some point $j \in \mathbb{N}$. Then
+  $x(j)$ is the least upper bound of $x$, and by monotonicity of $p$, $p(x(j))$
+  is above any $p(x(i))$, $i \in \mathbb{N}$.
+
+  \item Every $x(j)$ is strictly below some other $x(k)$, $j < k$, and $\sqcup
+  x$ is the least upper bound of x.  We have that every $x(j)$ is finite and
+  ends with $\bot$, so the same holds for every $p(x(j))$.  We also have that
+  $\sqcup x$ is an infinite word.  We consider two cases.
+
+    \begin{enumerate}
+
+      \item $\sqcup x$ ends with the word of infinitely many underscores.  That
+      is, it has only finitely many $S$s.  This means that after some point $j$,
+      all $x(k)$, $k > j$, increase in length but don't get any more $S$s, only
+      underscores.  As $p$ discards all underscores, but keeps the final $\bot$,
+      all those words get mapped to the same element in $L$, which is the same
+      as $p(\sqcup x)$, hence for all $i \in \mathbb{N}$: $p(x(i)) \sqsubseteq
+      p(\sqcup x)$.
+
+      \item $\sqcup x$ has infinitely many $S$s.  The projection $p$ maps
+      $\sqcup x$ to $\infty \in L$, which is above any word having the shape
+      described above.
+
+    \end{enumerate}
+
+\end{enumerate}
+
+\end{proof}
 
 \section{Further directions}
 
