@@ -18,6 +18,8 @@
 %\newcommand{\todo}[1]{}
 \newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
 
+\newtheorem{defDomain}{Definition}[section]
+
 \newtheorem{defNuF}{Definition}[section]
 \newtheorem{defNplaceSeparatedSum}[defNuF]{Definition}
 \newtheorem{defF}[defNuF]{Definition}
@@ -40,7 +42,7 @@
 
 \begin{document}
 
-\title{A Domain For The Lazy Natural Numbers With Computation Steps}
+\title{A Domain For The Coinductive Natural Numbers}
 \author{Markus Klinik}
 \maketitle
 
@@ -54,28 +56,49 @@ numbers is given.
 
 \end{abstract}
 
-\section{What Are The Natural Numbers With Computation Steps?}
+\section{Introduction}
 
-\section{What Is a Domain?}
+In his PhD thesis \cite{Capretta2002}, Capretta demonstrates that the type 1+X+X
+can be used to model general recursive functions on natural numbers.  He defines
+the coinductive natural numbers to be the largest fixed point of the functor
+1+X+X.  In this work, we show that such a fixed point exists, and that it is
+possible to define an information ordering on it.
 
-\begin{itemize}
+\section{Preliminaries}
 
-\item A domain is a CPO with a least element.
+  %is a partial order
 
-\item And what is a CPO?  A partial order where every chain has a least upper bound.
+  %is chain-complete
 
-\item Finding a domain for the 1+X+X means finding a suitable CPO
-together with a mapping from the 1+X+X to that CPO.
+  %has a least element, i.e.~there is an element $s \in Z$ such that for
+    %any other element $t \in Z, s \sqsubseteq t$.
 
-\item We then need to prove that the given construction is indeed a CPO with
-least element.
+\begin{defDomain}
+A structure $(X, \sqsubseteq)$, where $\sqsubseteq$ is a binary relation on the
+set $X$, is a \emph{domain}, if:
 
-\end{itemize}
+\begin{enumerate}
 
-\section{A Domain for 1+X+X}
+  \item
+    $\sqsubseteq$ is a partial ordering on $X$.
 
-\todo{We are currently on vacation in the land of CPOs and strict maps between them.
-Or somesuch.}
+  \item
+    $(X, \sqsubseteq)$ is chain-complete, that is, every ascending sequence of
+    elements of $X$ has a least upper bound.
+
+  \item
+    $(X, \sqsubseteq)$ has a least element, that is, an element $z$ such that $z
+    \sqsubseteq x$ for all $x \in X$.
+
+\end{enumerate}
+
+\end{defDomain}
+
+The discussion in this paper is done with programming language semantics in
+mind.  That's why all our categorical treatment takes place in the category of
+complete partial orders, $\mathbf{Cpo}$, and strict maps between them.
+
+\section{A domain for 1+X+X}
 
 \begin{defNplaceSeparatedSum}
 
@@ -961,9 +984,8 @@ where $F$ is a polynomial functor.
 \section{Bibliographic notes}
 
 This work is based on chapter 7 of the PhD thesis of Venanzio Capretta
-\cite{Capretta2002}, where coinductive natural numbers with computation steps
-are discussed.  Some treatment of lazy naturals can be found in
-\cite{Escardo1993}.
+\cite{Capretta2002}, where coinductive natural numbers are discussed.  Some
+treatment of lazy naturals can be found in \cite{Escardo1993}.
 
 An short introduction to dentotational semantics can be found in
 \cite{Allison1986}, while \cite{Gunter1992} is a more comprehensive treatment of
