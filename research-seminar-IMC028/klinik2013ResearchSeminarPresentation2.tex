@@ -24,7 +24,9 @@
 \usetikzlibrary{calc}
 
 \title
-{A Domain for the~Coinductive Natural~Numbers, Part 2}
+{A Domain for the\\
+Coinductive~Natural~Numbers\\
+Part 2}
 
 \author
 {Markus~Klinik}
@@ -51,10 +53,69 @@
   \tableofcontents
 \end{frame}
 
-\begin{frame}{The Answer}
+\begin{frame}{Fixed Points of Functors}
 
-42
+\begin{itemize}%[<+->]
+  \item $\mathbf{Set}$-Functors take sets to sets
+  \item Identity, powerset, cartesian product, function space
+  \item Fixed point: $f(x) = x$
+  \item Two sets are the same if \ldots
+  \item We are interested in isomorphic sets
+    \begin{itemize}
+      \item $FX \sim X$
+    \end{itemize}
+\end{itemize}
 
 \end{frame}
+
+
+\begin{frame}{Examples}
+
+\begin{itemize}
+  \item Cantor: $X \nsim PX$
+  \item What about $1 \dot\cup X$?
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{1?}
+
+Let's try $X = 1$, i.e. $\{*\}$
+
+\begin{center}
+
+$X = \{*\}$
+
+\bigskip
+
+$1 \dot\cup X = \{\langle 0, * \rangle, \langle 1, * \rangle\}$
+
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}{$\mathbb{N}$?}
+
+Let's try $X = \mathbb{N}$
+
+\begin{center}
+
+$\{1, 2, 3, \ldots \}$
+
+\bigskip
+
+$\{\langle 0, * \rangle
+, \langle 1, 1 \rangle
+, \langle 1, 2 \rangle
+, \langle 1, 3 \rangle
+, \ldots
+\}$
+
+\end{center}
+
+\end{frame}
+
 
 \end{document}
