@@ -189,6 +189,39 @@ $\{\langle 0, * \rangle
 
 
 \begin{frame}{The I-Place Separated Sum Functor}
+
+\begin{equation}
+\sum_{i \in I}{X_i} =
+  \bigcup_{i \in I} \{ \langle i, a \rangle | a \in X_i \}
+  \cup \{ \bot \} \nonumber
+\end{equation}
+
+\begin{equation*}
+( \sum_{i \in I}f_i ) (x) = \left\{
+  \begin{array}{rl}
+     \langle i, f(a) \rangle & \text{if } x = \langle i, a \rangle
+                               \text{ for some } i \in I \\
+    \bot                     & \text{if } x = \bot
+  \end{array} \right.
+\end{equation*}
+
+\bigskip
+
+Notation: instead of $\langle i, a \rangle$ we write $\kappa_i(a)$
+
+\end{frame}
+
+
+\begin{frame}{$1+X+X$}
+
+\begin{equation*}
+FX = \sum{(1, X, X)}
+\end{equation*}
+
+\begin{equation*}
+Ff = \sum{(id, f, f)}
+\end{equation*}
+
 \end{frame}
 
 
