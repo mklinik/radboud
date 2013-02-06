@@ -118,4 +118,64 @@ $\{\langle 0, * \rangle
 \end{frame}
 
 
+\newcommand{\picCpo}[1]{
+\node (bottom#1) {$\bot$};
+\node (top) [above=of bottom#1] {};
+\node (topleft) [left=5mm of top] {};
+\node (topright) [right=5mm of top] {};
+\draw (bottom#1) -- (topleft.center) -- (topright.center) -- (bottom#1);
+}
+
+
+\begin{frame}{The Coinductive Natural Numbers}
+
+\begin{itemize}
+
+  \item We are not in $\mathbf{Set}$, we are in $\mathbf{Cpo}$
+  \item Our sets have structure that functors must preserve
+  \item Here: $(X, \sqsubseteq)$ where
+    \begin{itemize}
+      \item $\sqsubseteq$ is a partial ordering
+      \item $\sqsubseteq$ is chain-complete
+      \item $(X, \sqsubseteq)$ has a least element
+    \end{itemize}
+
+\end{itemize}
+
+\onslide<+->
+\begin{center}
+\begin{tikzpicture}
+\picCpo{}
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}{The Separated Sum Functor}
+
+\begin{center}
+\begin{tikzpicture}
+
+  \onslide<+->
+
+  \picCpo{l}
+
+  \begin{scope}[xshift=2.5cm]
+  \picCpo{r}
+  \end{scope}
+
+  \onslide<+->
+  \begin{scope}[xshift=1.25cm,yshift=-1cm]
+  \node (newBottom) {$\bot$};
+  \end{scope}
+
+  \draw (bottoml) -- (newBottom) -- (bottomr);
+
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
 \end{document}
