@@ -142,7 +142,8 @@ $\{\langle 0, * \rangle
 
 \end{itemize}
 
-\onslide<+->
+%\onslide<+->
+
 \begin{center}
 \begin{tikzpicture}
 \picCpo{}
@@ -166,15 +167,28 @@ $\{\langle 0, * \rangle
   \end{scope}
 
   \onslide<+->
-  \begin{scope}[xshift=1.25cm,yshift=-1cm]
-  \node (newBottom) {$\bot$};
+
+  \path (1.25, -1) node (newBottom) {$\bot$};
+  \draw (bottoml) -- (newBottom) -- (bottomr);
+
+  \onslide<+->
+
+  \begin{scope}[xshift=5cm]
+  \picCpo{rr}
   \end{scope}
 
-  \draw (bottoml) -- (newBottom) -- (bottomr);
+  \onslide<+->
+
+  \path (2.5, -2.3) node (newNewBottom) {$\bot$};
+  \draw (newBottom) -- (newNewBottom) -- (bottomrr);
 
 \end{tikzpicture}
 \end{center}
 
+\end{frame}
+
+
+\begin{frame}{The I-Place Separated Sum Functor}
 \end{frame}
 
 
