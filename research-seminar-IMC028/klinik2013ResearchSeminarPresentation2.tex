@@ -10,6 +10,7 @@
 \usepackage[english]{babel}
 \usepackage[latin1]{inputenc}
 \usepackage{bussproofs}
+\usepackage[retainorgcmds]{IEEEtrantools}
 
 % needs debian package texlive-math-extra
 \usepackage{stmaryrd} % for \llbracket, \rrbracket
@@ -221,6 +222,20 @@ FX = \sum{(1, X, X)}
 \begin{equation*}
 Ff = \sum{(id, f, f)}
 \end{equation*}
+
+\end{frame}
+
+
+\begin{frame}{Example}
+
+\begin{IEEEeqnarray*}{rCl}
+f & : & X \arr Y \\
+Ff & : & \sum{(1, X, X)} \arr \sum{(1, Y, Y)}
+\end{IEEEeqnarray*}
+\begin{IEEEeqnarray*}{rCl}
+Ff(\kappa_0(*)) & = & \kappa_0(id(*)) = \kappa_0(*) \\
+Ff(\kappa_1(x)) & = & \kappa_1(f(x))
+\end{IEEEeqnarray*}
 
 \end{frame}
 
