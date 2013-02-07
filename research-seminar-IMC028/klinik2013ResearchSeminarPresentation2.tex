@@ -373,46 +373,6 @@ For any other $f : C \arr Z$ which makes the diagram commute:
 \end{frame}
 
 
-\begin{frame}{First Try}
-
-\onslide<1->
-
-\begin{itemize}
-  \item
-    \alt<1>{Want: $f(a) = \semantics{a}, \forall a \in C$}
-    {Also okay: $\delta(f(a)) = \delta(\semantics{a}), \forall a \in C$}
-  \item Have: two commutative diagrams
-\end{itemize}
-
-\onslide<4->{$\gamma(a) = \kappa_1(b)$}
-
-\onslide<6->{$\delta(Sw) = \kappa_1(w)$}
-\begin{IEEEeqnarray*}{CCCCCCCCC}
-\onslide<2->
-\delta(f(a))
-\onslide<3->
-   & = & Ff(\gamma(a))
-\onslide<4->
-   & = & Ff(\kappa_1(b))
-\onslide<5->
-   & = & \kappa_1(f(b))
-\onslide<6->
-   & = & \delta(Sf(b)) \\
-\onslide<2->
-\delta(\semantics{a})
-\onslide<3->
-   & = & F\semantics{-}(\gamma(a))
-\onslide<4->
-   & = & F\semantics-(\kappa_1(b))
-\onslide<5->
-   & = & \kappa_1(\semantics{b})
-\onslide<6->
-   & = & \delta(S\semantics{b})
-\end{IEEEeqnarray*}
-
-\end{frame}
-
-
 \begin{frame}{Coinduction FTW!}
 
 We need a proof by bisimulation
@@ -422,36 +382,6 @@ R \subseteq FZ \times FZ =
   \{ \langle \delta(wf(a)) , \delta(w\semantics{a}) \rangle
    \ |\  a \in C, w \in \{ S, \_ \}^*
   \}
-\end{IEEEeqnarray*}
-
-\end{frame}
-
-
-\begin{frame}[fragile]{Let's Try}
-
-Have: $R =
-  \{ \langle \delta(wf(a)) , \delta(w\semantics{a}) \rangle
-   \ |\  a \in C, w \in \{ S, \_ \}^*
-  \}$
-
-\onslide<2->{$w = Sw'$}
-\begin{IEEEeqnarray*}{CCCCCCC}
-\delta(wf(a))
- \onslide<2->
- & = & \delta(Sw'f(a))
- \onslide<3->
- & = & \kappa_1(w'f(a))
- \onslide<4->
- & = & \kappa_1(\textcolor{red}{\delta(}w'f(a)\textcolor{red}{)})
-\\
-\onslide<1->
-\delta(w\semantics{a})
- \onslide<2->
- & = & \delta(Sw'\semantics{a})
- \onslide<3->
- & = & \kappa_1(w'\semantics{a})
- \onslide<4->
- & = & \kappa_1(\textcolor{red}{\delta(}w'\semantics{a}\textcolor{red}{)})
 \end{IEEEeqnarray*}
 
 \end{frame}
@@ -476,27 +406,74 @@ Have: $R =
 \end{frame}
 
 
-\begin{frame}[fragile]{Let's Try}
+\begin{frame}[fragile]{Base Case}
+
+Have:\\
+
+$R =
+  \{ \langle \delta(wf(a)) , \delta(w\semantics{a}) \rangle
+   \ |\  a \in C, w \in \{ S, \_ \}^*
+  \}$
+
+$w = \varepsilon$
+
+\onslide<3->{$\gamma(a) = \kappa_1(b)$}
+
+\onslide<5->{$\delta(Sw) = \kappa_1(w)$}
+\begin{IEEEeqnarray*}{CCCCCCCCC}
+\delta(f(a))
+ \onslide<2->
+ & = & Ff(\gamma(a))
+ \onslide<3->
+ & = & Ff(\kappa_1(b))
+ \onslide<4->
+ & = & \kappa_1(f(b))
+ \onslide<5->
+ & = & \delta(Sf(b))
+\\
+\onslide<1->
+\delta(\semantics{a})
+ \onslide<2->
+ & = & F\semantics-(\gamma(a))
+ \onslide<3->
+ & = & F\semantics-(\kappa_1(b))
+ \onslide<4->
+ & = & \kappa_1(\semantics{b})
+ \onslide<5->
+ & = & \delta(S\semantics{b})
+\end{IEEEeqnarray*}
+
+\end{frame}
+
+\begin{frame}[fragile]{Induction Step}
 
 Have: $R =
   \{ \langle \delta(wf(a)) , \delta(w\semantics{a}) \rangle
    \ |\  a \in C, w \in \{ S, \_ \}^*
   \}$
 
-{$w = Sw'$}
+\onslide<2->{$w = Sw'$}
 \begin{IEEEeqnarray*}{CCCCCCC}
 \delta(wf(a))
+ \onslide<2->
  & = & \delta(Sw'f(a))
+ \onslide<3->
  & = & \kappa_1(w'f(a))
+ \onslide<4->
  & = & \kappa_1(\textcolor{red}{\llbracket\delta(}w'f(a)\textcolor{red}{)\rrbracket_{F\delta}})
 \\
+\onslide<1->
 \delta(w\semantics{a})
+ \onslide<2->
  & = & \delta(Sw'\semantics{a})
+ \onslide<3->
  & = & \kappa_1(w'\semantics{a})
+ \onslide<4->
  & = & \kappa_1(\textcolor{red}{\llbracket\delta(}w'\semantics{a}\textcolor{red}{)\rrbracket_{F\delta}})
 \end{IEEEeqnarray*}
 
 \end{frame}
+
 
 
 \begin{frame}{Intermission}
