@@ -294,6 +294,10 @@ Z ::= \bot\ |\ 0\ |\ S Z\ |\ \_ Z
 
   \item Coalgebras $(C, \gamma : C \arr FC)$
   \item Final coalgebra $(Z, \delta)$
+  \begin{itemize}
+    \item Existence
+    \item Unicity
+  \end{itemize}
 
 \end{itemize}
 
@@ -313,6 +317,74 @@ Z ::= \bot\ |\ 0\ |\ S Z\ |\ \_ Z
 \end{center}
 
 \end{frame}
+
+
+\begin{frame}{Existence}
+
+Define $\semantics{-}$ and prove
+  $\delta \circ \semantics{-} = F\semantics{-} \circ \gamma$.
+
+\begin{IEEEeqnarray*}{rCl}
+\semantics{a} & = & \text{ case } \gamma(a) \text{ of}
+\\
+\bot_C & = & \bot_Z
+\\
+\kappa_0(*) & = & 0
+\\
+\kappa_1(b) & = & S \semantics{b}
+\\
+\kappa_2(b) & = & \_ \semantics{b}
+\end{IEEEeqnarray*}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Unicity}
+
+For any other $f : C \arr Z$ which makes the diagram commute:
+
+\begin{equation*}
+  f = \semantics{-}
+\end{equation*}
+
+\begin{center}
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=3em,column sep=4em,minimum width=2em]
+  {
+     C & Z \\
+     FC & FZ \\
+  };
+  \path[-stealth]
+    (m-1-1) edge node [left] {$\gamma$} (m-2-1)
+            edge node [above] {$f$} (m-1-2)
+    (m-2-1.east|-m-2-2) edge node [below] {$Ff$} (m-2-2)
+    (m-1-2) edge node [right] {$\delta$} (m-2-2);
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}{First Try}
+
+\begin{itemize}
+  \item Want: $f(a) = \semantics{a}, \forall a \in C$
+  \item Have: two commutative diagrams
+\end{itemize}
+
+\begin{IEEEeqnarray*}{rrrr}
+\delta(f(a)) = &
+  Ff(\gamma(a)) = &
+  Ff(\kappa_1(b)) = &
+  \kappa_1(f(b)) \\
+\delta(\semantics{a}) = &
+  F\semantics{-}(\gamma(a)) = &
+  F\semantics-(\kappa_1(b)) = &
+  \kappa_1(\semantics{b})
+\end{IEEEeqnarray*}
+
+\end{frame}
+
 
 
 \end{document}
