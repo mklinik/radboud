@@ -142,7 +142,7 @@ $\{\langle 0, * \rangle
 \end{frame}
 
 
-\begin{frame}{The Separated Sum Functor}
+\begin{frame}{The Separated-Sum Functor}
 
 \begin{center}
 \begin{tikzpicture}
@@ -192,7 +192,7 @@ $\{\langle 0, * \rangle
 \begin{equation*}
 ( \sum_{i \in I}f_i ) (x) = \left\{
   \begin{array}{rl}
-     \langle i, f(a) \rangle & \text{if } x = \langle i, a \rangle
+     \langle i, f_i(a) \rangle & \text{if } x = \langle i, a \rangle
                                \text{ for some } i \in I \\
     \bot                     & \text{if } x = \bot
   \end{array} \right.
@@ -447,7 +447,9 @@ $w = \varepsilon$
 
 \begin{frame}[fragile]{Induction Step}
 
-Have: $R =
+Have:
+
+$R =
   \{ \langle \delta(wf(a)) , \delta(w\semantics{a}) \rangle
    \ |\  a \in C, w \in \{ S, \_ \}^*
   \}$
