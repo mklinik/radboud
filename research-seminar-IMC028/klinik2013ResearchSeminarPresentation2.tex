@@ -23,6 +23,7 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
+\usetikzlibrary{matrix}
 
 \title
 {A Domain for the\\
@@ -43,6 +44,7 @@ Part 2}
 
 \newcommand{\arr}{\rightarrow}
 \newcommand{\Arr}{\Rightarrow}
+\newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
 
 \begin{document}
 
@@ -250,7 +252,7 @@ Z ::= \bot\ |\ 0\ |\ S Z\ |\ \_ Z
 \end{frame}
 
 
-\begin{frame}{Is Z a Fixed Point for $1+X+X$?}
+\begin{frame}{Is Z a Fixed Point For $1+X+X$?}
 
 \begin{columns}[totalwidth=.7\textwidth]
 
@@ -285,5 +287,32 @@ Z ::= \bot\ |\ 0\ |\ S Z\ |\ \_ Z
 \end{columns}
 
 \end{frame}
+
+\begin{frame}[fragile]{Is Z The Largest Fixed Point?}
+
+\begin{itemize}
+
+  \item Coalgebras $(C, \gamma : C \arr FC)$
+  \item Final coalgebra $(Z, \delta)$
+
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=3em,column sep=4em,minimum width=2em]
+  {
+     C & Z \\
+     FC & FZ \\
+  };
+  \path[-stealth]
+    (m-1-1) edge node [left] {$\gamma$} (m-2-1)
+            edge node [above] {$\semantics{-}_{\gamma}$} (m-1-2)
+    (m-2-1.east|-m-2-2) edge node [below] {$F\semantics{-}_{\gamma}$} (m-2-2)
+    (m-1-2) edge node [right] {$\delta$} (m-2-2);
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
 
 \end{document}
