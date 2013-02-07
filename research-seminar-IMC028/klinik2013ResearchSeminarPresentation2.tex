@@ -502,6 +502,13 @@ To do:
 
 \begin{frame}{The Domain of Z}
 
+\onslide<+->
+
+Define a partial order $\sqsubseteq$ on Z.
+\smallskip
+
+\onslide<+->
+
 Let the relation $\sqsubset$ on $Z \times Z$ be defined as: two
 words $s$ and $t$ are in relation $s \sqsubset t$ iff $s$ is finite and $|s|
 \leq |t|$ and $s_{|s|-1} = \bot$ and for all $i < |s|-1: s_i = t_i$.
@@ -686,17 +693,17 @@ Let $\sqsubseteq$ be the reflexive closure of $\sqsubset$.
 
 \onslide<+->
 
-\begin{IEEEeqnarray}{rCl}
-p(z) & = & \bot
+\begin{IEEEeqnarray*}{rCl}
+p(0) & = & 0
+\\
+p(\bot) & = & \bot
+\\
+p(\_^\infty) & = & \bot
 \\
 p(Sw') & = & Sp(w')
 \\
 p(\_w') & = & p(w')
-\\
-p(0) & = & 0 \nonumber
-\\
-p(\bot) & = & \bot \nonumber
-\end{IEEEeqnarray}
+\end{IEEEeqnarray*}
 
 \end{frame}
 
