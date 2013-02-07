@@ -57,17 +57,19 @@ Part 2}
   \tableofcontents
 \end{frame}
 
+\section{A fixed point for $1+X+X$}
+
+\subsection{Fixed points of functors}
+
 \begin{frame}{Fixed Points of Functors}
 
-\begin{itemize}%[<+->]
+\begin{itemize}[<+->]
   \item $\mathbf{Set}$-Functors take sets to sets
   \item Identity, powerset, cartesian product, function space
   \item Fixed point: $f(x) = x$
   \item Two sets are the same if \ldots
-  \item We are interested in isomorphic sets
-    \begin{itemize}
-      \item $FX \sim X$
-    \end{itemize}
+  \item We are interested in isomorphic sets:
+      $X \sim FX$
 \end{itemize}
 
 \end{frame}
@@ -75,7 +77,7 @@ Part 2}
 
 \begin{frame}{Examples}
 
-\begin{itemize}
+\begin{itemize}[<+->]
   \item Cantor: $X \nsim PX$
   \item What about $1 \dot\cup X$?
 \end{itemize}
@@ -106,15 +108,15 @@ Let's try $X = \mathbb{N}$
 
 \begin{center}
 
-$\{1, 2, 3, \ldots \}$
+$\{1,\ 2,\ 3,\ 4,\ \ldots \}$
 
 \bigskip
 
 $\{\langle 0, * \rangle
-, \langle 1, 1 \rangle
-, \langle 1, 2 \rangle
-, \langle 1, 3 \rangle
-, \ldots
+,\ \langle 1, 1 \rangle
+,\ \langle 1, 2 \rangle
+,\ \langle 1, 3 \rangle
+,\ \ldots
 \}$
 
 \end{center}
@@ -133,7 +135,7 @@ $\{\langle 0, * \rangle
 
 \begin{frame}{The Coinductive Natural Numbers}
 
-\begin{itemize}
+\begin{itemize}[<+->]
 
   \item We are not in $\mathbf{Set}$, we are in $\mathbf{Cpo}$
   \item Our sets have structure that functors must preserve
@@ -146,7 +148,7 @@ $\{\langle 0, * \rangle
 
 \end{itemize}
 
-%\onslide<+->
+\onslide<+->
 
 \begin{center}
 \begin{tikzpicture}
@@ -192,7 +194,11 @@ $\{\langle 0, * \rangle
 \end{frame}
 
 
-\begin{frame}{The I-Place Separated Sum Functor}
+\subsection{The i-place separated-sum functor}
+
+\begin{frame}{The I-Place Separated-Sum Functor}
+
+\onslide<+->
 
 \begin{equation}
 \sum_{i \in I}{X_i} =
@@ -210,6 +216,8 @@ $\{\langle 0, * \rangle
 \end{equation*}
 
 \bigskip
+
+\onslide<+->
 
 Notation: instead of $\langle i, a \rangle$ we write $\kappa_i(a)$
 
@@ -231,17 +239,22 @@ Ff = \sum{(id, f, f)}
 
 \begin{frame}{Example}
 
+\onslide<+->
 \begin{IEEEeqnarray*}{rCl}
 f & : & X \arr Y \\
 Ff & : & \sum{(1, X, X)} \arr \sum{(1, Y, Y)}
 \end{IEEEeqnarray*}
+\onslide<+->
 \begin{IEEEeqnarray*}{rCl}
 Ff(\kappa_0(*)) & = & \kappa_0(id(*)) = \kappa_0(*) \\
+\onslide<+->
 Ff(\kappa_1(x)) & = & \kappa_1(f(x))
 \end{IEEEeqnarray*}
 
 \end{frame}
 
+
+\subsection{A fixed point}
 
 \begin{frame}{A Fixed Point for $1+X+X$}
 
@@ -522,6 +535,10 @@ To do:
 \end{frame}
 
 
+\section{A domain for $1+X+X$}
+
+\subsection{The domain}
+
 \begin{frame}{The Domain of Z}
 
 Let the relation $\sqsubset$ on $Z \times Z$ be defined as: two
@@ -605,6 +622,8 @@ Let $\sqsubseteq$ be the reflexive closure of $\sqsubset$.
 
 \end{frame}
 
+
+\subsection{Its relation to $1+X$}
 
 \begin{frame}{Projection from $1+X+X$ to $1+X$}
 
@@ -718,6 +737,10 @@ p(0) & = & 0 \nonumber
 p(\bot) & = & \bot \nonumber
 \end{IEEEeqnarray}
 
+\end{frame}
+
+
+\begin{frame}{Questions}
 \end{frame}
 
 
