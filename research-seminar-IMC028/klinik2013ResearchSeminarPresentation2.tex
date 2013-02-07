@@ -492,5 +492,108 @@ Have: $R =
 \end{frame}
 
 
+\begin{frame}{Intermission}
+
+Done:
+
+\begin{itemize}
+  \item $F$ is a handy variant of disjoint union
+  \item $Z$ is a fixed point of $F$
+  \item $Z$ is the largest fixed point of $F$
+\end{itemize}
+
+To do:
+
+\begin{itemize}
+  \item $Z$ is a domain
+  \item $Z$ somehow \emph{is} the lazy natural numbers
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{The Domain of Z}
+
+Let the relation $\sqsubset$ on $Z \times Z$ be defined as: two
+words $s$ and $t$ are in relation $s \sqsubset t$ iff $s$ is finite and $|s|
+\leq |t|$ and $s_{|s|-1} = \bot$ and for all $i < |s|-1: s_i = t_i$.
+
+\bigskip
+
+Let $\sqsubseteq$ be the reflexive closure of $\sqsubset$.
+
+\end{frame}
+
+
+\begin{frame}{The Domain of Z}
+
+\begin{center}
+\begin{tikzpicture}
+ [ grow'=up
+ , scale=1.2
+ , level distance=1cm
+ , level 1/.style={sibling distance=3cm}
+ , level 2/.style={sibling distance=1cm}
+ , normal/.style={thin, solid}
+ , skipping/.style={thick, dotted}
+ , and so on/.style={thick, dotted, sibling distance=0.6cm, level distance=0.6cm}
+ ]
+  \node {$\bot$}
+    child [sibling distance=1cm] { node {$0$} }
+    child
+    {
+      node {$S\bot$}
+      child { node {$S0$} }
+      child [skipping]
+      {
+        %node {$SS\bot$}
+        %child { node {$SS0$} }
+        %child [skipping]
+        %{
+          node {$S^n\bot$}
+          child [normal] { node {$S^n0$} }
+          child [skipping] { node {$\infty$} }
+          child [and so on] {}
+        %}
+        %child [and so on] {}
+      }
+      child
+      {
+        node {$S\_\bot$}
+        child [missing] {}
+        child [and so on] {}
+      }
+    }
+    child
+    {
+      node {$\_ \bot$}
+      child { node {$\_0$} }
+      child
+      {
+        node {$\_S\bot$}
+        child { node {$\_S0$} }
+        child [skipping]
+        {
+          node {$\_S^n\bot$}
+          child [normal] { node {$\_S^n0$} }
+          child { node {$\_\infty$} }
+          child [and so on] {}
+        }
+        child [and so on] {}
+      }
+      child
+      {
+        node {$\_\_\bot$}
+        child [missing] {}
+        %child [missing] {}
+        child [and so on] {}
+      }
+    }
+  ;
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
 
 \end{document}
