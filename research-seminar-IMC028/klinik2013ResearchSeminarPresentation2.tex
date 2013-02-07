@@ -45,6 +45,7 @@ Part 2}
 \newcommand{\arr}{\rightarrow}
 \newcommand{\Arr}{\Rightarrow}
 \newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
+\newcommand{\semanticsFd}[1]{\semantics{#1}_{F\delta}}
 
 \begin{document}
 
@@ -370,11 +371,15 @@ For any other $f : C \arr Z$ which makes the diagram commute:
 \onslide<1->
 
 \begin{itemize}
-  \item Want: $f(a) = \semantics{a}, \forall a \in C$
+  \item
+    \alt<1>{Want: $f(a) = \semantics{a}, \forall a \in C$}
+    {Also okay: $\delta(f(a)) = \delta(\semantics{a}), \forall a \in C$}
   \item Have: two commutative diagrams
 \end{itemize}
 
 \onslide<4->{$\gamma(a) = \kappa_1(b)$}
+
+\onslide<6->{$\delta(Sw) = \kappa_1(w)$}
 \begin{IEEEeqnarray*}{CCCCCCCCC}
 \onslide<2->
 \delta(f(a))
@@ -396,6 +401,92 @@ For any other $f : C \arr Z$ which makes the diagram commute:
    & = & \kappa_1(\semantics{b})
 \onslide<6->
    & = & \delta(S\semantics{b})
+\end{IEEEeqnarray*}
+
+\end{frame}
+
+
+\begin{frame}{Coinduction FTW!}
+
+We need a proof by bisimulation
+
+\begin{IEEEeqnarray*}{c}
+R \subseteq FZ \times FZ =
+  \{ \langle \delta(wf(a)) , \delta(w\semantics{a}) \rangle
+   \ |\  a \in C, w \in \{ S, \_ \}^*
+  \}
+\end{IEEEeqnarray*}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Let's Try}
+
+Have: $R =
+  \{ \langle \delta(wf(a)) , \delta(w\semantics{a}) \rangle
+   \ |\  a \in C, w \in \{ S, \_ \}^*
+  \}$
+
+\onslide<2->{$w = Sw'$}
+\begin{IEEEeqnarray*}{CCCCCCC}
+\delta(wf(a))
+ \onslide<2->
+ & = & \delta(Sw'f(a))
+ \onslide<3->
+ & = & \kappa_1(w'f(a))
+ \onslide<4->
+ & = & \kappa_1(\textcolor{red}{\delta(}w'f(a)\textcolor{red}{)})
+\\
+\onslide<1->
+\delta(w\semantics{a})
+ \onslide<2->
+ & = & \delta(Sw'\semantics{a})
+ \onslide<3->
+ & = & \kappa_1(w'\semantics{a})
+ \onslide<4->
+ & = & \kappa_1(\textcolor{red}{\delta(}w'\semantics{a}\textcolor{red}{)})
+\end{IEEEeqnarray*}
+
+\end{frame}
+
+
+\begin{frame}{Lemma}
+
+\onslide<+->
+
+\begin{IEEEeqnarray*}{C}
+  \semanticsFd{-} \circ \delta = \text{id}_{Z}
+\end{IEEEeqnarray*}
+\begin{IEEEeqnarray*}{C}
+\onslide<+->
+  \delta : Z \arr FZ
+  \\
+  (FZ, F\delta : FZ \arr FFZ)
+  \\
+  \semanticsFd{-} : FZ \arr Z
+\end{IEEEeqnarray*}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Let's Try}
+
+Have: $R =
+  \{ \langle \delta(wf(a)) , \delta(w\semantics{a}) \rangle
+   \ |\  a \in C, w \in \{ S, \_ \}^*
+  \}$
+
+{$w = Sw'$}
+\begin{IEEEeqnarray*}{CCCCCCC}
+\delta(wf(a))
+ & = & \delta(Sw'f(a))
+ & = & \kappa_1(w'f(a))
+ & = & \kappa_1(\textcolor{red}{\llbracket\delta(}w'f(a)\textcolor{red}{)\rrbracket_{F\delta}})
+\\
+\delta(w\semantics{a})
+ & = & \delta(Sw'\semantics{a})
+ & = & \kappa_1(w'\semantics{a})
+ & = & \kappa_1(\textcolor{red}{\llbracket\delta(}w'\semantics{a}\textcolor{red}{)\rrbracket_{F\delta}})
 \end{IEEEeqnarray*}
 
 \end{frame}
