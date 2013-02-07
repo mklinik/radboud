@@ -108,7 +108,7 @@ $\{\langle 0, * \rangle
 
 
 \newcommand{\picCpo}[1]{
-\node (bottom#1) {$\bot$};
+\node (bottom#1) {$\bot_{#1}$};
 \node (top) [above=of bottom#1] {};
 \node (topleft) [left=5mm of top] {};
 \node (topright) [right=5mm of top] {};
@@ -149,27 +149,27 @@ $\{\langle 0, * \rangle
 
   \onslide<+->
 
-  \picCpo{l}
+  \picCpo{X}
 
   \begin{scope}[xshift=2.5cm]
-  \picCpo{r}
+  \picCpo{Y}
   \end{scope}
 
   \onslide<+->
 
-  \path (1.25, -1) node (newBottom) {$\bot$};
-  \draw (bottoml) -- (newBottom) -- (bottomr);
+  \path (1.25, -1) node (newBottom) {$\bot_{XY}$};
+  \draw (bottomX) -- (newBottom) -- (bottomY);
 
   \onslide<+->
 
   \begin{scope}[xshift=5cm]
-  \picCpo{rr}
+  \picCpo{Z}
   \end{scope}
 
   \onslide<+->
 
-  \path (2.5, -2.3) node (newNewBottom) {$\bot$};
-  \draw (newBottom) -- (newNewBottom) -- (bottomrr);
+  \path (2.5, -2.3) node (newNewBottom) {$\bot_{XYZ}$};
+  \draw (newBottom) -- (newNewBottom) -- (bottomZ);
 
 \end{tikzpicture}
 \end{center}
