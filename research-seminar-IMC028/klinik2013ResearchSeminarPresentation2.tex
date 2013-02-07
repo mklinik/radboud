@@ -367,20 +367,35 @@ For any other $f : C \arr Z$ which makes the diagram commute:
 
 \begin{frame}{First Try}
 
+\onslide<1->
+
 \begin{itemize}
   \item Want: $f(a) = \semantics{a}, \forall a \in C$
   \item Have: two commutative diagrams
 \end{itemize}
 
-\begin{IEEEeqnarray*}{rrrr}
-\delta(f(a)) = &
-  Ff(\gamma(a)) = &
-  Ff(\kappa_1(b)) = &
-  \kappa_1(f(b)) \\
-\delta(\semantics{a}) = &
-  F\semantics{-}(\gamma(a)) = &
-  F\semantics-(\kappa_1(b)) = &
-  \kappa_1(\semantics{b})
+\onslide<4->{$\gamma(a) = \kappa_1(b)$}
+\begin{IEEEeqnarray*}{CCCCCCCCC}
+\onslide<2->
+\delta(f(a))
+\onslide<3->
+   & = & Ff(\gamma(a))
+\onslide<4->
+   & = & Ff(\kappa_1(b))
+\onslide<5->
+   & = & \kappa_1(f(b))
+\onslide<6->
+   & = & \delta(Sf(b)) \\
+\onslide<2->
+\delta(\semantics{a})
+\onslide<3->
+   & = & F\semantics{-}(\gamma(a))
+\onslide<4->
+   & = & F\semantics-(\kappa_1(b))
+\onslide<5->
+   & = & \kappa_1(\semantics{b})
+\onslide<6->
+   & = & \delta(S\semantics{b})
 \end{IEEEeqnarray*}
 
 \end{frame}
