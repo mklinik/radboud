@@ -207,7 +207,9 @@ Notation: instead of $\langle i, a \rangle$ we write $\kappa_i(a)$
 \end{frame}
 
 
-\begin{frame}{$1+X+X$}
+\begin{frame}[fragile]{$1+X+X$}
+
+\onslide<+->
 
 \begin{equation*}
 FX = \sum{(1, X, X)}
@@ -216,6 +218,30 @@ FX = \sum{(1, X, X)}
 \begin{equation*}
 Ff = \sum{(id, f, f)}
 \end{equation*}
+
+\onslide<+->
+
+\begin{center}
+\begin{tikzpicture}
+
+ \node (one) {$*$};
+
+ \begin{scope}[xshift=2cm]
+ \picCpo{X}
+ \end{scope}
+
+ \begin{scope}[xshift=4cm]
+  \picCpo{X}
+ \end{scope}
+
+ \path (2, -1.5) node (bot) {$\bot$};
+
+ \draw (bot) -- (one);
+ \draw (bot) -- (bottomX);
+ \draw (bot) -- (2, -0.3);
+
+\end{tikzpicture}
+\end{center}
 
 \end{frame}
 
