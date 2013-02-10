@@ -6,11 +6,20 @@ import Text.ParserCombinators.UU
 import Text.ParserCombinators.UU.BasicInstances
 
 pa = pSym 'a'
+parseA = run pa "aabb"
 
-parseA = parse ((,) <$> pa <*> pEnd) (createStr (LineColPos 0 0 0) "zaabb")
+parens :: Parser Int
+parens =
+  (\_ p _ q -> max (p+1) q)
+    <$> (pSym '(') <*> parens <*> pSym ')' <*> parens
+  <|> pure 0
+-- parseParens = run parens "###(())(a)"
+parseParens = run parens "#"
+
+run p input = parse ((,) <$> p <*> pEnd) (createStr (LineCol 0 0) input)
 
 main = do
-  let (a, errors) = parseA
+  let (a, errors) = parseParens
   putStrLn ("-- Result: " ++ show a)
   if null errors
     then return ()
