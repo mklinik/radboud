@@ -5,6 +5,7 @@ module UUParsinglib where
 import Text.ParserCombinators.UU
 import Text.ParserCombinators.UU.BasicInstances
 import Text.ParserCombinators.UU.Derived
+import Text.ParserCombinators.UU.Utils hiding (pDigit)
 
 pa = pSym 'a'
 parseA = run pa "aabb"
@@ -25,11 +26,6 @@ parensLeftRec =
 
 run p input = parse ((,) <$> p <*> pEnd) (createStr (LineCol 0 0) input)
 
-pKwElse :: Parser String
-pKwElse = pToken "else"
-
-parseKwElse = run pKwElse "else nothing"
-
 pDigit :: Parser Char
 pDigit = pRange ('0', '9')
 
@@ -41,16 +37,12 @@ pInt :: Parser Int
 pInt = pChainl (pure $ \num digit -> num * 10 + digit) pDigitAsInt
 
 pSignedInt :: Parser Int
-pSignedInt = (   (* (-1)) <$ pSym '-'
-             <|> id <$ pSym '+'
-             <|> pure id
-             ) <*> pInt
-
+pSignedInt = lexeme $
+  (   (* (-1)) <$ pSym '-'
+  <|> id <$ pSym '+'
+  <|> pure id
+  ) <*> pInt
 
 main = do
-  let (a, errors) = parseKwElse
-  putStrLn ("-- Result: " ++ show a)
-  if null errors
-    then return ()
-    else do putStrLn ("-- Errors: ")
-            (sequence_ . (map (putStrLn . show))) errors
+  interact $ show . runParser "signed integer" (pSpaces *> pSignedInt)
+  putStrLn ""
