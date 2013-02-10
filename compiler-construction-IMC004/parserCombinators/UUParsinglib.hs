@@ -38,7 +38,13 @@ pDigitAsInt = (\c -> fromEnum c - fromEnum '0') <$> pDigit
 
 pInt :: Parser Int
 -- pInt = foldl (\num digit -> num * 10 + digit) 0 <$> pMany pDigitAsInt
-pInt = pFoldr (\digit num -> num * 10 + digit, 0) pDigitAsInt
+pInt = pChainl (pure $ \num digit -> num * 10 + digit) pDigitAsInt
+
+pSignedInt :: Parser Int
+pSignedInt = (   (* (-1)) <$ pSym '-'
+             <|> id <$ pSym '+'
+             <|> pure id
+             ) <*> pInt
 
 
 main = do
