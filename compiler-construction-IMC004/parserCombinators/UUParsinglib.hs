@@ -4,6 +4,7 @@ module UUParsinglib where
 
 import Text.ParserCombinators.UU
 import Text.ParserCombinators.UU.BasicInstances
+import Text.ParserCombinators.UU.Derived
 
 pa = pSym 'a'
 parseA = run pa "aabb"
@@ -24,8 +25,24 @@ parensLeftRec =
 
 run p input = parse ((,) <$> p <*> pEnd) (createStr (LineCol 0 0) input)
 
+pKwElse :: Parser String
+pKwElse = pToken "else"
+
+parseKwElse = run pKwElse "else nothing"
+
+pDigit :: Parser Char
+pDigit = pRange ('0', '9')
+
+pDigitAsInt :: Parser Int
+pDigitAsInt = (\c -> fromEnum c - fromEnum '0') <$> pDigit
+
+pInt :: Parser Int
+-- pInt = foldl (\num digit -> num * 10 + digit) 0 <$> pMany pDigitAsInt
+pInt = pFoldr (\digit num -> num * 10 + digit, 0) pDigitAsInt
+
+
 main = do
-  let (a, errors) = parseParens
+  let (a, errors) = parseKwElse
   putStrLn ("-- Result: " ++ show a)
   if null errors
     then return ()
