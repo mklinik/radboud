@@ -49,7 +49,7 @@ pPlus = (+) <$> pSignedInt <* lexeme (pSym '+') <*> pSignedInt
 pPlusMinus :: Parser Int
 pPlusMinus = pChainl addops pSignedInt
 
-pOp (sem, symbol) = sem <$ pSym symbol
+pOp (sem, symbol) = sem <$ lexeme (pSym symbol)
 
 pChoice = foldr (<|>) pFail
 
@@ -59,7 +59,12 @@ addops = anyOp [((+), '+'), ((-), '-')]
 mulops = anyOp [((*), '*')]
 
 pTimes = pChainl mulops pSignedInt
-pPlusMinusTimes = pChainl addops pTimes
+pPlusMinusTimes = foldr pChainl pSignedInt [addops, mulops]
+
+pPack l p r = lexeme (pSym l) *> p <* lexeme (pSym r)
+
+pExpr = pSpaces *> foldr pChainl pFactor [addops, mulops]
+pFactor = pSignedInt <|> pPack '(' pExpr ')'
 
 main = do
   interact $ show . runParser "signed integer" (pSpaces *> pSignedInt)
