@@ -10,10 +10,10 @@ parseA = run pa "aabb"
 
 parens :: Parser Int
 parens =
-  (\_ p _ q -> max (p+1) q)
-    <$> (pSym '(') <*> parens <*> pSym ')' <*> parens
+  (max . (+1))
+    <$ (pSym '(') <*> parens <* pSym ')' <*> parens
   <|> pure 0
-parseParens = run parensLeftRec "#(())((()))"
+parseParens = run parens "#(())((()))"
 -- parseParens = run parensLeftRec "#"
 
 parensLeftRec :: Parser Int
