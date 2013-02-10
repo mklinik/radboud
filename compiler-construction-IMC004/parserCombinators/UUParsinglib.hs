@@ -38,10 +38,13 @@ pInt = pChainl (pure $ \num digit -> num * 10 + digit) pDigitAsInt
 
 pSignedInt :: Parser Int
 pSignedInt = lexeme $
-  (   (* (-1)) <$ pSym '-'
-  <|> id <$ pSym '+'
+  (   lexeme ((* (-1)) <$ pSym '-')
+  <|> lexeme (id <$ pSym '+')
   <|> pure id
   ) <*> pInt
+
+pPlus :: Parser Int
+pPlus = (+) <$> pSignedInt <* lexeme (pSym '+') <*> pSignedInt
 
 main = do
   interact $ show . runParser "signed integer" (pSpaces *> pSignedInt)
