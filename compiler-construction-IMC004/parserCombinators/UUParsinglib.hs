@@ -56,6 +56,10 @@ pChoice = foldr (<|>) pFail
 anyOp = pChoice . map pOp
 
 addops = anyOp [((+), '+'), ((-), '-')]
+mulops = anyOp [((*), '*')]
+
+pTimes = pChainl mulops pSignedInt
+pPlusMinusTimes = pChainl addops pTimes
 
 main = do
   interact $ show . runParser "signed integer" (pSpaces *> pSignedInt)
