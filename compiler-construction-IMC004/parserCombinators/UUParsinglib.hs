@@ -1,4 +1,4 @@
-{-# LANGUAGE  FlexibleContexts #-}
+{-# LANGUAGE  FlexibleContexts, NoMonomorphismRestriction #-}
 
 module UUParsinglib where
 
@@ -45,6 +45,17 @@ pSignedInt = lexeme $
 
 pPlus :: Parser Int
 pPlus = (+) <$> pSignedInt <* lexeme (pSym '+') <*> pSignedInt
+
+pPlusMinus :: Parser Int
+pPlusMinus = pChainl addops pSignedInt
+
+pOp (sem, symbol) = sem <$ pSym symbol
+
+pChoice = foldr (<|>) pFail
+
+anyOp = pChoice . map pOp
+
+addops = anyOp [((+), '+'), ((-), '-')]
 
 main = do
   interact $ show . runParser "signed integer" (pSpaces *> pSignedInt)
