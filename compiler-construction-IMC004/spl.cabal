@@ -18,6 +18,3 @@ executable spl
 
   main-is:
     Main.hs
-
-  other-modules:
-    Lexer
