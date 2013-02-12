@@ -63,8 +63,17 @@ pPlusMinusTimes = foldr pChainl pSignedInt [addops, mulops]
 
 pPack l p r = lexeme (pSym l) *> p <* lexeme (pSym r)
 
-pExpr = pSpaces *> foldr pChainl pFactor [addops, mulops]
+pExpr = pSpaces *> (foldr pChainl pFactor [addops, mulops] <|> pIfThenElse)
 pFactor = pSignedInt <|> pPack '(' pExpr ')'
+
+pIfThenElse = ifThenElse <$ lexeme (pToken "if") <*> pBoolExpr <* lexeme (pToken "then") <*> pExpr <* lexeme (pToken "else") <*> pExpr
+
+ifThenElse i t e = if i then t else e
+
+pBoolExpr :: Parser Bool
+pBoolExpr =
+      lexeme (pure True  <* pToken "True")
+  <|> lexeme (pure False <* pToken "False")
 
 main = do
   interact $ show . runParser "signed integer" (pSpaces *> pSignedInt)
