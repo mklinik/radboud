@@ -24,9 +24,9 @@ pVarDecl = AstVarDecl <$> pType <*> pIdentifier <* pSymbol "=" <* pExpr <* pSymb
 
 pType = lexeme $
       BaseType <$> pToken "Int"
-	<|> BaseType <$> pToken "Bool"
-	<|> TupleType <$ pSymbol "(" <*> pType <* pSymbol "," <*> pType <* pSymbol ")"
-	<|> ListType <$ pSymbol "[" <*> pType <* pSymbol "]"
+  <|> BaseType <$> pToken "Bool"
+  <|> TupleType <$ pSymbol "(" <*> pType <* pSymbol "," <*> pType <* pSymbol ")"
+  <|> ListType <$ pSymbol "[" <*> pType <* pSymbol "]"
 
 pIdentifier = lexeme $ many pLetter
 
