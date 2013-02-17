@@ -1,17 +1,26 @@
 module Main where
 
 import           Text.ParserCombinators.UU.Utils
-import           System.Console.GetOpt
 import           System.Environment (getArgs)
 import           System.IO
 
-import Options
-import Parser
+import qualified Options
+import           Options (Options)
+import           Parser
 
 main :: IO ()
 main = do
-  args <- getArgs
-  interact $ show . runParser "stdio" pProg
+  opts <- getArgs >>= Options.get
+  run opts
 
 run :: Options -> IO ()
-run options = hGetContents (input options) >>= return . show . runParser "" pProg >>= hPutStrLn (output options)
+run opts = do
+  case Options.mode opts of
+    Options.Prettyprint -> hGetContents (Options.input opts) >>= return . show . runParser "" pProg >>= hPutStrLn (Options.output opts)
+    Options.Help -> Options.printHelp
+  cleanUp opts
+
+cleanUp :: Options -> IO ()
+cleanUp opts = do
+  hClose (Options.input opts)
+  hClose (Options.output opts)
