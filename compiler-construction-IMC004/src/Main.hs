@@ -1,6 +1,6 @@
 module Main where
 
-import           Text.ParserCombinators.UU.Utils
+-- import           Text.ParserCombinators.UU.Utils hiding (runParser)
 import           System.Environment (getArgs)
 import           System.IO
 
@@ -16,8 +16,13 @@ main = do
 run :: Options -> IO ()
 run opts = do
   case Options.mode opts of
-    Options.Prettyprint -> hGetContents (Options.input opts) >>= return . show . runParser "" pProg >>= hPutStrLn (Options.output opts)
+    Options.Prettyprint -> do
+      input <- hGetContents (Options.input opts)
+      let output = show $ runParser (Options.inputFilename opts) pProg input
+      hPutStrLn (Options.output opts) output
+
     Options.Help -> Options.printHelp
+
   cleanUp opts
 
 cleanUp :: Options -> IO ()
