@@ -1,13 +1,17 @@
 module Main where
 
-import Text.ParserCombinators.UU.Utils
+import           Text.ParserCombinators.UU.Utils
+import           System.Console.GetOpt
+import           System.Environment (getArgs)
+import           System.IO
 
+import Options
 import Parser
-
--- main = do
-  -- sequence_ $ map putStrLn keywords
 
 main :: IO ()
 main = do
-  -- print $ runParser "test" pProg "(Int,Int) foo=100;"
+  args <- getArgs
   interact $ show . runParser "stdio" pProg
+
+run :: Options -> IO ()
+run options = hGetContents (input options) >>= return . show . runParser "" pProg >>= hPutStrLn (output options)
