@@ -33,11 +33,12 @@ operators =
 
 data Token
   = Keyword String
-  | Punctuation Char
+  | Ident
   | Identifier String
+  | Punctuation Char
   | Number Integer
   | Operator Char
-  deriving (Show)
+  deriving (Show, Eq)
 
 lexer :: Parser [Token]
 lexer = many (lexeme pTok)
