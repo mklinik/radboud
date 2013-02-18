@@ -3,4 +3,4 @@
 
 [ Bool ] bar = 100;
 
-(Int,Int)foo=100;[Bool]bar=100;
+(Int,Int)shmu=42;[Bool]baz=200;

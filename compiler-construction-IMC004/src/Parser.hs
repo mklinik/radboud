@@ -1,4 +1,6 @@
 {-# LANGUAGE  FlexibleContexts, NoMonomorphismRestriction, RankNTypes #-}
+
+-- The parser transforms the input text into an AST
 module Parser where
 
 import Text.ParserCombinators.UU
@@ -7,12 +9,7 @@ import Text.ParserCombinators.UU.Derived
 import Text.ParserCombinators.UU.Utils hiding (runParser)
 import Text.Printf (printf)
 
-data AstProg = AstProg [AstDecl]
-  deriving (Show)
-data AstDecl = AstVarDecl AstType String | AstFunDecl
-  deriving (Show)
-data AstType = BaseType String | TupleType AstType AstType | ListType AstType | PolymorphicType String
-  deriving (Show)
+import Ast
 
 pProg :: Parser AstProg
 pProg = AstProg <$> some pDecl
