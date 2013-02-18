@@ -40,6 +40,8 @@ booleanConstants = ["True", "False"]
 pExpr :: Parser AstExpr
 pExpr = AstInteger <$> lexeme pInteger
     <|> mkBoolOrIdentifier <$> lexeme pIdentifier
+    <|> pSymbol "(" *> pExpr <* pSymbol ")"
+    <|> AstTuple <$ pSymbol "(" <*> pExpr <* pSymbol "," <*> pExpr <* pSymbol ")"
 
 mkBoolOrIdentifier :: String -> AstExpr
 mkBoolOrIdentifier str =

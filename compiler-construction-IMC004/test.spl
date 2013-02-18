@@ -12,3 +12,6 @@ Bool d = False ;
 
 Int TCP_IP_connection = ab0;
 Int hello_world_1024 = Truee;
+
+(Int, Int) tup = (10, 20);
+Int i = (10);
