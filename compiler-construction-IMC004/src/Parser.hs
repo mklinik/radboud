@@ -7,14 +7,14 @@ import Text.ParserCombinators.UU
 import qualified Text.ParserCombinators.UU.BasicInstances as PC
 import           Text.ParserCombinators.UU.BasicInstances (Parser)
 -- import Text.ParserCombinators.UU.Derived
-import Text.ParserCombinators.UU.Utils hiding (runParser, pInteger)
+import Text.ParserCombinators.UU.Utils hiding (runParser, pInteger, lexeme, pSymbol)
 import Text.Printf (printf)
 import Data.Char (ord)
 
 import Ast
 
 pProgram :: Parser AstProgram
-pProgram = AstProgram <$> some pDeclaration
+pProgram = AstProgram <$ lexeme (pure ()) <*> some pDeclaration
 
 pDeclaration :: Parser AstDeclaration
 pDeclaration = pVarDeclaration -- <|> pFunDeclaration
@@ -28,7 +28,7 @@ baseTypes :: [String]
 baseTypes = ["Int", "Bool"]
 
 pType :: Parser AstType
-pType = lexeme $
+pType =
       mkBaseTypeOrIdentifier <$> pIdentifier
   <|> TupleType <$ pSymbol "(" <*> pType <* pSymbol "," <*> pType <* pSymbol ")"
   <|> ListType <$ pSymbol "[" <*> pType <* pSymbol "]"
@@ -48,7 +48,7 @@ booleanConstants = ["True", "False"]
 pExpr :: Parser AstExpr
 pExpr =
       AstInteger <$> lexeme pInteger
-  <|> mkBoolOrIdentifier <$> lexeme pIdentifier
+  <|> mkBoolOrIdentifier <$> pIdentifier
   <|> pSymbol "(" *> pExpr <* pSymbol ")"
   <|> AstTuple <$ pSymbol "(" <*> pExpr <* pSymbol "," <*> pExpr <* pSymbol ")"
   <|> AstEmptyList <$ pSymbol "[" <* pSymbol "]"
@@ -61,6 +61,25 @@ mkBoolOrIdentifier s =
 
 pInteger :: Parser Integer
 pInteger = opt (negate <$ pSymbol "-") id <*> pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)
+
+pSymbol :: String -> Parser String
+pSymbol = lexeme . PC.pToken
+
+lexeme :: PC.ParserTrafo a a
+-- lexeme p = p <* pSpaces
+lexeme p = p <* many (pSpace <<|> pLineComment <<|> pBlockComment)
+
+pSpace :: Parser ()
+pSpace = () <$ pAnySym " \r\n\t"
+
+pLineComment :: Parser ()
+pLineComment = () <$ PC.pToken "//" <* PC.pMunch (/= '\n') <* PC.pSym '\n'
+
+pBlockComment :: Parser ()
+pBlockComment = () <$ PC.pToken "/*" <* pCrapUntilBlockCommentEnd
+
+pCrapUntilBlockCommentEnd :: Parser ()
+pCrapUntilBlockCommentEnd = () <$ PC.pMunch (/= '*') <* (() <$ PC.pToken "*/" <<|> () <$ PC.pSym '*' <* pCrapUntilBlockCommentEnd)
 
 runParser :: String -> PC.Parser a -> String -> a
 runParser inputName parser input | (a,b) <- execParser parser input =
