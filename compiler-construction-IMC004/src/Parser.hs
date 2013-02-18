@@ -61,4 +61,4 @@ runParser inputName parser input | (a,b) <- execParser parser input =
                                 s' = map (\c -> if c=='\n' || c=='\r' || c=='\t' then ' ' else c) s
                                 aboveString = replicate 30 ' ' ++ "v"
                                 belowString = replicate 30 ' ' ++ "^"
-                                inputFrag   = replicate (30 - abs) ' ' ++ (take 71 $ drop (abs - 30) s')
+                                inputFrag   = replicate (30 - pos) ' ' ++ (take 71 $ drop (pos - 30) s')

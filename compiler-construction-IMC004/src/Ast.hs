@@ -15,7 +15,7 @@ instance Show AstProg where
 
 instance Show AstDecl where
   show AstFunDecl = "AstFunDecl"
-  show (AstVarDecl typ id) = concat $ intersperse " " $ [show typ, id, "=", "...", ";"]
+  show (AstVarDecl typ id) = concat $ intersperse " " [show typ, id, "=", "...", ";"]
 
 instance Show AstType where
   show (BaseType t) = t
