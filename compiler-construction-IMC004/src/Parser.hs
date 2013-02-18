@@ -36,10 +36,15 @@ pIdentifier = lexeme $ many pLetter
 
 pExpr :: Parser AstExpr
 pExpr = AstInteger <$> lexeme pInt
-    <|> AstIdentifier <$> pIdentifier
+    <<|> AstBoolean <$> pBool
+    <<|> AstIdentifier <$> pIdentifier
 
 pInt :: Parser Integer
 pInt = opt (negate <$ pSymbol "-") id <*> pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)
+
+pBool :: Parser Bool
+pBool = True <$ PC.pToken "True"
+    <|> False <$ PC.pToken "False"
 
 
 runParser :: String -> PC.Parser a -> String -> a

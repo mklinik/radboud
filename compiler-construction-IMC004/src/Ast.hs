@@ -13,6 +13,7 @@ data AstType = BaseType String | TupleType AstType AstType | ListType AstType | 
 data AstExpr
   = AstIdentifier String
   | AstInteger Integer
+  | AstBoolean Bool
 
 instance Show AstProg where
   show (AstProg decls) = concat $ intersperse "\n" $ map show decls
@@ -30,3 +31,4 @@ instance Show AstType where
 instance Show AstExpr where
   show (AstIdentifier ident) = ident
   show (AstInteger i) = show i
+  show (AstBoolean b) = "@" ++ show b
