@@ -28,7 +28,7 @@ instance Show AstType where
   show (BaseType t) = t
   show (TupleType a b) = concat ["(", show a, ", ", show b, ")"]
   show (ListType t) = concat ["[", show t, "]"]
-  show (PolymorphicType t) = t
+  show (PolymorphicType t) = "$" ++ t
 
 instance Show AstExpr where
   show (AstIdentifier ident) = "#" ++ ident

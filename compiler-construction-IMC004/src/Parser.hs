@@ -24,12 +24,20 @@ pVarDeclaration = AstVarDeclaration <$> pType <*> pIdentifier <* pSymbol "=" <*>
 
 -- pFunDeclaration = undefined
 
+baseTypes :: [String]
+baseTypes = ["Int", "Bool"]
+
 pType :: Parser AstType
 pType = lexeme $
-      BaseType <$> PC.pToken "Int"
-  <|> BaseType <$> PC.pToken "Bool"
+      mkBaseTypeOrIdentifier <$> pIdentifier
   <|> TupleType <$ pSymbol "(" <*> pType <* pSymbol "," <*> pType <* pSymbol ")"
   <|> ListType <$ pSymbol "[" <*> pType <* pSymbol "]"
+
+mkBaseTypeOrIdentifier :: String -> AstType
+mkBaseTypeOrIdentifier s =
+  if s `elem` baseTypes
+    then BaseType s
+    else PolymorphicType s
 
 pIdentifier :: Parser String
 pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_'))
@@ -45,10 +53,10 @@ pExpr = AstInteger <$> lexeme pInteger
     <|> AstEmptyList <$ pSymbol "[" <* pSymbol "]"
 
 mkBoolOrIdentifier :: String -> AstExpr
-mkBoolOrIdentifier str =
-  if str `elem` booleanConstants
-    then AstBoolean (str == "True")
-    else AstIdentifier str
+mkBoolOrIdentifier s =
+  if s `elem` booleanConstants
+    then AstBoolean (s == "True")
+    else AstIdentifier s
 
 pInteger :: Parser Integer
 pInteger = opt (negate <$ pSymbol "-") id <*> pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)

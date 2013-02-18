@@ -17,5 +17,4 @@ Int hello_world_1024 = Truee;
 Int i = (10);
 
 [Int] xs = [];
-
 [a] ys = [];
