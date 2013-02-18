@@ -4,9 +4,9 @@ module Ast where
 
 import Data.List (intersperse)
 
-data AstProgram = AstProgram [AstDecl]
+data AstProgram = AstProgram [AstDeclaration]
 
-data AstDecl = AstVarDecl AstType String AstExpr | AstFunDecl
+data AstDeclaration = AstVarDeclaration AstType String AstExpr | AstFunDeclaration
 
 data AstType = BaseType String | TupleType AstType AstType | ListType AstType | PolymorphicType String
 
@@ -18,9 +18,9 @@ data AstExpr
 instance Show AstProgram where
   show (AstProgram decls) = concat $ intersperse "\n" $ map show decls
 
-instance Show AstDecl where
-  show AstFunDecl = "AstFunDecl"
-  show (AstVarDecl typ ident expr) = concat $ intersperse " " [show typ, "#" ++ ident, "=", show expr, ";"]
+instance Show AstDeclaration where
+  show AstFunDeclaration = "AstFunDeclaration"
+  show (AstVarDeclaration typ ident expr) = concat $ intersperse " " [show typ, "#" ++ ident, "=", show expr, ";"]
 
 instance Show AstType where
   show (BaseType t) = t

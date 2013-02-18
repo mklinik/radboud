@@ -14,15 +14,15 @@ import Data.Char (ord)
 import Ast
 
 pProgram :: Parser AstProgram
-pProgram = AstProgram <$> some pDecl
+pProgram = AstProgram <$> some pDeclaration
 
-pDecl :: Parser AstDecl
-pDecl = pVarDecl -- <|> pFunDecl
+pDeclaration :: Parser AstDeclaration
+pDeclaration = pVarDeclaration -- <|> pFunDeclaration
 
-pVarDecl :: Parser AstDecl
-pVarDecl = AstVarDecl <$> pType <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
+pVarDeclaration :: Parser AstDeclaration
+pVarDeclaration = AstVarDeclaration <$> pType <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
 
--- pFunDecl = undefined
+-- pFunDeclaration = undefined
 
 pType :: Parser AstType
 pType = lexeme $
