@@ -42,6 +42,7 @@ pExpr = AstInteger <$> lexeme pInteger
     <|> mkBoolOrIdentifier <$> lexeme pIdentifier
     <|> pSymbol "(" *> pExpr <* pSymbol ")"
     <|> AstTuple <$ pSymbol "(" <*> pExpr <* pSymbol "," <*> pExpr <* pSymbol ")"
+    <|> AstEmptyList <$ pSymbol "[" <* pSymbol "]"
 
 mkBoolOrIdentifier :: String -> AstExpr
 mkBoolOrIdentifier str =

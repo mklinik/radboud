@@ -15,6 +15,7 @@ data AstExpr
   | AstInteger Integer
   | AstBoolean Bool
   | AstTuple AstExpr AstExpr
+  | AstEmptyList
 
 instance Show AstProgram where
   show (AstProgram decls) = concat $ intersperse "\n" $ map show decls
@@ -34,3 +35,4 @@ instance Show AstExpr where
   show (AstInteger i) = show i
   show (AstBoolean b) = "@" ++ show b
   show (AstTuple a b) = concat ["(", show a, ", ", show b, ")"]
+  show (AstEmptyList) = "[]"

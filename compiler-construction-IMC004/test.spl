@@ -15,3 +15,7 @@ Int hello_world_1024 = Truee;
 
 (Int, Int) tup = (10, 20);
 Int i = (10);
+
+[Int] xs = [];
+
+[a] ys = [];
