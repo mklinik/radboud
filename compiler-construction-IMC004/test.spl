@@ -4,3 +4,5 @@
 [ Bool ] bar = 1981;
 
 (Int,Int)shmu=42;[Bool]baz=2013;
+
+Bool b = shmu;

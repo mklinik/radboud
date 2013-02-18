@@ -36,6 +36,7 @@ pIdentifier = lexeme $ many pLetter
 
 pExpr :: Parser AstExpr
 pExpr = AstInteger <$> lexeme pInt
+    <|> AstIdentifier <$> pIdentifier
 
 pInt :: Parser Integer
 pInt = opt (negate <$ pSymbol "-") id <*> pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)
