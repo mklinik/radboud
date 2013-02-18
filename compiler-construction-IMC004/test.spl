@@ -31,3 +31,12 @@ Int i = (10);
 
 /*************************/
 Int i = 0;
+
+
+// line and
+
+/* block comments */
+
+// /* interchanged */
+
+/* // and so on */

@@ -67,7 +67,7 @@ pSymbol = lexeme . PC.pToken
 
 lexeme :: PC.ParserTrafo a a
 -- lexeme p = p <* pSpaces
-lexeme p = p <* many (pSpace <<|> pLineComment <<|> pBlockComment)
+lexeme p = p <* many (pSpace <<|> pLineComment <|> pBlockComment)
 
 pSpace :: Parser ()
 pSpace = () <$ pAnySym " \r\n\t"
