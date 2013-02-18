@@ -34,11 +34,18 @@ pType = lexeme $
 pIdentifier :: Parser String
 pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_'))
 
+booleanConstants :: [String]
 booleanConstants = ["True", "False"]
 
 pExpr :: Parser AstExpr
 pExpr = AstInteger <$> lexeme pInt
-    <|> (\str -> if str `elem` booleanConstants then (AstBoolean (str == "True")) else AstIdentifier str) <$> lexeme pIdentifier
+    <|> mkBoolOrIdentifier <$> lexeme pIdentifier
+
+mkBoolOrIdentifier :: String -> AstExpr
+mkBoolOrIdentifier str =
+  if str `elem` booleanConstants
+    then AstBoolean (str == "True")
+    else AstIdentifier str
 
 pInt :: Parser Integer
 pInt = opt (negate <$ pSymbol "-") id <*> pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)
