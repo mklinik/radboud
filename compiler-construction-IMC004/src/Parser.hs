@@ -66,7 +66,6 @@ pSymbol :: String -> Parser String
 pSymbol = lexeme . PC.pToken
 
 lexeme :: PC.ParserTrafo a a
--- lexeme p = p <* pSpaces
 lexeme p = p <* many (pSpace <<|> pLineComment <|> pBlockComment)
 
 pSpace :: Parser ()
@@ -79,7 +78,11 @@ pBlockComment :: Parser ()
 pBlockComment = () <$ PC.pToken "/*" <* pCrapUntilBlockCommentEnd
 
 pCrapUntilBlockCommentEnd :: Parser ()
-pCrapUntilBlockCommentEnd = () <$ PC.pMunch (/= '*') <* (() <$ PC.pToken "*/" <<|> () <$ PC.pSym '*' <* pCrapUntilBlockCommentEnd)
+pCrapUntilBlockCommentEnd = () <$
+  PC.pMunch (/= '*') <* -- eat everything that's not a star
+    (() <$ PC.pToken "*/" <<|> -- if we get a comment-end delimiter, we're done
+     () <$ PC.pSym '*' <* pCrapUntilBlockCommentEnd -- otherwise, eat the star and continue
+    )
 
 runParser :: String -> PC.Parser a -> String -> a
 runParser inputName parser input | (a,b) <- execParser parser input =

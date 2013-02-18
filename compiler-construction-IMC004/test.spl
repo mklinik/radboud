@@ -40,3 +40,5 @@ Int i = 0;
 // /* interchanged */
 
 /* // and so on */
+/**///
+Int x = 10;
