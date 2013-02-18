@@ -24,14 +24,14 @@ pVarDeclaration = AstVarDeclaration <$> pType <*> pIdentifier <* pSymbol "=" <*>
 
 -- pFunDeclaration = undefined
 
-baseTypes :: [String]
-baseTypes = ["Int", "Bool"]
-
 pType :: Parser AstType
 pType =
       mkBaseTypeOrIdentifier <$> pIdentifier
   <|> TupleType <$ pSymbol "(" <*> pType <* pSymbol "," <*> pType <* pSymbol ")"
   <|> ListType <$ pSymbol "[" <*> pType <* pSymbol "]"
+
+baseTypes :: [String]
+baseTypes = ["Int", "Bool"]
 
 mkBaseTypeOrIdentifier :: String -> AstType
 mkBaseTypeOrIdentifier s =
@@ -42,9 +42,6 @@ mkBaseTypeOrIdentifier s =
 pIdentifier :: Parser String
 pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_'))
 
-booleanConstants :: [String]
-booleanConstants = ["True", "False"]
-
 pExpr :: Parser AstExpr
 pExpr =
       AstInteger <$> pInteger
@@ -52,6 +49,9 @@ pExpr =
   <|> pSymbol "(" *> pExpr <* pSymbol ")"
   <|> AstTuple <$ pSymbol "(" <*> pExpr <* pSymbol "," <*> pExpr <* pSymbol ")"
   <|> AstEmptyList <$ pSymbol "[" <* pSymbol "]"
+
+booleanConstants :: [String]
+booleanConstants = ["True", "False"]
 
 mkBoolOrIdentifier :: String -> AstExpr
 mkBoolOrIdentifier s =
