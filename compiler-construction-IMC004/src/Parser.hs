@@ -32,12 +32,12 @@ pType = lexeme $
   <|> ListType <$ pSymbol "[" <*> pType <* pSymbol "]"
 
 pIdentifier :: Parser String
-pIdentifier = lexeme $ many pLetter
+pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_'))
 
 pExpr :: Parser AstExpr
 pExpr = AstInteger <$> lexeme pInt
-    <<|> AstBoolean <$> pBool
-    <<|> AstIdentifier <$> pIdentifier
+    <<|> AstBoolean <$> lexeme pBool
+    <<|> AstIdentifier <$> lexeme pIdentifier
 
 pInt :: Parser Integer
 pInt = opt (negate <$ pSymbol "-") id <*> pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)

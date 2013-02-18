@@ -20,7 +20,7 @@ instance Show AstProg where
 
 instance Show AstDecl where
   show AstFunDecl = "AstFunDecl"
-  show (AstVarDecl typ ident expr) = concat $ intersperse " " [show typ, ident, "=", show expr, ";"]
+  show (AstVarDecl typ ident expr) = concat $ intersperse " " [show typ, "#" ++ ident, "=", show expr, ";"]
 
 instance Show AstType where
   show (BaseType t) = t
@@ -29,6 +29,6 @@ instance Show AstType where
   show (PolymorphicType t) = t
 
 instance Show AstExpr where
-  show (AstIdentifier ident) = ident
+  show (AstIdentifier ident) = "#" ++ ident
   show (AstInteger i) = show i
   show (AstBoolean b) = "@" ++ show b

@@ -5,7 +5,10 @@
 
 (Int,Int)shmu=42;[Bool]baz=-2013;
 
-Bool b = shmu;
+Bool b = shmu ;
 
-Bool c = True;
-Bool d = False;
+Bool c = True ;
+Bool d = False ;
+
+Int TCP_IP_connection = ab0;
+Int hello_world_1024 = Truee;
