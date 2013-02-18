@@ -1,6 +1,6 @@
-( Int , Int ) foo = 100  ;
+( Int , Int ) foo = 1024  ;
 
 
-[ Bool ] bar = 100;
+[ Bool ] bar = 1981;
 
-(Int,Int)shmu=42;[Bool]baz=200;
+(Int,Int)shmu=42;[Bool]baz=2013;

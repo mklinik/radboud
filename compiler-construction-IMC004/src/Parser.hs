@@ -9,6 +9,7 @@ import           Text.ParserCombinators.UU.BasicInstances (Parser)
 -- import Text.ParserCombinators.UU.Derived
 import Text.ParserCombinators.UU.Utils hiding (runParser)
 import Text.Printf (printf)
+import Data.Char (ord)
 
 import Ast
 
@@ -19,7 +20,7 @@ pDecl :: Parser AstDecl
 pDecl = pVarDecl -- <|> pFunDecl
 
 pVarDecl :: Parser AstDecl
-pVarDecl = AstVarDecl <$> pType <*> pIdentifier <* pSymbol "=" <* pExpr <* pSymbol ";"
+pVarDecl = AstVarDecl <$> pType <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
 
 -- pFunDecl = undefined
 
@@ -33,7 +34,11 @@ pType = lexeme $
 pIdentifier :: Parser String
 pIdentifier = lexeme $ many pLetter
 
-pExpr = lexeme $ many pDigit
+pExpr :: Parser AstExpr
+pExpr = AstInteger <$> lexeme pInt
+
+pInt :: Parser Integer
+pInt = opt (negate <$ pSymbol "-") id <*> pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)
 
 
 runParser :: String -> PC.Parser a -> String -> a
