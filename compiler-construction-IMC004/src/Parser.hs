@@ -56,6 +56,7 @@ runParser inputName parser input | (a,b) <- execParser parser input =
         pruneError _ (PC.DeletedAtEnd x     : _) = printf "Unexpected '%s' at end." x
         pruneError s (PC.Inserted _ position expr : _) = prettyError s expr position
         pruneError s (PC.Deleted  _ position expr : _) = prettyError s expr position
+        pruneError _ (PC.Replaced _ _ _ _ : _) = error "pruneError: unhandled case `Replaced`" -- don't know what to do, don't care (for now)
         prettyError :: String -> [String] -> PC.LineColPos -> String
         prettyError s expr loc@(PC.LineColPos _ _ pos) = printf "Expected %s at %s :\n%s\n%s\n%s\n"
                                                            (PC.show_expecting loc expr)
