@@ -4,7 +4,7 @@ module Ast where
 
 import Data.List (intersperse)
 
-data AstProg = AstProg [AstDecl]
+data AstProgram = AstProgram [AstDecl]
 
 data AstDecl = AstVarDecl AstType String AstExpr | AstFunDecl
 
@@ -15,8 +15,8 @@ data AstExpr
   | AstInteger Integer
   | AstBoolean Bool
 
-instance Show AstProg where
-  show (AstProg decls) = concat $ intersperse "\n" $ map show decls
+instance Show AstProgram where
+  show (AstProgram decls) = concat $ intersperse "\n" $ map show decls
 
 instance Show AstDecl where
   show AstFunDecl = "AstFunDecl"

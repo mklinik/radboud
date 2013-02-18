@@ -18,7 +18,7 @@ run opts = do
   case Options.mode opts of
     Options.Prettyprint -> do
       input <- hGetContents (Options.input opts)
-      let output = show $ runParser (Options.inputFilename opts) pProg input
+      let output = show $ runParser (Options.inputFilename opts) pProgram input
       hPutStrLn (Options.output opts) output
 
     Options.Help -> Options.printHelp

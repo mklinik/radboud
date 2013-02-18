@@ -13,8 +13,8 @@ import Data.Char (ord)
 
 import Ast
 
-pProg :: Parser AstProg
-pProg = AstProg <$> some pDecl
+pProgram :: Parser AstProgram
+pProgram = AstProgram <$> some pDecl
 
 pDecl :: Parser AstDecl
 pDecl = pVarDecl -- <|> pFunDecl
