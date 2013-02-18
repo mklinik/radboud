@@ -7,7 +7,7 @@ import Text.ParserCombinators.UU
 import qualified Text.ParserCombinators.UU.BasicInstances as PC
 import           Text.ParserCombinators.UU.BasicInstances (Parser)
 -- import Text.ParserCombinators.UU.Derived
-import Text.ParserCombinators.UU.Utils hiding (runParser)
+import Text.ParserCombinators.UU.Utils hiding (runParser, pInteger)
 import Text.Printf (printf)
 import Data.Char (ord)
 
@@ -38,7 +38,7 @@ booleanConstants :: [String]
 booleanConstants = ["True", "False"]
 
 pExpr :: Parser AstExpr
-pExpr = AstInteger <$> lexeme pInt
+pExpr = AstInteger <$> lexeme pInteger
     <|> mkBoolOrIdentifier <$> lexeme pIdentifier
 
 mkBoolOrIdentifier :: String -> AstExpr
@@ -47,8 +47,8 @@ mkBoolOrIdentifier str =
     then AstBoolean (str == "True")
     else AstIdentifier str
 
-pInt :: Parser Integer
-pInt = opt (negate <$ pSymbol "-") id <*> pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)
+pInteger :: Parser Integer
+pInteger = opt (negate <$ pSymbol "-") id <*> pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)
 
 runParser :: String -> PC.Parser a -> String -> a
 runParser inputName parser input | (a,b) <- execParser parser input =
