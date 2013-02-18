@@ -79,8 +79,8 @@ pBlockComment :: Parser ()
 pBlockComment = () <$ PC.pToken "/*" <* pCrapUntilBlockCommentEnd
 
 pCrapUntilBlockCommentEnd :: Parser ()
-pCrapUntilBlockCommentEnd = () <$
-  PC.pMunch (/= '*') <* -- eat everything that's not a star
+pCrapUntilBlockCommentEnd =
+  () <$ PC.pMunch (/= '*') <* -- eat everything that's not a star
     (() <$ PC.pToken "*/" <<|> -- if we get a comment-end delimiter, we're done
      () <$ PC.pSym '*' <* pCrapUntilBlockCommentEnd -- otherwise, eat the star and continue
     )
