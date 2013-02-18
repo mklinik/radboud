@@ -47,7 +47,7 @@ booleanConstants = ["True", "False"]
 
 pExpr :: Parser AstExpr
 pExpr =
-      AstInteger <$> lexeme pInteger
+      AstInteger <$> pInteger
   <|> mkBoolOrIdentifier <$> pIdentifier
   <|> pSymbol "(" *> pExpr <* pSymbol ")"
   <|> AstTuple <$ pSymbol "(" <*> pExpr <* pSymbol "," <*> pExpr <* pSymbol ")"
@@ -60,7 +60,8 @@ mkBoolOrIdentifier s =
     else AstIdentifier s
 
 pInteger :: Parser Integer
-pInteger = opt (negate <$ pSymbol "-") id <*> pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)
+pInteger = lexeme $ opt (negate <$ pSymbol "-") id <*>
+  pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)
 
 pSymbol :: String -> Parser String
 pSymbol = lexeme . PC.pToken
