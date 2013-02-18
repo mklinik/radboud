@@ -4,8 +4,9 @@
 module Parser where
 
 import Text.ParserCombinators.UU
-import Text.ParserCombinators.UU.BasicInstances
-import Text.ParserCombinators.UU.Derived
+import qualified Text.ParserCombinators.UU.BasicInstances as PC
+import           Text.ParserCombinators.UU.BasicInstances (Parser)
+-- import Text.ParserCombinators.UU.Derived
 import Text.ParserCombinators.UU.Utils hiding (runParser)
 import Text.Printf (printf)
 
@@ -14,41 +15,45 @@ import Ast
 pProg :: Parser AstProg
 pProg = AstProg <$> some pDecl
 
+pDecl :: Parser AstDecl
 pDecl = pVarDecl -- <|> pFunDecl
 
+pVarDecl :: Parser AstDecl
 pVarDecl = AstVarDecl <$> pType <*> pIdentifier <* pSymbol "=" <* pExpr <* pSymbol ";"
 
 -- pFunDecl = undefined
 
+pType :: Parser AstType
 pType = lexeme $
-      BaseType <$> pToken "Int"
-  <|> BaseType <$> pToken "Bool"
+      BaseType <$> PC.pToken "Int"
+  <|> BaseType <$> PC.pToken "Bool"
   <|> TupleType <$ pSymbol "(" <*> pType <* pSymbol "," <*> pType <* pSymbol ")"
   <|> ListType <$ pSymbol "[" <*> pType <* pSymbol "]"
 
+pIdentifier :: Parser String
 pIdentifier = lexeme $ many pLetter
 
 pExpr = lexeme $ many pDigit
 
 
-runParser :: String -> Parser a -> String -> a
-runParser inputName p s | (a,b) <- execParser p s =
+runParser :: String -> PC.Parser a -> String -> a
+runParser inputName parser input | (a,b) <- execParser parser input =
     if null b
     then a
-    else error (printf "Failed parsing '%s' :\n%s\n" inputName (pruneError s b))
+    else error (printf "Failed parsing '%s' :\n%s\n" inputName (pruneError input b))
          -- We do 'pruneError' above because otherwise you can end
          -- up reporting huge correction streams, and that's
          -- generally not helpful... but the pruning does discard info...
     where -- | Produce a single simple, user-friendly error message
-        pruneError :: String -> [Error LineColPos] -> String
+        pruneError :: String -> [PC.Error PC.LineColPos] -> String
         pruneError _ [] = ""
-        pruneError _ (DeletedAtEnd x     : _) = printf "Unexpected '%s' at end." x
-        pruneError s (Inserted _ pos exp : _) = prettyError s exp pos
-        pruneError s (Deleted  _ pos exp : _) = prettyError s exp pos
-        prettyError :: String -> [String] -> LineColPos -> String
-        prettyError s exp p@(LineColPos line c abs) = printf "Expected %s at %s :\n%s\n%s\n%s\n"
-                                                           (show_expecting p exp)
-                                                           (show p)
+        pruneError _ (PC.DeletedAtEnd x     : _) = printf "Unexpected '%s' at end." x
+        pruneError s (PC.Inserted _ position expr : _) = prettyError s expr position
+        pruneError s (PC.Deleted  _ position expr : _) = prettyError s expr position
+        prettyError :: String -> [String] -> PC.LineColPos -> String
+        prettyError s expr loc@(PC.LineColPos _ _ pos) = printf "Expected %s at %s :\n%s\n%s\n%s\n"
+                                                           (PC.show_expecting loc expr)
+                                                           (show loc)
                                                            aboveString
                                                            inputFrag
                                                            belowString
