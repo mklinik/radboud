@@ -47,3 +47,9 @@ Int idInt(Int i) {}
 a id(a i) {}
 
 a const(a x, b y) {}
+
+Int foobar(Int x, Bool y)
+{
+  Int tmp = 0;
+	Bool tmp = True;
+}

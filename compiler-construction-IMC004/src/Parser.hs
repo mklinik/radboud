@@ -27,7 +27,7 @@ pFunDeclaration =
   AstFunDeclaration
     <$> pReturnType <*> pIdentifier
     <* pSymbol "(" <*> pFunctionArguments <* pSymbol ")"
-    <* pSymbol "{" <* pSymbol "}"
+    <* pSymbol "{" <*> many pVarDeclaration <* pSymbol "}"
 
 pFunctionArguments :: Parser [AstFunctionArgument]
 pFunctionArguments = (:) <$> pFunctionArgument <*> (pSymbol "," *> pFunctionArguments <|> pure [])
