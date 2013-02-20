@@ -27,7 +27,11 @@ pFunDeclaration =
   AstFunDeclaration
     <$> pReturnType <*> pIdentifier
     <* pSymbol "(" <*> pFunctionArguments <* pSymbol ")"
-    <* pSymbol "{" <*> many pVarDeclaration <* pSymbol "}"
+    <* pSymbol "{" <*> many pVarDeclaration <*> some pStatement <* pSymbol "}"
+
+pStatement :: Parser AstStatement
+pStatement =
+  AstReturn <$ lexeme (PC.pToken "return") <*> opt (Just <$> pExpr) Nothing <* pSymbol ";"
 
 pFunctionArguments :: Parser [AstFunctionArgument]
 pFunctionArguments = (:) <$> pFunctionArgument <*> (pSymbol "," *> pFunctionArguments <|> pure [])

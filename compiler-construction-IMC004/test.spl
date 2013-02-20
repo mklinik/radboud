@@ -43,13 +43,20 @@ Int i = 0;
 /**///
 Int x = 10;
 
-Int idInt(Int i) {}
-a id(a i) {}
+Int idInt(Int i)
+{ return True;
+}
 
-a const(a x, b y) {}
+a id(a i)
+{
+  return i;
+}
+
+a const(a x, b y) {return x;}
 
 Int foobar(Int x, Bool y)
 {
   Int tmp = 0;
 	Bool tmp = True;
+	return tmp;
 }
