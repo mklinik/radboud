@@ -6,7 +6,9 @@ import Data.List (intersperse)
 
 data AstProgram = AstProgram [AstDeclaration]
 
-data AstDeclaration = AstVarDeclaration AstType String AstExpr | AstFunDeclaration
+data AstDeclaration
+  = AstVarDeclaration AstType String AstExpr
+  | AstFunDeclaration AstType String
 
 data AstType = BaseType String | TupleType AstType AstType | ListType AstType | PolymorphicType String
 
@@ -21,7 +23,7 @@ instance Show AstProgram where
   show (AstProgram decls) = concat $ intersperse "\n" $ map show decls
 
 instance Show AstDeclaration where
-  show AstFunDeclaration = "AstFunDeclaration"
+  show (AstFunDeclaration typ ident) = concat $ intersperse " " [show typ, "#" ++ ident, "(", ")", "{", "}"]
   show (AstVarDeclaration typ ident expr) = concat $ intersperse " " [show typ, "#" ++ ident, "=", show expr, ";"]
 
 instance Show AstType where

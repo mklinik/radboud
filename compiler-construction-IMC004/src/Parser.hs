@@ -17,24 +17,30 @@ pProgram :: Parser AstProgram
 pProgram = AstProgram <$ lexeme (pure ()) <*> some pDeclaration
 
 pDeclaration :: Parser AstDeclaration
-pDeclaration = pVarDeclaration -- <|> pFunDeclaration
+pDeclaration = pVarDeclaration <|> pFunDeclaration
 
 pVarDeclaration :: Parser AstDeclaration
-pVarDeclaration = AstVarDeclaration <$> pType <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
+pVarDeclaration = AstVarDeclaration <$> pType defaultBaseTypes <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
 
--- pFunDeclaration = undefined
+pFunDeclaration :: Parser AstDeclaration
+pFunDeclaration =
+  AstFunDeclaration <$> pReturnType <*> pIdentifier <* pSymbol "(" <* pSymbol ")"
+                    <* pSymbol "{" <* pSymbol "}"
 
-pType :: Parser AstType
-pType =
-      mkBaseTypeOrIdentifier <$> pIdentifier
-  <|> TupleType <$ pSymbol "(" <*> pType <* pSymbol "," <*> pType <* pSymbol ")"
-  <|> ListType <$ pSymbol "[" <*> pType <* pSymbol "]"
+pType :: [String] -> Parser AstType
+pType baseTypes =
+      mkBaseTypeOrIdentifier baseTypes <$> pIdentifier
+  <|> TupleType <$ pSymbol "(" <*> pType baseTypes <* pSymbol "," <*> pType baseTypes <* pSymbol ")"
+  <|> ListType <$ pSymbol "[" <*> pType baseTypes <* pSymbol "]"
 
-baseTypes :: [String]
-baseTypes = ["Int", "Bool"]
+pReturnType :: Parser AstType
+pReturnType = pType ("Void" : defaultBaseTypes)
 
-mkBaseTypeOrIdentifier :: String -> AstType
-mkBaseTypeOrIdentifier s =
+defaultBaseTypes :: [String]
+defaultBaseTypes = ["Int", "Bool"]
+
+mkBaseTypeOrIdentifier :: [String] -> String -> AstType
+mkBaseTypeOrIdentifier baseTypes s =
   if s `elem` baseTypes
     then BaseType s
     else PolymorphicType s
