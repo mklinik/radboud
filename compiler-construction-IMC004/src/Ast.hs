@@ -22,6 +22,7 @@ data AstExpr
 data AstStatement
   = AstReturn (Maybe AstExpr)
   | AstBlock [AstStatement]
+  | AstAssignment String AstExpr
 
 data AstFunctionArgument = AstFunctionArgument AstType String
 
@@ -34,12 +35,13 @@ instance Show AstDeclaration where
       ++ arguments
       ++ [")", "{"]
       ++ variables
+      ++ ["\n  "]
       ++ statements
       ++ ["}"]
     where
       arguments = intersperse ", " $ map show args
       variables = intersperse " " $ map show vars
-      statements = intersperse " " $ map show stmts
+      statements = intersperse "\n  " $ map show stmts
   show (AstVarDeclaration typ ident expr) = concat $ intersperse " " [show typ, "#" ++ ident, "=", show expr, ";"]
 
 instance Show AstType where
@@ -59,7 +61,8 @@ instance Show AstStatement where
   show (AstReturn mExpr) = "return " ++ (maybe "" show mExpr) ++ ";"
   show (AstBlock stmts) = "{ " ++ statements ++ "}"
     where
-      statements = concat $ intersperse " " $ map show stmts
+      statements = concat $ intersperse "\n  " $ map show stmts
+  show (AstAssignment ident val) = concat $ intersperse " " [ident, "=", show val, ";"]
 
 instance Show AstFunctionArgument where
   show (AstFunctionArgument typ ident) = concat $ intersperse " " [show typ, ident]

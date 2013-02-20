@@ -71,3 +71,11 @@ Int functionWithBlocks(Int x)
 		return True;
 	}
 }
+
+
+Int funWithAssignments(Int x)
+{
+  Int tmp = x;
+	x = x;
+	return x;
+}
