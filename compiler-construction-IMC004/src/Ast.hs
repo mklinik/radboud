@@ -25,7 +25,9 @@ instance Show AstProgram where
   show (AstProgram decls) = concat $ intersperse "\n" $ map show decls
 
 instance Show AstDeclaration where
-  show (AstFunDeclaration typ ident args) = concat $ intersperse " " [show typ, "#" ++ ident, "("] ++ map show args ++ [")", "{", "}"]
+  show (AstFunDeclaration typ ident args) = concat $ intersperse " " [show typ, "#" ++ ident, "("] ++ arguments ++ [")", "{", "}"]
+    where
+      arguments = intersperse ", " $ map show args
   show (AstVarDeclaration typ ident expr) = concat $ intersperse " " [show typ, "#" ++ ident, "=", show expr, ";"]
 
 instance Show AstType where

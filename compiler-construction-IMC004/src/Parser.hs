@@ -30,7 +30,7 @@ pFunDeclaration =
     <* pSymbol "{" <* pSymbol "}"
 
 pFunctionArguments :: Parser [AstFunctionArgument]
-pFunctionArguments = (:) <$> pFunctionArgument <*> pure []
+pFunctionArguments = (:) <$> pFunctionArgument <*> (pSymbol "," *> pFunctionArguments <|> pure [])
 
 pFunctionArgument :: Parser AstFunctionArgument
 pFunctionArgument = AstFunctionArgument <$> pType defaultBaseTypes <*> pIdentifier
