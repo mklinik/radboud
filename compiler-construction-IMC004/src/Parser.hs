@@ -31,7 +31,8 @@ pFunDeclaration =
 
 pStatement :: Parser AstStatement
 pStatement =
-  AstReturn <$ lexeme (PC.pToken "return") <*> opt (Just <$> pExpr) Nothing <* pSymbol ";"
+      AstReturn <$ lexeme (PC.pToken "return") <*> opt (Just <$> pExpr) Nothing <* pSymbol ";"
+  <|> AstBlock <$ pSymbol "{" <*> many pStatement <* pSymbol "}"
 
 pFunctionArguments :: Parser [AstFunctionArgument]
 pFunctionArguments = (:) <$> pFunctionArgument <*> (pSymbol "," *> pFunctionArguments <|> pure [])

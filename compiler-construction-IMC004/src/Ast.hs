@@ -21,6 +21,7 @@ data AstExpr
 
 data AstStatement
   = AstReturn (Maybe AstExpr)
+  | AstBlock [AstStatement]
 
 data AstFunctionArgument = AstFunctionArgument AstType String
 
@@ -56,6 +57,9 @@ instance Show AstExpr where
 
 instance Show AstStatement where
   show (AstReturn mExpr) = "return " ++ (maybe "" show mExpr) ++ ";"
+  show (AstBlock stmts) = "{ " ++ statements ++ "}"
+    where
+      statements = concat $ intersperse " " $ map show stmts
 
 instance Show AstFunctionArgument where
   show (AstFunctionArgument typ ident) = concat $ intersperse " " [show typ, ident]

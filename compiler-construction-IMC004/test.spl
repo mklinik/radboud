@@ -60,3 +60,14 @@ Int foobar(Int x, Bool y)
 	Bool tmp = True;
 	return tmp;
 }
+
+
+Int functionWithBlocks(Int x)
+{
+
+  { return 10; }
+	{ return;
+	  return;
+		return True;
+	}
+}
