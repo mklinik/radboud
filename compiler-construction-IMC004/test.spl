@@ -79,3 +79,15 @@ Int funWithAssignments(Int x)
 	x = x;
 	return x;
 }
+
+Int funWithWhileLoops(Int x)
+{
+  while(x)
+	  x = x;
+
+	while(y)
+	{
+	  y = y;
+		return y;
+	}
+}

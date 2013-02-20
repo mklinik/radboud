@@ -34,6 +34,7 @@ pStatement =
       AstReturn <$ lexeme (PC.pToken "return") <*> opt (Just <$> pExpr) Nothing <* pSymbol ";"
   <|> AstBlock <$ pSymbol "{" <*> many pStatement <* pSymbol "}"
   <|> AstAssignment <$> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
+  <|> AstWhile <$ lexeme (PC.pToken "while") <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement
 
 pFunctionArguments :: Parser [AstFunctionArgument]
 pFunctionArguments = (:) <$> pFunctionArgument <*> (pSymbol "," *> pFunctionArguments <|> pure [])

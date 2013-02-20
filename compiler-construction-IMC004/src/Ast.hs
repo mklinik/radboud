@@ -23,6 +23,7 @@ data AstStatement
   = AstReturn (Maybe AstExpr)
   | AstBlock [AstStatement]
   | AstAssignment String AstExpr
+  | AstWhile AstExpr AstStatement
 
 data AstFunctionArgument = AstFunctionArgument AstType String
 
@@ -63,6 +64,7 @@ instance Show AstStatement where
     where
       statements = concat $ intersperse "\n  " $ map show stmts
   show (AstAssignment ident val) = concat $ intersperse " " [ident, "=", show val, ";"]
+  show (AstWhile condition body) = concat $ intersperse " " ["while (", show condition, ")", show body]
 
 instance Show AstFunctionArgument where
   show (AstFunctionArgument typ ident) = concat $ intersperse " " [show typ, ident]
