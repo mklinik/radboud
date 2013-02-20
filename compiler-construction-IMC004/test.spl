@@ -43,4 +43,5 @@ Int i = 0;
 /**///
 Int x = 10;
 
-Int id() {}
+Int idInt(Int i) {}
+a id(a i) {}

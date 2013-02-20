@@ -8,7 +8,7 @@ data AstProgram = AstProgram [AstDeclaration]
 
 data AstDeclaration
   = AstVarDeclaration AstType String AstExpr
-  | AstFunDeclaration AstType String
+  | AstFunDeclaration AstType String [AstFunctionArgument]
 
 data AstType = BaseType String | TupleType AstType AstType | ListType AstType | PolymorphicType String
 
@@ -19,11 +19,13 @@ data AstExpr
   | AstTuple AstExpr AstExpr
   | AstEmptyList
 
+data AstFunctionArgument = AstFunctionArgument AstType String
+
 instance Show AstProgram where
   show (AstProgram decls) = concat $ intersperse "\n" $ map show decls
 
 instance Show AstDeclaration where
-  show (AstFunDeclaration typ ident) = concat $ intersperse " " [show typ, "#" ++ ident, "(", ")", "{", "}"]
+  show (AstFunDeclaration typ ident args) = concat $ intersperse " " [show typ, "#" ++ ident, "("] ++ map show args ++ [")", "{", "}"]
   show (AstVarDeclaration typ ident expr) = concat $ intersperse " " [show typ, "#" ++ ident, "=", show expr, ";"]
 
 instance Show AstType where
@@ -38,3 +40,6 @@ instance Show AstExpr where
   show (AstBoolean b) = "@" ++ show b
   show (AstTuple a b) = concat ["(", show a, ", ", show b, ")"]
   show (AstEmptyList) = "[]"
+
+instance Show AstFunctionArgument where
+  show (AstFunctionArgument typ ident) = concat $ intersperse " " [show typ, ident]

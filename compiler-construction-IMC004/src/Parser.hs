@@ -24,8 +24,16 @@ pVarDeclaration = AstVarDeclaration <$> pType defaultBaseTypes <*> pIdentifier <
 
 pFunDeclaration :: Parser AstDeclaration
 pFunDeclaration =
-  AstFunDeclaration <$> pReturnType <*> pIdentifier <* pSymbol "(" <* pSymbol ")"
-                    <* pSymbol "{" <* pSymbol "}"
+  AstFunDeclaration
+    <$> pReturnType <*> pIdentifier
+    <* pSymbol "(" <*> pFunctionArguments <* pSymbol ")"
+    <* pSymbol "{" <* pSymbol "}"
+
+pFunctionArguments :: Parser [AstFunctionArgument]
+pFunctionArguments = (:) <$> pFunctionArgument <*> pure []
+
+pFunctionArgument :: Parser AstFunctionArgument
+pFunctionArgument = AstFunctionArgument <$> pType defaultBaseTypes <*> pIdentifier
 
 pType :: [String] -> Parser AstType
 pType baseTypes =
