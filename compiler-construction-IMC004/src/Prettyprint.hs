@@ -23,10 +23,11 @@ instance Prettyprint AstProgram where
 instance Prettyprint AstDeclaration where
   pp level (AstVarDeclaration typ ident expr) = \s -> replicate level ' ' ++ pp level typ " " ++ ident ++ " = " ++ pp level expr ";\n" ++ s
   pp level (AstFunDeclaration typ ident args decls stmts) = \s ->
-      pp level typ " " ++ ident ++ "(" ++ arguments ++ ")" ++ "\n{\n" ++ declarations ++ "}\n" ++ s
+      pp level typ " " ++ ident ++ "(" ++ arguments ++ ")" ++ "\n{\n" ++ declarations ++ statements ++ "}\n" ++ s
     where
       arguments = (foldl (.) id $ intersperse (", " ++) $ map (pp level) args) ""
       declarations = (foldl (.) id $ map (indent level) decls) ""
+      statements = (foldl (.) id $ map (indent level) stmts) ""
 
 
 instance Prettyprint AstType where
@@ -44,3 +45,15 @@ instance Prettyprint AstExpr where
   pp _ (AstBoolean b) = (show b ++)
   pp level (AstTuple a b) = \s -> "(" ++ pp level a ", " ++ pp level b ")" ++ s
   pp level (AstEmptyList) = ("[]" ++)
+
+instance Prettyprint AstStatement where
+  pp level (AstReturn mExpr) = \s -> replicate level ' ' ++ "return" ++ maybe ";\n" (\e -> " " ++ pp level e ";\n") mExpr ++ s
+  pp level (AstBlock stmts) = \s -> replicate level ' ' ++ "{\n" ++ statements ++ replicate level ' ' ++ "}\n" ++ s
+    where
+      statements = (foldl (.) id $ map (indent level) stmts) ""
+  pp level (AstAssignment ident expr) = \s -> replicate level ' ' ++ ident ++ " = " ++ pp level expr ";\n" ++ s
+  pp level (AstWhile condition body) = \s -> replicate level ' ' ++ "while( " ++ pp level condition " )\n" ++ body_ ++ s
+    where
+      body_ = case body of
+        AstBlock _ -> pp level body ""     -- Blocks don't need to be indented ...
+        _          -> indent level body "" -- ... but single statements do.
