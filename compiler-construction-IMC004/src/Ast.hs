@@ -5,12 +5,15 @@ module Ast where
 import Data.List (intersperse)
 
 data AstProgram = AstProgram [AstDeclaration]
+  deriving (Eq)
 
 data AstDeclaration
   = AstVarDeclaration AstType String AstExpr
   | AstFunDeclaration AstType String [AstFunctionArgument] [AstDeclaration] [AstStatement]
+  deriving (Eq)
 
 data AstType = BaseType String | TupleType AstType AstType | ListType AstType | PolymorphicType String
+  deriving (Eq)
 
 data AstExpr
   = AstIdentifier String
@@ -18,14 +21,17 @@ data AstExpr
   | AstBoolean Bool
   | AstTuple AstExpr AstExpr
   | AstEmptyList
+  deriving (Eq)
 
 data AstStatement
   = AstReturn (Maybe AstExpr)
   | AstBlock [AstStatement]
   | AstAssignment String AstExpr
   | AstWhile AstExpr AstStatement
+  deriving (Eq)
 
 data AstFunctionArgument = AstFunctionArgument AstType String
+  deriving (Eq)
 
 instance Show AstProgram where
   show (AstProgram decls) = concat $ intersperse "\n" $ map show decls

@@ -5,7 +5,7 @@ import Data.List (intersperse)
 import Ast
 
 prettyprint :: Prettyprint a => a -> String
-prettyprint a = pp 0 a "<<EOF>>"
+prettyprint a = pp 0 a ""
 
 indent :: Prettyprint a => Int -> a -> (String -> String)
 indent level a = pp (level + 2) a
@@ -17,7 +17,7 @@ class Prettyprint a where
   pp :: Int -> a -> (String -> String)
 
 instance Prettyprint AstProgram where
-  pp level (AstProgram []) = id
+  pp _ (AstProgram []) = id
   pp level (AstProgram (d:decls)) = \s -> pp level d "\n" ++ pp level (AstProgram decls) s
 
 instance Prettyprint AstDeclaration where
@@ -44,7 +44,7 @@ instance Prettyprint AstExpr where
   pp _ (AstInteger i) = (show i ++)
   pp _ (AstBoolean b) = (show b ++)
   pp level (AstTuple a b) = \s -> "(" ++ pp level a ", " ++ pp level b ")" ++ s
-  pp level (AstEmptyList) = ("[]" ++)
+  pp _ (AstEmptyList) = ("[]" ++)
 
 instance Prettyprint AstStatement where
   pp level (AstReturn mExpr) = \s -> replicate level ' ' ++ "return" ++ maybe ";\n" (\e -> " " ++ pp level e ";\n") mExpr ++ s

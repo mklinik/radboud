@@ -9,7 +9,7 @@ import System.Exit
 programName :: String
 programName = "spl"
 
-data Mode = Help | Prettyprint
+data Mode = Help | Prettyprint | CheckParser
   deriving (Show)
 
 data Options = Options
@@ -35,6 +35,7 @@ options =
   [ Option []     ["help"]    (NoArg  (\  opts -> opts { mode = Help }))               "display this help and exit"
   , Option ['i']  ["input"]   (ReqArg (\s opts -> opts { inputFilename = s }) "FILE")  "file to read input from;\nuse \"--\" to read from stdin;\nwhen unspecified, defaults to stdin"
   , Option ['o']  ["output"]  (ReqArg (\s opts -> opts { outputFilename = s }) "FILE") "file to write output to;\nuse \"--\" to write to stdout;\nwhen unspecified, defaults to stdout"
+  , Option []  ["check"]      (NoArg  (\  opts -> opts { mode = CheckParser }))              "parse, prettyprint, parse and compare ASTs"
   ]
 
 get :: [String] -> IO Options

@@ -24,6 +24,12 @@ run opts = do
 
     Options.Help -> Options.printHelp
 
+    Options.CheckParser -> do
+      input <- hGetContents (Options.input opts)
+      let ast1 = runParser (Options.inputFilename opts) pProgram input
+      let ast2 = runParser (Options.inputFilename opts) pProgram $ prettyprint ast1
+      print (ast1 == ast2)
+
   cleanUp opts
 
 cleanUp :: Options -> IO ()
