@@ -103,7 +103,28 @@ Int funWithIfThenElse(Int x)
 	if(True)
 	  if(True)
 		  if(True)
+		  if(True)
+		  if(True)
+		  if(True)
+		  if(True)
+		  if(True)
+		  if(True)
+		  if(True)
+		  if(True)
+		  if(True)
+		  if(True)
 			  x = x;
 
 			else y = y; // dang!
+
+	if(True)
+	{
+	  x = x;
+		y = y;
+		z = z;
+		return foobar;
+	}
+	else
+	{
+	}
 }
