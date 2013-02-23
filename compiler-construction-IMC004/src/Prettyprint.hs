@@ -57,3 +57,5 @@ instance Prettyprint AstStatement where
       body_ = case body of
         AstBlock _ -> pp level body ""     -- Blocks don't need to be indented ...
         _          -> indent level body "" -- ... but single statements do.
+  pp level (AstIfThenElse condition thenStmt elseStmt) = \s -> replicate level ' ' ++ "if( " ++ pp level condition " )\n" ++
+      indent level thenStmt "" ++ replicate level ' ' ++ "else\n" ++ indent level elseStmt "" ++ s
