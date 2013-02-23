@@ -6,7 +6,6 @@ module Parser where
 import Text.ParserCombinators.UU
 import qualified Text.ParserCombinators.UU.BasicInstances as PC
 import           Text.ParserCombinators.UU.BasicInstances (Parser)
--- import Text.ParserCombinators.UU.Derived
 import Text.ParserCombinators.UU.Utils hiding (runParser, pInteger, lexeme, pSymbol)
 import Text.Printf (printf)
 import Data.Char (ord)
