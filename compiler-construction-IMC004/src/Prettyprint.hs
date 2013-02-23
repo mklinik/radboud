@@ -10,9 +10,6 @@ prettyprint a = pp 0 a ""
 indent :: Prettyprint a => Int -> a -> (String -> String)
 indent level a = pp (level + 2) a
 
-unindent :: Prettyprint a => Int -> a -> (String -> String)
-unindent level a = pp (level - 2) a
-
 class Prettyprint a where
   pp :: Int -> a -> (String -> String)
 
