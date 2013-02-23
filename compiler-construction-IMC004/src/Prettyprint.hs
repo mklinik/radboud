@@ -49,10 +49,10 @@ instance Prettyprint AstStatement where
     where
       statements = (foldl (.) id $ map (indent level) stmts) ""
   pp level (AstAssignment ident expr) = \s -> replicate level ' ' ++ ident ++ " = " ++ pp level expr ";\n" ++ s
-  pp level (AstWhile condition body) = \s -> replicate level ' ' ++ "while( " ++ pp level condition " )\n" ++ body_ ++ s
-    where
-      body_ = case body of
-        AstBlock _ -> pp level body ""     -- Blocks don't need to be indented ...
-        _          -> indent level body "" -- ... but single statements do.
+  pp level (AstWhile condition body) = \s -> replicate level ' ' ++ "while( " ++ pp level condition " )\n" ++ indent_ level body "" ++ s
   pp level (AstIfThenElse condition thenStmt elseStmt) = \s -> replicate level ' ' ++ "if( " ++ pp level condition " )\n" ++
-      indent level thenStmt "" ++ replicate level ' ' ++ "else\n" ++ indent level elseStmt "" ++ s
+      indent_ level thenStmt "" ++ replicate level ' ' ++ "else\n" ++ indent_ level elseStmt "" ++ s
+
+indent_ :: Int -> AstStatement -> (String -> String)
+indent_ level a@(AstBlock _) = pp level a -- Blocks don't need to be indented ...
+indent_ level a = indent level a          -- ... but everything else does.
