@@ -91,3 +91,19 @@ Int funWithWhileLoops(Int x)
 		return y;
 	}
 }
+
+Int funWithIfThenElse(Int x)
+{
+  if(True)
+	  x = x;
+	else
+	  y = y;
+
+
+	if(True)
+	  if(True)
+		  if(True)
+			  x = x;
+
+			else y = y; // dang!
+}

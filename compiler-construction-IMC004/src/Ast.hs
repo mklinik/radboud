@@ -28,6 +28,7 @@ data AstStatement
   | AstBlock [AstStatement]
   | AstAssignment String AstExpr
   | AstWhile AstExpr AstStatement
+  | AstIfThenElse AstExpr AstStatement AstStatement
   deriving (Eq)
 
 data AstFunctionArgument = AstFunctionArgument AstType String
@@ -71,6 +72,7 @@ instance Show AstStatement where
       statements = concat $ intersperse "\n  " $ map show stmts
   show (AstAssignment ident val) = concat $ intersperse " " [ident, "=", show val, ";"]
   show (AstWhile condition body) = concat $ intersperse " " ["while (", show condition, ")", show body]
+  show (AstIfThenElse condition thenStmt elseStmt) = concat $ intersperse " " ["if (", show condition, ")", show thenStmt, "else", show elseStmt]
 
 instance Show AstFunctionArgument where
   show (AstFunctionArgument typ ident) = concat $ intersperse " " [show typ, ident]

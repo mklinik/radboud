@@ -22,6 +22,11 @@ run opts = do
       let output = prettyprint $ runParser (Options.inputFilename opts) pProgram input
       hPutStrLn (Options.output opts) output
 
+    Options.Show -> do
+      input <- hGetContents (Options.input opts)
+      let output = show $ runParser (Options.inputFilename opts) pProgram input
+      hPutStrLn (Options.output opts) output
+
     Options.Help -> Options.printHelp
 
     Options.CheckParser -> do
