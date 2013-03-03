@@ -6,7 +6,7 @@ module Parser where
 import Text.ParserCombinators.UU
 import qualified Text.ParserCombinators.UU.BasicInstances as PC
 import           Text.ParserCombinators.UU.BasicInstances (Parser)
-import Text.ParserCombinators.UU.Utils hiding (runParser, pInteger, lexeme, pSymbol)
+import Text.ParserCombinators.UU.Utils hiding (runParser, pNatural, lexeme, pSymbol)
 import Text.Printf (printf)
 import Data.Char (ord)
 
@@ -83,13 +83,20 @@ pExpr = pChainr (mkOp ":") $ foldr pChainl pBaseExpr pBinOps
   where
     pBinOps = map (foldr (<|>) pFail) $ map (map mkOp) binOps
 
-pBaseExpr:: Parser AstExpr
+pBaseExpr :: Parser AstExpr
 pBaseExpr =
-      AstInteger <$> pInteger
+      AstInteger <$> pNatural
   <|> mkBoolOrIdentifier <$> pIdentifier
   <|> pSymbol "(" *> pExpr <* pSymbol ")"
   <|> AstTuple <$ pSymbol "(" <*> pExpr <* pSymbol "," <*> pExpr <* pSymbol ")"
   <|> AstEmptyList <$ pSymbol "[" <* pSymbol "]"
+  <|> pSymbol "-" *> pNegatedExpression
+  <|> AstUnaryOp <$> pSymbol "!" <*> pExpr
+
+pNegatedExpression :: Parser AstExpr
+pNegatedExpression =
+       AstInteger . negate <$> pNatural
+  <<|> AstUnaryOp "-" <$> pExpr
 
 booleanConstants :: [String]
 booleanConstants = ["True", "False"]
@@ -100,8 +107,8 @@ mkBoolOrIdentifier s =
     then AstBoolean (s == "True")
     else AstIdentifier s
 
-pInteger :: Parser Integer
-pInteger = lexeme $ opt (negate <$ pSymbol "-") id <*>
+pNatural :: Parser Integer
+pNatural = lexeme $
   pChainl (pure $ \num digit -> num * 10 + digit) ((\c -> toInteger (ord c - ord '0')) <$> pDigit)
 
 pSymbol :: String -> Parser String

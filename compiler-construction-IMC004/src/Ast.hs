@@ -2,8 +2,6 @@
 -- Data structures which form the Abstract Syntax Tree
 module Ast where
 
-import Data.List (intersperse)
-
 data AstProgram = AstProgram [AstDeclaration]
   deriving (Show, Eq)
 
@@ -22,6 +20,7 @@ data AstExpr
   | AstTuple AstExpr AstExpr
   | AstEmptyList
   | AstBinOp String AstExpr AstExpr
+  | AstUnaryOp String AstExpr
   deriving (Show, Eq)
 
 data AstStatement

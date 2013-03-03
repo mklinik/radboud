@@ -72,6 +72,27 @@ specs = do
                      (AstBinOp ":" (AstBinOp "*" (AstInteger 7) (AstInteger 4))
                                    AstEmptyList)
 
+    it "parses '-10' as negative integer constant" $
+      parse pExpr "- 10" `shouldBe` AstInteger (-10)
+    it "parses 5 - 10 as subtraction" $
+      parse pExpr "5 - 10" `shouldBe` AstBinOp "-" (AstInteger 5) (AstInteger 10)
+    it "parses '5 - - 10' as subtraction with negative integer constant" $
+      parse pExpr "5 - - 10" `shouldBe` AstBinOp "-" (AstInteger 5) (AstInteger (-10))
+    it "parses '5--10' as subtraction with negative integer constant" $
+      parse pExpr "5--10" `shouldBe` AstBinOp "-" (AstInteger 5) (AstInteger (-10))
+
+    it "parses unary boolean negation" $
+      parse pExpr "!True" `shouldBe` AstUnaryOp "!" (AstBoolean True)
+
+    it "parses unary arithmetic negation" $
+      parse pExpr "- a" `shouldBe` AstUnaryOp "-" (AstIdentifier "a")
+
+    it "parses --a as double unary negation" $
+      parse pExpr "--a" `shouldBe` AstUnaryOp "-" (AstUnaryOp "-" (AstIdentifier "a"))
+
+    it "parses --1 as unary negation of a negative number" $
+      parse pExpr "--1" `shouldBe` AstUnaryOp "-" (AstInteger (-1))
+
 
 main :: IO ()
 main = hspec specs
