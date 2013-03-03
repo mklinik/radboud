@@ -64,6 +64,9 @@ mkBaseTypeOrIdentifier baseTypes s =
 pIdentifier :: Parser String
 pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_'))
 
+mkOp :: String -> Parser (AstExpr -> AstExpr -> AstExpr)
+mkOp op = AstBinOp <$> pSymbol op
+
 -- Precedence levels are the same as in C (except for `cons`, of course)
 binOps :: [[String]]
 binOps =
@@ -71,15 +74,14 @@ binOps =
   , [ "&&" ]
   , [ "==" , "!=" ]
   , [ "<" , ">" , "<=" , ">=" ]
-  , [ ":" ]
   , [ "+" , "-" ]
   , [ "*" , "/", "%" ]
   ]
 
 pExpr :: Parser AstExpr
-pExpr = foldr pChainl pBaseExpr pBinOps
+pExpr = pChainr (mkOp ":") $ foldr pChainl pBaseExpr pBinOps
   where
-    pBinOps = map (foldr (<|>) pFail) $ map (map (\op -> AstBinOp <$> pSymbol op)) binOps
+    pBinOps = map (foldr (<|>) pFail) $ map (map mkOp) binOps
 
 pBaseExpr:: Parser AstExpr
 pBaseExpr =

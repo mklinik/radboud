@@ -60,6 +60,18 @@ specs = do
     it "parses (:) right-associative" $
       parse pExpr "1 : 2 : []" `shouldBe` AstBinOp ":" (AstInteger 1) (AstBinOp ":" (AstInteger 2) (AstEmptyList))
 
+    it "parses (:) with lower precedence than boolean operators" $
+      parse pExpr "5 < 3 : 7 || 4 : []" `shouldBe`
+        AstBinOp ":" (AstBinOp "<" (AstInteger 5) (AstInteger 3))
+                     (AstBinOp ":" (AstBinOp "||" (AstInteger 7) (AstInteger 4))
+                                   AstEmptyList)
+
+    it "parses (:) with lower precedence than arithmetic operators" $
+      parse pExpr "5 + 3 : 7 * 4 : []" `shouldBe`
+        AstBinOp ":" (AstBinOp "+" (AstInteger 5) (AstInteger 3))
+                     (AstBinOp ":" (AstBinOp "*" (AstInteger 7) (AstInteger 4))
+                                   AstEmptyList)
+
 
 main :: IO ()
 main = hspec specs
