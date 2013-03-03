@@ -19,3 +19,19 @@ executable spl
 
   main-is:
     Main.hs
+
+test-suite spec
+  default-language:
+    Haskell2010
+  type:
+    exitcode-stdio-1.0
+  main-is:
+    Test.hs
+  ghc-options:
+    -Wall
+  hs-source-dirs:
+    src,test
+  build-depends:
+      base
+    , hspec
+    , uu-parsinglib
