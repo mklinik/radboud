@@ -36,6 +36,7 @@ pStatement =
   <|> AstWhile <$ pSymbol "while" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement
   <|> AstIfThenElse <$ pSymbol "if" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement <*>
         (pSymbol "else" *> pStatement  <<|> pure (AstBlock []))
+  <|> AstFunctionCallStmt <$> pFunctionCall
 
 pFunctionArguments :: Parser [AstFunctionArgument]
 pFunctionArguments = (:) <$> pFunctionArgument <*> opt (pSymbol "," *> pFunctionArguments) []
@@ -92,7 +93,10 @@ pBaseExpr =
   <|> AstEmptyList <$ pSymbol "[" <* pSymbol "]"
   <|> pSymbol "-" *> pNegatedExpression
   <|> AstUnaryOp <$> pSymbol "!" <*> pExpr
-  <|> AstFunctionCall <$> pIdentifier <* pSymbol "(" <*> opt pActualParameters [] <* pSymbol ")"
+  <|> AstFunctionCallExpr <$> pFunctionCall
+
+pFunctionCall :: Parser AstFunctionCall
+pFunctionCall = AstFunctionCall <$> pIdentifier <* pSymbol "(" <*> opt pActualParameters [] <* pSymbol ")"
 
 pActualParameters :: Parser [AstExpr]
 pActualParameters = (:) <$> pExpr <*> opt (pSymbol "," *> pActualParameters) []

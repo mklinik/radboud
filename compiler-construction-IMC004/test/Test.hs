@@ -109,11 +109,11 @@ specs = do
 
     describe "various forms of function calls" $ do
       it "foo()" $
-        parse pExpr "foo()" `shouldBe` AstFunctionCall "foo" []
+        parse pExpr "foo()" `shouldBe` (AstFunctionCallExpr $ AstFunctionCall "foo" [])
       it "foo(1)" $
-        parse pExpr "foo(1)" `shouldBe` AstFunctionCall "foo" [AstInteger 1]
+        parse pExpr "foo(1)" `shouldBe` (AstFunctionCallExpr $ AstFunctionCall "foo" [AstInteger 1])
       it "foo(1, True, bar())" $
-        parse pExpr "foo(1, True, bar())" `shouldBe` AstFunctionCall "foo" [AstInteger 1, AstBoolean True, AstFunctionCall "bar" []]
+        parse pExpr "foo(1, True, bar())" `shouldBe` (AstFunctionCallExpr $ AstFunctionCall "foo" [AstInteger 1, AstBoolean True, AstFunctionCallExpr (AstFunctionCall "bar" [])])
 
 
   describe "pFunDeclaration" $ do
@@ -147,6 +147,24 @@ specs = do
     specTypeParser $ parse pReturnType
     it "Void" $ parse pReturnType "Void" `shouldBe` BaseType "Void"
 
+  describe "pVarDeclaration" $ do
+    let p = parse pVarDeclaration
+    it "integer variable" $ p "Int x = 5;" `shouldBe` AstVarDeclaration (BaseType "Int") "x" (AstInteger 5)
+    -- it "integer variable" $ p "Int x = 5" `shouldThrow` anyException
+
+  describe "pStatement" $ do
+    let p = parse pStatement
+    it "return;" $ p "return;" `shouldBe` AstReturn Nothing
+    it "return 10;" $ p "return 10;" `shouldBe` AstReturn (Just (AstInteger 10))
+    it "if-then-else" $ p "if(True) return; else return;" `shouldBe`
+      AstIfThenElse (AstBoolean True)
+                    (AstReturn Nothing)
+                    (AstReturn Nothing)
+    it "while" $ p "while(True) return;" `shouldBe` AstWhile (AstBoolean True) (AstReturn Nothing)
+    it "assignment" $ p "x = 10;" `shouldBe` AstAssignment "x" (AstInteger 10)
+    it "function call" $ p "foo()" `shouldBe` AstFunctionCallStmt (AstFunctionCall "foo" [])
+
+specTypeParser :: (String -> AstType) -> Spec
 specTypeParser p = do
   it "polymorphic type" $ p "x" `shouldBe` PolymorphicType "x"
   it "base type Int" $ p "Int" `shouldBe` BaseType "Int"

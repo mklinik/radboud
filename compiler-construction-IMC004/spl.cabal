@@ -35,3 +35,4 @@ test-suite spec
       base
     , hspec
     , uu-parsinglib
+    , QuickCheck

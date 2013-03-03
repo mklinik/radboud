@@ -21,7 +21,7 @@ data AstExpr
   | AstEmptyList
   | AstBinOp String AstExpr AstExpr
   | AstUnaryOp String AstExpr
-  | AstFunctionCall String [AstExpr]
+  | AstFunctionCallExpr AstFunctionCall
   deriving (Show, Eq)
 
 data AstStatement
@@ -30,6 +30,10 @@ data AstStatement
   | AstAssignment String AstExpr
   | AstWhile AstExpr AstStatement
   | AstIfThenElse AstExpr AstStatement AstStatement
+  | AstFunctionCallStmt AstFunctionCall
+  deriving (Show, Eq)
+
+data AstFunctionCall = AstFunctionCall String [AstExpr]
   deriving (Show, Eq)
 
 data AstFunctionArgument = AstFunctionArgument AstType String
