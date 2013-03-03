@@ -163,6 +163,8 @@ specs = do
     it "while" $ p "while(True) return;" `shouldBe` AstWhile (AstBoolean True) (AstReturn Nothing)
     it "assignment" $ p "x = 10;" `shouldBe` AstAssignment "x" (AstInteger 10)
     it "function call" $ p "foo()" `shouldBe` AstFunctionCallStmt (AstFunctionCall "foo" [])
+    it "empty statement block" $ p "{}" `shouldBe` AstBlock []
+    it "statement block with return " $ p "{return;}" `shouldBe` AstBlock [AstReturn Nothing]
 
 specTypeParser :: (String -> AstType) -> Spec
 specTypeParser p = do
