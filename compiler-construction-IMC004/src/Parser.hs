@@ -64,10 +64,6 @@ mkBaseTypeOrIdentifier baseTypes s =
 pIdentifier :: Parser String
 pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_'))
 
-applyAll :: a -> [a -> a] -> a
-applyAll x [] = x
-applyAll x (f:fs) = applyAll (f x) fs
-
 -- Precedence levels are the same as in C (except for `cons`, of course)
 binOps :: [[String]]
 binOps =

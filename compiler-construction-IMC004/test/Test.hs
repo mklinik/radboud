@@ -57,6 +57,9 @@ specs = do
                                    (AstInteger 3))
                      (AstInteger 4)
 
+    it "parses (:) right-associative" $
+      parse pExpr "1 : 2 : []" `shouldBe` AstBinOp ":" (AstInteger 1) (AstBinOp ":" (AstInteger 2) (AstEmptyList))
+
 
 main :: IO ()
 main = hspec specs
