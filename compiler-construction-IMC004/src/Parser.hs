@@ -92,6 +92,10 @@ pBaseExpr =
   <|> AstEmptyList <$ pSymbol "[" <* pSymbol "]"
   <|> pSymbol "-" *> pNegatedExpression
   <|> AstUnaryOp <$> pSymbol "!" <*> pExpr
+  <|> AstFunctionCall <$> pIdentifier <* pSymbol "(" <*> opt pActualParameters [] <* pSymbol ")"
+
+pActualParameters :: Parser [AstExpr]
+pActualParameters = (:) <$> pExpr <*> opt (pSymbol "," *> pActualParameters) []
 
 pNegatedExpression :: Parser AstExpr
 pNegatedExpression =

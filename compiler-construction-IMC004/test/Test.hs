@@ -99,14 +99,22 @@ specs = do
       parse pExpr "--1" `shouldBe` AstUnaryOp "-" (AstInteger (-1))
 
     describe "parenthesized expressions" $ do
-      (it "(1)" $
-        parse pExpr "(1)" `shouldBe` AstInteger 1)
+      it "(1)" $
+        parse pExpr "(1)" `shouldBe` AstInteger 1
 
       it "1 + (2 + 3)" $
         parse pExpr "1 + (2 + 3)" `shouldBe` AstBinOp "+" (AstInteger 1) (AstBinOp "+" (AstInteger 2) (AstInteger 3))
 
       it "1 * (2 + 3)" $
         parse pExpr "1 * (2 + 3)" `shouldBe` AstBinOp "*" (AstInteger 1) (AstBinOp "+" (AstInteger 2) (AstInteger 3))
+
+    describe "various forms of function calls" $ do
+      it "foo()" $
+        parse pExpr "foo()" `shouldBe` AstFunctionCall "foo" []
+      it "foo(1)" $
+        parse pExpr "foo(1)" `shouldBe` AstFunctionCall "foo" [AstInteger 1]
+      it "foo(1, True, bar())" $
+        parse pExpr "foo(1, True, bar())" `shouldBe` AstFunctionCall "foo" [AstInteger 1, AstBoolean True, AstFunctionCall "bar" []]
 
 
 main :: IO ()

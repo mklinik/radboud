@@ -21,6 +21,7 @@ data AstExpr
   | AstEmptyList
   | AstBinOp String AstExpr AstExpr
   | AstUnaryOp String AstExpr
+  | AstFunctionCall String [AstExpr]
   deriving (Show, Eq)
 
 data AstStatement
