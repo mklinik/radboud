@@ -64,8 +64,16 @@ mkBaseTypeOrIdentifier baseTypes s =
 pIdentifier :: Parser String
 pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_'))
 
-pExpr :: Parser AstExpr
-pExpr =
+applyAll :: a -> [a -> a] -> a
+applyAll x [] = x
+applyAll x (f:fs) = applyAll (f x) fs
+
+pExpr = applyAll <$> pTerm <*> pMany ((\op r l -> AstBinOp op l r) <$> pSymbol "+" <*> pTerm)
+
+pTerm = applyAll <$> pFooo <*> pMany ((\op r l -> AstBinOp op l r) <$> pSymbol "*" <*> pFooo)
+
+pFooo :: Parser AstExpr
+pFooo =
       AstInteger <$> pInteger
   <|> mkBoolOrIdentifier <$> pIdentifier
   <|> pSymbol "(" *> pExpr <* pSymbol ")"

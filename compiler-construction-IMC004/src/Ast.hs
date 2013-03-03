@@ -21,6 +21,7 @@ data AstExpr
   | AstBoolean Bool
   | AstTuple AstExpr AstExpr
   | AstEmptyList
+  | AstBinOp String AstExpr AstExpr
   deriving (Show, Eq)
 
 data AstStatement

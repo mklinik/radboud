@@ -42,6 +42,7 @@ instance Prettyprint AstExpr where
   pp _ (AstBoolean b) = (show b ++)
   pp level (AstTuple a b) = \s -> "(" ++ pp level a ", " ++ pp level b ")" ++ s
   pp _ (AstEmptyList) = ("[]" ++)
+  pp level (AstBinOp op l r) = \s -> "(" ++ pp level l (" " ++ op ++ " ") ++ pp level r ")" ++ s
 
 instance Prettyprint AstStatement where
   pp level (AstReturn mExpr) = \s -> replicate level ' ' ++ "return" ++ maybe ";\n" (\e -> " " ++ pp level e ";\n") mExpr ++ s
