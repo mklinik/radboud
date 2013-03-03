@@ -15,7 +15,6 @@ parse = runParser ""
 specs :: Spec
 specs = do
   describe "pExpr" $ do
-  describe "parses" $ do
     it "various forms of identifiers" $
       property $ forAll (elements ["a", "a_", "a10", "a_", "TCP_IP_Connection", "Truee"]) $
         \i -> parse pExpr i == AstIdentifier i
@@ -116,6 +115,7 @@ specs = do
       it "foo(1, True, bar())" $
         parse pExpr "foo(1, True, bar())" `shouldBe` AstFunctionCall "foo" [AstInteger 1, AstBoolean True, AstFunctionCall "bar" []]
 
+
   describe "pFunDeclaration" $ do
     it "function without formal parameters" $
       parse pFunDeclaration "Void foo() { return; }" `shouldBe`
@@ -140,6 +140,20 @@ specs = do
           []
           [AstReturn (Just (AstIdentifier "a"))]
 
+  describe "pType" $ do
+    specTypeParser $ parse (pType defaultBaseTypes)
+
+  describe "pReturnType" $ do
+    specTypeParser $ parse pReturnType
+    it "Void" $ parse pReturnType "Void" `shouldBe` BaseType "Void"
+
+specTypeParser p = do
+  it "polymorphic type" $ p "x" `shouldBe` PolymorphicType "x"
+  it "base type Int" $ p "Int" `shouldBe` BaseType "Int"
+  it "base type Bool" $ p "Bool" `shouldBe` BaseType "Bool"
+  it "tuple type" $ p "(Int, Bool)" `shouldBe` TupleType (BaseType "Int") (BaseType "Bool")
+  it "list type" $ p "[Int]" `shouldBe` ListType (BaseType "Int")
+  it "polymorphic list type" $ p "[a]" `shouldBe` ListType (PolymorphicType "a")
 
 main :: IO ()
 main = hspec specs
