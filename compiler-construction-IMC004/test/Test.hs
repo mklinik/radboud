@@ -116,6 +116,30 @@ specs = do
       it "foo(1, True, bar())" $
         parse pExpr "foo(1, True, bar())" `shouldBe` AstFunctionCall "foo" [AstInteger 1, AstBoolean True, AstFunctionCall "bar" []]
 
+  describe "pFunDeclaration" $ do
+    it "function without formal parameters" $
+      parse pFunDeclaration "Void foo() { return; }" `shouldBe`
+        AstFunDeclaration (BaseType "Void") "foo" [] [] [AstReturn Nothing]
+    it "function with one formal parameters" $
+      parse pFunDeclaration "Void foo(Int x) { return; }" `shouldBe`
+        AstFunDeclaration
+          (BaseType "Void")
+          "foo"
+          [AstFunctionArgument (BaseType "Int") "x"]
+          []
+          [AstReturn Nothing]
+    it "function with three formal parameters and a return value" $
+      parse pFunDeclaration "Void foo(Int x, a y, Bool z) { return a; }" `shouldBe`
+        AstFunDeclaration
+          (BaseType "Void")
+          "foo"
+          [ AstFunctionArgument (BaseType "Int") "x"
+          , AstFunctionArgument (PolymorphicType "a") "y"
+          , AstFunctionArgument (BaseType "Bool") "z"
+          ]
+          []
+          [AstReturn (Just (AstIdentifier "a"))]
+
 
 main :: IO ()
 main = hspec specs

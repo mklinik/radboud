@@ -25,7 +25,7 @@ pFunDeclaration :: Parser AstDeclaration
 pFunDeclaration =
   AstFunDeclaration
     <$> pReturnType <*> pIdentifier
-    <* pSymbol "(" <*> pFunctionArguments <* pSymbol ")"
+    <* pSymbol "(" <*> opt pFunctionArguments [] <* pSymbol ")"
     <* pSymbol "{" <*> many pVarDeclaration <*> some pStatement <* pSymbol "}"
 
 pStatement :: Parser AstStatement
@@ -38,7 +38,7 @@ pStatement =
         (pSymbol "else" *> pStatement  <<|> pure (AstBlock []))
 
 pFunctionArguments :: Parser [AstFunctionArgument]
-pFunctionArguments = (:) <$> pFunctionArgument <*> (pSymbol "," *> pFunctionArguments <|> pure [])
+pFunctionArguments = (:) <$> pFunctionArgument <*> opt (pSymbol "," *> pFunctionArguments) []
 
 pFunctionArgument :: Parser AstFunctionArgument
 pFunctionArgument = AstFunctionArgument <$> pType defaultBaseTypes <*> pIdentifier
