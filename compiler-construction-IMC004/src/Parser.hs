@@ -68,12 +68,25 @@ applyAll :: a -> [a -> a] -> a
 applyAll x [] = x
 applyAll x (f:fs) = applyAll (f x) fs
 
-pExpr = applyAll <$> pTerm <*> pMany ((\op r l -> AstBinOp op l r) <$> pSymbol "+" <*> pTerm)
+-- Precedence levels are the same as in C (except for `cons`, of course)
+binOps :: [[String]]
+binOps =
+  [ [ "||" ]
+  , [ "&&" ]
+  , [ "==" , "!=" ]
+  , [ "<" , ">" , "<=" , ">=" ]
+  , [ "%" , "+" , "-" ]
+  , [ "*" , "/" ]
+  , [ ":" ]
+  ]
 
-pTerm = applyAll <$> pFooo <*> pMany ((\op r l -> AstBinOp op l r) <$> pSymbol "*" <*> pFooo)
+pExpr :: Parser AstExpr
+pExpr = foldr pChainl pBaseExpr pBinOps
+  where
+    pBinOps = map (foldr (<|>) pFail) $ map (map (\op -> AstBinOp <$> pSymbol op)) binOps
 
-pFooo :: Parser AstExpr
-pFooo =
+pBaseExpr:: Parser AstExpr
+pBaseExpr =
       AstInteger <$> pInteger
   <|> mkBoolOrIdentifier <$> pIdentifier
   <|> pSymbol "(" *> pExpr <* pSymbol ")"
