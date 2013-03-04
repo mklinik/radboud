@@ -57,8 +57,8 @@ a const(a x, b y) {return x;}
 Int foobar(Int x, Bool y)
 {
   Int tmp = 0;
-	Bool tmp = True;
-	return tmp;
+  Bool tmp = True;
+  return tmp;
 }
 
 
@@ -66,65 +66,71 @@ Int functionWithBlocks(Int x)
 {
 
   { return 10; }
-	{ return;
-	  return;
-		return True;
-	}
+  { return;
+    return;
+    return True;
+  }
 }
 
 
 Int funWithAssignments(Int x)
 {
   Int tmp = x;
-	x = x;
-	return x;
+  x = x;
+  return x;
 }
 
 Int funWithWhileLoops(Int x)
 {
   while(x)
-	  x = x;
+    x = x;
 
-	while(y)
-	{
-	  y = y;
-		return y;
-	}
+  while(y)
+  {
+    y = y;
+    return y;
+  }
 }
 
 Int funWithIfThenElse(Int x)
 {
   if(True)
-	  x = x;
-	else
-	  y = y;
+    x = x;
+  else
+    y = y;
 
 
-	if(True)
-	  if(True)
-		  if(True)
-		  if(True)
-		  if(True)
-		  if(True)
-		  if(True)
-		  if(True)
-		  if(True)
-		  if(True)
-		  if(True)
-		  if(True)
-		  if(True)
-			  x = x;
+  if(True)
+    if(True)
+      if(True)
+      if(True)
+      if(True)
+      if(True)
+      if(True)
+      if(True)
+      if(True)
+      if(True)
+      if(True)
+      if(True)
+      if(True)
+        x = x;
 
-			else y = y; // dang!
+      else y = y; // dang!
 
-	if(True)
-	{
-	  x = x;
-		y = y;
-		z = z;
-		return foobar;
-	}
-	else
-	{
-	}
+  if(True)
+  {
+    x = x;
+    y = y;
+    z = z;
+    return foobar;
+  }
+  else
+  {
+  }
+}
+
+Int ambiguousReturn()
+{
+  // could be regarded as function call or return statement
+  return (10);
 }
