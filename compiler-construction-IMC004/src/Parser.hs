@@ -30,13 +30,14 @@ pFunDeclaration =
 
 pStatement :: Parser AstStatement
 pStatement =
-      AstReturn <$ pSymbol "return" <*> opt (Just <$> pExpr) Nothing <* pSymbol ";"
-  <|> AstBlock <$ pSymbol "{" <*> many pStatement <* pSymbol "}"
+      AstBlock <$ pSymbol "{" <*> many pStatement <* pSymbol "}"
   <|> AstAssignment <$> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
   <|> AstWhile <$ pSymbol "while" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement
   <|> AstIfThenElse <$ pSymbol "if" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement <*>
         (pSymbol "else" *> pStatement  <<|> pure (AstBlock []))
-  <|> AstFunctionCallStmt <$> pFunctionCall <* pSymbol ";"
+  <|> (     AstReturn <$ pSymbol "return" <*> opt (Just <$> pExpr) Nothing <* pSymbol ";"
+       <<|> AstFunctionCallStmt <$> pFunctionCall <* pSymbol ";"
+      )
 
 pFunctionArguments :: Parser [AstFunctionArgument]
 pFunctionArguments = (:) <$> pFunctionArgument <*> opt (pSymbol "," *> pFunctionArguments) []

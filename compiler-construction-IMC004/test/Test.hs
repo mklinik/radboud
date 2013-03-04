@@ -165,6 +165,8 @@ specs = do
     it "function call" $ p "foo();" `shouldBe` AstFunctionCallStmt (AstFunctionCall "foo" [])
     it "empty statement block" $ p "{}" `shouldBe` AstBlock []
     it "statement block with return " $ p "{return;}" `shouldBe` AstBlock [AstReturn Nothing]
+    it "return with parenthesized expression is not a function call" $
+      p "return (10);" `shouldBe` AstReturn (Just (AstInteger 10))
 
 specTypeParser :: (String -> AstType) -> Spec
 specTypeParser p = do
