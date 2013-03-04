@@ -36,7 +36,7 @@ pStatement =
   <|> AstWhile <$ pSymbol "while" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement
   <|> AstIfThenElse <$ pSymbol "if" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement <*>
         (pSymbol "else" *> pStatement  <<|> pure (AstBlock []))
-  <|> AstFunctionCallStmt <$> pFunctionCall
+  <|> AstFunctionCallStmt <$> pFunctionCall <* pSymbol ";"
 
 pFunctionArguments :: Parser [AstFunctionArgument]
 pFunctionArguments = (:) <$> pFunctionArgument <*> opt (pSymbol "," *> pFunctionArguments) []
