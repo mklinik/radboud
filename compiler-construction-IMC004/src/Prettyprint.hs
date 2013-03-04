@@ -43,6 +43,11 @@ instance Prettyprint AstExpr where
   pp level (AstTuple a b) = \s -> "(" ++ pp level a ", " ++ pp level b ")" ++ s
   pp _ (AstEmptyList) = ("[]" ++)
   pp level (AstBinOp op l r) = \s -> "(" ++ pp level l (" " ++ op ++ " ") ++ pp level r ")" ++ s
+  pp level (AstUnaryOp op e) = \s -> op ++ pp level e s
+  pp level (AstFunctionCallExpr fun) = pp level fun
+
+instance Prettyprint AstFunctionCall where
+  pp level (AstFunctionCall ident args) = \s -> ident ++ "(" ++ foldr ($) ")" (intersperse (", "++) (map (pp level) args)) ++ s
 
 instance Prettyprint AstStatement where
   pp level (AstReturn mExpr) = \s -> replicate level ' ' ++ "return" ++ maybe ";\n" (\e -> " " ++ pp level e ";\n") mExpr ++ s
@@ -53,6 +58,7 @@ instance Prettyprint AstStatement where
   pp level (AstWhile condition body) = \s -> replicate level ' ' ++ "while( " ++ pp level condition " )\n" ++ indent_ level body "" ++ s
   pp level (AstIfThenElse condition thenStmt elseStmt) = \s -> replicate level ' ' ++ "if( " ++ pp level condition " )\n" ++
       indent_ level thenStmt "" ++ replicate level ' ' ++ "else\n" ++ indent_ level elseStmt "" ++ s
+  pp level (AstFunctionCallStmt fun) = \s -> replicate level ' ' ++ pp level fun ";\n" ++ s
 
 indent_ :: Int -> AstStatement -> (String -> String)
 indent_ level a@(AstBlock _) = pp level a -- Blocks don't need to be indented ...
