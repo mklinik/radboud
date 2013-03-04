@@ -26,7 +26,7 @@ test-suite spec
   type:
     exitcode-stdio-1.0
   main-is:
-    Test.hs
+    ParserSpec.hs
   ghc-options:
     -Wall
   hs-source-dirs:
