@@ -143,9 +143,9 @@ $ cat test3.spl
 \end{verbatim}
 \onslide<+->
 \begin{verbatim}
-Void if(return else)
-{if(return)return(if(else));else if
-(else)return else;else return return;}
+Bool if(return else) { return return =!
+else;if(return)if(else)return if(else);
+else return return; else return else; }
 \end{verbatim}
 \onslide<+->
 \begin{verbatim}
@@ -153,15 +153,16 @@ $ ./dist/build/spl/spl -i test3.spl
 \end{verbatim}
 \onslide<+->
 \begin{verbatim}
-Void if(return else)
+return if(return else)
 {
+  return return = !else;
   if( return )
-    return if(else);
-  else
     if( else )
-      return else;
+      return if(else);
     else
       return return;
+  else
+    return else;
 }
 \end{verbatim}
 \end{frame}
