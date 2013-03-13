@@ -56,7 +56,7 @@
   \begin{itemize}
     \item Implementation language: Haskell
     \item Reason: FTW
-    \item Kind: Top-Down using parser combinators
+    \item Kind: top-down parser combinators
     \item Library used: uu-parsinglib
     \item Time to implement: 8 hours
   \end{itemize}
@@ -64,18 +64,17 @@
 \end{frame}
 
 
-\begin{frame}{Code Metrics}
+\begin{frame}[fragile]{Code Metrics}
 
-  Lines of code
-
-  \begin{itemize}
-    \item 141 Parser
-    \item 39 Ast
-    \item 65 Prettyprinter
-    \item 123 Main
-    \item 181 Unittests
-    \item 368 total
-  \end{itemize}
+\begin{verbatim}
+$ wc -l src/* test/*
+   39 src/Ast.hs
+  141 src/Parser.hs
+   65 src/Prettyprint.hs
+  118 src/Main.hs
+  182 test/ParserSpec.hs
+  545 total
+\end{verbatim}
 
 \end{frame}
 
@@ -105,7 +104,7 @@
 \begin{frame}[fragile]{Operator Precedence}
 
 \begin{itemize}
-  \item Operator Precedence by anonymous intermediate non-terminals
+  \item Operator Precedence by anonymous, intermediate non-terminals
   \item Parse right recursive, amend parse tree
 \end{itemize}
 
@@ -127,7 +126,44 @@ binOps =
 \end{frame}
 
 
-\begin{frame}{Demo}
+\begin{frame}{Dangling Else}
+
+\begin{itemize}
+  \item Resolved by greedily recognizing \texttt{else} branches
+  \item Like in C: dangling \texttt{else} belongs to innermost \texttt{if}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Demo}
+\onslide<+->
+\begin{verbatim}
+$ cat test3.spl
+\end{verbatim}
+\onslide<+->
+\begin{verbatim}
+Void if(return else)
+{if(return)return(if(else));else if
+(else)return else;else return return;}
+\end{verbatim}
+\onslide<+->
+\begin{verbatim}
+$ ./dist/build/spl/spl -i test3.spl
+\end{verbatim}
+\onslide<+->
+\begin{verbatim}
+Void if(return else)
+{
+  if( return )
+    return if(else);
+  else
+    if( else )
+      return else;
+    else
+      return return;
+}
+\end{verbatim}
 \end{frame}
 
 
