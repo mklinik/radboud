@@ -134,3 +134,12 @@ Int ambiguousReturn()
   // could be regarded as function call or return statement
   return (10);
 }
+
+Int weird()
+{
+  // yes, we can have identifiers with the same name as keywords
+  Int return = 10;
+  Bool if = True;
+  if( if )
+    return return;
+}
