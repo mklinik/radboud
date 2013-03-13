@@ -1,0 +1,134 @@
+\documentclass{beamer}
+
+\beamertemplatenavigationsymbolsempty
+
+\mode<presentation>
+{
+  \usetheme{default}
+}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{bussproofs}
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+% needs debian package texlive-math-extra
+\usepackage{stmaryrd} % for \llbracket, \rrbracket
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{matrix}
+
+\title
+{A Parser for SPL, the Simple Programming Language}
+
+\author
+{Markus~Klinik}
+
+\institute[Radboud University Nijmegen] % (optional, but mostly needed)
+{
+  Radboud University Nijmegen
+}
+
+\date
+{Compiler Construction 2013}
+
+
+\newcommand{\arr}{\rightarrow}
+\newcommand{\Arr}{\Rightarrow}
+\newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
+\newcommand{\semanticsFd}[1]{\semantics{#1}_{F\delta}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Meta}
+
+  \begin{itemize}
+    \item Implementation language: Haskell
+    \item Reason: FTW
+    \item Kind: Top-Down using parser combinators
+    \item Library used: uu-parsinglib
+    \item Time to implement: 8 hours
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Code Metrics}
+
+  Lines of code
+
+  \begin{itemize}
+    \item 141 Parser
+    \item 39 Ast
+    \item 65 Prettyprinter
+    \item 123 Main
+    \item 181 Unittests
+    \item 368 total
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Grammar Changes}
+
+\begin{itemize}
+  \item No distinction between keywords and identifiers
+  \item \texttt{return(5);} could be return statement or function call
+  \item Resolved by greedily recognizing return statements
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Moar Grammar Changes}
+
+\begin{itemize}
+  \item Ambiguity between negative integer and unary minus
+  \item \texttt{-5}
+  \item Resolved by greedily recognizing negative integers
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Operator Precedence}
+
+\begin{itemize}
+  \item Operator Precedence by anonymous intermediate non-terminals
+  \item Parse right recursive, amend parse tree
+\end{itemize}
+
+\begin{verbatim}
+pExpr = pChainr (mkOp ":") $
+  foldr pChainl pBaseExpr pBinOps
+pBinOps = map (foldr (<|>) pFail) $ map (map mkOp) binOps
+mkOp op = AstBinOp <$> pSymbol op
+binOps =
+  [ [ "||" ]
+  , [ "&&" ]
+  , [ "==" , "!=" ]
+  , [ "<" , ">" , "<=" , ">=" ]
+  , [ "+" , "-" ]
+  , [ "*" , "/", "%" ]
+  ]
+\end{verbatim}
+
+\end{frame}
+
+
+\begin{frame}{Demo}
+\end{frame}
+
+
+\end{document}
