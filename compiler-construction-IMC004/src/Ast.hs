@@ -1,4 +1,3 @@
-
 -- Data structures which form the Abstract Syntax Tree
 module Ast where
 

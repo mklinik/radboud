@@ -21,6 +21,9 @@ pDeclaration = pVarDeclaration <|> pFunDeclaration
 pVarDeclaration :: Parser AstDeclaration
 pVarDeclaration = AstVarDeclaration <$> pType defaultBaseTypes <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
 
+defaultBaseTypes :: [String]
+defaultBaseTypes = ["Int", "Bool"]
+
 pFunDeclaration :: Parser AstDeclaration
 pFunDeclaration =
   AstFunDeclaration
@@ -28,22 +31,8 @@ pFunDeclaration =
     <* pSymbol "(" <*> opt pFunctionArguments [] <* pSymbol ")"
     <* pSymbol "{" <*> many pVarDeclaration <*> some pStatement <* pSymbol "}"
 
-pStatement :: Parser AstStatement
-pStatement =
-      AstBlock <$ pSymbol "{" <*> many pStatement <* pSymbol "}"
-  <|> AstAssignment <$> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
-  <|> AstWhile <$ pSymbol "while" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement
-  <|> AstIfThenElse <$ pSymbol "if" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement <*>
-        (pSymbol "else" *> pStatement  <<|> pure (AstBlock []))
-  <|> (     AstReturn <$ pSymbol "return" <*> opt (Just <$> pExpr) Nothing <* pSymbol ";"
-       <<|> AstFunctionCallStmt <$> pFunctionCall <* pSymbol ";"
-      )
-
-pFunctionArguments :: Parser [AstFunctionArgument]
-pFunctionArguments = (:) <$> pFunctionArgument <*> opt (pSymbol "," *> pFunctionArguments) []
-
-pFunctionArgument :: Parser AstFunctionArgument
-pFunctionArgument = AstFunctionArgument <$> pType defaultBaseTypes <*> pIdentifier
+pReturnType :: Parser AstType
+pReturnType = pType ("Void" : defaultBaseTypes)
 
 pType :: [String] -> Parser AstType
 pType baseTypes =
@@ -51,20 +40,33 @@ pType baseTypes =
   <|> TupleType <$ pSymbol "(" <*> pType baseTypes <* pSymbol "," <*> pType baseTypes <* pSymbol ")"
   <|> ListType <$ pSymbol "[" <*> pType baseTypes <* pSymbol "]"
 
-pReturnType :: Parser AstType
-pReturnType = pType ("Void" : defaultBaseTypes)
-
-defaultBaseTypes :: [String]
-defaultBaseTypes = ["Int", "Bool"]
-
 mkBaseTypeOrIdentifier :: [String] -> String -> AstType
 mkBaseTypeOrIdentifier baseTypes s =
   if s `elem` baseTypes
     then BaseType s
     else PolymorphicType s
 
-pIdentifier :: Parser String
-pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_'))
+pFunctionArguments :: Parser [AstFunctionArgument]
+pFunctionArguments = (:) <$> pFunctionArgument <*> opt (pSymbol "," *> pFunctionArguments) []
+
+pFunctionArgument :: Parser AstFunctionArgument
+pFunctionArgument = AstFunctionArgument <$> pType defaultBaseTypes <*> pIdentifier
+
+pStatement :: Parser AstStatement
+pStatement =
+      AstBlock <$ pSymbol "{" <*> many pStatement <* pSymbol "}"
+  <|> AstIfThenElse <$ pSymbol "if" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement <*>
+        (pSymbol "else" *> pStatement  <<|> pure (AstBlock []))
+  <|> AstWhile <$ pSymbol "while" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement
+  <|> AstAssignment <$> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
+  <|> (     AstReturn <$ pSymbol "return" <*> opt (Just <$> pExpr) Nothing <* pSymbol ";"
+       <<|> AstFunctionCallStmt <$> pFunctionCall <* pSymbol ";"
+      )
+
+pExpr :: Parser AstExpr
+pExpr = pChainr (mkOp ":") $ foldr pChainl pBaseExpr pBinOps
+  where
+    pBinOps = map (foldr (<|>) pFail) $ map (map mkOp) binOps
 
 mkOp :: String -> Parser (AstExpr -> AstExpr -> AstExpr)
 mkOp op = AstBinOp <$> pSymbol op
@@ -80,32 +82,30 @@ binOps =
   , [ "*" , "/", "%" ]
   ]
 
-pExpr :: Parser AstExpr
-pExpr = pChainr (mkOp ":") $ foldr pChainl pBaseExpr pBinOps
-  where
-    pBinOps = map (foldr (<|>) pFail) $ map (map mkOp) binOps
-
 pBaseExpr :: Parser AstExpr
 pBaseExpr =
-      AstInteger <$> pNatural
-  <|> mkBoolOrIdentifier <$> pIdentifier
-  <|> pSymbol "(" *> pExpr <* pSymbol ")"
-  <|> AstTuple <$ pSymbol "(" <*> pExpr <* pSymbol "," <*> pExpr <* pSymbol ")"
-  <|> AstEmptyList <$ pSymbol "[" <* pSymbol "]"
-  <|> pSymbol "-" *> pNegatedExpression
+      mkBoolOrIdentifier <$> pIdentifier
   <|> AstUnaryOp <$> pSymbol "!" <*> pExpr
+  <|> AstInteger <$> pNatural
+  <|> pSymbol "(" *> pExpr <* pSymbol ")"
   <|> AstFunctionCallExpr <$> pFunctionCall
+  <|> AstEmptyList <$ pSymbol "[" <* pSymbol "]"
+  <|> AstTuple <$ pSymbol "(" <*> pExpr <* pSymbol "," <*> pExpr <* pSymbol ")"
+  <|> pSymbol "-" *> pNegatedExpression
+
+pIdentifier :: Parser String
+pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_'))
 
 pFunctionCall :: Parser AstFunctionCall
 pFunctionCall = AstFunctionCall <$> pIdentifier <* pSymbol "(" <*> opt pActualParameters [] <* pSymbol ")"
-
-pActualParameters :: Parser [AstExpr]
-pActualParameters = (:) <$> pExpr <*> opt (pSymbol "," *> pActualParameters) []
 
 pNegatedExpression :: Parser AstExpr
 pNegatedExpression =
        AstInteger . negate <$> pNatural
   <<|> AstUnaryOp "-" <$> pExpr
+
+pActualParameters :: Parser [AstExpr]
+pActualParameters = (:) <$> pExpr <*> opt (pSymbol "," *> pActualParameters) []
 
 booleanConstants :: [String]
 booleanConstants = ["True", "False"]
