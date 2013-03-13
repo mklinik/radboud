@@ -5,6 +5,7 @@ module Main (specs, main) where
 import Test.Hspec
 import Test.QuickCheck
 import Text.ParserCombinators.UU.BasicInstances (Parser)
+import Text.ParserCombinators.UU.Utils (runParser)
 
 import Parser
 import Ast

@@ -1,6 +1,6 @@
 module Main where
 
--- import           Text.ParserCombinators.UU.Utils hiding (runParser)
+import           Text.ParserCombinators.UU.Utils (runParser)
 import           System.Environment (getArgs)
 import           System.IO
 
