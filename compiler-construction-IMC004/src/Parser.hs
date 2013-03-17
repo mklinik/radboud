@@ -90,9 +90,10 @@ pBaseExpr =
   <|> AstEmptyList <$ pSymbol "[" <* pSymbol "]"
   <|> AstTuple <$ pSymbol "(" <*> pExpr <* pSymbol "," <*> pExpr <* pSymbol ")"
   <|> pSymbol "-" *> pNegatedExpression
+  <?> "Expression"
 
 pIdentifier :: Parser String
-pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_'))
+pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> PC.pSym '_')) <?> "Identifier"
 
 pFunctionCall :: Parser AstFunctionCall
 pFunctionCall = AstFunctionCall <$> pIdentifier <* pSymbol "(" <*> opt pActualParameters [] <* pSymbol ")"
@@ -122,10 +123,13 @@ pSymbol :: String -> Parser String
 pSymbol = lexeme . PC.pToken
 
 lexeme :: PC.ParserTrafo a a
-lexeme p = p <* many (pSpace <<|> pLineComment <|> pBlockComment)
+lexeme p = p <* many (pSpace <<|> pComment)
 
 pSpace :: Parser ()
-pSpace = () <$ pAnySym " \r\n\t"
+pSpace = () <$ pAnySym " \r\n\t" <?> "Whitespace"
+
+pComment :: Parser ()
+pComment = pLineComment <|> pBlockComment <?> "Comment"
 
 pLineComment :: Parser ()
 pLineComment = () <$ PC.pToken "//" <* PC.pMunch (/= '\n') <* PC.pSym '\n'
