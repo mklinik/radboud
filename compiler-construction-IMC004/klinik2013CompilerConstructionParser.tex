@@ -135,37 +135,4 @@ binOps =
 
 \end{frame}
 
-
-\begin{frame}[fragile]{Demo}
-\onslide<+->
-\begin{verbatim}
-$ cat test3.spl
-\end{verbatim}
-\onslide<+->
-\begin{verbatim}
-Bool if(return else) { return return =!
-else;if(return)if(else)return if(else);
-else return return; else return else; }
-\end{verbatim}
-\onslide<+->
-\begin{verbatim}
-$ ./dist/build/spl/spl -i test3.spl
-\end{verbatim}
-\onslide<+->
-\begin{verbatim}
-return if(return else)
-{
-  return return = !else;
-  if( return )
-    if( else )
-      return if(else);
-    else
-      return return;
-  else
-    return else;
-}
-\end{verbatim}
-\end{frame}
-
-
 \end{document}
