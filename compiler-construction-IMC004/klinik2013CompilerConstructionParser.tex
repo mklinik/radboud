@@ -79,10 +79,19 @@ $ wc -l src/* test/*
 \end{frame}
 
 
-\begin{frame}{Grammar Changes}
+\begin{frame}{Dangling Else}
 
 \begin{itemize}
-  \item No distinction between keywords and identifiers
+  \item Resolved by greedily recognizing \texttt{else} branches
+  \item Like in C: dangling \texttt{else} belongs to innermost \texttt{if}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Grammar Changes}
+
+\begin{itemize}
   \item \texttt{return(5);} could be return statement or function call
   \item Resolved by greedily recognizing return statements
 \end{itemize}
@@ -125,14 +134,5 @@ binOps =
 
 \end{frame}
 
-
-\begin{frame}{Dangling Else}
-
-\begin{itemize}
-  \item Resolved by greedily recognizing \texttt{else} branches
-  \item Like in C: dangling \texttt{else} belongs to innermost \texttt{if}
-\end{itemize}
-
-\end{frame}
 
 \end{document}
