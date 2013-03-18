@@ -18,7 +18,7 @@ instance Prettyprint AstProgram where
   pp level (AstProgram (d:decls)) = \s -> pp level d "\n" ++ pp level (AstProgram decls) s
 
 instance Prettyprint AstDeclaration where
-  pp level (AstVarDeclaration typ ident expr) = \s -> replicate level ' ' ++ pp level typ " " ++ ident ++ " = " ++ pp level expr ";\n" ++ s
+  pp level (AstVarDeclaration _ typ ident expr) = \s -> replicate level ' ' ++ pp level typ " " ++ ident ++ " = " ++ pp level expr ";\n" ++ s
   pp level (AstFunDeclaration typ ident args decls stmts) = \s ->
       pp level typ " " ++ ident ++ "(" ++ arguments ++ ")" ++ "\n{\n" ++ declarations ++ statements ++ "}\n" ++ s
     where

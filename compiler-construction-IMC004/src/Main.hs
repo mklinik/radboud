@@ -1,6 +1,5 @@
 module Main where
 
-import Text.ParserCombinators.UU.Utils (runParser)
 import System.Environment (getArgs)
 import System.IO
 import System.Console.GetOpt
@@ -10,6 +9,7 @@ import System.Exit
 
 import Parser
 import Prettyprint
+import Utils
 
 main :: IO ()
 main = do
@@ -21,20 +21,20 @@ run opts = do
   case mode opts of
     ModePrettyprint -> do
       input <- hGetContents (inFile opts)
-      let output = prettyprint $ runParser (inputFilename opts) pProgram input
+      let output = prettyprint $ runParser_ (inputFilename opts) pProgram input
       hPutStrLn (outFile opts) output
 
     ModeShow -> do
       input <- hGetContents (inFile opts)
-      let output = show $ runParser (inputFilename opts) pProgram input
+      let output = show $ runParser_ (inputFilename opts) pProgram input
       hPutStrLn (outFile opts) output
 
     ModeHelp -> printHelp
 
     ModeCheckParser -> do
       input <- hGetContents (inFile opts)
-      let ast1 = runParser (inputFilename opts) pProgram input
-      let ast2 = runParser (inputFilename opts) pProgram $ prettyprint ast1
+      let ast1 = runParser_ (inputFilename opts) pProgram input
+      let ast2 = runParser_ (inputFilename opts) pProgram $ prettyprint ast1
       print (ast1 == ast2)
 
   cleanUp opts

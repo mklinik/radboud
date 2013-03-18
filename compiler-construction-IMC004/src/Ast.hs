@@ -1,11 +1,25 @@
 -- Data structures which form the Abstract Syntax Tree
 module Ast where
 
+import Text.ParserCombinators.UU.BasicInstances as PC
+
+-- Meta information for ast nodes
+data AstMeta = AstMeta
+  { sourceLocation :: PC.LineColPos
+  }
+  deriving (Show)
+
+instance Eq AstMeta where
+  (==) _ _ = True
+
+emptyMeta :: AstMeta
+emptyMeta = AstMeta { sourceLocation = PC.LineColPos 0 0 0 }
+
 data AstProgram = AstProgram [AstDeclaration]
   deriving (Show, Eq)
 
 data AstDeclaration
-  = AstVarDeclaration AstType String AstExpr
+  = AstVarDeclaration AstMeta AstType String AstExpr
   | AstFunDeclaration AstType String [AstFunctionArgument] [AstDeclaration] [AstStatement]
   deriving (Show, Eq)
 

@@ -10,19 +10,22 @@ import Data.Char (ord)
 
 import Ast
 
-pProgram :: Parser AstProgram
+-- basically the same as Parser from uu-parsinglib, but not as general. We fix String and LineColPos
+type SplParser a = P (PC.Str Char String PC.LineColPos) a
+
+pProgram :: SplParser AstProgram
 pProgram = AstProgram <$ lexeme (pure ()) <*> some pDeclaration
 
-pDeclaration :: Parser AstDeclaration
+pDeclaration :: SplParser AstDeclaration
 pDeclaration = pVarDeclaration <|> pFunDeclaration
 
-pVarDeclaration :: Parser AstDeclaration
-pVarDeclaration = AstVarDeclaration <$> pType defaultBaseTypes <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
+pVarDeclaration :: SplParser AstDeclaration
+pVarDeclaration = AstVarDeclaration <$> ((\s -> AstMeta { sourceLocation = PC.pos s }) <$> pState) <*> pType defaultBaseTypes <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
 
 defaultBaseTypes :: [String]
 defaultBaseTypes = ["Int", "Bool"]
 
-pFunDeclaration :: Parser AstDeclaration
+pFunDeclaration :: SplParser AstDeclaration
 pFunDeclaration =
   AstFunDeclaration
     <$> pReturnType <*> pIdentifier

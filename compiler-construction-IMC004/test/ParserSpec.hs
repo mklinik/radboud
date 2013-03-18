@@ -4,14 +4,13 @@ module Main (specs, main) where
 
 import Test.Hspec
 import Test.QuickCheck
-import Text.ParserCombinators.UU.BasicInstances (Parser)
-import Text.ParserCombinators.UU.Utils (runParser)
 
 import Parser
 import Ast
+import Utils
 
-parse :: (Parser a) -> String -> a
-parse = runParser ""
+parse :: (SplParser a) -> String -> a
+parse = runParser_ ""
 
 specs :: Spec
 specs = do
@@ -150,7 +149,7 @@ specs = do
 
   describe "pVarDeclaration" $ do
     let p = parse pVarDeclaration
-    it "integer variable" $ p "Int x = 5;" `shouldBe` AstVarDeclaration (BaseType "Int") "x" (AstInteger 5)
+    it "integer variable" $ p "Int x = 5;" `shouldBe` AstVarDeclaration emptyMeta (BaseType "Int") "x" (AstInteger 5)
     -- it "integer variable" $ p "Int x = 5" `shouldThrow` anyException
 
   describe "pStatement" $ do
