@@ -1,2 +1,4 @@
 - line numbers in parser error messages seem to be off-by-one
+- source locations in parser need to be +1 for both line and column (editors start counting at 1)
 - use <?> to generate better error messages
+-- source locations of pNegatedExpression are not correct. Need to use source location of pSymbol "-" in pBaseExpr

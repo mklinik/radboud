@@ -20,20 +20,20 @@ data AstProgram = AstProgram [AstDeclaration]
 
 data AstDeclaration
   = AstVarDeclaration AstMeta AstType String AstExpr
-  | AstFunDeclaration AstType String [AstFunctionArgument] [AstDeclaration] [AstStatement]
+  | AstFunDeclaration AstMeta AstType String [AstFunctionArgument] [AstDeclaration] [AstStatement]
   deriving (Show, Eq)
 
 data AstType = BaseType String | TupleType AstType AstType | ListType AstType | PolymorphicType String
   deriving (Show, Eq)
 
 data AstExpr
-  = AstIdentifier String
-  | AstInteger Integer
-  | AstBoolean Bool
-  | AstTuple AstExpr AstExpr
-  | AstEmptyList
-  | AstBinOp String AstExpr AstExpr
-  | AstUnaryOp String AstExpr
+  = AstIdentifier AstMeta String
+  | AstInteger AstMeta Integer
+  | AstBoolean AstMeta Bool
+  | AstTuple AstMeta AstExpr AstExpr
+  | AstEmptyList AstMeta
+  | AstBinOp AstMeta String AstExpr AstExpr
+  | AstUnaryOp AstMeta String AstExpr
   | AstFunctionCallExpr AstFunctionCall
   deriving (Show, Eq)
 
@@ -46,7 +46,7 @@ data AstStatement
   | AstFunctionCallStmt AstFunctionCall
   deriving (Show, Eq)
 
-data AstFunctionCall = AstFunctionCall String [AstExpr]
+data AstFunctionCall = AstFunctionCall AstMeta String [AstExpr]
   deriving (Show, Eq)
 
 data AstFunctionArgument = AstFunctionArgument AstType String
