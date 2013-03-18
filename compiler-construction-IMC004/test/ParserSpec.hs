@@ -119,7 +119,7 @@ specs = do
   describe "pFunDeclaration" $ do
     it "function without formal parameters" $
       parse pFunDeclaration "Void foo() { return; }" `shouldBe`
-        AstFunDeclaration emptyMeta (BaseType "Void") "foo" [] [] [AstReturn Nothing]
+        AstFunDeclaration emptyMeta (BaseType "Void") "foo" [] [] [AstReturn emptyMeta Nothing]
     it "function with one formal parameters" $
       parse pFunDeclaration "Void foo(Int x) { return; }" `shouldBe`
         AstFunDeclaration
@@ -128,7 +128,7 @@ specs = do
           "foo"
           [AstFunctionArgument (BaseType "Int") "x"]
           []
-          [AstReturn Nothing]
+          [AstReturn emptyMeta Nothing]
     it "function with three formal parameters and a return value" $
       parse pFunDeclaration "Void foo(Int x, a y, Bool z) { return a; }" `shouldBe`
         AstFunDeclaration
@@ -140,7 +140,7 @@ specs = do
           , AstFunctionArgument (BaseType "Bool") "z"
           ]
           []
-          [AstReturn (Just (AstIdentifier emptyMeta "a"))]
+          [AstReturn emptyMeta (Just (AstIdentifier emptyMeta "a"))]
 
   describe "pType" $ do
     specTypeParser $ parse (pType defaultBaseTypes)
@@ -156,19 +156,20 @@ specs = do
 
   describe "pStatement" $ do
     let p = parse pStatement
-    it "return;" $ p "return;" `shouldBe` AstReturn Nothing
-    it "return 10;" $ p "return 10;" `shouldBe` AstReturn (Just (AstInteger emptyMeta 10))
+    it "return;" $ p "return;" `shouldBe` AstReturn emptyMeta Nothing
+    it "return 10;" $ p "return 10;" `shouldBe` AstReturn emptyMeta (Just (AstInteger emptyMeta 10))
     it "if-then-else" $ p "if(True) return; else return;" `shouldBe`
-      AstIfThenElse (AstBoolean emptyMeta True)
-                    (AstReturn Nothing)
-                    (AstReturn Nothing)
-    it "while" $ p "while(True) return;" `shouldBe` AstWhile (AstBoolean emptyMeta True) (AstReturn Nothing)
-    it "assignment" $ p "x = 10;" `shouldBe` AstAssignment "x" (AstInteger emptyMeta 10)
+      AstIfThenElse emptyMeta
+                    (AstBoolean emptyMeta True)
+                    (AstReturn emptyMeta Nothing)
+                    (AstReturn emptyMeta Nothing)
+    it "while" $ p "while(True) return;" `shouldBe` AstWhile emptyMeta (AstBoolean emptyMeta True) (AstReturn emptyMeta Nothing)
+    it "assignment" $ p "x = 10;" `shouldBe` AstAssignment emptyMeta "x" (AstInteger emptyMeta 10)
     it "function call" $ p "foo();" `shouldBe` AstFunctionCallStmt (AstFunctionCall emptyMeta "foo" [])
     it "empty statement block" $ p "{}" `shouldBe` AstBlock []
-    it "statement block with return " $ p "{return;}" `shouldBe` AstBlock [AstReturn Nothing]
+    it "statement block with return " $ p "{return;}" `shouldBe` AstBlock [AstReturn emptyMeta Nothing]
     it "return with parenthesized expression is not a function call" $
-      p "return (10);" `shouldBe` AstReturn (Just (AstInteger emptyMeta 10))
+      p "return (10);" `shouldBe` AstReturn emptyMeta (Just (AstInteger emptyMeta 10))
 
 specTypeParser :: (String -> AstType) -> Spec
 specTypeParser p = do

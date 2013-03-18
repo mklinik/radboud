@@ -59,11 +59,11 @@ pFunctionArgument = AstFunctionArgument <$> pType defaultBaseTypes <*> pIdentifi
 pStatement :: SplParser AstStatement
 pStatement =
       AstBlock <$ pSymbol "{" <*> many pStatement <* pSymbol "}"
-  <|> AstIfThenElse <$ pSymbol "if" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement <*>
+  <|> AstIfThenElse <$> pSourceLocation <* pSymbol "if" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement <*>
         (pSymbol "else" *> pStatement  <<|> pure (AstBlock []))
-  <|> AstWhile <$ pSymbol "while" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement
-  <|> AstAssignment <$> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
-  <|> (     AstReturn <$ pSymbol "return" <*> opt (Just <$> pExpr) Nothing <* pSymbol ";"
+  <|> AstWhile <$> pSourceLocation <* pSymbol "while" <* pSymbol "(" <*> pExpr <* pSymbol ")" <*> pStatement
+  <|> AstAssignment <$> pSourceLocation <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
+  <|> (     AstReturn <$> pSourceLocation <* pSymbol "return" <*> opt (Just <$> pExpr) Nothing <* pSymbol ";"
        <<|> AstFunctionCallStmt <$> pFunctionCall <* pSymbol ";"
       )
 

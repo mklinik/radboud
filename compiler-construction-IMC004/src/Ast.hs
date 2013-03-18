@@ -38,11 +38,11 @@ data AstExpr
   deriving (Show, Eq)
 
 data AstStatement
-  = AstReturn (Maybe AstExpr)
+  = AstReturn AstMeta (Maybe AstExpr)
   | AstBlock [AstStatement]
-  | AstAssignment String AstExpr
-  | AstWhile AstExpr AstStatement
-  | AstIfThenElse AstExpr AstStatement AstStatement
+  | AstAssignment AstMeta String AstExpr
+  | AstWhile AstMeta AstExpr AstStatement
+  | AstIfThenElse AstMeta AstExpr AstStatement AstStatement
   | AstFunctionCallStmt AstFunctionCall
   deriving (Show, Eq)
 
