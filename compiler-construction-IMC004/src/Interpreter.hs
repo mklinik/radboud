@@ -31,6 +31,12 @@ type State = String -> Value
 emptyState :: State
 emptyState i = error ("State: unknown identifier: '" ++ i ++ "'")
 
+(|->) :: String -> Value -> State -> State
+(|->) ident val s =
+  \x -> if x == ident
+    then val
+    else s x
+
 -- programs can have side effects
 runSpl :: AstProgram -> IO State
 runSpl = undefined
@@ -53,11 +59,12 @@ eval _ (AstBinOp _ ":" _ _) = error ("eval: lists not yet supported")
 eval s (AstBinOp _ "<" l r) = intBinOpBool (<) s l r
 eval s (AstBinOp _ ">" l r) = intBinOpBool (>) s l r
 eval s (AstBinOp _ "<=" l r) = intBinOpBool (<=) s l r
-eval s (AstBinOp _ ">=" l r) = intBinOpBool (<=) s l r
+eval s (AstBinOp _ ">=" l r) = intBinOpBool (>=) s l r
 eval s (AstBinOp _ "||" l r) = boolBinOpBool (||) s l r
 eval s (AstBinOp _ "&&" l r) = boolBinOpBool (&&) s l r
 eval _ (AstBinOp _ _ _ _) = error ("eval: unknown binary operator")
 eval s (AstUnaryOp _ "-" e) = intUnaryOpInt negate s e
+eval s (AstUnaryOp _ "!" e) = boolUnaryOpBool not s e
 eval _ (AstUnaryOp _ _ _) = error ("eval: unknown unary operator")
 eval _ (AstFunctionCallExpr _) = error ("eval: function calls not yet supported")
 
@@ -84,3 +91,9 @@ boolBinOpBool f s l r = boolBinOpBool_ (eval s l) (eval s r)
   where
     boolBinOpBool_ (B l_) (B r_) = B $ f l_ r_
     boolBinOpBool_ _ _ = error ("boolBinOpBool: type error")
+
+boolUnaryOpBool :: (Bool -> Bool) -> State -> AstExpr -> Value
+boolUnaryOpBool f s r = boolUnaryOpBool_ (eval s r)
+  where
+    boolUnaryOpBool_ (B r_) = B $ f r_
+    boolUnaryOpBool_ _ = error ("boolUnaryOpBool: type error")
