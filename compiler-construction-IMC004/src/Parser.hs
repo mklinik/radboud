@@ -40,15 +40,15 @@ pReturnType = pType ("Void" : defaultBaseTypes)
 
 pType :: [String] -> SplParser AstType
 pType baseTypes =
-      mkBaseTypeOrIdentifier baseTypes <$> pIdentifier
-  <|> TupleType <$ pSymbol "(" <*> pType baseTypes <* pSymbol "," <*> pType baseTypes <* pSymbol ")"
-  <|> ListType <$ pSymbol "[" <*> pType baseTypes <* pSymbol "]"
+      mkBaseTypeOrIdentifier baseTypes <$> pSourceLocation <*> pIdentifier
+  <|> TupleType <$> pSourceLocation <* pSymbol "(" <*> pType baseTypes <* pSymbol "," <*> pType baseTypes <* pSymbol ")"
+  <|> ListType <$> pSourceLocation <* pSymbol "[" <*> pType baseTypes <* pSymbol "]"
 
-mkBaseTypeOrIdentifier :: [String] -> String -> AstType
-mkBaseTypeOrIdentifier baseTypes s =
+mkBaseTypeOrIdentifier :: [String] -> AstMeta -> String -> AstType
+mkBaseTypeOrIdentifier baseTypes m s =
   if s `elem` baseTypes
-    then BaseType s
-    else PolymorphicType s
+    then BaseType m s
+    else PolymorphicType m s
 
 pFunctionArguments :: SplParser [AstFunctionArgument]
 pFunctionArguments = (:) <$> pFunctionArgument <*> opt (pSymbol "," *> pFunctionArguments) []

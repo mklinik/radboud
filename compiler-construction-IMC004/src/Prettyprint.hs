@@ -28,10 +28,10 @@ instance Prettyprint AstDeclaration where
 
 
 instance Prettyprint AstType where
-  pp _ (BaseType t) = (t ++)
-  pp _ (PolymorphicType t) = (t ++)
-  pp level (TupleType a b) = \s -> "(" ++ pp level a ", " ++ pp level b ")" ++ s
-  pp level (ListType t) = \s -> "[" ++ pp level t "]" ++ s
+  pp _ (BaseType _ t) = (t ++)
+  pp _ (PolymorphicType _ t) = (t ++)
+  pp level (TupleType _ a b) = \s -> "(" ++ pp level a ", " ++ pp level b ")" ++ s
+  pp level (ListType _ t) = \s -> "[" ++ pp level t "]" ++ s
 
 instance Prettyprint AstFunctionArgument where
   pp level (AstFunctionArgument _ typ ident) = \s -> pp level typ " " ++ ident ++ s

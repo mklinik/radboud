@@ -23,7 +23,11 @@ data AstDeclaration
   | AstFunDeclaration AstMeta AstType String [AstFunctionArgument] [AstDeclaration] [AstStatement]
   deriving (Show, Eq)
 
-data AstType = BaseType String | TupleType AstType AstType | ListType AstType | PolymorphicType String
+data AstType
+  = BaseType AstMeta String
+  | TupleType AstMeta AstType AstType
+  | ListType AstMeta AstType
+  | PolymorphicType AstMeta String
   deriving (Show, Eq)
 
 data AstExpr

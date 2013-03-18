@@ -119,25 +119,25 @@ specs = do
   describe "pFunDeclaration" $ do
     it "function without formal parameters" $
       parse pFunDeclaration "Void foo() { return; }" `shouldBe`
-        AstFunDeclaration emptyMeta (BaseType "Void") "foo" [] [] [AstReturn emptyMeta Nothing]
+        AstFunDeclaration emptyMeta (BaseType emptyMeta "Void") "foo" [] [] [AstReturn emptyMeta Nothing]
     it "function with one formal parameters" $
       parse pFunDeclaration "Void foo(Int x) { return; }" `shouldBe`
         AstFunDeclaration
           emptyMeta
-          (BaseType "Void")
+          (BaseType emptyMeta "Void")
           "foo"
-          [AstFunctionArgument emptyMeta (BaseType "Int") "x"]
+          [AstFunctionArgument emptyMeta (BaseType emptyMeta "Int") "x"]
           []
           [AstReturn emptyMeta Nothing]
     it "function with three formal parameters and a return value" $
       parse pFunDeclaration "Void foo(Int x, a y, Bool z) { return a; }" `shouldBe`
         AstFunDeclaration
           emptyMeta
-          (BaseType "Void")
+          (BaseType emptyMeta "Void")
           "foo"
-          [ AstFunctionArgument emptyMeta (BaseType "Int") "x"
-          , AstFunctionArgument emptyMeta (PolymorphicType "a") "y"
-          , AstFunctionArgument emptyMeta (BaseType "Bool") "z"
+          [ AstFunctionArgument emptyMeta (BaseType emptyMeta "Int") "x"
+          , AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "y"
+          , AstFunctionArgument emptyMeta (BaseType emptyMeta "Bool") "z"
           ]
           []
           [AstReturn emptyMeta (Just (AstIdentifier emptyMeta "a"))]
@@ -147,11 +147,11 @@ specs = do
 
   describe "pReturnType" $ do
     specTypeParser $ parse pReturnType
-    it "Void" $ parse pReturnType "Void" `shouldBe` BaseType "Void"
+    it "Void" $ parse pReturnType "Void" `shouldBe` BaseType emptyMeta "Void"
 
   describe "pVarDeclaration" $ do
     let p = parse pVarDeclaration
-    it "integer variable" $ p "Int x = 5;" `shouldBe` AstVarDeclaration emptyMeta (BaseType "Int") "x" (AstInteger emptyMeta 5)
+    it "integer variable" $ p "Int x = 5;" `shouldBe` AstVarDeclaration emptyMeta (BaseType emptyMeta "Int") "x" (AstInteger emptyMeta 5)
     -- it "integer variable" $ p "Int x = 5" `shouldThrow` anyException
 
   describe "pStatement" $ do
@@ -173,12 +173,12 @@ specs = do
 
 specTypeParser :: (String -> AstType) -> Spec
 specTypeParser p = do
-  it "polymorphic type" $ p "x" `shouldBe` PolymorphicType "x"
-  it "base type Int" $ p "Int" `shouldBe` BaseType "Int"
-  it "base type Bool" $ p "Bool" `shouldBe` BaseType "Bool"
-  it "tuple type" $ p "(Int, Bool)" `shouldBe` TupleType (BaseType "Int") (BaseType "Bool")
-  it "list type" $ p "[Int]" `shouldBe` ListType (BaseType "Int")
-  it "polymorphic list type" $ p "[a]" `shouldBe` ListType (PolymorphicType "a")
+  it "polymorphic type" $ p "x" `shouldBe` PolymorphicType emptyMeta "x"
+  it "base type Int" $ p "Int" `shouldBe` BaseType emptyMeta "Int"
+  it "base type Bool" $ p "Bool" `shouldBe` BaseType emptyMeta "Bool"
+  it "tuple type" $ p "(Int, Bool)" `shouldBe` TupleType emptyMeta (BaseType emptyMeta "Int") (BaseType emptyMeta "Bool")
+  it "list type" $ p "[Int]" `shouldBe` ListType emptyMeta (BaseType emptyMeta "Int")
+  it "polymorphic list type" $ p "[a]" `shouldBe` ListType emptyMeta (PolymorphicType emptyMeta "a")
 
 main :: IO ()
 main = hspec specs
