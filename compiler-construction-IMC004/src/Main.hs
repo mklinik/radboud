@@ -9,6 +9,7 @@ import System.Exit
 
 import Parser
 import Prettyprint
+import Interpreter
 import Utils
 
 main :: IO ()
@@ -37,6 +38,12 @@ run opts = do
       let ast2 = runParser_ (inputFilename opts) pProgram $ prettyprint ast1
       print (ast1 == ast2)
 
+    ModeInterpret -> do
+      input <- hGetContents (inFile opts)
+      let ast1 = runParser_ (inputFilename opts) pProgram input
+      _ <- runSpl ast1
+      return ()
+
   cleanUp opts
 
 cleanUp :: Options -> IO ()
@@ -47,7 +54,7 @@ cleanUp opts = do
 programName :: String
 programName = "spl"
 
-data Mode = ModeHelp | ModePrettyprint | ModeCheckParser | ModeShow
+data Mode = ModeHelp | ModePrettyprint | ModeCheckParser | ModeShow | ModeInterpret
   deriving (Show)
 
 data Options = Options
@@ -75,6 +82,7 @@ options =
   , Option ['o']  ["output"]  (ReqArg (\s opts -> opts { outputFilename = s }) "FILE") "file to write output to;\nuse \"--\" to write to stdout;\nwhen unspecified, defaults to stdout"
   , Option []  ["check"]      (NoArg  (\  opts -> opts { mode = ModeCheckParser }))        "parse, prettyprint, parse and compare ASTs"
   , Option []  ["show"]       (NoArg  (\  opts -> opts { mode = ModeShow }))               "parse, then show"
+  , Option []  ["interpret"]  (NoArg  (\  opts -> opts { mode = ModeInterpret }))          "parse, then interpret"
   ]
 
 get :: [String] -> IO Options
