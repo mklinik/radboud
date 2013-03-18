@@ -40,43 +40,47 @@ interpret = undefined
 
 eval :: State -> AstExpr -> Value
 eval s (AstIdentifier _ i) = s i
-eval s (AstInteger _ i) = I i
-eval s (AstBoolean _ b) = B b
-eval s (AstTuple _ _ _) = error ("eval: tuples not yet supported")
-eval s (AstEmptyList _) = error ("eval: lists not yet supported")
+eval _ (AstInteger _ i) = I i
+eval _ (AstBoolean _ b) = B b
+eval _ (AstTuple _ _ _) = error ("eval: tuples not yet supported")
+eval _ (AstEmptyList _) = error ("eval: lists not yet supported")
 eval s (AstBinOp _ "+" l r) = intBinOpInt (+) s l r
 eval s (AstBinOp _ "-" l r) = intBinOpInt (-) s l r
 eval s (AstBinOp _ "*" l r) = intBinOpInt (*) s l r
 eval s (AstBinOp _ "/" l r) = intBinOpInt (div) s l r
 eval s (AstBinOp _ "%" l r) = intBinOpInt (mod) s l r
-eval s (AstBinOp _ ":" l r) = error ("eval: lists not yet supported")
+eval _ (AstBinOp _ ":" _ _) = error ("eval: lists not yet supported")
 eval s (AstBinOp _ "<" l r) = intBinOpBool (<) s l r
 eval s (AstBinOp _ ">" l r) = intBinOpBool (>) s l r
 eval s (AstBinOp _ "<=" l r) = intBinOpBool (<=) s l r
 eval s (AstBinOp _ ">=" l r) = intBinOpBool (<=) s l r
 eval s (AstBinOp _ "||" l r) = boolBinOpBool (||) s l r
 eval s (AstBinOp _ "&&" l r) = boolBinOpBool (&&) s l r
-eval s (AstBinOp _ _ _ _) = error ("eval: unknown binary operator")
+eval _ (AstBinOp _ _ _ _) = error ("eval: unknown binary operator")
 eval s (AstUnaryOp _ "-" e) = intUnaryOpInt negate s e
-eval s (AstUnaryOp _ _ _) = error ("eval: unknown unary operator")
-eval s (AstFunctionCallExpr _) = error ("eval: function calls not yet supported")
+eval _ (AstUnaryOp _ _ _) = error ("eval: unknown unary operator")
+eval _ (AstFunctionCallExpr _) = error ("eval: function calls not yet supported")
 
-intBinOpInt f s l r = intBinOp_ f (eval s l) (eval s r)
+intBinOpInt :: (Integer -> Integer -> Integer) -> State -> AstExpr -> AstExpr -> Value
+intBinOpInt f s l r = intBinOp_ (eval s l) (eval s r)
   where
-    intBinOp_ f (I l) (I r) = I $ f l r
-    intBinOp_ _ _ _ = error ("intBinOpInt: type error")
+    intBinOp_ (I l_) (I r_) = I $ f l_ r_
+    intBinOp_ _ _ = error ("intBinOpInt: type error")
 
-intUnaryOpInt f s e = intUnaryOp_ f (eval s e)
+intUnaryOpInt :: (Integer -> Integer) -> State -> AstExpr -> Value
+intUnaryOpInt f s e = intUnaryOp_ (eval s e)
   where
-    intUnaryOp_ f (I i) = I $ f i
-    intUnaryOp_ _ _ = error ("intUnaryOpInt: type error")
+    intUnaryOp_ (I i) = I $ f i
+    intUnaryOp_ _ = error ("intUnaryOpInt: type error")
 
-intBinOpBool f s l r = intBinOpBool_ f (eval s l) (eval s r)
+intBinOpBool :: (Integer -> Integer -> Bool) -> State -> AstExpr -> AstExpr -> Value
+intBinOpBool f s l r = intBinOpBool_ (eval s l) (eval s r)
   where
-    intBinOpBool_ f (I l_) (I r_) = B $ f l_ r_
-    intBinOpBool_ _ _ _ = error ("intBinOpBool: type error")
+    intBinOpBool_ (I l_) (I r_) = B $ f l_ r_
+    intBinOpBool_ _ _ = error ("intBinOpBool: type error")
 
-boolBinOpBool f s l r = boolBinOpBool_ f (eval s l) (eval s r)
+boolBinOpBool :: (Bool -> Bool -> Bool) -> State -> AstExpr -> AstExpr -> Value
+boolBinOpBool f s l r = boolBinOpBool_ (eval s l) (eval s r)
   where
-    boolBinOpBool_ f (B l_) (B r_) = B $ f l_ r_
-    boolBinOpBool_ _ _ _ = error ("boolBinOpBool: type error")
+    boolBinOpBool_ (B l_) (B r_) = B $ f l_ r_
+    boolBinOpBool_ _ _ = error ("boolBinOpBool: type error")
