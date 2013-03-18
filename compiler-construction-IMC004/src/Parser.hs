@@ -54,7 +54,7 @@ pFunctionArguments :: SplParser [AstFunctionArgument]
 pFunctionArguments = (:) <$> pFunctionArgument <*> opt (pSymbol "," *> pFunctionArguments) []
 
 pFunctionArgument :: SplParser AstFunctionArgument
-pFunctionArgument = AstFunctionArgument <$> pType defaultBaseTypes <*> pIdentifier
+pFunctionArgument = AstFunctionArgument <$> pSourceLocation <*> pType defaultBaseTypes <*> pIdentifier
 
 pStatement :: SplParser AstStatement
 pStatement =

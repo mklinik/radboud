@@ -34,7 +34,7 @@ instance Prettyprint AstType where
   pp level (ListType t) = \s -> "[" ++ pp level t "]" ++ s
 
 instance Prettyprint AstFunctionArgument where
-  pp level (AstFunctionArgument typ ident) = \s -> pp level typ " " ++ ident ++ s
+  pp level (AstFunctionArgument _ typ ident) = \s -> pp level typ " " ++ ident ++ s
 
 instance Prettyprint AstExpr where
   pp _ (AstIdentifier _ ident) = (ident ++)

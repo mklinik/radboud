@@ -49,5 +49,5 @@ data AstStatement
 data AstFunctionCall = AstFunctionCall AstMeta String [AstExpr]
   deriving (Show, Eq)
 
-data AstFunctionArgument = AstFunctionArgument AstType String
+data AstFunctionArgument = AstFunctionArgument AstMeta AstType String
   deriving (Show, Eq)

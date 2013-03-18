@@ -126,7 +126,7 @@ specs = do
           emptyMeta
           (BaseType "Void")
           "foo"
-          [AstFunctionArgument (BaseType "Int") "x"]
+          [AstFunctionArgument emptyMeta (BaseType "Int") "x"]
           []
           [AstReturn emptyMeta Nothing]
     it "function with three formal parameters and a return value" $
@@ -135,9 +135,9 @@ specs = do
           emptyMeta
           (BaseType "Void")
           "foo"
-          [ AstFunctionArgument (BaseType "Int") "x"
-          , AstFunctionArgument (PolymorphicType "a") "y"
-          , AstFunctionArgument (BaseType "Bool") "z"
+          [ AstFunctionArgument emptyMeta (BaseType "Int") "x"
+          , AstFunctionArgument emptyMeta (PolymorphicType "a") "y"
+          , AstFunctionArgument emptyMeta (BaseType "Bool") "z"
           ]
           []
           [AstReturn emptyMeta (Just (AstIdentifier emptyMeta "a"))]
