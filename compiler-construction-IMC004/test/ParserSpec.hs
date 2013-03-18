@@ -1,6 +1,6 @@
 {-# LANGUAGE  FlexibleContexts, NoMonomorphismRestriction, RankNTypes #-}
 
-module Main (specs, main) where
+module ParserSpec (spec, main) where
 
 import Test.Hspec
 import Test.QuickCheck
@@ -9,11 +9,14 @@ import Parser
 import Ast
 import Utils
 
+main :: IO ()
+main = hspec spec
+
 parse :: (SplParser a) -> String -> a
 parse = runParser_ ""
 
-specs :: Spec
-specs = do
+spec :: Spec
+spec = do
   describe "pExpr" $ do
     it "various forms of identifiers" $
       property $ forAll (elements ["a", "a_", "a10", "a_", "TCP_IP_Connection", "Truee"]) $
@@ -179,6 +182,3 @@ specTypeParser p = do
   it "tuple type" $ p "(Int, Bool)" `shouldBe` TupleType emptyMeta (BaseType emptyMeta "Int") (BaseType emptyMeta "Bool")
   it "list type" $ p "[Int]" `shouldBe` ListType emptyMeta (BaseType emptyMeta "Int")
   it "polymorphic list type" $ p "[a]" `shouldBe` ListType emptyMeta (PolymorphicType emptyMeta "a")
-
-main :: IO ()
-main = hspec specs
