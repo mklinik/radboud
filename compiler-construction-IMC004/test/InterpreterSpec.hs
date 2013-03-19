@@ -4,13 +4,13 @@ module InterpreterSpec (spec, main) where
 
 import Test.Hspec
 import Test.QuickCheck
+import Control.Monad.Trans.State.Lazy
 
 import Parser
 import Utils
 import Interpreter
 
-expr :: String -> Value
-expr prog = eval emptyState $ runParser_ "" pExpr prog
+expr prog = evalState (eval $ runParser_ "" pExpr prog) emptyState
 
 testBinOp opSyntax opFunction resultConstructor =
   property $ \i1 i2 -> expr (show i1 ++ " " ++ opSyntax ++ " " ++ show i2) == resultConstructor (opFunction i1 i2)

@@ -6,6 +6,8 @@
 
 module Interpreter where
 
+import Control.Monad.Trans.State.Lazy
+
 import Ast
 
 data Value
@@ -26,74 +28,53 @@ instance Eq Value where
   (==) (L l1) (L l2) = l1 == l2
   (==) _      _      = error "Eq Value: type error in comparison"
 
-type State = String -> Value
+type Environment = String -> Value
 
-emptyState :: State
-emptyState i = error ("State: unknown identifier: '" ++ i ++ "'")
+emptyState :: Environment
+emptyState i = error ("Environment: unknown identifier: '" ++ i ++ "'")
 
-(|->) :: String -> Value -> State -> State
+(|->) :: String -> Value -> Environment -> Environment
 (|->) ident val s =
   \x -> if x == ident
     then val
     else s x
 
 -- programs can have side effects
-runSpl :: AstProgram -> IO State
+runSpl :: AstProgram -> IO Environment
 runSpl = undefined
 
-interpret :: State -> AstStatement -> IO State
+interpret :: Environment -> AstStatement -> IO Environment
 interpret = undefined
 
-eval :: State -> AstExpr -> Value
-eval s (AstIdentifier _ i) = s i
-eval _ (AstInteger _ i) = I i
-eval _ (AstBoolean _ b) = B b
-eval _ (AstTuple _ _ _) = error ("eval: tuples not yet supported")
-eval _ (AstEmptyList _) = error ("eval: lists not yet supported")
-eval s (AstBinOp _ "+" l r) = intBinOpInt (+) s l r
-eval s (AstBinOp _ "-" l r) = intBinOpInt (-) s l r
-eval s (AstBinOp _ "*" l r) = intBinOpInt (*) s l r
-eval s (AstBinOp _ "/" l r) = intBinOpInt (div) s l r
-eval s (AstBinOp _ "%" l r) = intBinOpInt (mod) s l r
-eval _ (AstBinOp _ ":" _ _) = error ("eval: lists not yet supported")
-eval s (AstBinOp _ "<" l r) = intBinOpBool (<) s l r
-eval s (AstBinOp _ ">" l r) = intBinOpBool (>) s l r
-eval s (AstBinOp _ "<=" l r) = intBinOpBool (<=) s l r
-eval s (AstBinOp _ ">=" l r) = intBinOpBool (>=) s l r
-eval s (AstBinOp _ "||" l r) = boolBinOpBool (||) s l r
-eval s (AstBinOp _ "&&" l r) = boolBinOpBool (&&) s l r
-eval _ (AstBinOp _ _ _ _) = error ("eval: unknown binary operator")
-eval s (AstUnaryOp _ "-" e) = intUnaryOpInt negate s e
-eval s (AstUnaryOp _ "!" e) = boolUnaryOpBool not s e
-eval _ (AstUnaryOp _ _ _) = error ("eval: unknown unary operator")
-eval _ (AstFunctionCallExpr _) = error ("eval: function calls not yet supported")
+eval :: AstExpr -> State Environment Value
+eval (AstIdentifier _ i) = get >>= \s -> return $ s i
+eval (AstInteger _ i) = return $ I i
+eval (AstBoolean _ b) = return $ B b
+eval (AstBinOp _ "+" l r) = intBinOp (+) l r I
+eval (AstBinOp _ "-" l r) = intBinOp (-) l r I
+eval (AstBinOp _ "*" l r) = intBinOp (*) l r I
+eval (AstBinOp _ "/" l r) = intBinOp (div) l r I
+eval (AstBinOp _ "%" l r) = intBinOp (mod) l r I
+eval (AstBinOp _ "<" l r) = intBinOp (<) l r B
+eval (AstBinOp _ ">" l r) = intBinOp (>) l r B
+eval (AstBinOp _ "<=" l r) = intBinOp (<=) l r B
+eval (AstBinOp _ ">=" l r) = intBinOp (>=) l r B
+eval (AstBinOp _ "||" l r) = boolBinOp (||) l r
+eval (AstBinOp _ "&&" l r) = boolBinOp (&&) l r
+eval (AstUnaryOp _ "-" e) = do
+  (I x) <- eval e
+  return $ I $ negate x
+eval (AstUnaryOp _ "!" e) = do
+  (B x) <- eval e
+  return $ B $ not x
+eval _ = error "eval: unsupported feature"
 
-intBinOpInt :: (Integer -> Integer -> Integer) -> State -> AstExpr -> AstExpr -> Value
-intBinOpInt f s l r = intBinOp_ (eval s l) (eval s r)
-  where
-    intBinOp_ (I l_) (I r_) = I $ f l_ r_
-    intBinOp_ _ _ = error ("intBinOpInt: type error")
+intBinOp f l r c = do
+  (I lhs) <- eval l
+  (I rhs) <- eval r
+  return $ c $ f lhs rhs
 
-intUnaryOpInt :: (Integer -> Integer) -> State -> AstExpr -> Value
-intUnaryOpInt f s e = intUnaryOp_ (eval s e)
-  where
-    intUnaryOp_ (I i) = I $ f i
-    intUnaryOp_ _ = error ("intUnaryOpInt: type error")
-
-intBinOpBool :: (Integer -> Integer -> Bool) -> State -> AstExpr -> AstExpr -> Value
-intBinOpBool f s l r = intBinOpBool_ (eval s l) (eval s r)
-  where
-    intBinOpBool_ (I l_) (I r_) = B $ f l_ r_
-    intBinOpBool_ _ _ = error ("intBinOpBool: type error")
-
-boolBinOpBool :: (Bool -> Bool -> Bool) -> State -> AstExpr -> AstExpr -> Value
-boolBinOpBool f s l r = boolBinOpBool_ (eval s l) (eval s r)
-  where
-    boolBinOpBool_ (B l_) (B r_) = B $ f l_ r_
-    boolBinOpBool_ _ _ = error ("boolBinOpBool: type error")
-
-boolUnaryOpBool :: (Bool -> Bool) -> State -> AstExpr -> Value
-boolUnaryOpBool f s r = boolUnaryOpBool_ (eval s r)
-  where
-    boolUnaryOpBool_ (B r_) = B $ f r_
-    boolUnaryOpBool_ _ = error ("boolUnaryOpBool: type error")
+boolBinOp f l r = do
+  (B lhs) <- eval l
+  (B rhs) <- eval r
+  return $ B $ f lhs rhs

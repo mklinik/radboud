@@ -13,6 +13,7 @@ executable spl
       base-compat >= 0.2
     , uu-parsinglib
     , ListLike
+    , transformers
 
   hs-source-dirs:
     src
@@ -37,3 +38,4 @@ test-suite spec
     , uu-parsinglib
     , QuickCheck
     , ListLike
+    , transformers
