@@ -7,6 +7,7 @@
 module Interpreter where
 
 import Control.Monad.Trans.State.Lazy
+import Control.Monad
 
 import Ast
 
@@ -31,8 +32,11 @@ instance Eq Value where
 type Environment = String -> Value
 type Spl a = State Environment a
 
-emptyState :: Environment
-emptyState i = error ("Environment: unknown identifier: '" ++ i ++ "'")
+lookupEnv :: String -> Environment -> Value
+lookupEnv x e = e x
+
+emptyEnvironment :: Environment
+emptyEnvironment i = error ("Environment: unknown identifier: '" ++ i ++ "'")
 
 (|->) :: String -> Value -> Environment -> Environment
 (|->) ident val s =
@@ -41,14 +45,28 @@ emptyState i = error ("Environment: unknown identifier: '" ++ i ++ "'")
     else s x
 
 -- programs can have side effects
-runSpl :: AstProgram -> IO ()
-runSpl = undefined
+runSpl :: AstProgram -> Spl ()
+runSpl (AstProgram globals) = do
+  -- put all global declarations in the environment
+  env <- foldM addDeclaration emptyEnvironment globals
+  -- search for the main function
+  let main = env "main"
+  -- put all variables of the main function in the environment
+  -- interpret all statements of the main function
+  return ()
 
+addDeclaration :: Environment -> AstDeclaration -> Spl Environment
+addDeclaration env (AstVarDeclaration _ _ name expression) = do
+  value <- eval expression
+  return $ (name |-> value) env
+addDeclaration env (AstFunDeclaration _ _ _ _ _ _) = undefined
+
+-- big-step operational semantics
 interpret :: AstStatement -> IO (Spl ())
 interpret = undefined
 
 eval :: AstExpr -> Spl Value
-eval (AstIdentifier _ i) = get >>= \s -> return $ s i
+eval (AstIdentifier _ i) = get >>= \s -> return $ lookupEnv i s
 eval (AstInteger _ i) = return $ I i
 eval (AstBoolean _ b) = return $ B b
 eval (AstBinOp _ "+" l r) = intBinOp (+) l r I

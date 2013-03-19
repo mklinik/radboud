@@ -10,7 +10,7 @@ import Parser
 import Utils
 import Interpreter
 
-expr prog = evalState (eval $ runParser_ "" pExpr prog) emptyState
+expr prog = evalState (eval $ runParser_ "" pExpr prog) emptyEnvironment
 
 testBinOp opSyntax opFunction resultConstructor =
   property $ \i1 i2 -> expr (show i1 ++ " " ++ opSyntax ++ " " ++ show i2) == resultConstructor (opFunction i1 i2)
@@ -47,11 +47,11 @@ spec = do
 
   describe "State" $ do
     it "retrieves the most recently added identifier in a singleton state" $ do
-      ("x" |-> I 10) emptyState "x" `shouldBe` I 10
+      lookupEnv "x" (("x" |-> I 10) emptyEnvironment) `shouldBe` I 10
     it "retrieves the most recently added identifier in a state with more elements" $ do
-      (("x" |-> I 10) . ("y" |-> B True)) emptyState "y" `shouldBe` B True
+      lookupEnv "y" ((("x" |-> I 10) . ("y" |-> B True)) emptyEnvironment) `shouldBe` B True
     it "retrieves an identifier somewhere inside the state" $ do
-      (("x" |-> I 10) . ("y" |-> B True)) emptyState "x" `shouldBe` I 10
+      lookupEnv "x" ((("x" |-> I 10) . ("y" |-> B True)) emptyEnvironment) `shouldBe` I 10
 
 main :: IO ()
 main = hspec spec
