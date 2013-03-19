@@ -6,6 +6,7 @@ import System.Console.GetOpt
 import Text.Printf (printf)
 import Control.Monad
 import System.Exit
+import qualified Control.Monad.Trans.State.Lazy as MT
 
 import Parser
 import Prettyprint
@@ -41,8 +42,7 @@ run opts = do
     ModeInterpret -> do
       input <- hGetContents (inFile opts)
       let ast1 = runParser_ (inputFilename opts) pProgram input
-      _ <- runSpl ast1
-      return ()
+      print $ MT.evalState (runSpl ast1) emptyEnvironment
 
   cleanUp opts
 

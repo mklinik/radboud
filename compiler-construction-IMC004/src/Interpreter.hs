@@ -15,18 +15,21 @@ data Value
   = I Integer
   | B Bool
   | L [Value]
-  | F (Value -> Value)
+  | V
+  | F (Value -> Spl Value)
 
 instance Show Value where
   show (I i) = show i
   show (B b) = show b
   show (L l) = show l
+  show  V    = "Void"
   show (F _) = "<function>"
 
 instance Eq Value where
   (==) (I i1) (I i2) = i1 == i2
   (==) (B b1) (B b2) = b1 == b2
   (==) (L l1) (L l2) = l1 == l2
+  (==)  V      V     = True
   (==) _      _      = error "Eq Value: type error in comparison"
 
 type Environment = String -> Value
@@ -45,28 +48,40 @@ emptyEnvironment i = error ("Environment: unknown identifier: '" ++ i ++ "'")
     else s x
 
 -- programs can have side effects
-runSpl :: AstProgram -> Spl ()
+runSpl :: AstProgram -> Spl Value
 runSpl (AstProgram globals) = do
   -- put all global declarations in the environment
   env <- foldM addDeclaration emptyEnvironment globals
   -- search for the main function
-  let main = env "main"
-  -- put all variables of the main function in the environment
-  -- interpret all statements of the main function
-  return ()
+  let (F main) = env "main"
+  put env
+  main $ I 0
 
 addDeclaration :: Environment -> AstDeclaration -> Spl Environment
 addDeclaration env (AstVarDeclaration _ _ name expression) = do
   value <- eval expression
   return $ (name |-> value) env
-addDeclaration env (AstFunDeclaration _ _ _ _ _ _) = undefined
+addDeclaration env (AstFunDeclaration _ _ name formalArgs localVars body) = do
+  let fun = mkFunction formalArgs localVars body
+  return $ (name |-> fun) env
 
--- big-step operational semantics
-interpret :: AstStatement -> IO (Spl ())
-interpret = undefined
+mkFunction :: [AstFunctionArgument] -> [AstDeclaration] -> [AstStatement] -> Value
+mkFunction ((AstFunctionArgument _ _ argumentName):arg:args) decls stmts = F $ \v -> do
+  modify (argumentName |-> v)
+  return $ mkFunction (arg:args) decls stmts
+mkFunction [AstFunctionArgument _ _ argumentName] decls stmts = F $ \v -> do
+  modify (argumentName |-> v)
+  get >>= \env -> foldM addDeclaration env decls >>= put
+  result <- mapM interpret stmts
+  return $ last result
+mkFunction [] decls stmts = error "mkFunction: functions must have at least one argument"
+
+interpret :: AstStatement -> Spl Value
+interpret (AstReturn _ Nothing) = return V
+interpret (AstReturn _ (Just e)) = eval e
 
 eval :: AstExpr -> Spl Value
-eval (AstIdentifier _ i) = get >>= \s -> return $ lookupEnv i s
+eval (AstIdentifier _ i) = gets $ lookupEnv i
 eval (AstInteger _ i) = return $ I i
 eval (AstBoolean _ b) = return $ B b
 eval (AstBinOp _ "+" l r) = intBinOp (+) l r I
@@ -86,7 +101,14 @@ eval (AstUnaryOp _ "-" e) = do
 eval (AstUnaryOp _ "!" e) = do
   (B x) <- eval e
   return $ B $ not x
+eval (AstFunctionCallExpr (AstFunctionCall _ name actualArgs)) = do
+  f <- gets $ lookupEnv name
+  args <- mapM eval actualArgs
+  foldM apply f args
 eval _ = error "eval: unsupported feature"
+
+apply :: Value -> Value -> Spl Value
+apply (F f) v = f v
 
 intBinOp :: (Integer -> Integer -> b) -> AstExpr -> AstExpr -> (b -> Value) -> Spl Value
 intBinOp f l r c = do
