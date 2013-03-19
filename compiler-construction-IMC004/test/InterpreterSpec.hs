@@ -47,11 +47,11 @@ spec = do
 
   describe "State" $ do
     it "retrieves the most recently added identifier in a singleton state" $ do
-      (("x" |-> I 10) emptyState $ "x") `shouldBe` I 10
+      ("x" |-> I 10) emptyState "x" `shouldBe` I 10
     it "retrieves the most recently added identifier in a state with more elements" $ do
-      (("x" |-> I 10) $ ("y" |-> B True) emptyState) "y" `shouldBe` B True
+      (("x" |-> I 10) . ("y" |-> B True)) emptyState "y" `shouldBe` B True
     it "retrieves an identifier somewhere inside the state" $ do
-      (("x" |-> I 10) $ ("y" |-> B True) emptyState) "x" `shouldBe` I 10
+      (("x" |-> I 10) . ("y" |-> B True)) emptyState "x" `shouldBe` I 10
 
 main :: IO ()
 main = hspec spec
