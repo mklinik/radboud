@@ -1,0 +1,5 @@
+Int z = 30;
+Void main(Int x)
+{
+  return z;
+}
