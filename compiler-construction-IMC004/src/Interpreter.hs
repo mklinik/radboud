@@ -29,6 +29,7 @@ instance Eq Value where
   (==) _      _      = error "Eq Value: type error in comparison"
 
 type Environment = String -> Value
+type Spl a = State Environment a
 
 emptyState :: Environment
 emptyState i = error ("Environment: unknown identifier: '" ++ i ++ "'")
@@ -40,13 +41,13 @@ emptyState i = error ("Environment: unknown identifier: '" ++ i ++ "'")
     else s x
 
 -- programs can have side effects
-runSpl :: AstProgram -> IO Environment
+runSpl :: AstProgram -> IO ()
 runSpl = undefined
 
-interpret :: Environment -> AstStatement -> IO Environment
+interpret :: AstStatement -> IO (Spl ())
 interpret = undefined
 
-eval :: AstExpr -> State Environment Value
+eval :: AstExpr -> Spl Value
 eval (AstIdentifier _ i) = get >>= \s -> return $ s i
 eval (AstInteger _ i) = return $ I i
 eval (AstBoolean _ b) = return $ B b
@@ -69,11 +70,13 @@ eval (AstUnaryOp _ "!" e) = do
   return $ B $ not x
 eval _ = error "eval: unsupported feature"
 
+intBinOp :: (Integer -> Integer -> b) -> AstExpr -> AstExpr -> (b -> Value) -> Spl Value
 intBinOp f l r c = do
   (I lhs) <- eval l
   (I rhs) <- eval r
   return $ c $ f lhs rhs
 
+boolBinOp :: (Bool -> Bool -> Bool) -> AstExpr -> AstExpr -> Spl Value
 boolBinOp f l r = do
   (B lhs) <- eval l
   (B rhs) <- eval r
