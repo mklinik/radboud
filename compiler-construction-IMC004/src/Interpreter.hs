@@ -8,6 +8,7 @@ module Interpreter where
 
 import Control.Monad.Trans.State.Lazy
 import Control.Monad
+import qualified Data.Map as Map
 
 import Ast
 
@@ -32,60 +33,83 @@ instance Eq Value where
   (==)  V      V     = True
   (==) _      _      = error "Eq Value: type error in comparison"
 
-type Environment = String -> Value
-type Spl a = State Environment a
-
-lookupEnv :: String -> Environment -> Value
-lookupEnv x e = e x
+type Environment = (Map.Map String Value, [Map.Map String Value])
 
 emptyEnvironment :: Environment
-emptyEnvironment i = error ("Environment: unknown identifier: '" ++ i ++ "'")
+emptyEnvironment = (Map.empty,[Map.empty])
 
-(|->) :: String -> Value -> Environment -> Environment
-(|->) ident val s =
-  \x -> if x == ident
-    then val
-    else s x
+envLookup :: String -> Environment -> Value
+envLookup x (globals, locals:_) =
+  case Map.lookup x locals of
+    (Just v) -> v
+    Nothing  -> case Map.lookup x globals of
+      (Just v) -> v
+      Nothing  -> error ("Environment: unknown identifier: '" ++ x ++ "'")
+
+envAddGlobal :: String -> Value -> Environment -> Environment
+envAddGlobal name value (globals, locals) = (Map.insert name value globals, locals)
+
+envAdd :: String -> Value -> Environment -> Environment
+envAdd name value (globals, l:locals) = (globals, (Map.insert name value l):locals)
+
+envAddDeclaration :: (String -> Value -> Environment -> Environment) -> Environment -> AstDeclaration -> Spl Environment
+envAddDeclaration doAdd env (AstVarDeclaration _ _ name expression) = do
+  value <- eval expression
+  return $ doAdd name value env
+envAddDeclaration doAdd env (AstFunDeclaration _ _ name formalArgs localVars body) = do
+  let fun = mkFunction formalArgs localVars body
+  return $ doAdd name fun env
+
+envUpdate :: String -> Value -> Environment -> Environment
+envUpdate name value (globals, l:locals) =
+  if Map.member name l
+    then (globals, (Map.adjust (const value) name l):locals)
+    else if Map.member name globals
+      then (Map.adjust (const value) name globals, l:locals)
+      else error ("envUpdate: unknown identifier: " ++ name)
+
+envPushScope :: Environment -> Environment
+envPushScope (globals, locals) = (globals, Map.empty:locals)
+
+envPopScope :: Environment -> Environment
+envPopScope (globals, (_:locals)) = (globals, locals)
+
+
+type Spl a = State Environment a
 
 -- programs can have side effects
 runSpl :: AstProgram -> Spl Value
 runSpl (AstProgram globals) = do
   -- put all global declarations in the environment
-  env <- foldM addDeclaration emptyEnvironment globals
+  env <- foldM (envAddDeclaration envAddGlobal) emptyEnvironment globals
   -- search for the main function
-  let (F main) = env "main"
+  let (F main) = envLookup "main" env
   put env
   main []
 
-addDeclaration :: Environment -> AstDeclaration -> Spl Environment
-addDeclaration env (AstVarDeclaration _ _ name expression) = do
-  value <- eval expression
-  return $ (name |-> value) env
-addDeclaration env (AstFunDeclaration _ _ name formalArgs localVars body) = do
-  let fun = mkFunction formalArgs localVars body
-  return $ (name |-> fun) env
-
 mkFunction :: [AstFunctionArgument] -> [AstDeclaration] -> [AstStatement] -> Value
 mkFunction formalArgs decls stmts = F $ \actualArgs -> do
+  modify envPushScope
   let nameValues = zipWith (\(AstFunctionArgument _ _ argName) argValue -> (argName, argValue)) formalArgs actualArgs :: [(String, Value)]
-  let modifies = map (modify . (uncurry (|->))) nameValues :: [Spl ()]
+  let addActualArgs = map (modify . (uncurry envAdd)) nameValues :: [Spl ()]
   -- put actual parameters to environment
-  sequence_ modifies
+  sequence_ addActualArgs
   -- put local declarations to environment
-  get >>= \env -> foldM addDeclaration env decls >>= put
+  get >>= \env -> foldM (envAddDeclaration envAdd) env decls >>= put
   -- interpret statements
   result <- mapM interpret stmts
+  modify envPopScope
   -- return value of last statement, which hopefully was a return statement
   return $ last result
 
 interpret :: AstStatement -> Spl Value
 interpret (AstReturn _ Nothing) = return V
 interpret (AstReturn _ (Just e)) = eval e
-interpret (AstAssignment _ var expr) = eval expr >>= \e -> modify (var |-> e) >> return V
+interpret (AstAssignment _ var expr) = eval expr >>= \e -> modify (var `envUpdate` e) >> return V
 interpret (AstFunctionCallStmt f) = apply f
 
 eval :: AstExpr -> Spl Value
-eval (AstIdentifier _ i) = gets $ lookupEnv i
+eval (AstIdentifier _ i) = gets $ envLookup i
 eval (AstInteger _ i) = return $ I i
 eval (AstBoolean _ b) = return $ B b
 eval (AstBinOp _ "+" l r) = intBinOp (+) l r I
@@ -110,7 +134,7 @@ eval _ = error "eval: unsupported feature"
 
 apply :: AstFunctionCall -> Spl Value
 apply (AstFunctionCall _ name actualArgs) = do
-  (F f) <- gets $ lookupEnv name
+  (F f) <- gets $ envLookup name
   args <- mapM eval actualArgs
   f args
 

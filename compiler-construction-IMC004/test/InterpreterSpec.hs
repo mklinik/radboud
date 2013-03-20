@@ -85,11 +85,11 @@ spec = do
 
   describe "State" $ do
     it "retrieves the most recently added identifier in a singleton state" $ do
-      lookupEnv "x" (("x" |-> I 10) emptyEnvironment) `shouldBe` I 10
+      envLookup "x" (("x" `envAdd` I 10) emptyEnvironment) `shouldBe` I 10
     it "retrieves the most recently added identifier in a state with more elements" $ do
-      lookupEnv "y" ((("x" |-> I 10) . ("y" |-> B True)) emptyEnvironment) `shouldBe` B True
+      envLookup "y" ((("x" `envAdd` I 10) . ("y" `envAdd` B True)) emptyEnvironment) `shouldBe` B True
     it "retrieves an identifier somewhere inside the state" $ do
-      lookupEnv "x" ((("x" |-> I 10) . ("y" |-> B True)) emptyEnvironment) `shouldBe` I 10
+      envLookup "x" ((("x" `envAdd` I 10) . ("y" `envAdd` B True)) emptyEnvironment) `shouldBe` I 10
 
 main :: IO ()
 main = hspec spec
