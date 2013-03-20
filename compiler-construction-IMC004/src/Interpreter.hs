@@ -107,6 +107,20 @@ interpret (AstReturn _ Nothing) = return V
 interpret (AstReturn _ (Just e)) = eval e
 interpret (AstAssignment _ var expr) = eval expr >>= \e -> modify (var `envUpdate` e) >> return V
 interpret (AstFunctionCallStmt f) = apply f
+interpret (AstBlock stmts) = do
+  result <- mapM interpret stmts
+  return $ last result
+interpret while@(AstWhile _ condition stmt) = do
+  (B cond) <- eval condition
+  if cond
+    then do interpret stmt
+            interpret while
+    else return V
+interpret (AstIfThenElse _ condition thenStmt elseStmt) = do
+  (B cond) <- eval condition
+  interpret $ if cond
+    then thenStmt
+    else elseStmt
 
 eval :: AstExpr -> Spl Value
 eval (AstIdentifier _ i) = gets $ envLookup i
