@@ -44,7 +44,7 @@ envLookup x (globals, locals:_) =
     (Just v) -> v
     Nothing  -> case Map.lookup x globals of
       (Just v) -> v
-      Nothing  -> error ("Environment: unknown identifier: '" ++ x ++ "'")
+      Nothing  -> error ("envLookup: unknown identifier: '" ++ x ++ "'")
 
 envAddGlobal :: String -> Value -> Environment -> Environment
 envAddGlobal name value (globals, locals) = (Map.insert name value globals, locals)

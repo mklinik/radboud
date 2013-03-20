@@ -14,6 +14,7 @@ executable spl
     , uu-parsinglib
     , ListLike
     , transformers
+    , containers
 
   hs-source-dirs:
     src
@@ -39,3 +40,4 @@ test-suite spec
     , QuickCheck
     , ListLike
     , transformers
+    , containers
