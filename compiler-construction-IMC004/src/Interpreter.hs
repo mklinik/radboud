@@ -16,7 +16,7 @@ data Value
   | B Bool
   | L [Value]
   | V
-  | F (Value -> Spl Value)
+  | F ([Value] -> Spl Value)
 
 instance Show Value where
   show (I i) = show i
@@ -55,7 +55,7 @@ runSpl (AstProgram globals) = do
   -- search for the main function
   let (F main) = env "main"
   put env
-  main $ I 0
+  main []
 
 addDeclaration :: Environment -> AstDeclaration -> Spl Environment
 addDeclaration env (AstVarDeclaration _ _ name expression) = do
@@ -66,15 +66,17 @@ addDeclaration env (AstFunDeclaration _ _ name formalArgs localVars body) = do
   return $ (name |-> fun) env
 
 mkFunction :: [AstFunctionArgument] -> [AstDeclaration] -> [AstStatement] -> Value
-mkFunction ((AstFunctionArgument _ _ argumentName):arg:args) decls stmts = F $ \v -> do
-  modify (argumentName |-> v)
-  return $ mkFunction (arg:args) decls stmts
-mkFunction [AstFunctionArgument _ _ argumentName] decls stmts = F $ \v -> do
-  modify (argumentName |-> v)
+mkFunction formalArgs decls stmts = F $ \actualArgs -> do
+  let nameValues = zipWith (\(AstFunctionArgument _ _ argName) argValue -> (argName, argValue)) formalArgs actualArgs :: [(String, Value)]
+  let modifies = map (modify . (uncurry (|->))) nameValues :: [Spl ()]
+  -- put actual parameters to environment
+  sequence_ modifies
+  -- put local declarations to environment
   get >>= \env -> foldM addDeclaration env decls >>= put
+  -- interpret statements
   result <- mapM interpret stmts
+  -- return value of last statement, which hopefully was a return statement
   return $ last result
-mkFunction [] decls stmts = error "mkFunction: functions must have at least one argument"
 
 interpret :: AstStatement -> Spl Value
 interpret (AstReturn _ Nothing) = return V
@@ -102,13 +104,10 @@ eval (AstUnaryOp _ "!" e) = do
   (B x) <- eval e
   return $ B $ not x
 eval (AstFunctionCallExpr (AstFunctionCall _ name actualArgs)) = do
-  f <- gets $ lookupEnv name
+  (F f) <- gets $ lookupEnv name
   args <- mapM eval actualArgs
-  foldM apply f args
+  f args
 eval _ = error "eval: unsupported feature"
-
-apply :: Value -> Value -> Spl Value
-apply (F f) v = f v
 
 intBinOp :: (Integer -> Integer -> b) -> AstExpr -> AstExpr -> (b -> Value) -> Spl Value
 intBinOp f l r c = do

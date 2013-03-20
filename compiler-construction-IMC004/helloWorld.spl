@@ -1,5 +1,6 @@
-Int z = 30;
-Void main(Int x)
+Int main()
 {
-  return z;
+  Int y = 42;
+  return z + y;
 }
+Int z = 30;
