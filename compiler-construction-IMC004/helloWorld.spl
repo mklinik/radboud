@@ -1,6 +1,10 @@
+Int square(Int x)
+{
+  return x * x;
+}
+
 Int main()
 {
-  Int y = 42;
-  return z + y;
+  return square(z);
 }
 Int z = 30;

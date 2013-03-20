@@ -4,19 +4,57 @@ module InterpreterSpec (spec, main) where
 
 import Test.Hspec
 import Test.QuickCheck
-import Control.Monad.Trans.State.Lazy
+import qualified Control.Monad.Trans.State.Lazy as MT
 
 import Parser
 import Utils
 import Interpreter
 
-expr prog = evalState (eval $ runParser_ "" pExpr prog) emptyEnvironment
+expr prog = MT.evalState (eval $ runParser_ "" pExpr prog) emptyEnvironment
+
+run prog = MT.evalState (runSpl $ runParser_ "" pProgram prog) emptyEnvironment
+run_ prog = MT.evalState (runSpl $ runParser_ "" pProgram $ unlines prog) emptyEnvironment
 
 testBinOp opSyntax opFunction resultConstructor =
   property $ \i1 i2 -> expr (show i1 ++ " " ++ opSyntax ++ " " ++ show i2) == resultConstructor (opFunction i1 i2)
 
 spec :: Spec
 spec = do
+
+  describe "Interpreter" $ do
+    it "integer constant" $ run "Int main() { return 10; }" `shouldBe` I 10
+    it "global variable" $
+      run_ ["Int foo = 42;"
+           ,"Int main()"
+           ,"{"
+           ,"  return foo;"
+           ,"}"
+           ] `shouldBe` I 42
+    it "assignments" $
+      run_ ["Int main()"
+           ,"{"
+           ,"  Int i = 5;"
+           ,"  i = 10;"
+           ,"  return i;"
+           ,"}"
+           ] `shouldBe` I 10
+    it "side effects" $
+      run_ ["Int foo = 42;"
+           ,"Void bar()"
+           ,"{"
+           ,"  foo = 100;"
+           ,"}"
+           ,"Int main()"
+           ,"{ bar();"
+           ,"  return foo;"
+           ,"}"
+           ] `shouldBe` I 100
+    it "environments shrink again" $ do
+      run_ ["Int x = 1;"
+           ,"Void bar() { Int x = 10; return; }"
+           ,"Int main() { bar(); return x; }"
+           ] `shouldBe` I 1
+
   describe "eval" $ do
     it "evaluates integer constants" $ do
       property $ \x -> expr (show x) == I x

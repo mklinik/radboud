@@ -81,6 +81,8 @@ mkFunction formalArgs decls stmts = F $ \actualArgs -> do
 interpret :: AstStatement -> Spl Value
 interpret (AstReturn _ Nothing) = return V
 interpret (AstReturn _ (Just e)) = eval e
+interpret (AstAssignment _ var expr) = eval expr >>= \e -> modify (var |-> e) >> return V
+interpret (AstFunctionCallStmt f) = apply f
 
 eval :: AstExpr -> Spl Value
 eval (AstIdentifier _ i) = gets $ lookupEnv i
@@ -103,11 +105,14 @@ eval (AstUnaryOp _ "-" e) = do
 eval (AstUnaryOp _ "!" e) = do
   (B x) <- eval e
   return $ B $ not x
-eval (AstFunctionCallExpr (AstFunctionCall _ name actualArgs)) = do
+eval (AstFunctionCallExpr f) = apply f
+eval _ = error "eval: unsupported feature"
+
+apply :: AstFunctionCall -> Spl Value
+apply (AstFunctionCall _ name actualArgs) = do
   (F f) <- gets $ lookupEnv name
   args <- mapM eval actualArgs
   f args
-eval _ = error "eval: unsupported feature"
 
 intBinOp :: (Integer -> Integer -> b) -> AstExpr -> AstExpr -> (b -> Value) -> Spl Value
 intBinOp f l r c = do
