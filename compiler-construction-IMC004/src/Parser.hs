@@ -91,12 +91,27 @@ pBaseExpr =
       mkBoolOrIdentifier <$> pSourceLocation <*> pIdentifier
   <|> AstUnaryOp <$> pSourceLocation <*> pSymbol "!" <*> pExpr
   <|> AstInteger <$> pSourceLocation <*> pNatural
-  <|> pSymbol "(" *> pExpr <* pSymbol ")"
   <|> AstFunctionCallExpr <$> pFunctionCall
   <|> AstEmptyList <$> pSourceLocation <* pSymbol "[" <* pSymbol "]"
-  <|> AstTuple <$> pSourceLocation <* pSymbol "(" <*> pExpr <* pSymbol "," <*> pExpr <* pSymbol ")"
-  <|> pSymbol "-" *> pNegatedExpression
+  <|> addLength 1
+      ( do
+        loc <- pSourceLocation
+        _ <- pSymbol "("
+        e <- pExpr
+        pParenthesizedExpression loc e
+      )
+  <|> addLength 1
+      ( do
+        loc <- pSourceLocation
+        _ <- pSymbol "-"
+        pNegatedExpression loc
+      )
   <?> "Expression"
+
+pParenthesizedExpression :: AstMeta -> AstExpr -> SplParser AstExpr
+pParenthesizedExpression loc e =
+      pSymbol ")" *> pure e
+  <|> pSymbol "," *> (AstTuple loc e <$> pExpr) <* pSymbol ")"
 
 pIdentifier :: SplParser String
 pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> UU.pSym '_')) <?> "Identifier"
@@ -104,11 +119,10 @@ pIdentifier = lexeme ((:) <$> pLetter <*> many (pLetter <|> pDigit <|> UU.pSym '
 pFunctionCall :: SplParser AstFunctionCall
 pFunctionCall = AstFunctionCall <$> pSourceLocation <*> pIdentifier <* pSymbol "(" <*> opt pActualParameters [] <* pSymbol ")"
 
--- TODO: source locations are not correct. Need to use source location of pSymbol "-" in pBaseExpr
-pNegatedExpression :: SplParser AstExpr
-pNegatedExpression =
-       (\m i -> AstInteger m (negate i)) <$> pSourceLocation <*> pNatural
-  <<|> (\m -> AstUnaryOp m "-") <$> pSourceLocation <*> pExpr
+pNegatedExpression :: AstMeta -> SplParser AstExpr
+pNegatedExpression loc =
+       (AstInteger loc) . negate <$> pNatural
+  <<|> (AstUnaryOp loc "-") <$> pExpr
 
 pActualParameters :: SplParser [AstExpr]
 pActualParameters = (:) <$> pExpr <*> opt (pSymbol "," *> pActualParameters) []
