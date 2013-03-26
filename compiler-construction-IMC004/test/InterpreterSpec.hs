@@ -141,12 +141,12 @@ spec = do
     it "snd is the second projection" $ do
       run "Int main() { return snd( (10, 20) ); }" `shouldReturn` I 20
 
-    it "hd is the head function" $ do
-      run "Int main() { return hd(10:[]); }" `shouldReturn` I 10
-    it "tl is the tail function" $ do
-      run "Int main() { return tl(10:[]); }" `shouldReturn` L []
-    it "hd and tl together" $ do
-      run "Int main() { return hd(tl(tl(10:20:30:[]))); }" `shouldReturn` I 30
+    it "head is the head function" $ do
+      run "Int main() { return head(10:[]); }" `shouldReturn` I 10
+    it "tail is the tail function" $ do
+      run "Int main() { return tail(10:[]); }" `shouldReturn` L []
+    it "head and tail together" $ do
+      run "Int main() { return head(tail(tail(10:20:30:[]))); }" `shouldReturn` I 30
 
     it "isEmpty gives True on the empty list" $ do
       run "Int main() { return isEmpty([]); }" `shouldReturn` B True
