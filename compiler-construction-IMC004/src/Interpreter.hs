@@ -91,9 +91,15 @@ interpretProgram :: AstProgram -> Spl Value
 interpretProgram (AstProgram globals) = do
   -- put all global declarations in the environment
   env <- foldM (envAddDeclaration envAddGlobal) emptyEnvironment globals
-  -- search for the main function
-  let (F main) = envLookup "main" env
   lift $ put env
+
+  -- put all built-in functions in the environment
+  lift $ sequence_ $ map (modify . uncurry envAddGlobal) builtins
+
+  -- search for the main function
+  F main <- lift $ gets $ envLookup "main"
+
+  -- execute main function
   main []
 
 mkFunction :: [AstFunctionArgument] -> [AstDeclaration] -> [AstStatement] -> Value
@@ -187,3 +193,11 @@ boolBinOp f l r = do
   (B lhs) <- eval l
   (B rhs) <- eval r
   return $ B $ f lhs rhs
+
+
+-- built in functions
+builtins :: [(String, Value)]
+builtins =
+  [ ("fst", F $ \[(T (l, _))] -> right l)
+  , ("snd", F $ \[(T (_, r))] -> right r)
+  ]

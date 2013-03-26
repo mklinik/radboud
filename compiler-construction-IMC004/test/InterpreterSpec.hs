@@ -127,6 +127,12 @@ spec = do
       expr "(10, True)" `shouldBe` T (I 10, B True)
       expr "(10, (True, False))" `shouldBe` T (I 10, T (B True, B False))
 
+  describe "builtin functions" $ do
+    it "fst is the first projection" $ do
+      run "Int main() { return fst( (10, 20) ); }" `shouldBe` I 10
+    it "snd is the second projection" $ do
+      run "Int main() { return snd( (10, 20) ); }" `shouldBe` I 20
+
 
   describe "State" $ do
     it "retrieves the most recently added identifier in a singleton state" $ do
