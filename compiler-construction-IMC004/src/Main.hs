@@ -43,7 +43,7 @@ run opts = do
     ModeInterpret -> do
       input <- hGetContents (inFile opts)
       let ast1 = runParser_ (inputFilename opts) pProgram input
-      print $ MT.evalState (MT.runEitherT (runSpl ast1)) emptyEnvironment
+      print $ MT.evalState (MT.runEitherT (interpretProgram ast1)) emptyEnvironment
       return ()
 
   cleanUp opts

@@ -20,6 +20,7 @@ data Value
   | L [Value]
   | V
   | F ([Value] -> Spl Value)
+  | T (Value, Value)
 
 instance Show Value where
   show (I i) = show i
@@ -27,12 +28,14 @@ instance Show Value where
   show (L l) = show l
   show  V    = "Void"
   show (F _) = "<function>"
+  show (T t) = show t
 
 instance Eq Value where
   (==) (I i1) (I i2) = i1 == i2
   (==) (B b1) (B b2) = b1 == b2
   (==) (L l1) (L l2) = l1 == l2
   (==)  V      V     = True
+  (==) (T t1) (T t2) = t1 == t2
   (==) _      _      = error "Eq Value: type error in comparison"
 
 type Environment = (Map.Map String Value, [Map.Map String Value])
@@ -84,8 +87,8 @@ envPopScope _ = error "envPopScope: fatal error"
 type Spl a = EitherT Value (State Environment) a
 
 -- programs can have side effects
-runSpl :: AstProgram -> Spl Value
-runSpl (AstProgram globals) = do
+interpretProgram :: AstProgram -> Spl Value
+interpretProgram (AstProgram globals) = do
   -- put all global declarations in the environment
   env <- foldM (envAddDeclaration envAddGlobal) emptyEnvironment globals
   -- search for the main function
@@ -141,6 +144,7 @@ eval :: AstExpr -> Spl Value
 eval (AstIdentifier _ i) = lift $ gets $ envLookup i
 eval (AstInteger _ i) = return $ I i
 eval (AstBoolean _ b) = return $ B b
+eval (AstEmptyList _) = error "eval: lists not supported"
 eval (AstBinOp _ "+" l r) = intBinOp (+) l r I
 eval (AstBinOp _ "-" l r) = intBinOp (-) l r I
 eval (AstBinOp _ "*" l r) = intBinOp (*) l r I
@@ -152,14 +156,19 @@ eval (AstBinOp _ "<=" l r) = intBinOp (<=) l r B
 eval (AstBinOp _ ">=" l r) = intBinOp (>=) l r B
 eval (AstBinOp _ "||" l r) = boolBinOp (||) l r
 eval (AstBinOp _ "&&" l r) = boolBinOp (&&) l r
+eval (AstBinOp _ o _ _) = error ("eval: unsupported binary operator: " ++ o)
 eval (AstUnaryOp _ "-" e) = do
   (I x) <- eval e
   return $ I $ negate x
 eval (AstUnaryOp _ "!" e) = do
   (B x) <- eval e
   return $ B $ not x
+eval (AstUnaryOp _ o _) = error ("eval: unsupported unary operator: " ++ o)
 eval (AstFunctionCallExpr f) = apply f
-eval _ = error "eval: unsupported feature"
+eval (AstTuple _ eX eY) = do
+  x <- eval eX
+  y <- eval eY
+  return $ T (x, y)
 
 apply :: AstFunctionCall -> Spl Value
 apply (AstFunctionCall _ name actualArgs) = do

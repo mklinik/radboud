@@ -19,10 +19,10 @@ expr :: String -> Value
 expr prog = unRight $ MT.evalState (MT.runEitherT (eval $ runParser_ "" pExpr prog)) emptyEnvironment
 
 run :: String -> Value
-run prog = unRight $ MT.evalState (MT.runEitherT $ runSpl $ runParser_ "" pProgram prog) emptyEnvironment
+run prog = unRight $ MT.evalState (MT.runEitherT $ interpretProgram $ runParser_ "" pProgram prog) emptyEnvironment
 
 run_ :: [String] -> Value
-run_ prog = unRight $ MT.evalState (MT.runEitherT $ runSpl $ runParser_ "" pProgram $ unlines prog) emptyEnvironment
+run_ prog = unRight $ MT.evalState (MT.runEitherT $ interpretProgram $ runParser_ "" pProgram $ unlines prog) emptyEnvironment
 
 testBinOp opSyntax opFunction resultConstructor =
   property $ \i1 i2 -> expr (show i1 ++ " " ++ opSyntax ++ " " ++ show i2) == (resultConstructor (opFunction i1 i2))
@@ -121,6 +121,11 @@ spec = do
     it "evaluates unary minus" $ property $ \i -> expr ("- (" ++ show i ++ ")") == (I (-i))
     it "evaluates double negation" $ property $ \i -> expr ("--" ++ show i) == (I i)
     it "evaluates unary negation" $ property $ \i -> expr ("!" ++ show i) == (B (not i))
+
+    it "evaluates tuples" $ do
+      expr "(10, 20)" `shouldBe` T (I 10, I 20)
+      expr "(10, True)" `shouldBe` T (I 10, B True)
+      expr "(10, (True, False))" `shouldBe` T (I 10, T (B True, B False))
 
 
   describe "State" $ do
