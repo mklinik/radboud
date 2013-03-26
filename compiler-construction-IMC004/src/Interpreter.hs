@@ -163,6 +163,8 @@ eval (AstBinOp _ "<=" l r) = intBinOp (<=) l r B
 eval (AstBinOp _ ">=" l r) = intBinOp (>=) l r B
 eval (AstBinOp _ "||" l r) = boolBinOp (||) l r
 eval (AstBinOp _ "&&" l r) = boolBinOp (&&) l r
+eval (AstBinOp _ "==" l r) = polyBinOp (==) l r B
+eval (AstBinOp _ "!=" l r) = polyBinOp (/=) l r B
 eval (AstBinOp _ ":" h t) = do
   h_ <- eval h
   (L t_) <- eval t
@@ -186,6 +188,12 @@ apply (AstFunctionCall _ name actualArgs) = do
   (F f) <- lift $ gets $ envLookup name
   args <- mapM eval actualArgs
   f args
+
+polyBinOp :: (Value -> Value -> b) -> AstExpr -> AstExpr -> (b -> Value) -> Spl Value
+polyBinOp f l r c = do
+  lhs <- eval l
+  rhs <- eval r
+  return $ c $ f lhs rhs
 
 intBinOp :: (Integer -> Integer -> b) -> AstExpr -> AstExpr -> (b -> Value) -> Spl Value
 intBinOp f l r c = do
