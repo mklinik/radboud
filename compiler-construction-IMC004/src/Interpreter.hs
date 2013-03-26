@@ -47,12 +47,14 @@ envLookup x (globals, locals:_) =
     Nothing  -> case Map.lookup x globals of
       (Just v) -> v
       Nothing  -> error ("envLookup: unknown identifier: '" ++ x ++ "'")
+envLookup _ _ = error "envLookup: fatal error"
 
 envAddGlobal :: String -> Value -> Environment -> Environment
 envAddGlobal name value (globals, locals) = (Map.insert name value globals, locals)
 
 envAdd :: String -> Value -> Environment -> Environment
 envAdd name value (globals, l:locals) = (globals, (Map.insert name value l):locals)
+envAdd _ _ _ = error "envAdd: fatal error"
 
 envAddDeclaration :: (String -> Value -> Environment -> Environment) -> Environment -> AstDeclaration -> Spl Environment
 envAddDeclaration doAdd env (AstVarDeclaration _ _ name expression) = do
@@ -69,12 +71,14 @@ envUpdate name value (globals, l:locals) =
     else if Map.member name globals
       then (Map.adjust (const value) name globals, l:locals)
       else error ("envUpdate: unknown identifier: " ++ name)
+envUpdate _ _ _ = error "envUpdate: fatal error"
 
 envPushScope :: Environment -> Environment
 envPushScope (globals, locals) = (globals, Map.empty:locals)
 
 envPopScope :: Environment -> Environment
 envPopScope (globals, (_:locals)) = (globals, locals)
+envPopScope _ = error "envPopScope: fatal error"
 
 
 type Spl a = EitherT Value (State Environment) a
