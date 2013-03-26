@@ -151,7 +151,7 @@ eval :: AstExpr -> Spl Value
 eval (AstIdentifier _ i) = lift $ gets $ envLookup i
 eval (AstInteger _ i) = return $ I i
 eval (AstBoolean _ b) = return $ B b
-eval (AstEmptyList _) = error "eval: lists not supported"
+eval (AstEmptyList _) = right $ L []
 eval (AstBinOp _ "+" l r) = intBinOp (+) l r I
 eval (AstBinOp _ "-" l r) = intBinOp (-) l r I
 eval (AstBinOp _ "*" l r) = intBinOp (*) l r I
@@ -163,6 +163,10 @@ eval (AstBinOp _ "<=" l r) = intBinOp (<=) l r B
 eval (AstBinOp _ ">=" l r) = intBinOp (>=) l r B
 eval (AstBinOp _ "||" l r) = boolBinOp (||) l r
 eval (AstBinOp _ "&&" l r) = boolBinOp (&&) l r
+eval (AstBinOp _ ":" h t) = do
+  h_ <- eval h
+  (L t_) <- eval t
+  right $ L (h_:t_)
 eval (AstBinOp _ o _ _) = error ("eval: unsupported binary operator: " ++ o)
 eval (AstUnaryOp _ "-" e) = do
   (I x) <- eval e
@@ -202,4 +206,7 @@ builtins =
   [ ("fst", F $ \[(T (l, _))] -> right l)
   , ("snd", F $ \[(T (_, r))] -> right r)
   , ("print", F $ \[v] -> liftIO (print v) >> right V)
+  , ("hd", F $ \[L (h:_)] -> right h)
+  , ("tl", F $ \[L (_:t)] -> right $ L t)
+  , ("isEmpty", F $ \[L l] -> right $ B $ null l)
   ]

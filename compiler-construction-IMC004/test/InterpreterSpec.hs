@@ -129,11 +129,29 @@ spec = do
       expr "(10, True)" `shouldBe` T (I 10, B True)
       expr "(10, (True, False))" `shouldBe` T (I 10, T (B True, B False))
 
+    it "evaluates lists" $ do
+      expr "[]" `shouldBe` L []
+      expr "10:[]" `shouldBe` L [I 10]
+      expr "True:[]" `shouldBe` L [B True]
+      expr "[]:[]" `shouldBe` L [L []]
+
   describe "builtin functions" $ do
     it "fst is the first projection" $ do
       run "Int main() { return fst( (10, 20) ); }" `shouldReturn` I 10
     it "snd is the second projection" $ do
       run "Int main() { return snd( (10, 20) ); }" `shouldReturn` I 20
+
+    it "hd is the head function" $ do
+      run "Int main() { return hd(10:[]); }" `shouldReturn` I 10
+    it "tl is the tail function" $ do
+      run "Int main() { return tl(10:[]); }" `shouldReturn` L []
+    it "hd and tl together" $ do
+      run "Int main() { return hd(tl(tl(10:20:30:[]))); }" `shouldReturn` I 30
+
+    it "isEmpty gives True on the empty list" $ do
+      run "Int main() { return isEmpty([]); }" `shouldReturn` B True
+    it "isEmpty gives False on a non-empty list" $ do
+      run "Int main() { return isEmpty(10:[]); }" `shouldReturn` B False
 
 
   describe "State" $ do
