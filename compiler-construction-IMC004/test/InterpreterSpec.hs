@@ -23,14 +23,14 @@ spec :: Spec
 spec = do
 
   describe "Interpreter" $ do
-    it "integer constant" $ run "Int main() { return 10; }" `shouldBe` Left (I 10)
+    it "integer constant" $ run "Int main() { return 10; }" `shouldBe` Right (I 10)
     it "global variable" $
       run_ ["Int foo = 42;"
            ,"Int main()"
            ,"{"
            ,"  return foo;"
            ,"}"
-           ] `shouldBe` Left (I 42)
+           ] `shouldBe` Right (I 42)
     it "assignments" $
       run_ ["Int main()"
            ,"{"
@@ -38,54 +38,54 @@ spec = do
            ,"  i = 10;"
            ,"  return i;"
            ,"}"
-           ] `shouldBe` Left (I 10)
+           ] `shouldBe` Right (I 10)
     it "side effects" $
       run_ ["Int foo = 42;"
            ,"Void bar()"
            ,"{"
-           ,"  foo = 100;"
+           ,"  foo = 100; return;"
            ,"}"
            ,"Int main()"
            ,"{ bar();"
            ,"  return foo;"
            ,"}"
-           ] `shouldBe` Left (I 100)
+           ] `shouldBe` Right (I 100)
     it "environments shrink again" $ do
       run_ ["Int x = 1;"
            ,"Void bar() { Int x = 10; return; }"
            ,"Int main() { bar(); return x; }"
-           ] `shouldBe` Left (I 1)
+           ] `shouldBe` Right (I 1)
 
     it "two return statements return the first value" $ do
-      run "Int main() { return 10; return 20; }" `shouldBe` Left (I 10)
+      run "Int main() { return 10; return 20; }" `shouldBe` Right (I 10)
 
   describe "while loop" $ do
 
     it "doesn't run the statement when the condition is false" $ do
       run "Int main() { Int counter = 0; while(False) { counter = counter + 1; } return counter; }"
-        `shouldBe` Left (I 0)
+        `shouldBe` Right (I 0)
     it "runs the statement once when the condition becomes false in the first iteration" $ do
       run_ ["Int main() {"
            ,"  Int counter = 0;"
            ,"  while( counter <= 0 ) counter = counter + 1;"
            ,"  return counter;"
            ,"}"
-           ] `shouldBe` Left (I 1)
+           ] `shouldBe` Right (I 1)
     it "runs the statement several times" $ do
       run_ ["Int main() {"
            ,"  Int counter = 0;"
            ,"  while( counter <= 10 ) counter = counter + 1;"
            ,"  return counter;"
            ,"}"
-           ] `shouldBe` Left (I 11)
+           ] `shouldBe` Right (I 11)
 
   describe "if-then-else" $ do
     it "interprets the then-branch when the condition is true" $ do
       run "Int main() { if(True) return 1000; else return 42; }"
-        `shouldBe` Left (I 1000)
+        `shouldBe` Right (I 1000)
     it "interprets the else-branch when the condition is false" $ do
       run "Int main() { if(False) return 1000; else return 42; }"
-        `shouldBe` Left (I 42)
+        `shouldBe` Right (I 42)
 
   describe "eval" $ do
     it "evaluates integer constants" $ do

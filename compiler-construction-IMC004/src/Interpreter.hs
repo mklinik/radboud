@@ -95,17 +95,23 @@ mkFunction formalArgs decls stmts = F $ \actualArgs -> do
   let nameValues = zipWith (\(AstFunctionArgument _ _ argName) argValue -> (argName, argValue)) formalArgs actualArgs :: [(String, Value)]
   let blaat = map (uncurry envAdd) nameValues
   let addActualArgs = map (modify) blaat -- :: [Spl ()]
+
   -- put actual parameters to environment
   lift $ sequence_ addActualArgs
+
   -- put local declarations to environment
   env <- lift get
   env_ <- foldM (envAddDeclaration envAdd) env decls
   lift $ put env_
-  -- interpret statements
-  result <- mapM interpret stmts
+
+  -- interpret statements, catch Left value of first encountered return statement
+  (Left result) <- lift $ (runEitherT $ mapM interpret stmts)
+
+  -- restore old environment
   lift $ modify envPopScope
-  -- return value of last statement, which hopefully was a return statement
-  return $ last result
+
+  -- turn the result, which we got as a Left Value, into a Right value
+  right result
 
 interpret :: AstStatement -> Spl Value
 interpret (AstReturn _ Nothing) = left V
