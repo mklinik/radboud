@@ -12,7 +12,7 @@ Int facR ( Int n )
 
 
 // The iterative version of the factorial function
-Int FacI ( Int n )
+Int facI ( Int n )
 {
   Int r = 1 ;
   while ( n > 1 )
@@ -39,8 +39,8 @@ Void main ()
     }
     n = n + 1;
   }
-  // print ( ok ) ;
-  return ok;
+  print ( ok ) ;
+  return;
 }
 
 

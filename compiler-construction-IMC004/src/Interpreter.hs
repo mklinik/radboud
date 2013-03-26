@@ -214,7 +214,7 @@ builtins =
   [ ("fst", F $ \[(T (l, _))] -> right l)
   , ("snd", F $ \[(T (_, r))] -> right r)
   , ("print", F $ \[v] -> liftIO (print v) >> right V)
-  , ("hd", F $ \[L (h:_)] -> right h)
-  , ("tl", F $ \[L (_:t)] -> right $ L t)
+  , ("head", F $ \[L (h:_)] -> right h)
+  , ("tail", F $ \[L (_:t)] -> right $ L t)
   , ("isEmpty", F $ \[L l] -> right $ B $ null l)
   ]
