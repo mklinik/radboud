@@ -15,6 +15,7 @@ executable spl
     , ListLike
     , transformers
     , containers
+    , either
 
   hs-source-dirs:
     src
@@ -41,3 +42,4 @@ test-suite spec
     , ListLike
     , transformers
     , containers
+    , either

@@ -39,7 +39,8 @@ Void main ()
     }
     n = n + 1;
   }
-  print ( ok ) ;
+  // print ( ok ) ;
+  return ok;
 }
 
 

@@ -7,6 +7,7 @@ import Text.Printf (printf)
 import Control.Monad
 import System.Exit
 import qualified Control.Monad.Trans.State.Lazy as MT
+import qualified Control.Monad.Trans.Either as MT
 
 import Parser
 import Prettyprint
@@ -42,7 +43,8 @@ run opts = do
     ModeInterpret -> do
       input <- hGetContents (inFile opts)
       let ast1 = runParser_ (inputFilename opts) pProgram input
-      print $ MT.evalState (runSpl ast1) emptyEnvironment
+      print $ MT.evalState (MT.runEitherT (runSpl ast1)) emptyEnvironment
+      return ()
 
   cleanUp opts
 

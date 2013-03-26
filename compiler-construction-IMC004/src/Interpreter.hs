@@ -8,6 +8,8 @@ module Interpreter where
 
 import Control.Monad.Trans.State.Lazy
 import Control.Monad
+import Control.Monad.Trans.Either
+import Control.Monad.Trans.Class
 import qualified Data.Map as Map
 
 import Ast
@@ -55,7 +57,7 @@ envAdd name value (globals, l:locals) = (globals, (Map.insert name value l):loca
 envAddDeclaration :: (String -> Value -> Environment -> Environment) -> Environment -> AstDeclaration -> Spl Environment
 envAddDeclaration doAdd env (AstVarDeclaration _ _ name expression) = do
   value <- eval expression
-  return $ doAdd name value env
+  lift $ return $ doAdd name value env
 envAddDeclaration doAdd env (AstFunDeclaration _ _ name formalArgs localVars body) = do
   let fun = mkFunction formalArgs localVars body
   return $ doAdd name fun env
@@ -75,7 +77,7 @@ envPopScope :: Environment -> Environment
 envPopScope (globals, (_:locals)) = (globals, locals)
 
 
-type Spl a = State Environment a
+type Spl a = EitherT Value (State Environment) a
 
 -- programs can have side effects
 runSpl :: AstProgram -> Spl Value
@@ -84,28 +86,31 @@ runSpl (AstProgram globals) = do
   env <- foldM (envAddDeclaration envAddGlobal) emptyEnvironment globals
   -- search for the main function
   let (F main) = envLookup "main" env
-  put env
+  lift $ put env
   main []
 
 mkFunction :: [AstFunctionArgument] -> [AstDeclaration] -> [AstStatement] -> Value
 mkFunction formalArgs decls stmts = F $ \actualArgs -> do
-  modify envPushScope
+  lift $ modify envPushScope
   let nameValues = zipWith (\(AstFunctionArgument _ _ argName) argValue -> (argName, argValue)) formalArgs actualArgs :: [(String, Value)]
-  let addActualArgs = map (modify . (uncurry envAdd)) nameValues :: [Spl ()]
+  let blaat = map (uncurry envAdd) nameValues
+  let addActualArgs = map (modify) blaat -- :: [Spl ()]
   -- put actual parameters to environment
-  sequence_ addActualArgs
+  lift $ sequence_ addActualArgs
   -- put local declarations to environment
-  get >>= \env -> foldM (envAddDeclaration envAdd) env decls >>= put
+  env <- lift get
+  env_ <- foldM (envAddDeclaration envAdd) env decls
+  lift $ put env_
   -- interpret statements
   result <- mapM interpret stmts
-  modify envPopScope
+  lift $ modify envPopScope
   -- return value of last statement, which hopefully was a return statement
   return $ last result
 
 interpret :: AstStatement -> Spl Value
-interpret (AstReturn _ Nothing) = return V
-interpret (AstReturn _ (Just e)) = eval e
-interpret (AstAssignment _ var expr) = eval expr >>= \e -> modify (var `envUpdate` e) >> return V
+interpret (AstReturn _ Nothing) = left V
+interpret (AstReturn _ (Just e)) = eval e >>= left
+interpret (AstAssignment _ var expr) = eval expr >>= \e -> lift $ modify (var `envUpdate` e) >> return V
 interpret (AstFunctionCallStmt f) = apply f
 interpret (AstBlock stmts) = do
   result <- mapM interpret stmts
@@ -113,7 +118,7 @@ interpret (AstBlock stmts) = do
 interpret while@(AstWhile _ condition stmt) = do
   (B cond) <- eval condition
   if cond
-    then do interpret stmt
+    then do _ <- interpret stmt
             interpret while
     else return V
 interpret (AstIfThenElse _ condition thenStmt elseStmt) = do
@@ -123,7 +128,7 @@ interpret (AstIfThenElse _ condition thenStmt elseStmt) = do
     else elseStmt
 
 eval :: AstExpr -> Spl Value
-eval (AstIdentifier _ i) = gets $ envLookup i
+eval (AstIdentifier _ i) = lift $ gets $ envLookup i
 eval (AstInteger _ i) = return $ I i
 eval (AstBoolean _ b) = return $ B b
 eval (AstBinOp _ "+" l r) = intBinOp (+) l r I
@@ -148,7 +153,7 @@ eval _ = error "eval: unsupported feature"
 
 apply :: AstFunctionCall -> Spl Value
 apply (AstFunctionCall _ name actualArgs) = do
-  (F f) <- gets $ envLookup name
+  (F f) <- lift $ gets $ envLookup name
   args <- mapM eval actualArgs
   f args
 
