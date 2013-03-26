@@ -144,6 +144,16 @@ spec = do
           ]
           []
           [AstReturn emptyMeta (Just (AstIdentifier emptyMeta "a"))]
+    it "function without formal params, no local variables, and an assignment." $ do
+      parse pFunDeclaration "Void bar() { foo = 100; return; }" `shouldBe`
+        AstFunDeclaration
+          emptyMeta
+          (BaseType emptyMeta "Void")
+          "bar"
+          []
+          []
+          [AstAssignment emptyMeta "foo" $ AstInteger emptyMeta 100
+          ,AstReturn emptyMeta Nothing]
 
   describe "pType" $ do
     specTypeParser $ parse (pType defaultBaseTypes)
