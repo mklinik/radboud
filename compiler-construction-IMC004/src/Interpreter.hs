@@ -10,6 +10,7 @@ import Control.Monad.Trans.State.Lazy
 import Control.Monad
 import Control.Monad.Trans.Either
 import Control.Monad.Trans.Class
+import Control.Monad.IO.Class (liftIO)
 import qualified Data.Map as Map
 
 import Ast
@@ -84,7 +85,7 @@ envPopScope (globals, (_:locals)) = (globals, locals)
 envPopScope _ = error "envPopScope: fatal error"
 
 
-type Spl a = EitherT Value (State Environment) a
+type Spl a = EitherT Value (StateT Environment IO) a
 
 -- programs can have side effects
 interpretProgram :: AstProgram -> Spl Value
@@ -200,4 +201,5 @@ builtins :: [(String, Value)]
 builtins =
   [ ("fst", F $ \[(T (l, _))] -> right l)
   , ("snd", F $ \[(T (_, r))] -> right r)
+  , ("print", F $ \[v] -> liftIO (print v) >> right V)
   ]
