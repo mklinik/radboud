@@ -13,6 +13,7 @@ import Parser
 import Prettyprinter
 import Interpreter
 import Utils
+import qualified Typechecker as TC
 
 main :: IO ()
 main = do
