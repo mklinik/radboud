@@ -1,4 +1,4 @@
-module Prettyprint where
+module Prettyprinter where
 
 import Data.List (intersperse)
 

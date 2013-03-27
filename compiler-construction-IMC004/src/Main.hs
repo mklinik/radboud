@@ -10,7 +10,7 @@ import qualified Control.Monad.Trans.State.Lazy as MT
 import qualified Control.Monad.Trans.Either as MT
 
 import Parser
-import Prettyprint
+import Prettyprinter
 import Interpreter
 import Utils
 
