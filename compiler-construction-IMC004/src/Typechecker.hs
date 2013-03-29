@@ -178,11 +178,7 @@ instance InferType AstProgram where
 instance InferType AstDeclaration where
   inferType (AstVarDeclaration _ astType name expr) = do
     (exprType, exprConstraints) <- inferType expr
-    a <- case astType of
-      -- yes, we are discarding the type variable here!
-      -- TODO: the same type variables occuring in type expressions must get the same fresh type variables
-      (PolymorphicType _ _) -> fresh
-      _ -> astType2splType astType
+    a <- astType2splType astType
     envAddGlobal name a
     return (a, (a,exprType):exprConstraints)
 
