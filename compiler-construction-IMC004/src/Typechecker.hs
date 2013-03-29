@@ -118,8 +118,8 @@ noConstraints = []
 -- Makes fresh type variables for each type variable occuring in the given AstType.
 -- The same type variables in the AstType get the same fresh type variables.
 astFreshTypeVariables :: AstType -> Typecheck (Map.Map String SplType)
-astFreshTypeVariables t = do
-  oldFreshs <- mapM oldFresh $ Set.toList $ astTypeVariables t
+astFreshTypeVariables astType = do
+  oldFreshs <- mapM oldFresh $ Set.toList $ astTypeVariables
   return $ foldl (flip $ uncurry Map.insert) Map.empty oldFreshs
   where
     -- Pairs the given type variable with a fresh one.
@@ -128,8 +128,8 @@ astFreshTypeVariables t = do
       a <- fresh
       return (s, a)
     -- Gets all type variables in an AstType.
-    astTypeVariables :: AstType -> Set.Set String
-    astTypeVariables t = astTypeVariables_ t Set.empty
+    astTypeVariables :: Set.Set String
+    astTypeVariables = astTypeVariables_ astType Set.empty
 
     astTypeVariables_ :: AstType -> Set.Set String -> Set.Set String
     astTypeVariables_ (BaseType _ _) s = s
@@ -150,10 +150,10 @@ astType2splType t = do
   tvars <- astFreshTypeVariables t
   astType2splType_ t tvars
   where
-  astType2splType_ (BaseType _ "Bool") tvars = right (SplBaseType BaseTypeBool)
-  astType2splType_ (BaseType _ "Int") tvars = right (SplBaseType BaseTypeInt)
-  astType2splType_ (BaseType _ "Void") tvars = right (SplBaseType BaseTypeVoid)
-  astType2splType_ (BaseType _ _) tvars = left $ InternalError "astType2splType: non-base types are always type variables"
+  astType2splType_ (BaseType _ "Bool") _ = right (SplBaseType BaseTypeBool)
+  astType2splType_ (BaseType _ "Int") _ = right (SplBaseType BaseTypeInt)
+  astType2splType_ (BaseType _ "Void") _ = right (SplBaseType BaseTypeVoid)
+  astType2splType_ (BaseType _ _) _ = left $ InternalError "astType2splType: non-base types are always type variables"
   astType2splType_ (TupleType _ a b) tvars = do
     a_ <- astType2splType_ a tvars
     b_ <- astType2splType_ b tvars
