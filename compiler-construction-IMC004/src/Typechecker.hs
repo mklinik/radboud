@@ -2,6 +2,7 @@ module Typechecker where
 
 import Data.List (intersperse)
 import qualified Data.Map as Map
+import qualified Data.Set as Set
 import Control.Monad.Trans.Either
 import Control.Monad.Trans.State.Lazy
 import Control.Monad.Trans.Class (lift)
@@ -113,17 +114,56 @@ type Constraints = [(SplType, SplType)]
 noConstraints :: Constraints
 noConstraints = []
 
+
+-- Makes fresh type variables for each type variable occuring in the given AstType.
+-- The same type variables in the AstType get the same fresh type variables.
+astFreshTypeVariables :: AstType -> Typecheck (Map.Map String SplType)
+astFreshTypeVariables t = do
+  oldFreshs <- mapM oldFresh $ Set.toList $ astTypeVariables t
+  return $ foldl (flip $ uncurry Map.insert) Map.empty oldFreshs
+  where
+    -- Pairs the given type variable with a fresh one.
+    oldFresh :: String -> Typecheck (String, SplType)
+    oldFresh s = do
+      a <- fresh
+      return (s, a)
+    -- Gets all type variables in an AstType.
+    astTypeVariables :: AstType -> Set.Set String
+    astTypeVariables t = astTypeVariables_ t Set.empty
+
+    astTypeVariables_ :: AstType -> Set.Set String -> Set.Set String
+    astTypeVariables_ (BaseType _ _) s = s
+    astTypeVariables_ (TupleType _ a b) s = astTypeVariables_ b $ astTypeVariables_ a s
+    astTypeVariables_ (ListType _ a) s = astTypeVariables_ a s
+    astTypeVariables_ (PolymorphicType _ v) s = Set.insert v s
+
+
+-- Turns an AstType into an SplType such that all type variables are replaced
+-- with fresh type variables, but occurences of the same type variable get the
+-- same fresh type variable.
+-- For example (a -> b -> c) becomes (<1> -> <2> -> <3>)
+--         and (a -> b -> a) becomes (<1> -> <2> -> <1>)
+-- where a, b, c are given type variables and <1>, <2>, <3> are fresh type
+-- variables.
 astType2splType :: AstType -> Typecheck SplType
-astType2splType (BaseType _ "Bool") = return (SplBaseType BaseTypeBool)
-astType2splType (BaseType _ "Int") = return (SplBaseType BaseTypeInt)
-astType2splType (BaseType _ "Void") = return (SplBaseType BaseTypeVoid)
-astType2splType (BaseType _ _) = left $ InternalError "astType2splType: non-base types are always type variables"
-astType2splType (TupleType _ a b) = do
-  a_ <- astType2splType a
-  b_ <- astType2splType b
-  return $ SplTupleType a_ b_
-astType2splType (ListType _ a) = astType2splType a >>= return . SplListType
-astType2splType (PolymorphicType _ a) = return $ SplTypeVariable a
+astType2splType t = do
+  tvars <- astFreshTypeVariables t
+  astType2splType_ t tvars
+  where
+  astType2splType_ (BaseType _ "Bool") tvars = right (SplBaseType BaseTypeBool)
+  astType2splType_ (BaseType _ "Int") tvars = right (SplBaseType BaseTypeInt)
+  astType2splType_ (BaseType _ "Void") tvars = right (SplBaseType BaseTypeVoid)
+  astType2splType_ (BaseType _ _) tvars = left $ InternalError "astType2splType: non-base types are always type variables"
+  astType2splType_ (TupleType _ a b) tvars = do
+    a_ <- astType2splType_ a tvars
+    b_ <- astType2splType_ b tvars
+    right $ SplTupleType a_ b_
+  astType2splType_ (ListType _ a) tvars =  astType2splType_ a tvars >>= right . SplListType
+  astType2splType_ (PolymorphicType _ a) tvars =
+    case Map.lookup a tvars of
+      Just v -> right v
+      Nothing -> left $ InternalError "astType2splType: type variable not found"
+
 
 class InferType a where
   inferType :: a -> Typecheck (SplType, Constraints)
@@ -145,6 +185,8 @@ instance InferType AstDeclaration where
       _ -> astType2splType astType
     envAddGlobal name a
     return (a, (a,exprType):exprConstraints)
+
+
 
 instance InferType AstExpr where
   inferType (AstIdentifier meta x) = do
