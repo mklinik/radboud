@@ -46,6 +46,11 @@ run opts = do
       let ast1 = runParser_ (inputFilename opts) pProgram input
       MT.evalStateT (MT.runEitherT (interpretProgram ast1)) emptyEnvironment >>= print
 
+    ModeTypecheck -> do
+      input <- hGetContents (inFile opts)
+      let ast = runParser_ (inputFilename opts) pProgram input
+      print $ TC.runTypecheck (TC.inferType ast)
+
   cleanUp opts
 
 cleanUp :: Options -> IO ()
@@ -56,7 +61,13 @@ cleanUp opts = do
 programName :: String
 programName = "spl"
 
-data Mode = ModeHelp | ModePrettyprint | ModeCheckParser | ModeShow | ModeInterpret
+data Mode
+  = ModeHelp
+  | ModePrettyprint
+  | ModeCheckParser
+  | ModeShow
+  | ModeInterpret
+  | ModeTypecheck
   deriving (Show)
 
 data Options = Options
@@ -85,6 +96,7 @@ options =
   , Option []  ["check"]      (NoArg  (\  opts -> opts { mode = ModeCheckParser }))        "parse, prettyprint, parse and compare ASTs"
   , Option []  ["show"]       (NoArg  (\  opts -> opts { mode = ModeShow }))               "parse, then show"
   , Option []  ["interpret"]  (NoArg  (\  opts -> opts { mode = ModeInterpret }))          "parse, then interpret"
+  , Option []  ["typecheck"]  (NoArg  (\  opts -> opts { mode = ModeTypecheck }))          "parse, then typecheck"
   ]
 
 get :: [String] -> IO Options
