@@ -8,6 +8,7 @@ import Control.Monad
 import System.Exit
 import qualified Control.Monad.Trans.State.Lazy as MT
 import qualified Control.Monad.Trans.Either as MT
+import qualified System.Console.Readline as Readline
 
 import Parser
 import Prettyprinter
@@ -51,12 +52,28 @@ run opts = do
       let ast = runParser_ (inputFilename opts) pProgram input
       print $ TC.runTypecheck (TC.inferType ast)
 
+    ModeInteractive -> do
+      putStrLn ("Welcome to " ++ programName ++ " interactive mode.")
+      putStrLn "Type Ctrl-d to exit."
+      readEvalPrintLoop
+
   cleanUp opts
 
 cleanUp :: Options -> IO ()
 cleanUp opts = do
   hClose (inFile opts)
   hClose (outFile opts)
+
+readEvalPrintLoop :: IO ()
+readEvalPrintLoop = do
+  maybeLine <- Readline.readline "> "
+  case maybeLine of
+    Nothing     -> return () -- EOF / control-d
+    Just line   -> do
+      Readline.addHistory line
+      let ast = runParser_ "interactive" pProgram line
+      print $ TC.runTypecheck (TC.inferType ast)
+      readEvalPrintLoop
 
 programName :: String
 programName = "spl"
@@ -68,6 +85,7 @@ data Mode
   | ModeShow
   | ModeInterpret
   | ModeTypecheck
+  | ModeInteractive
   deriving (Show)
 
 data Options = Options
@@ -97,6 +115,7 @@ options =
   , Option []  ["show"]       (NoArg  (\  opts -> opts { mode = ModeShow }))               "parse, then show"
   , Option []  ["interpret"]  (NoArg  (\  opts -> opts { mode = ModeInterpret }))          "parse, then interpret"
   , Option []  ["typecheck"]  (NoArg  (\  opts -> opts { mode = ModeTypecheck }))          "parse, then typecheck"
+  , Option []  ["interactive"](NoArg  (\  opts -> opts { mode = ModeInteractive }))        "read-eval-print loop"
   ]
 
 get :: [String] -> IO Options

@@ -16,6 +16,7 @@ executable spl
     , transformers
     , containers
     , either
+    , readline
 
   hs-source-dirs:
     src
