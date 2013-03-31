@@ -170,6 +170,10 @@ class InferType a where
 
 instance InferType AstProgram where
   inferType (AstProgram decls) =
+    -- mapM inferType decls >> return (SplBaseType BaseTypeVoid, noConstraints)
+    -- collect all constraints while inferring. This is only needed for
+    -- debugging; constraints are not needed in branches of the AST, only the
+    -- environment needs to be passed around
     foldM (\(_, c1) d -> do
       (t, c2) <- inferType d
       return (t, c1 ++ c2)
