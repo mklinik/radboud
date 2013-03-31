@@ -1,6 +1,5 @@
 module Typechecker where
 
-import Data.List (intersperse)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Control.Monad.Trans.Either
@@ -9,33 +8,8 @@ import Control.Monad.Trans.Class (lift)
 import Control.Monad (foldM)
 
 import Ast
-
-data SplBaseType
- = BaseTypeInt
- | BaseTypeBool
- | BaseTypeVoid
- deriving (Eq)
-
-data SplType
- = SplBaseType SplBaseType
- | SplTypeVariable String
- | SplTupleType SplType SplType
- | SplListType SplType
- | SplFunctionType [SplType] SplType
- deriving (Eq)
-
-
-instance Show SplType where
-  show t = prettyprintType t
-
-prettyprintType :: SplType -> String
-prettyprintType (SplBaseType BaseTypeInt) = "Int"
-prettyprintType (SplBaseType BaseTypeBool) = "Bool"
-prettyprintType (SplBaseType BaseTypeVoid) = "Void"
-prettyprintType (SplTypeVariable v) = v
-prettyprintType (SplTupleType x y) = "(" ++ prettyprintType x ++ ", " ++ prettyprintType y ++ ")"
-prettyprintType (SplListType x) = "[" ++ prettyprintType x ++ "]"
-prettyprintType (SplFunctionType argTypes returnType) = "(" ++ concat (intersperse " " (map prettyprintType argTypes)) ++ " -> " ++ prettyprintType returnType ++ ")"
+import SplType
+import CompileError
 
 type TypecheckState = (Integer, Environment)
 type Typecheck a = EitherT CompileError (State TypecheckState) a
@@ -49,23 +23,6 @@ fresh = do
 type Unifier = String -> SplType
 
 type Environment = (Map.Map String SplType, [Map.Map String SplType])
-
-data CompileError
-  = TypeError SplType SplType AstMeta
-  | UnknownIdentifier String AstMeta
-  | InternalError String
-
-instance Show CompileError where
-  show (TypeError expected got meta) =
-    "Couldn't match expected type `" ++ show expected
-    ++ "' with actual type `" ++ show got ++ "' "
-    ++ position meta
-  show (UnknownIdentifier ident meta) =
-    "Unknown identifier `" ++ ident ++ "' " ++ position meta
-  show (InternalError x) = "Internal error `" ++ x ++ "'" -- should never happen, but you know...
-
-position :: AstMeta -> String
-position meta = "at position " ++ show (sourceLocation meta)
 
 emptyEnvironment :: Environment
 emptyEnvironment = (Map.empty, [Map.empty])
