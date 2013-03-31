@@ -195,6 +195,9 @@ instance InferType AstExpr where
 
   inferType (AstBoolean meta _) = return (SplBaseType BaseTypeBool, noConstraints)
   inferType (AstInteger meta _) = return (SplBaseType BaseTypeInt, noConstraints)
+  inferType (AstEmptyList _) = do
+    a <- fresh
+    return (SplListType a, noConstraints)
 
   inferType (AstFunctionCallExpr (AstFunctionCall meta f (actualArg:_))) = do
     ft <- envLookup f meta
