@@ -9,16 +9,10 @@ import Control.Monad.Trans.State.Lazy
 import Parser
 import Utils
 import Typechecker
+import SplType
 
 main :: IO ()
 main = hspec spec
-
-parse :: (SplParser a) -> String -> a
-parse = runParser_ ""
-
-unRight :: Either a b -> b
-unRight (Right x) = x
-unRight _ = undefined
 
 -- inferExpr :: String -> SplType
 -- inferExpr expr = unRight $ inferType emptyEnvironment (parse pExpr expr) (SplTypeVariable "a")

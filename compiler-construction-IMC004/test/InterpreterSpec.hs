@@ -13,18 +13,14 @@ import Parser
 import Utils
 import Interpreter
 
-unRight :: Either Value Value -> Value
-unRight (Right v) = v
-unRight _ = undefined
-
 expr :: String -> Value
-expr prog = unsafePerformIO $ (liftM unRight) $ MT.evalStateT (MT.runEitherT (eval $ runParser_ "" pExpr prog)) emptyEnvironment
+expr prog = unsafePerformIO $ (liftM unRight) $ MT.evalStateT (MT.runEitherT (eval $ parse pExpr prog)) emptyEnvironment
 
 run :: String -> IO Value
-run prog = (liftM unRight) $ MT.evalStateT (MT.runEitherT $ interpretProgram $ runParser_ "" pProgram prog) emptyEnvironment
+run prog = (liftM unRight) $ MT.evalStateT (MT.runEitherT $ interpretProgram $ parse pProgram prog) emptyEnvironment
 
 run_ :: [String] -> IO Value
-run_ prog = (liftM unRight) $ MT.evalStateT (MT.runEitherT $ interpretProgram $ runParser_ "" pProgram $ unlines prog) emptyEnvironment
+run_ prog = (liftM unRight) $ MT.evalStateT (MT.runEitherT $ interpretProgram $ parse pProgram $ unlines prog) emptyEnvironment
 
 testBinOp opSyntax opFunction resultConstructor =
   property $ \i1 i2 -> expr (show i1 ++ " " ++ opSyntax ++ " " ++ show i2) == (resultConstructor (opFunction i1 i2))

@@ -6,14 +6,13 @@ import System.Console.GetOpt
 import Text.Printf (printf)
 import Control.Monad
 import System.Exit
-import qualified Control.Monad.Trans.State.Lazy as MT
-import qualified Control.Monad.Trans.Either as MT
 import qualified System.Console.Readline as Readline
 
 import Parser
 import Prettyprinter
 import Interpreter
 import Utils
+import Ast
 import qualified Typechecker as TC
 
 main :: IO ()
@@ -21,36 +20,40 @@ main = do
   opts <- getArgs >>= get
   run opts
 
+parseAnd :: (AstProgram -> String) -> Options -> IO ()
+parseAnd action opts = parseAnd_ (return . action) opts
+
+parseAnd_ :: (AstProgram -> IO String) -> Options -> IO ()
+parseAnd_ action opts = do
+  input <- hGetContents (inFile opts)
+  case runParser_ (inputFilename opts) pProgram input of
+    Right ast -> do
+      action ast >>= hPutStrLn (outFile opts)
+    Left err  -> print err
+
 run :: Options -> IO ()
 run opts = do
   case mode opts of
     ModePrettyprint -> do
-      input <- hGetContents (inFile opts)
-      let output = prettyprint $ runParser_ (inputFilename opts) pProgram input
-      hPutStrLn (outFile opts) output
+      parseAnd prettyprint opts
 
     ModeShow -> do
-      input <- hGetContents (inFile opts)
-      let output = show $ runParser_ (inputFilename opts) pProgram input
-      hPutStrLn (outFile opts) output
+      parseAnd show opts
 
     ModeHelp -> printHelp
 
     ModeCheckParser -> do
       input <- hGetContents (inFile opts)
-      let ast1 = runParser_ (inputFilename opts) pProgram input
-      let ast2 = runParser_ (inputFilename opts) pProgram $ prettyprint ast1
-      print (ast1 == ast2)
+      print $
+        do ast1 <- runParser_ (inputFilename opts) pProgram input
+           ast2 <- runParser_ (inputFilename opts) pProgram $ prettyprint ast1
+           Right (ast1 == ast2)
 
     ModeInterpret -> do
-      input <- hGetContents (inFile opts)
-      let ast1 = runParser_ (inputFilename opts) pProgram input
-      MT.evalStateT (MT.runEitherT (interpretProgram ast1)) emptyEnvironment >>= print
+      parseAnd_ runProgram opts
 
     ModeTypecheck -> do
-      input <- hGetContents (inFile opts)
-      let ast = runParser_ (inputFilename opts) pProgram input
-      print $ TC.runTypecheck (TC.inferType ast)
+      parseAnd (show . TC.runTypecheck . TC.inferType) opts
 
     ModeInteractive -> do
       putStrLn ("Welcome to " ++ programName ++ " interactive mode.")
@@ -71,8 +74,9 @@ readEvalPrintLoop = do
     Nothing     -> return () -- EOF / control-d
     Just line   -> do
       Readline.addHistory line
-      let ast = runParser_ "interactive" pProgram line
-      print $ TC.runTypecheck (TC.inferType ast)
+      case runParser_ "interactive" pProgram line of
+        Right ast -> print $ TC.runTypecheck (TC.inferType ast)
+        Left err -> print err
       readEvalPrintLoop
 
 programName :: String

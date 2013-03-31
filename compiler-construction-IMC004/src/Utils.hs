@@ -6,15 +6,16 @@ import Text.ParserCombinators.UU.Core
 import Text.ParserCombinators.UU.BasicInstances
 
 import Parser
+import CompileError
 
 execParser_ :: SplParser a -> String -> (a, [Error LineColPos])
 execParser_ p = parse_h ((,) <$> p <*> pEnd) . createStr (LineColPos 0 0 0)
 
-runParser_ :: String -> SplParser a -> String -> a
-runParser_ inputName p s | (a,b) <- execParser_ p s =
+runParser_ :: String -> SplParser a -> String -> Either CompileError a
+runParser_ inputName p s | (a,b) <- execParser_ p s = do
     if null b
-    then a
-    else error (printf "Failed parsing '%s' :\n%s\n" inputName (pruneError s b))
+    then Right a
+    else Left $ ParseError (printf "Failed parsing '%s' :\n%s\n" inputName (pruneError s b))
          -- We do 'pruneError' above because otherwise you can end
          -- up reporting huge correction streams, and that's
          -- generally not helpful... but the pruning does discard info...
@@ -37,3 +38,10 @@ runParser_ inputName p s | (a,b) <- execParser_ p s =
                                 belowString = replicate 30 ' ' ++ "^"
                                 inputFrag   = replicate (30 - abs) ' ' ++ (take 71 $ drop (abs - 30) s')
 
+-- unsafe runParser
+parse :: (SplParser a) -> String -> a
+parse parser prog = unRight $ runParser_ "" parser prog
+
+unRight :: Either a b -> b
+unRight (Right x) = x
+unRight _ = undefined

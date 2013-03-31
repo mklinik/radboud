@@ -103,6 +103,11 @@ interpretProgram (AstProgram globals) = do
   -- execute main function
   main []
 
+runProgram :: AstProgram -> IO String
+runProgram ast = do
+  blaat <- evalStateT (runEitherT (interpretProgram ast)) emptyEnvironment
+  return $ show $ either id id blaat
+
 mkFunction :: [AstFunctionArgument] -> [AstDeclaration] -> [AstStatement] -> Value
 mkFunction formalArgs decls stmts = F $ \actualArgs -> do
   lift $ modify envPushScope

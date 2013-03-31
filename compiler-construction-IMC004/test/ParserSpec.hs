@@ -12,9 +12,6 @@ import Utils
 main :: IO ()
 main = hspec spec
 
-parse :: (SplParser a) -> String -> a
-parse = runParser_ ""
-
 spec :: Spec
 spec = do
   describe "pExpr" $ do
