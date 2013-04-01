@@ -112,9 +112,9 @@ astType2splType t = do
   tvars <- astFreshTypeVariables t
   astType2splType_ t tvars
   where
-  astType2splType_ (BaseType _ "Bool") _ = right (SplBaseType BaseTypeBool)
-  astType2splType_ (BaseType _ "Int") _ = right (SplBaseType BaseTypeInt)
-  astType2splType_ (BaseType _ "Void") _ = right (SplBaseType BaseTypeVoid)
+  astType2splType_ (BaseType _ "Bool") _ = right splTypeBool
+  astType2splType_ (BaseType _ "Int") _ = right splTypeInt
+  astType2splType_ (BaseType _ "Void") _ = right splTypeVoid
   astType2splType_ (BaseType _ _) _ = left $ InternalError "astType2splType: non-base types are always type variables"
   astType2splType_ (TupleType _ a b) tvars = do
     a_ <- astType2splType_ a tvars
@@ -153,7 +153,7 @@ instance InferType AstProgram where
     -- second pass: infer type of global identifiers
     mapM_ inferType decls
 
-    return (SplBaseType BaseTypeVoid, noConstraints) -- don't care
+    return dontCare
 
 
 instance InferType AstDeclaration where
@@ -162,7 +162,7 @@ instance InferType AstDeclaration where
     (splType, constraints) <- envLookup name meta
     (exprType, exprConstraints) <- inferType expr
     envAddGlobal name splType (constraints ++ ((splType,exprType):exprConstraints))
-    return (SplBaseType BaseTypeVoid, noConstraints) -- don't care
+    return dontCare
 
   inferType (AstFunDeclaration meta returnType name formalArgs _ body) = do
     (functionType, functionConstraints) <- envLookup name meta
@@ -178,7 +178,7 @@ instance InferType AstDeclaration where
     let inferredType = SplFunctionType (map (fst . snd) freshArgTypes) freshReturnType
     envAddGlobal name functionType (functionConstraints ++ (functionType,inferredType):bodyConstraints)
 
-    return (SplBaseType BaseTypeVoid, noConstraints) -- don't care
+    return dontCare
     where
       makeSplArgType :: AstFunctionArgument -> Typecheck (String, (SplType, Constraints))
       makeSplArgType (AstFunctionArgument _ typ nam) = do
@@ -186,7 +186,7 @@ instance InferType AstDeclaration where
         return (nam, (typ_, noConstraints))
 
 dontCare :: (SplType, Constraints)
-dontCare = (SplBaseType BaseTypeVoid, noConstraints)
+dontCare = (splTypeVoid, noConstraints)
 
 instance InferType AstStatement where
   inferType (AstReturn _ Nothing) = do
@@ -221,8 +221,8 @@ instance InferType AstStatement where
 
 instance InferType AstExpr where
   inferType (AstIdentifier meta x) = envLookup x meta
-  inferType (AstBoolean _ _) = return (SplBaseType BaseTypeBool, noConstraints)
-  inferType (AstInteger _ _) = return (SplBaseType BaseTypeInt, noConstraints)
+  inferType (AstBoolean _ _) = return (splTypeBool, noConstraints)
+  inferType (AstInteger _ _) = return (splTypeInt, noConstraints)
   inferType (AstEmptyList _) = do
     a <- fresh
     return (SplListType a, noConstraints)
@@ -246,7 +246,7 @@ initializeEnvironment :: Typecheck ()
 initializeEnvironment = sequence_
   [ do
     a <- fresh
-    envAddGlobal "print" (SplFunctionType [a] (SplBaseType BaseTypeVoid)) noConstraints
+    envAddGlobal "print" (SplFunctionType [a] splTypeVoid) noConstraints
 
   , do
     a <- fresh
@@ -268,17 +268,17 @@ initializeEnvironment = sequence_
 
   , do
     a <- fresh
-    envAddGlobal "isEmpty" (SplFunctionType [SplListType a] (SplBaseType BaseTypeBool)) noConstraints
+    envAddGlobal "isEmpty" (SplFunctionType [SplListType a] splTypeBool) noConstraints
 
   -- unary and binary operators are put here with invalid identifiers
   , do
-    envAddGlobal "unary !" (SplFunctionType [SplBaseType BaseTypeBool] (SplBaseType BaseTypeBool)) noConstraints
+    envAddGlobal "unary !" (SplFunctionType [splTypeBool] splTypeBool) noConstraints
 
   , do
-    envAddGlobal "unary -" (SplFunctionType [SplBaseType BaseTypeInt] (SplBaseType BaseTypeInt)) noConstraints
+    envAddGlobal "unary -" (SplFunctionType [splTypeInt] (splTypeInt)) noConstraints
 
   , do
-    mapM_ (\o -> envAddGlobal o (SplFunctionType [SplBaseType BaseTypeInt, SplBaseType BaseTypeInt] (SplBaseType BaseTypeInt)) noConstraints)
+    mapM_ (\o -> envAddGlobal o (SplFunctionType [splTypeInt, splTypeInt] (splTypeInt)) noConstraints)
       ["+", "-", "*", "/", "%"]
   ]
 
