@@ -196,6 +196,10 @@ instance InferType AstExpr where
   inferType (AstFunctionCallExpr f) = inferType f
   inferType (AstBinOp meta name lhs rhs) = inferType (AstFunctionCall meta name [lhs, rhs])
   inferType (AstUnaryOp meta name arg) = inferType (AstFunctionCall meta ("unary " ++ name) [arg])
+  inferType (AstTuple _ a b) = do
+    (aType, aConstraints) <- inferType a
+    (bType, bConstraints) <- inferType b
+    return (SplTupleType aType bType, aConstraints ++ bConstraints)
 
 instance InferType AstFunctionCall where
   inferType (AstFunctionCall meta f actualArgs) = do
