@@ -1,0 +1,5 @@
+a f(b x, c y) // b must be Int, c must be Bool
+{
+  x = 10;
+  y = True;
+}

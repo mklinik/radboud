@@ -1,0 +1,7 @@
+a f(b x) // a must be Void, x must be Bool
+{
+  while( x )
+  {
+    return;
+  }
+}

@@ -1,0 +1,6 @@
+Int idInt(Int x) { return x; }
+
+a f(b x) // b must be Int
+{
+  idInt(x);
+}

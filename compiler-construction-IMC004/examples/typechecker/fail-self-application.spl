@@ -1,0 +1,4 @@
+a f(b x)
+{
+  return f(f);
+}

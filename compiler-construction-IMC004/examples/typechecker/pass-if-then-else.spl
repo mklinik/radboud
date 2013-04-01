@@ -1,0 +1,5 @@
+a f(b x) // a is Int, b is Bool
+{
+  if( x )
+    return 10;
+}

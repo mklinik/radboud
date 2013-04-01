@@ -1,0 +1,19 @@
+Int idInt(Int x)
+{
+  return x;
+}
+
+a id(a x)
+{
+  return x;
+}
+
+a const(a x, b y)
+{
+  return x;
+}
+
+Bool constInt(Int x, b y)
+{
+  return x;
+}

@@ -1,0 +1,13 @@
+Int f()
+{
+  return 10;
+  return True;
+  return;
+}
+
+a g()
+{
+  return 10;
+  return True;
+  return;
+}
