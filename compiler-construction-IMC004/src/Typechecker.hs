@@ -5,7 +5,7 @@ import qualified Data.Set as Set
 import Control.Monad.Trans.Either
 import Control.Monad.Trans.State.Lazy
 import Control.Monad.Trans.Class (lift)
-import Control.Monad (foldM)
+import Control.Monad (foldM, liftM)
 
 import Ast
 import SplType
@@ -154,11 +154,11 @@ instance InferType AstExpr where
   inferType (AstFunctionCallExpr f) = inferType f
 
 instance InferType AstFunctionCall where
-  inferType (AstFunctionCall meta f (actualArg:_)) = do
+  inferType (AstFunctionCall meta f actualArgs) = do
     (functionType, functionConstraints) <- envLookup f meta
-    (actualArgType, actualArgConstraints) <- inferType actualArg
+    (actualArgTypes, actualArgsConstraints) <- liftM unzip $ mapM inferType actualArgs
     returnType <- fresh
-    return (returnType, (functionType, SplFunctionType [actualArgType] returnType):functionConstraints ++ actualArgConstraints)
+    return (returnType, (functionType, SplFunctionType actualArgTypes returnType):functionConstraints ++ concat actualArgsConstraints)
 
 
 initializeEnvironment :: Typecheck ()
@@ -207,9 +207,6 @@ initializeEnvironment = sequence_
 
 runTypecheck :: (Typecheck a) -> (Either CompileError a, TypecheckState)
 runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnvironment)
--- runTypecheck t = runState (runEitherT (t)) (0, emptyEnvironment)
-
--- type Environment = (Map.Map String (SplType, Constraints), Map.Map String (SplType, Constraints))
 
 prettyprintGlobals :: Environment -> String
 prettyprintGlobals (globals, locals) =
