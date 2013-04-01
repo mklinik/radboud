@@ -11,6 +11,7 @@ import Ast
 import SplType
 import CompileError
 
+type Environment = (Map.Map String SplType, Map.Map String SplType)
 type TypecheckState = (Integer, Environment)
 type Typecheck a = EitherT CompileError (State TypecheckState) a
 
@@ -22,14 +23,12 @@ fresh = do
 
 type Unifier = String -> SplType
 
-type Environment = (Map.Map String SplType, [Map.Map String SplType])
-
 emptyEnvironment :: Environment
-emptyEnvironment = (Map.empty, [Map.empty])
+emptyEnvironment = (Map.empty, Map.empty)
 
 envLookup :: String -> AstMeta -> Typecheck SplType
 envLookup ident meta = do
-  (_, (globals, locals:_)) <- lift get
+  (_, (globals, locals)) <- lift get
   case Map.lookup ident locals of
     (Just t) -> right t
     Nothing  -> case Map.lookup ident globals of
