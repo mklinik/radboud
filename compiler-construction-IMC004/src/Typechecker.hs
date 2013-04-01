@@ -5,7 +5,7 @@ import qualified Data.Set as Set
 import Control.Monad.Trans.Either
 import Control.Monad.Trans.State.Lazy
 import Control.Monad.Trans.Class (lift)
-import Control.Monad (foldM, liftM)
+import Control.Monad (liftM)
 
 import Ast
 import SplType
@@ -168,7 +168,7 @@ instance InferType AstDeclaration where
     (splType, constraints) <- envLookup name meta
 
     freshArgTypes <- mapM makeSplType formalArgs
-    mapM (uncurry envAddLocal) freshArgTypes
+    mapM_ (uncurry envAddLocal) freshArgTypes
     (bodyType, bodyConstraints) <- inferType body
     envClearLocals
 
@@ -178,9 +178,9 @@ instance InferType AstDeclaration where
     return (SplBaseType BaseTypeVoid, noConstraints) -- don't care
     where
       makeSplType :: AstFunctionArgument -> Typecheck (String, (SplType, Constraints))
-      makeSplType (AstFunctionArgument _ typ name) = do
+      makeSplType (AstFunctionArgument _ typ nam) = do
         typ_ <- astType2splType typ
-        return (name, (typ_, noConstraints))
+        return (nam, (typ_, noConstraints))
 
 instance InferType AstStatement where
   inferType (AstReturn _ Nothing) = return (SplBaseType BaseTypeVoid, noConstraints)
