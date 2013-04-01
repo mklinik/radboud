@@ -171,12 +171,12 @@ instance InferType AstDeclaration where
     mapM_ (uncurry envAddLocal) freshArgTypes
     freshReturnType <- astType2splType returnType
     envAddLocal "#return" (freshReturnType, noConstraints)
-    mapM_ inferType body
-    (returnType_, returnConstraints) <- envLookup "#return" emptyMeta
+    blaat <- mapM inferType body
+    let bodyConstraints = concatMap snd blaat
     envClearLocals
 
-    let inferredType = SplFunctionType (map (fst . snd) freshArgTypes) returnType_
-    envAddGlobal name functionType (functionConstraints ++ (functionType,inferredType):returnConstraints)
+    let inferredType = SplFunctionType (map (fst . snd) freshArgTypes) freshReturnType
+    envAddGlobal name functionType (functionConstraints ++ (functionType,inferredType):bodyConstraints)
 
     return (SplBaseType BaseTypeVoid, noConstraints) -- don't care
     where
@@ -191,13 +191,21 @@ dontCare = (SplBaseType BaseTypeVoid, noConstraints)
 instance InferType AstStatement where
   inferType (AstReturn _ Nothing) = do
     (returnType, returnConstraints) <- envLookup "#return" emptyMeta
-    envAddLocal "#return" (returnType, (splTypeVoid, returnType):returnConstraints)
-    return dontCare;
+    return (returnType, (splTypeVoid, returnType):returnConstraints)
   inferType (AstReturn _ (Just expr)) = do
     (returnType, returnConstraints) <- envLookup "#return" emptyMeta
     (exprType, exprConstraints) <- inferType expr
-    envAddLocal "#return" (returnType, (exprType, returnType):returnConstraints ++ exprConstraints)
-    return dontCare
+    return (returnType, (exprType, returnType):returnConstraints ++ exprConstraints)
+
+  inferType (AstIfThenElse _ astCondition thenStmt elseStmt) = do
+    (conditionType, conditionConstraints) <- inferType astCondition
+    (_, thenConstraints) <- inferType thenStmt
+    (_, elseConstraints) <- inferType elseStmt
+    return (splTypeVoid, (conditionType, splTypeBool):conditionConstraints ++ thenConstraints ++ elseConstraints)
+
+  inferType (AstBlock stmts) = do
+    blaat <- mapM inferType stmts
+    return (splTypeVoid, concatMap snd blaat)
 
 instance InferType AstExpr where
   inferType (AstIdentifier meta x) = envLookup x meta
