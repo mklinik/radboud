@@ -15,9 +15,6 @@ import Ast
 main :: IO ()
 main = hspec spec
 
--- inferExpr :: String -> SplType
--- inferExpr expr = unRight $ inferType emptyEnvironment (parse pExpr expr) (SplTypeVariable "a")
-
 -- evaluate a typecheck action in an empty environment
 evalTypecheckBare :: (Typecheck a) -> a
 evalTypecheckBare t = unRight $ evalState (runEitherT (t)) (0, emptyEnvironment)

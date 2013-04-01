@@ -28,7 +28,7 @@ data AstType
   | TupleType AstMeta AstType AstType
   | ListType AstMeta AstType
   | PolymorphicType AstMeta String
-  | FunctionType [AstType] AstType
+  | FunctionType [AstType] AstType -- there is no parser for this yet, but it is useful in the typechecker
   deriving (Show, Eq)
 
 data AstExpr
