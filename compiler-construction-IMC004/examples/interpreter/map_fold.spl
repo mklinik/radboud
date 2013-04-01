@@ -1,0 +1,48 @@
+[c] map(a f, [b] xs)
+{
+  if( isEmpty(xs) )
+    return [];
+  else
+    return f(head(xs)) : map(f, tail(xs));
+}
+
+c foldl(a f, c x, [b] xs)
+{
+  if( isEmpty(xs) )
+    return x;
+  else
+    return foldl(f, f(x, head(xs)), tail(xs));
+}
+
+c foldr(a f, c x, [b] xs)
+{
+  if( isEmpty(xs) )
+    return x;
+  else
+    return f(head(xs), foldr(f, x, tail(xs)));
+}
+
+a gt3(b x)
+{
+  return x > 3;
+}
+
+a plus(b x, c y) { return x + y; }
+
+a div(b x, c y) { return x / y; }
+
+a cons(b x, c y) { return x:y; }
+
+Int main()
+{
+  let xs = 1:2:3:4:5:[];
+  print(xs);
+  print(map(gt3, xs));
+  print(15 == foldl(plus, 0, xs));
+
+  print(3 == foldl(div, 24, 4:2:[]));
+
+  print((1:2:3:4:5:[]) == foldr(cons, [], xs));
+
+  return 0;
+}
