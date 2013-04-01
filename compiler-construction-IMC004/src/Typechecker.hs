@@ -50,13 +50,6 @@ envAddGlobal ident t constraints = do
   (i, (globals, locals)) <- lift get
   lift $ put (i, (Map.insert ident (t, constraints) globals, locals))
 
--- envAdd :: String -> SplType -> Environment -> Typecheck Environment
--- envAdd name value (globals, l:locals) = right (globals, (Map.insert name value l):locals)
--- envAdd _ _ _ = left $ InternalError "envAdd"
-
--- envAddDeclaration :: (String -> SplType -> Typecheck Environment) -> AstDeclaration -> Typecheck Environment
--- envAddDeclaration doAdd (AstVarDeclaration _ typ ident expression) =
-
 typeVars :: SplType -> [String]
 typeVars (SplBaseType _) = []
 typeVars (SplTypeVariable v) = [v]
@@ -153,18 +146,19 @@ instance InferType AstDeclaration where
 
 instance InferType AstExpr where
   inferType (AstIdentifier meta x) = envLookup x meta
-
   inferType (AstBoolean _ _) = return (SplBaseType BaseTypeBool, noConstraints)
   inferType (AstInteger _ _) = return (SplBaseType BaseTypeInt, noConstraints)
   inferType (AstEmptyList _) = do
     a <- fresh
     return (SplListType a, noConstraints)
+  inferType (AstFunctionCallExpr f) = inferType f
 
-  -- inferType (AstFunctionCallExpr (AstFunctionCall meta f (actualArg:_))) = do
-    -- ft <- envLookup f meta
-    -- (actualArgType, c2) <- inferType actualArg
-    -- x <- fresh
-    -- return (x, (ft, SplFunctionType [actualArgType] x):c2)
+instance InferType AstFunctionCall where
+  inferType (AstFunctionCall meta f (actualArg:_)) = do
+    (functionType, functionConstraints) <- envLookup f meta
+    (actualArgType, actualArgConstraints) <- inferType actualArg
+    returnType <- fresh
+    return (returnType, (functionType, SplFunctionType [actualArgType] returnType):functionConstraints ++ actualArgConstraints)
 
 
 initializeEnvironment :: Typecheck ()
@@ -194,10 +188,30 @@ initializeEnvironment = sequence_
   , do
     a <- fresh
     envAddGlobal "isEmpty" (SplFunctionType [SplListType a] (SplBaseType BaseTypeBool)) noConstraints
+
+  -- unary and binary operators are put here with invalid identifiers
+  -- unary operators are prefixed with a single #
+  -- binary operators are prefixed with a double ##
+  , do
+    envAddGlobal "#!" (SplFunctionType [SplBaseType BaseTypeBool] (SplBaseType BaseTypeBool)) noConstraints
+
+  , do
+    envAddGlobal "#-" (SplFunctionType [SplBaseType BaseTypeInt] (SplBaseType BaseTypeInt)) noConstraints
+
+  , do
+    mapM_ (\o -> envAddGlobal o (SplFunctionType [SplBaseType BaseTypeInt, SplBaseType BaseTypeInt] (SplBaseType BaseTypeInt)) noConstraints)
+      ["##+", "##-", "##*", "##/", "##%"]
   ]
 
 
 
 runTypecheck :: (Typecheck a) -> (Either CompileError a, TypecheckState)
--- runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnvironment)
-runTypecheck t = runState (runEitherT (t)) (0, emptyEnvironment)
+runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnvironment)
+-- runTypecheck t = runState (runEitherT (t)) (0, emptyEnvironment)
+
+-- type Environment = (Map.Map String (SplType, Constraints), Map.Map String (SplType, Constraints))
+
+prettyprintGlobals :: Environment -> String
+prettyprintGlobals (globals, locals) =
+    concatMap (\(name, (typ, constr)) -> name ++ " : " ++ show typ ++ " | " ++ show constr ++ "\n") blaat
+  where blaat = Map.toList globals

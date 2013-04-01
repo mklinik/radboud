@@ -53,7 +53,7 @@ run opts = do
       parseAnd_ runProgram opts
 
     ModeTypecheck -> do
-      parseAnd (show . TC.runTypecheck . TC.inferType) opts
+      parseAnd typecheck opts
 
     ModeInteractive -> do
       putStrLn ("Welcome to " ++ programName ++ " interactive mode.")
@@ -61,6 +61,11 @@ run opts = do
       readEvalPrintLoop
 
   cleanUp opts
+
+typecheck ast =
+  let (result, (_, env)) = TC.runTypecheck (TC.inferType ast)
+  in
+    TC.prettyprintGlobals env
 
 cleanUp :: Options -> IO ()
 cleanUp opts = do
