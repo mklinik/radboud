@@ -15,7 +15,7 @@ readEvalPrintLoop = do
     Just line   -> do
       Readline.addHistory line
       case runParser_ "interactive" pProgram line of
-        -- Right ast -> print $ runTypecheck (inferType ast)
-        Right ast -> runProgram ast >>= putStrLn
+        Right ast -> print $ runTypecheck (inferType ast)
+        -- Right ast -> runProgram ast >>= putStrLn
         Left err -> print err
       readEvalPrintLoop

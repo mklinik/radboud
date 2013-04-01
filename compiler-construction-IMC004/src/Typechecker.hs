@@ -24,7 +24,7 @@ fresh :: Typecheck SplType
 fresh = do
   (i, env) <- lift get
   lift $ put (i+1, env)
-  return $ SplTypeVariable ("{" ++ show i ++ "}")
+  return $ SplTypeVariable ("<" ++ show i ++ ">")
 
 type Unifier = String -> SplType
 

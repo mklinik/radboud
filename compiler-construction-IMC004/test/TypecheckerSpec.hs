@@ -21,6 +21,7 @@ main = hspec spec
 evalTypecheckBare :: (Typecheck a) -> a
 evalTypecheckBare t = unRight $ evalState (runEitherT (t)) (0, emptyEnvironment)
 
+parseConvertShow :: String -> String
 parseConvertShow s = show (evalTypecheckBare $ astType2splType (parse pReturnType s))
 
 spec :: Spec
@@ -34,11 +35,11 @@ spec = do
       parseConvertShow "Int" `shouldBe` "Int"
       parseConvertShow "Void" `shouldBe` "Void"
     it "replaces single type variables with fresh ones" $ do
-      parseConvertShow "a" `shouldBe` "{0}"
-      parseConvertShow "[a]" `shouldBe` "[{0}]"
+      parseConvertShow "a" `shouldBe` "<0>"
+      parseConvertShow "[a]" `shouldBe` "[<0>]"
     it "replaces distinct type variables with distinct fresh ones" $ do
-      parseConvertShow "(a, b)" `shouldBe` "({0}, {1})"
+      parseConvertShow "(a, b)" `shouldBe` "(<0>, <1>)"
     it "replaces the same type variables with the same fresh ones" $ do
-      parseConvertShow "(a, a)" `shouldBe` "({0}, {0})"
+      parseConvertShow "(a, a)" `shouldBe` "(<0>, <0>)"
     it "replaces same with same and distinct with distinct type variables" $ do
-      parseConvertShow "(a, (b, (b, a)))" `shouldBe` "({0}, ({1}, ({1}, {0})))"
+      parseConvertShow "(a, (b, (b, a)))" `shouldBe` "(<0>, (<1>, (<1>, <0>)))"
