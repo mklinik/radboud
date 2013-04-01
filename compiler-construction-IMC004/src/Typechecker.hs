@@ -150,8 +150,8 @@ instance InferType AstExpr where
     t <- envLookup x meta
     return (t, noConstraints)
 
-  inferType (AstBoolean meta _) = return (SplBaseType BaseTypeBool, noConstraints)
-  inferType (AstInteger meta _) = return (SplBaseType BaseTypeInt, noConstraints)
+  inferType (AstBoolean _ _) = return (SplBaseType BaseTypeBool, noConstraints)
+  inferType (AstInteger _ _) = return (SplBaseType BaseTypeInt, noConstraints)
   inferType (AstEmptyList _) = do
     a <- fresh
     return (SplListType a, noConstraints)
