@@ -43,6 +43,8 @@ envLookup ident meta = do
       (Just t) -> right t
       Nothing  -> left $ UnknownIdentifier ident meta
 
+-- If the identifier already exists, it is replaced.
+-- TODO: explicitly distinguish between updating and adding global identifiers, to generate error messages for updates
 envAddGlobal :: String -> SplType -> Constraints -> Typecheck ()
 envAddGlobal ident t constraints = do
   (i, (globals, locals)) <- lift get
@@ -123,24 +125,30 @@ astType2splType t = do
 class InferType a where
   inferType :: a -> Typecheck (SplType, Constraints)
 
+
+initDeclaration :: AstDeclaration -> Typecheck ()
+initDeclaration (AstVarDeclaration _ astType name _) = do
+  a <- astType2splType astType
+  envAddGlobal name a noConstraints
+
 instance InferType AstProgram where
-  inferType (AstProgram decls) =
-    -- mapM inferType decls >> return (SplBaseType BaseTypeVoid, noConstraints)
-    -- collect all constraints while inferring. This is only needed for
-    -- debugging; constraints are not needed in branches of the AST, only the
-    -- environment needs to be passed around
-    foldM (\(_, c1) d -> do
-      (t, c2) <- inferType d
-      return (t, c1 ++ c2)
-      ) (SplBaseType BaseTypeVoid, noConstraints) decls
+  inferType (AstProgram decls) = do
+    -- two passes:
+    -- first pass: put all global identifiers to environment
+    mapM_ initDeclaration decls
+
+    -- second pass: infer type of global identifiers
+    mapM_ inferType decls
+
+    return (SplBaseType BaseTypeVoid, noConstraints)
+
 
 instance InferType AstDeclaration where
-  inferType (AstVarDeclaration _ astType name expr) = do
+  inferType (AstVarDeclaration meta _ name expr) = do
+    (splType, constraints) <- envLookup name meta
     (exprType, exprConstraints) <- inferType expr
-    a <- astType2splType astType
-    envAddGlobal name a ((a,exprType):exprConstraints)
-    return (a, (a,exprType):exprConstraints)
-
+    envAddGlobal name splType (constraints ++ ((splType,exprType):exprConstraints))
+    return (SplBaseType BaseTypeVoid, noConstraints)
 
 
 instance InferType AstExpr where
@@ -191,4 +199,5 @@ initializeEnvironment = sequence_
 
 
 runTypecheck :: (Typecheck a) -> (Either CompileError a, TypecheckState)
-runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnvironment)
+-- runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnvironment)
+runTypecheck t = runState (runEitherT (t)) (0, emptyEnvironment)
