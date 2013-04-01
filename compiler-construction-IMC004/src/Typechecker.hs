@@ -195,6 +195,7 @@ instance InferType AstExpr where
     return (SplListType a, noConstraints)
   inferType (AstFunctionCallExpr f) = inferType f
   inferType (AstBinOp meta name lhs rhs) = inferType (AstFunctionCall meta name [lhs, rhs])
+  inferType (AstUnaryOp meta name arg) = inferType (AstFunctionCall meta ("unary " ++ name) [arg])
 
 instance InferType AstFunctionCall where
   inferType (AstFunctionCall meta f actualArgs) = do
@@ -233,13 +234,11 @@ initializeEnvironment = sequence_
     envAddGlobal "isEmpty" (SplFunctionType [SplListType a] (SplBaseType BaseTypeBool)) noConstraints
 
   -- unary and binary operators are put here with invalid identifiers
-  -- unary operators are prefixed with a single #
-  -- binary operators are prefixed with a double ##
   , do
-    envAddGlobal "#!" (SplFunctionType [SplBaseType BaseTypeBool] (SplBaseType BaseTypeBool)) noConstraints
+    envAddGlobal "unary !" (SplFunctionType [SplBaseType BaseTypeBool] (SplBaseType BaseTypeBool)) noConstraints
 
   , do
-    envAddGlobal "#-" (SplFunctionType [SplBaseType BaseTypeInt] (SplBaseType BaseTypeInt)) noConstraints
+    envAddGlobal "unary -" (SplFunctionType [SplBaseType BaseTypeInt] (SplBaseType BaseTypeInt)) noConstraints
 
   , do
     mapM_ (\o -> envAddGlobal o (SplFunctionType [SplBaseType BaseTypeInt, SplBaseType BaseTypeInt] (SplBaseType BaseTypeInt)) noConstraints)
