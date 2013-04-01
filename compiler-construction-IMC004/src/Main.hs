@@ -6,7 +6,6 @@ import System.Console.GetOpt
 import Text.Printf (printf)
 import Control.Monad
 import System.Exit
-import qualified System.Console.Readline as Readline
 
 import Parser
 import Prettyprinter
@@ -14,6 +13,7 @@ import Interpreter
 import Utils
 import Ast
 import qualified Typechecker as TC
+import Repl
 
 main :: IO ()
 main = do
@@ -66,18 +66,6 @@ cleanUp :: Options -> IO ()
 cleanUp opts = do
   hClose (inFile opts)
   hClose (outFile opts)
-
-readEvalPrintLoop :: IO ()
-readEvalPrintLoop = do
-  maybeLine <- Readline.readline "> "
-  case maybeLine of
-    Nothing     -> return () -- EOF / control-d
-    Just line   -> do
-      Readline.addHistory line
-      case runParser_ "interactive" pProgram line of
-        Right ast -> print $ TC.runTypecheck (TC.inferType ast)
-        Left err -> print err
-      readEvalPrintLoop
 
 programName :: String
 programName = "spl"
