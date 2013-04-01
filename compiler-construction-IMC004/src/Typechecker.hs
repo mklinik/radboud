@@ -207,6 +207,11 @@ instance InferType AstStatement where
     blaat <- mapM inferType stmts
     return (splTypeVoid, concatMap snd blaat)
 
+  inferType (AstWhile _ condition body) = do
+    (conditionType, conditionConstraints) <- inferType condition
+    (_, bodyConstraints) <- inferType body
+    return (splTypeVoid, (conditionType, splTypeBool):conditionConstraints ++ bodyConstraints)
+
 instance InferType AstExpr where
   inferType (AstIdentifier meta x) = envLookup x meta
   inferType (AstBoolean _ _) = return (SplBaseType BaseTypeBool, noConstraints)
