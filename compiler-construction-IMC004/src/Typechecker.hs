@@ -164,16 +164,19 @@ instance InferType AstDeclaration where
     envAddGlobal name splType (constraints ++ ((splType,exprType):exprConstraints))
     return (SplBaseType BaseTypeVoid, noConstraints) -- don't care
 
-  inferType (AstFunDeclaration meta _ name formalArgs _ (body:_)) = do -- only a single return statement supported for now
+  inferType (AstFunDeclaration meta returnType name formalArgs _ body) = do
     (functionType, functionConstraints) <- envLookup name meta
 
     freshArgTypes <- mapM makeSplArgType formalArgs
     mapM_ (uncurry envAddLocal) freshArgTypes
-    (bodyType, bodyConstraints) <- inferType body
+    freshReturnType <- astType2splType returnType
+    envAddLocal "#return" (freshReturnType, noConstraints)
+    mapM_ inferType body
+    (returnType_, returnConstraints) <- envLookup "#return" emptyMeta
     envClearLocals
 
-    let inferredType = SplFunctionType (map (fst . snd) freshArgTypes) bodyType
-    envAddGlobal name functionType (functionConstraints ++ (functionType,inferredType):bodyConstraints)
+    let inferredType = SplFunctionType (map (fst . snd) freshArgTypes) returnType_
+    envAddGlobal name functionType (functionConstraints ++ (functionType,inferredType):returnConstraints)
 
     return (SplBaseType BaseTypeVoid, noConstraints) -- don't care
     where
@@ -182,9 +185,19 @@ instance InferType AstDeclaration where
         typ_ <- astType2splType typ
         return (nam, (typ_, noConstraints))
 
+dontCare :: (SplType, Constraints)
+dontCare = (SplBaseType BaseTypeVoid, noConstraints)
+
 instance InferType AstStatement where
-  inferType (AstReturn _ Nothing) = return (SplBaseType BaseTypeVoid, noConstraints)
-  inferType (AstReturn _ (Just expr)) = inferType expr
+  inferType (AstReturn _ Nothing) = do
+    (returnType, returnConstraints) <- envLookup "#return" emptyMeta
+    envAddLocal "#return" (returnType, (splTypeVoid, returnType):returnConstraints)
+    return dontCare;
+  inferType (AstReturn _ (Just expr)) = do
+    (returnType, returnConstraints) <- envLookup "#return" emptyMeta
+    (exprType, exprConstraints) <- inferType expr
+    envAddLocal "#return" (returnType, (exprType, returnType):returnConstraints ++ exprConstraints)
+    return dontCare
 
 instance InferType AstExpr where
   inferType (AstIdentifier meta x) = envLookup x meta

@@ -16,6 +16,11 @@ data SplType
  | SplFunctionType [SplType] SplType
  deriving (Eq)
 
+-- for convenience
+splTypeVoid, splTypeInt, splTypeBool :: SplType
+splTypeVoid = SplBaseType BaseTypeVoid
+splTypeInt = SplBaseType BaseTypeInt
+splTypeBool = SplBaseType BaseTypeBool
 
 instance Show SplType where
   show t = prettyprintType t
