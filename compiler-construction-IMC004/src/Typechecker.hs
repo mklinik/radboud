@@ -86,6 +86,8 @@ astFreshTypeVariables astType = do
     astTypeVariables_ (TupleType _ a b) s = astTypeVariables_ b $ astTypeVariables_ a s
     astTypeVariables_ (ListType _ a) s = astTypeVariables_ a s
     astTypeVariables_ (PolymorphicType _ v) s = Set.insert v s
+    astTypeVariables_ (FunctionType argTypes returnType) s =
+      astTypeVariables_ returnType $ foldl (flip astTypeVariables_) s argTypes
 
 
 -- Turns an AstType into an SplType such that all type variables are replaced
@@ -113,6 +115,10 @@ astType2splType t = do
     case Map.lookup a tvars of
       Just v -> right v
       Nothing -> left $ InternalError "astType2splType: type variable not found"
+  astType2splType_ (FunctionType argTypes returnType) tvars = do
+    returnType_ <- astType2splType_ returnType tvars
+    argTypes_ <- mapM (\typ -> astType2splType_ typ tvars) argTypes
+    right $ SplFunctionType argTypes_ returnType_
 
 
 class InferType a where
@@ -122,6 +128,9 @@ class InferType a where
 initDeclaration :: AstDeclaration -> Typecheck ()
 initDeclaration (AstVarDeclaration _ astType name _) = do
   a <- astType2splType astType
+  envAddGlobal name a noConstraints
+initDeclaration (AstFunDeclaration _ astReturnType name formalArgs _ _) = do
+  a <- astType2splType (FunctionType (map (\(AstFunctionArgument _ ty _) -> ty) formalArgs) astReturnType)
   envAddGlobal name a noConstraints
 
 instance InferType AstProgram where
@@ -209,6 +218,6 @@ runTypecheck :: (Typecheck a) -> (Either CompileError a, TypecheckState)
 runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnvironment)
 
 prettyprintGlobals :: Environment -> String
-prettyprintGlobals (globals, locals) =
+prettyprintGlobals (globals, _) =
     concatMap (\(name, (typ, constr)) -> name ++ " : " ++ show typ ++ " | " ++ show constr ++ "\n") blaat
   where blaat = Map.toList globals

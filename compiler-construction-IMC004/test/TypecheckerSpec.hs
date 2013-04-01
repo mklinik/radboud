@@ -10,6 +10,7 @@ import Parser
 import Utils
 import Typechecker
 import SplType
+import Ast
 
 main :: IO ()
 main = hspec spec
@@ -22,7 +23,17 @@ evalTypecheckBare :: (Typecheck a) -> a
 evalTypecheckBare t = unRight $ evalState (runEitherT (t)) (0, emptyEnvironment)
 
 parseConvertShow :: String -> String
-parseConvertShow s = show (evalTypecheckBare $ astType2splType (parse pReturnType s))
+parseConvertShow s = convertShow $ parse pReturnType s
+
+convertShow :: AstType -> String
+convertShow t = show $ evalTypecheckBare $ astType2splType t
+
+typeInt, typeBool, typeVoid :: AstType
+typeInt = BaseType emptyMeta "Int"
+typeBool = BaseType emptyMeta "Bool"
+typeVoid = BaseType emptyMeta "Void"
+typeVar :: String -> AstType
+typeVar x = PolymorphicType emptyMeta x
 
 spec :: Spec
 spec = do
@@ -43,3 +54,9 @@ spec = do
       parseConvertShow "(a, a)" `shouldBe` "(<0>, <0>)"
     it "replaces same with same and distinct with distinct type variables" $ do
       parseConvertShow "(a, (b, (b, a)))" `shouldBe` "(<0>, (<1>, (<1>, <0>)))"
+    it "is the identity on monomorphic function types" $ do
+      convertShow (FunctionType [typeInt, typeBool] typeVoid) `shouldBe` "(Int Bool -> Void)"
+    it "replaces distinct with distinct type variables in function types" $ do
+      convertShow (FunctionType [typeVar "x", typeVar "y"] (typeVar "z")) `shouldBe` "(<0> <1> -> <2>)"
+    it "replaces distinct with distinct and same with same type vars in function types" $ do
+      convertShow (FunctionType [typeVar "x", typeVar "y", typeVar "y"] (typeVar "x")) `shouldBe` "(<0> <1> <1> -> <0>)"

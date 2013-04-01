@@ -28,6 +28,7 @@ data AstType
   | TupleType AstMeta AstType AstType
   | ListType AstMeta AstType
   | PolymorphicType AstMeta String
+  | FunctionType [AstType] AstType
   deriving (Show, Eq)
 
 data AstExpr
