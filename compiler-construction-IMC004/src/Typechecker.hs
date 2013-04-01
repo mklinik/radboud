@@ -11,9 +11,14 @@ import Ast
 import SplType
 import CompileError
 
-type Environment = (Map.Map String SplType, Map.Map String SplType)
+type Environment = (Map.Map String (SplType, Constraints), Map.Map String (SplType, Constraints))
 type TypecheckState = (Integer, Environment)
 type Typecheck a = EitherT CompileError (State TypecheckState) a
+
+type Constraints = [(SplType, SplType)]
+
+noConstraints :: Constraints
+noConstraints = []
 
 fresh :: Typecheck SplType
 fresh = do
@@ -23,10 +28,13 @@ fresh = do
 
 type Unifier = String -> SplType
 
+emptyUnifier :: Unifier
+emptyUnifier = undefined
+
 emptyEnvironment :: Environment
 emptyEnvironment = (Map.empty, Map.empty)
 
-envLookup :: String -> AstMeta -> Typecheck SplType
+envLookup :: String -> AstMeta -> Typecheck (SplType, Constraints)
 envLookup ident meta = do
   (_, (globals, locals)) <- lift get
   case Map.lookup ident locals of
@@ -35,10 +43,10 @@ envLookup ident meta = do
       (Just t) -> right t
       Nothing  -> left $ UnknownIdentifier ident meta
 
-envAddGlobal :: String -> SplType -> Typecheck ()
-envAddGlobal ident t = do
+envAddGlobal :: String -> SplType -> Constraints -> Typecheck ()
+envAddGlobal ident t constraints = do
   (i, (globals, locals)) <- lift get
-  lift $ put (i, (Map.insert ident t globals, locals))
+  lift $ put (i, (Map.insert ident (t, constraints) globals, locals))
 
 -- envAdd :: String -> SplType -> Environment -> Typecheck Environment
 -- envAdd name value (globals, l:locals) = right (globals, (Map.insert name value l):locals)
@@ -46,10 +54,6 @@ envAddGlobal ident t = do
 
 -- envAddDeclaration :: (String -> SplType -> Typecheck Environment) -> AstDeclaration -> Typecheck Environment
 -- envAddDeclaration doAdd (AstVarDeclaration _ typ ident expression) =
-
-
-emptyUnifier :: Unifier
-emptyUnifier = undefined
 
 typeVars :: SplType -> [String]
 typeVars (SplBaseType _) = []
@@ -64,11 +68,6 @@ substitute _ t@(SplBaseType _) = t
 substitute u (SplTupleType x y) = SplTupleType (substitute u x) (substitute u y)
 substitute u (SplListType x) = SplListType (substitute u x)
 substitute u (SplFunctionType argTypes returnType) = SplFunctionType (map (substitute u) argTypes) (substitute u returnType)
-
-type Constraints = [(SplType, SplType)]
-
-noConstraints :: Constraints
-noConstraints = []
 
 
 -- Makes fresh type variables for each type variable occuring in the given AstType.
@@ -139,15 +138,13 @@ instance InferType AstDeclaration where
   inferType (AstVarDeclaration _ astType name expr) = do
     (exprType, exprConstraints) <- inferType expr
     a <- astType2splType astType
-    envAddGlobal name a
+    envAddGlobal name a ((a,exprType):exprConstraints)
     return (a, (a,exprType):exprConstraints)
 
 
 
 instance InferType AstExpr where
-  inferType (AstIdentifier meta x) = do
-    t <- envLookup x meta
-    return (t, noConstraints)
+  inferType (AstIdentifier meta x) = envLookup x meta
 
   inferType (AstBoolean _ _) = return (SplBaseType BaseTypeBool, noConstraints)
   inferType (AstInteger _ _) = return (SplBaseType BaseTypeInt, noConstraints)
@@ -155,40 +152,40 @@ instance InferType AstExpr where
     a <- fresh
     return (SplListType a, noConstraints)
 
-  inferType (AstFunctionCallExpr (AstFunctionCall meta f (actualArg:_))) = do
-    ft <- envLookup f meta
-    (actualArgType, c2) <- inferType actualArg
-    x <- fresh
-    return (x, (ft, SplFunctionType [actualArgType] x):c2)
+  -- inferType (AstFunctionCallExpr (AstFunctionCall meta f (actualArg:_))) = do
+    -- ft <- envLookup f meta
+    -- (actualArgType, c2) <- inferType actualArg
+    -- x <- fresh
+    -- return (x, (ft, SplFunctionType [actualArgType] x):c2)
 
 
 initializeEnvironment :: Typecheck ()
 initializeEnvironment = sequence_
   [ do
     a <- fresh
-    envAddGlobal "print" (SplFunctionType [a] (SplBaseType BaseTypeVoid))
+    envAddGlobal "print" (SplFunctionType [a] (SplBaseType BaseTypeVoid)) noConstraints
 
   , do
     a <- fresh
     b <- fresh
-    envAddGlobal "fst" (SplFunctionType [SplTupleType a b] a)
+    envAddGlobal "fst" (SplFunctionType [SplTupleType a b] a) noConstraints
 
   , do
     a <- fresh
     b <- fresh
-    envAddGlobal "snd" (SplFunctionType [SplTupleType a b] b)
+    envAddGlobal "snd" (SplFunctionType [SplTupleType a b] b) noConstraints
 
   , do
     a <- fresh
-    envAddGlobal "head" (SplFunctionType [SplListType a] a)
+    envAddGlobal "head" (SplFunctionType [SplListType a] a) noConstraints
 
   , do
     a <- fresh
-    envAddGlobal "tail" (SplFunctionType [SplListType a] a)
+    envAddGlobal "tail" (SplFunctionType [SplListType a] a) noConstraints
 
   , do
     a <- fresh
-    envAddGlobal "isEmpty" (SplFunctionType [SplListType a] (SplBaseType BaseTypeBool))
+    envAddGlobal "isEmpty" (SplFunctionType [SplListType a] (SplBaseType BaseTypeBool)) noConstraints
   ]
 
 
