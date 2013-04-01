@@ -194,6 +194,7 @@ instance InferType AstExpr where
     a <- fresh
     return (SplListType a, noConstraints)
   inferType (AstFunctionCallExpr f) = inferType f
+  inferType (AstBinOp meta name lhs rhs) = inferType (AstFunctionCall meta name [lhs, rhs])
 
 instance InferType AstFunctionCall where
   inferType (AstFunctionCall meta f actualArgs) = do
@@ -242,7 +243,7 @@ initializeEnvironment = sequence_
 
   , do
     mapM_ (\o -> envAddGlobal o (SplFunctionType [SplBaseType BaseTypeInt, SplBaseType BaseTypeInt] (SplBaseType BaseTypeInt)) noConstraints)
-      ["##+", "##-", "##*", "##/", "##%"]
+      ["+", "-", "*", "/", "%"]
   ]
 
 
