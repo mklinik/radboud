@@ -212,6 +212,11 @@ instance InferType AstStatement where
     (_, bodyConstraints) <- inferType body
     return (splTypeVoid, (conditionType, splTypeBool):conditionConstraints ++ bodyConstraints)
 
+  inferType (AstAssignment meta name expr) = do
+    (exprType, exprConstraints) <- inferType expr
+    (nameType, nameConstraints) <- envLookup name meta
+    return (splTypeVoid, (exprType, nameType):exprConstraints ++ nameConstraints)
+
 instance InferType AstExpr where
   inferType (AstIdentifier meta x) = envLookup x meta
   inferType (AstBoolean _ _) = return (SplBaseType BaseTypeBool, noConstraints)
