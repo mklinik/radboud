@@ -50,6 +50,16 @@ envAddGlobal ident t constraints = do
   (i, (globals, locals)) <- lift get
   lift $ put (i, (Map.insert ident (t, constraints) globals, locals))
 
+envAddLocal :: String -> (SplType, Constraints) -> Typecheck ()
+envAddLocal name value = do
+  (i, (globals, locals)) <- lift get
+  lift $ put (i, (globals, Map.insert name value locals))
+
+envClearLocals :: Typecheck ()
+envClearLocals = do
+  (i, (globals, _)) <- lift get
+  lift $ put (i, (globals, Map.empty))
+
 typeVars :: SplType -> [String]
 typeVars (SplBaseType _) = []
 typeVars (SplTypeVariable v) = [v]
@@ -130,6 +140,7 @@ initDeclaration (AstVarDeclaration _ astType name _) = do
   a <- astType2splType astType
   envAddGlobal name a noConstraints
 initDeclaration (AstFunDeclaration _ astReturnType name formalArgs _ _) = do
+  -- we're building a fake Ast node here: the function type
   a <- astType2splType (FunctionType (map (\(AstFunctionArgument _ ty _) -> ty) formalArgs) astReturnType)
   envAddGlobal name a noConstraints
 
@@ -142,16 +153,38 @@ instance InferType AstProgram where
     -- second pass: infer type of global identifiers
     mapM_ inferType decls
 
-    return (SplBaseType BaseTypeVoid, noConstraints)
+    return (SplBaseType BaseTypeVoid, noConstraints) -- don't care
 
 
 instance InferType AstDeclaration where
+
   inferType (AstVarDeclaration meta _ name expr) = do
     (splType, constraints) <- envLookup name meta
     (exprType, exprConstraints) <- inferType expr
     envAddGlobal name splType (constraints ++ ((splType,exprType):exprConstraints))
-    return (SplBaseType BaseTypeVoid, noConstraints)
+    return (SplBaseType BaseTypeVoid, noConstraints) -- don't care
 
+  inferType (AstFunDeclaration meta returnType name formalArgs _ (body:_)) = do -- only a single return statement supported for now
+    (splType, constraints) <- envLookup name meta
+
+    freshArgTypes <- mapM makeSplType formalArgs
+    mapM (uncurry envAddLocal) freshArgTypes
+    (bodyType, bodyConstraints) <- inferType body
+    envClearLocals
+
+    let expectedType = SplFunctionType (map (fst . snd) freshArgTypes) bodyType
+    envAddGlobal name splType (constraints ++ (splType,expectedType):bodyConstraints)
+
+    return (SplBaseType BaseTypeVoid, noConstraints) -- don't care
+    where
+      makeSplType :: AstFunctionArgument -> Typecheck (String, (SplType, Constraints))
+      makeSplType (AstFunctionArgument _ typ name) = do
+        typ_ <- astType2splType typ
+        return (name, (typ_, noConstraints))
+
+instance InferType AstStatement where
+  inferType (AstReturn _ Nothing) = return (SplBaseType BaseTypeVoid, noConstraints)
+  inferType (AstReturn _ (Just expr)) = inferType expr
 
 instance InferType AstExpr where
   inferType (AstIdentifier meta x) = envLookup x meta
