@@ -1,0 +1,3 @@
+a id(a x) { return x; }
+
+a z = (id(True), id(10));

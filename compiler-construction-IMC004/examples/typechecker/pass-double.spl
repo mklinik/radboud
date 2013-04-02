@@ -1,0 +1,15 @@
+a double(b f, c x)
+{
+  return f(f(x));
+}
+
+Int succ(Int x) { return x + 1; }
+
+Bool not(Bool x) { return !x; }
+
+Void main()
+{
+  double(succ, 0); 
+  double(not, True);
+  return;
+}
