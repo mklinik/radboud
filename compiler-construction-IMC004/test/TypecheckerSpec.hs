@@ -84,13 +84,18 @@ spec = do
     it "infers mutual recursive lists" $ do
       typeOf "x" "a x = head(y):x; b y = head(x):y;" `shouldBe` "[a]"
       typeOf "y" "a x = head(y):x; b y = head(x):y;" `shouldBe` "[a]"
-    it "infers mutual recursive functions" $ do
-      let prog = (unlines
+
+    let mutualFandG = unlines
             ["a f(b x) { return g(x); }"
             ,"a g(b x) { return f(x); }"
-            ])
-      typeOf "f" prog `shouldBe` "(a -> b)"
-      typeOf "g" prog `shouldBe` "(a -> b)"
+            ]
+
+    it "infers mutual recursive functions" $ do
+      typeOf "f" mutualFandG `shouldBe` "(a -> b)"
+      typeOf "g" mutualFandG `shouldBe` "(a -> b)"
+
+    it "can use mutual f and g with different types of arguments" $ do
+      typeOf "x" (mutualFandG ++ "x x = (f(True), g(10));") `shouldBe` "(a, b)"
 
     it "infers mutual recursive functions where f is a tad more specific" $ do
       let prog = (unlines
@@ -114,14 +119,23 @@ spec = do
     it "can use different instantiations of globals in statements" $ do
       typeOf "f" "a id(a x) { return x; } a f() { id(10); id(True); return 10; }" `shouldBe` "( -> Int)"
 
-    it "cannot use different intsantiatons of locals" $ do
+    it "cannot use different instantiatons of locals" $ do
       typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
         "Couldn't match expected type `Int' with actual type `Bool' at position 1:1"
+
+    let double = "a double(f f, x x) { return f(f(x)); }"
+
+    it "can type the double function" $ do
+      typeOf "double" double `shouldBe` "((a -> a) a -> a)"
 
     -- some boring stuff
     it "infers some monomorphic values" $ do
       typeOf "x" "Int x = 10;" `shouldBe` "Int"
       typeOf "x" "Bool x = True;" `shouldBe` "Bool"
+      typeOf "x" "a x = (10, True);" `shouldBe` "(Int, Bool)"
+      typeOf "x" "a x = 10:[];" `shouldBe` "[Int]"
+      typeOf "x" "a x = (10, True):[];" `shouldBe` "[(Int, Bool)]"
+      typeOf "x" "a x = (10:[], True:[]):[];" `shouldBe` "[([Int], [Bool])]"
 
     -- quirky
     it "infers that the identity stays (a -> a) when applied to Int in body" $ do
