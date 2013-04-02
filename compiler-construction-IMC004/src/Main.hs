@@ -62,6 +62,7 @@ run opts = do
 
   cleanUp opts
 
+typecheck :: AstProgram -> String
 typecheck ast =
   let (result, (_, env)) = TC.runTypecheck $ TC.typecheck ast
   in
