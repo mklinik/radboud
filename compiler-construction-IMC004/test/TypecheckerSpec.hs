@@ -106,10 +106,13 @@ spec = do
     it "infers that x must be a tuple" $ do
       typeOf "f" "Int f(a x) { return fst(x); }" `shouldBe` "((Int, a) -> Int)"
 
-    it "can use different instantiations of globals" $ do
+    it "can use different instantiations of globals in tuples" $ do
       let identity = "a id(a x) { return x; }"
       typeOf "x" (identity ++ "a x = (   10,     True );") `shouldBe` "(Int, Bool)"
       typeOf "x" (identity ++ "a x = (id(10), id(True));") `shouldBe` "(Int, Bool)"
+
+    it "can use different instantiations of globals in statements" $ do
+      typeOf "f" "a id(a x) { return x; } a f() { id(10); id(True); return 10; }" `shouldBe` "( -> Int)"
 
     it "cannot use different intsantiatons of locals" $ do
       typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
@@ -121,7 +124,7 @@ spec = do
       typeOf "x" "Bool x = True;" `shouldBe` "Bool"
 
     -- quirky
-    it "infers that the identity becomes (Int -> Int) when applied to Int in body" $ do
-      typeOf "id" "a id(a x) { id(1); return x; }" `shouldBe` "(Int -> Int)"
+    it "infers that the identity stays (a -> a) when applied to Int in body" $ do
+      typeOf "id" "a id(a x) { id(1); return x; }" `shouldBe` "(a -> a)"
     it "infers that the identity stays (a -> a) when applied to int outside body" $ do
       typeOf "id" "a id(a x) { return x; } Int y = id(1);" `shouldBe` "(a -> a)"

@@ -41,8 +41,23 @@ envLookup ident meta = do
   case Map.lookup ident locals of
     (Just t) -> right t
     Nothing  -> case Map.lookup ident globals of
-      (Just t) -> right t
+      (Just t) -> makeFreshTypeVariables t
       Nothing  -> left $ UnknownIdentifier ident meta
+
+makeFreshTypeVariables :: (SplType, Constraints) -> Typecheck (SplType, Constraints)
+makeFreshTypeVariables (t, constraints) = do
+  let tvars = Set.toList $ Set.fromList $ typeVarsInConstraints constraints ++ typeVars t
+  u <- foldM foobar emptyUnifier tvars
+  return $ (substitute u t, substitute u constraints)
+  where
+    foobar :: Unifier -> String -> Typecheck Unifier
+    foobar u var = do
+      a <- fresh
+      return (u . mkSubstitution var a)
+
+typeVarsInConstraints :: Constraints -> [String]
+typeVarsInConstraints [] = []
+typeVarsInConstraints ((t1, t2):cs) = typeVars t1 ++ typeVars t2 ++ typeVarsInConstraints cs
 
 -- If the identifier already exists, it is replaced.
 -- TODO: explicitly distinguish between updating and adding global identifiers, to generate error messages for updates
@@ -68,12 +83,21 @@ typeVars (SplTupleType x y) = typeVars x ++ typeVars y
 typeVars (SplListType x) = typeVars x
 typeVars (SplFunctionType argTypes returnType) = foldl (\accum argType -> typeVars argType ++ accum) (typeVars returnType) argTypes
 
-substitute :: Unifier -> SplType -> SplType
-substitute u t@(SplTypeVariable _) = u t
-substitute _ t@(SplBaseType _) = t
-substitute u (SplTupleType x y) = SplTupleType (substitute u x) (substitute u y)
-substitute u (SplListType x) = SplListType (substitute u x)
-substitute u (SplFunctionType argTypes returnType) = SplFunctionType (map (substitute u) argTypes) (substitute u returnType)
+class Substitute a where
+  substitute :: Unifier -> a -> a
+
+instance Substitute SplType where
+  substitute u t@(SplTypeVariable _) = u t
+  substitute _ t@(SplBaseType _) = t
+  substitute u (SplTupleType x y) = SplTupleType (substitute u x) (substitute u y)
+  substitute u (SplListType x) = SplListType (substitute u x)
+  substitute u (SplFunctionType argTypes returnType) = SplFunctionType (map (substitute u) argTypes) (substitute u returnType)
+
+instance (Substitute a, Substitute b) => Substitute (a, b) where
+  substitute u (a, b) = (substitute u a, substitute u b)
+
+instance Substitute a => Substitute [a] where
+  substitute u l = map (substitute u) l
 
 unify :: (SplType, SplType) -> Typecheck Unifier
 unify (SplBaseType BaseTypeInt, SplBaseType BaseTypeInt) = return id
