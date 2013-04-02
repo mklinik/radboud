@@ -3,6 +3,7 @@
 module TypecheckerSpec (spec, main) where
 
 import Test.Hspec
+import Test.QuickCheck
 import Control.Monad.Trans.Either
 import Control.Monad.Trans.State.Lazy
 
@@ -136,6 +137,18 @@ spec = do
       typeOf "x" "a x = 10:[];" `shouldBe` "[Int]"
       typeOf "x" "a x = (10, True):[];" `shouldBe` "[(Int, Bool)]"
       typeOf "x" "a x = (10:[], True:[]):[];" `shouldBe` "[([Int], [Bool])]"
+
+    it "typechecks comparison operators" $ do
+      property $ forAll (elements ["<", ">", "<=", ">=", "==", "!="]) $
+        \o -> typeOf "x" ("x x = 10" ++ o ++ "10;") == "Bool"
+
+    it "typechecks arithmetical operators" $ do
+      property $ forAll (elements ["+", "-", "*", "/", "%"]) $
+        \o -> typeOf "x" ("x x = 10" ++ o ++ "10;") == "Int"
+
+    it "typechecks logical operators" $ do
+      typeOf "x" "x x = True && True;" `shouldBe` "Bool"
+      typeOf "x" "x x = True || True;" `shouldBe` "Bool"
 
     -- quirky
     it "infers that the identity stays (a -> a) when applied to Int in body" $ do

@@ -332,6 +332,14 @@ initializeEnvironment = sequence_
       ["+", "-", "*", "/", "%"]
 
   , do
+    mapM_ (\o -> envAddGlobal o (SplFunctionType [splTypeInt, splTypeInt] (splTypeBool)) noConstraints)
+      ["<", ">", "<=", ">=", "==", "!="]
+
+  , do
+    mapM_ (\o -> envAddGlobal o (SplFunctionType [splTypeBool, splTypeBool] (splTypeBool)) noConstraints)
+      ["&&", "||"]
+
+  , do
     a <- fresh
     envAddGlobal ":" (SplFunctionType [a, SplListType a] (SplListType a)) noConstraints
   ]
