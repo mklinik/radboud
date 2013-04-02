@@ -1,5 +1,6 @@
 module CompileError where
 
+import Text.ParserCombinators.UU.BasicInstances
 import Ast
 import SplType
 
@@ -19,5 +20,9 @@ instance Show CompileError where
   show (ParseError message) = message
   show (InternalError x) = "Internal error `" ++ x ++ "'" -- should never happen, but you know...
 
+-- default show LineColPos is not nice
+lcpToString :: LineColPos -> String
+lcpToString (LineColPos l c _) = show (l+1) ++ ":" ++ show (c+1)
+
 position :: AstMeta -> String
-position meta = "at position " ++ show (sourceLocation meta)
+position meta = "at position " ++ lcpToString (sourceLocation meta)

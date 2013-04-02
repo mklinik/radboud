@@ -28,7 +28,7 @@ runParser_ inputName p s | (a,b) <- execParser_ p s = do
           prettyError :: String -> [String] -> LineColPos -> String
           prettyError s exp p@(LineColPos line c abs) = printf "Expected %s at %s :\n%s\n%s\n%s\n"
                                                            (show_expecting p exp)
-                                                           (show p)
+                                                           (lcpToString p)
                                                            aboveString
                                                            inputFrag
                                                            belowString
