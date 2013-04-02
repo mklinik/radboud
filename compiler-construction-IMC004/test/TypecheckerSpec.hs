@@ -37,9 +37,11 @@ typeVar x = PolymorphicType emptyMeta x
 typeOf :: String -> String -> String
 typeOf identifier program =
   let ast = parse pProgram program
-      (Right (typ, _), _) = runTypecheck $ typecheck ast >> envLookup identifier emptyMeta
+      (result, _) = runTypecheck $ typecheck ast >> envLookup identifier emptyMeta
   in
-    prettyprintType $ makeNiceAutoTypeVariables typ
+    case result of
+      Right (typ, _) -> prettyprintType $ makeNiceAutoTypeVariables typ
+      Left err -> show err
 
 spec :: Spec
 spec = do
@@ -68,21 +70,21 @@ spec = do
       convertShow (FunctionType [typeVar "x", typeVar "y", typeVar "y"] (typeVar "x")) `shouldBe` "(<0> <1> <1> -> <0>)"
 
   describe "typecheck" $ do
-    it "identity function" $ do
+    it "infers the identity function" $ do
       typeOf "id" "a id(b x){ return x; }" `shouldBe` "(a -> a)"
-    it "constant function" $ do
+    it "infers the constant function" $ do
       typeOf "const" "a const(b x, c y){ return x; }" `shouldBe` "(b a -> b)"
-    it "monomorphic recursive list definition" $ do
+    it "infers a monomorphic recursive list definition" $ do
       typeOf "x" "a x = 1:x;" `shouldBe` "[Int]"
-    it "polymorphic recursive list definition" $ do
+    it "infers a polymorphic recursive list definition" $ do
       typeOf "x" "a x = head(x):x;" `shouldBe` "[a]"
-    it "mutual recursive values" $ do
+    it "infers mutual recursive values" $ do
       typeOf "x" "a x = y; b y = x;" `shouldBe` "a"
       typeOf "y" "a x = y; b y = x;" `shouldBe` "a"
-    it "mutual recursive lists" $ do
+    it "infers mutual recursive lists" $ do
       typeOf "x" "a x = head(y):x; b y = head(x):y;" `shouldBe` "[a]"
       typeOf "y" "a x = head(y):x; b y = head(x):y;" `shouldBe` "[a]"
-    it "mutual recursive functions" $ do
+    it "infers mutual recursive functions" $ do
       let prog = (unlines
             ["a f(b x) { return g(x); }"
             ,"a g(b x) { return f(x); }"
@@ -90,14 +92,36 @@ spec = do
       typeOf "f" prog `shouldBe` "(a -> b)"
       typeOf "g" prog `shouldBe` "(a -> b)"
 
-    -- now the boring stuff
-    it "monomorphic values" $ do
+    it "infers mutual recursive functions where f is a tad more specific" $ do
+      let prog = (unlines
+            ["a f(a x) { return g(x); }"
+            ,"a g(b x) { return f(x); }"
+            ])
+      typeOf "f" prog `shouldBe` "(a -> a)"
+      typeOf "g" prog `shouldBe` "(a -> a)"
+
+    it "infers that g must be a function" $ do
+      typeOf "f" "Int f(a g) { return g(1); }" `shouldBe` "((Int -> Int) -> Int)"
+
+    it "infers that x must be a tuple" $ do
+      typeOf "f" "Int f(a x) { return fst(x); }" `shouldBe` "((Int, a) -> Int)"
+
+    it "can use different instantiations of globals" $ do
+      let identity = "a id(a x) { return x; }"
+      typeOf "x" (identity ++ "a x = (   10,     True );") `shouldBe` "(Int, Bool)"
+      typeOf "x" (identity ++ "a x = (id(10), id(True));") `shouldBe` "(Int, Bool)"
+
+    it "cannot use different intsantiatons of locals" $ do
+      typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
+        "Couldn't match expected type `Int' with actual type `Bool' at position 1:1"
+
+    -- some boring stuff
+    it "infers some monomorphic values" $ do
       typeOf "x" "Int x = 10;" `shouldBe` "Int"
       typeOf "x" "Bool x = True;" `shouldBe` "Bool"
 
-
     -- quirky
-    it "identity becomes (Int -> Int) when applied to Int in body" $ do
+    it "infers that the identity becomes (Int -> Int) when applied to Int in body" $ do
       typeOf "id" "a id(a x) { id(1); return x; }" `shouldBe` "(Int -> Int)"
-    it "identity stays (a -> a) when applied to int outside body" $ do
+    it "infers that the identity stays (a -> a) when applied to int outside body" $ do
       typeOf "id" "a id(a x) { return x; } Int y = id(1);" `shouldBe` "(a -> a)"
