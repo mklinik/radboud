@@ -5,7 +5,7 @@ import qualified Data.Set as Set
 import Control.Monad.Trans.Either
 import Control.Monad.Trans.State.Lazy
 import Control.Monad.Trans.Class (lift)
-import Control.Monad (liftM)
+import Control.Monad (foldM, liftM)
 
 import Ast
 import SplType
@@ -26,10 +26,10 @@ fresh = do
   lift $ put (i+1, env)
   return $ SplTypeVariable ("<" ++ show i ++ ">")
 
-type Unifier = String -> SplType
+type Unifier = SplType -> SplType
 
 emptyUnifier :: Unifier
-emptyUnifier = undefined
+emptyUnifier = id
 
 emptyEnvironment :: Environment
 emptyEnvironment = (Map.empty, Map.empty)
@@ -68,12 +68,38 @@ typeVars (SplListType x) = typeVars x
 typeVars (SplFunctionType argTypes returnType) = foldl (\accum argType -> typeVars argType ++ accum) (typeVars returnType) argTypes
 
 substitute :: Unifier -> SplType -> SplType
-substitute u (SplTypeVariable v) = u v
+substitute u t@(SplTypeVariable _) = u t
 substitute _ t@(SplBaseType _) = t
 substitute u (SplTupleType x y) = SplTupleType (substitute u x) (substitute u y)
 substitute u (SplListType x) = SplListType (substitute u x)
 substitute u (SplFunctionType argTypes returnType) = SplFunctionType (map (substitute u) argTypes) (substitute u returnType)
 
+unify :: (SplType, SplType) -> Typecheck Unifier
+unify (SplBaseType BaseTypeInt, SplBaseType BaseTypeInt) = return id
+unify (SplBaseType BaseTypeBool, SplBaseType BaseTypeBool) = return id
+unify (SplBaseType BaseTypeVoid, SplBaseType BaseTypeVoid) = return id
+unify (SplTypeVariable v1, SplTypeVariable v2) | v1 == v2 = return id
+unify (SplListType t1, SplListType t2) = unify (t1, t2)
+unify (SplTupleType a1 b1, SplTupleType a2 b2) = unifyAll [(a1, a2), (b1, b2)]
+unify (t1@(SplFunctionType args1 ret1), t2@(SplFunctionType args2 ret2)) =
+  if length args1 == length args2
+    then unifyAll $ zip (ret1:args1) (ret2:args2)
+    else left $ TypeError t1 t2 emptyMeta
+unify (SplTypeVariable v, t) | not (elem v (typeVars t)) = return $ substitute u
+  where u (SplTypeVariable v2) | v == v2 = t
+        u t_ = t_
+unify (t, SplTypeVariable v) | not (elem v (typeVars t)) = return $ substitute u
+  where u (SplTypeVariable v2) | v == v2 = t
+        u t_ = t_
+unify (t1, t2) = left $ TypeError t1 t2 emptyMeta
+
+unifyAll :: Constraints -> Typecheck Unifier
+unifyAll cs = foldM unifyBlaat emptyUnifier cs
+
+unifyBlaat :: Unifier -> (SplType, SplType) -> Typecheck Unifier
+unifyBlaat u (a, b) = do
+ u2 <- unify (substitute u a, substitute u b)
+ return (u2 . u)
 
 -- Makes fresh type variables for each type variable occuring in the given AstType.
 -- The same type variables in the AstType get the same fresh type variables.
@@ -133,7 +159,6 @@ astType2splType t = do
 
 class InferType a where
   inferType :: a -> Typecheck (SplType, Constraints)
-
 
 initDeclaration :: AstDeclaration -> Typecheck ()
 initDeclaration (AstVarDeclaration _ astType name _) = do
@@ -282,7 +307,15 @@ initializeEnvironment = sequence_
       ["+", "-", "*", "/", "%"]
   ]
 
-
+typecheck :: AstProgram -> Typecheck ()
+typecheck prog = do
+  -- third pass: run unifier on all global identifiers
+  _ <- inferType prog -- these constraints are empty, the juicy stuff is in the environment
+  (i, (globals, locals)) <- lift get
+  let constraints = concatMap (snd . snd) $ Map.toList globals
+  u <- unifyAll constraints
+  lift $ put (i, (Map.map (\(t, c) -> (substitute u t, c)) globals, locals)) -- apply the unifier to all globals
+  return () -- success!
 
 runTypecheck :: (Typecheck a) -> (Either CompileError a, TypecheckState)
 runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnvironment)

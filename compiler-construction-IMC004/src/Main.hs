@@ -63,7 +63,7 @@ run opts = do
   cleanUp opts
 
 typecheck ast =
-  let (result, (_, env)) = TC.runTypecheck (TC.inferType ast)
+  let (result, (_, env)) = TC.runTypecheck $ TC.typecheck ast
   in
     show result ++ "\n" ++ TC.prettyprintGlobals env
 
