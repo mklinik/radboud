@@ -7,3 +7,6 @@ a g(b x)
 {
   return f(x + 1);
 }
+
+a h(b x) { return i(x); }
+a i(b x) { return h(x); }

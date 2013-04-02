@@ -89,3 +89,15 @@ spec = do
             ])
       typeOf "f" prog `shouldBe` "(a -> b)"
       typeOf "g" prog `shouldBe` "(a -> b)"
+
+    -- now the boring stuff
+    it "monomorphic values" $ do
+      typeOf "x" "Int x = 10;" `shouldBe` "Int"
+      typeOf "x" "Bool x = True;" `shouldBe` "Bool"
+
+
+    -- quirky
+    it "identity becomes (Int -> Int) when applied to Int in body" $ do
+      typeOf "id" "a id(a x) { id(1); return x; }" `shouldBe` "(Int -> Int)"
+    it "identity stays (a -> a) when applied to int outside body" $ do
+      typeOf "id" "a id(a x) { return x; } Int y = id(1);" `shouldBe` "(a -> a)"

@@ -317,10 +317,14 @@ typecheck prog = do
   -- third pass: run unifier on all global identifiers
   _ <- inferType prog -- these constraints are empty, the juicy stuff is in the environment
   (i, (globals, locals)) <- lift get
-  let globalConstraints = concatMap (snd . snd) $ Map.toList globals
-  u <- unifyAll globalConstraints
-  lift $ put (i, (Map.map (\(t, c) -> (substitute u t, c)) globals, locals)) -- apply the unifier to all globals
+  unifiedGlobals <- mapM unifyOneGlobal $ Map.toList globals
+  lift $ put (i, (Map.fromList unifiedGlobals, locals))
   return () -- success!
+
+unifyOneGlobal :: (String, (SplType, Constraints)) -> Typecheck (String, (SplType, Constraints))
+unifyOneGlobal (name, (typ, constraints)) = do
+  u <- unifyAll constraints
+  return $ (name, (substitute u typ, constraints))
 
 runTypecheck :: (Typecheck a) -> (Either CompileError a, TypecheckState)
 runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnvironment)
