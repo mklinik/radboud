@@ -32,6 +32,15 @@ typeVoid = BaseType emptyMeta "Void"
 typeVar :: String -> AstType
 typeVar x = PolymorphicType emptyMeta x
 
+-- Given a program and an identifier, infer the type of the identifier in the
+-- standard environment.
+typeOf :: String -> String -> String
+typeOf program identifier =
+  let ast = parse pProgram program
+      (Right (typ, _), _) = runTypecheck $ typecheck ast >> envLookup identifier emptyMeta
+  in
+    prettyprintType $ makeNiceAutoTypeVariables typ
+
 spec :: Spec
 spec = do
   describe "typeVars" $ do
@@ -57,3 +66,11 @@ spec = do
       convertShow (FunctionType [typeVar "x", typeVar "y"] (typeVar "z")) `shouldBe` "(<0> <1> -> <2>)"
     it "replaces distinct with distinct and same with same type vars in function types" $ do
       convertShow (FunctionType [typeVar "x", typeVar "y", typeVar "y"] (typeVar "x")) `shouldBe` "(<0> <1> <1> -> <0>)"
+
+  describe "typecheck" $ do
+    it "identity function" $ do
+      typeOf "a id(b x){ return x; }" "id" `shouldBe` "(a -> a)"
+    it "constant function" $ do
+      typeOf "a const(b x, c y){ return x; }" "const" `shouldBe` "(b a -> b)"
+    it "recursive list definition" $ do
+      typeOf "a x = True:x;" "x" `shouldBe` "[Bool]"

@@ -6,6 +6,7 @@ import Control.Monad.Trans.Either
 import Control.Monad.Trans.State.Lazy
 import Control.Monad.Trans.Class (lift)
 import Control.Monad (foldM, liftM)
+import Data.Char (ord, chr)
 
 import Ast
 import SplType
@@ -328,3 +329,14 @@ prettyprintGlobals :: Environment -> String
 prettyprintGlobals (globals, _) =
     concatMap (\(name, (typ, constr)) -> name ++ " : " ++ show typ ++ " | " ++ show constr ++ "\n") blaat
   where blaat = Map.toList globals
+
+-- Replaces auto-type variables with letters from a-z
+makeNiceAutoTypeVariables :: SplType -> SplType
+makeNiceAutoTypeVariables t =
+  let tvars = Set.fromList $ typeVars t
+      (_, u) = Set.foldl foobar (0, emptyUnifier) tvars
+  in
+    substitute u t
+  where
+    foobar :: (Int, Unifier) -> String -> (Int, Unifier)
+    foobar (i, u) var = (i+1, u . mkSubstitution var (SplTypeVariable ((chr $ ord 'a' + i):[])))
