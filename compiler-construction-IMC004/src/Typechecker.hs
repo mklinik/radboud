@@ -85,13 +85,13 @@ unify (t1@(SplFunctionType args1 ret1), t2@(SplFunctionType args2 ret2)) =
   if length args1 == length args2
     then unifyAll $ zip (ret1:args1) (ret2:args2)
     else left $ TypeError t1 t2 emptyMeta
-unify (SplTypeVariable v, t) | not (elem v (typeVars t)) = return $ substitute u
-  where u (SplTypeVariable v2) | v == v2 = t
-        u t_ = t_
-unify (t, SplTypeVariable v) | not (elem v (typeVars t)) = return $ substitute u
-  where u (SplTypeVariable v2) | v == v2 = t
-        u t_ = t_
+unify (SplTypeVariable v, t) | not (elem v (typeVars t)) = return $ mkSubstitution v t
+unify (t, SplTypeVariable v) | not (elem v (typeVars t)) = return $ mkSubstitution v t
 unify (t1, t2) = left $ TypeError t1 t2 emptyMeta
+
+mkSubstitution :: String -> SplType -> SplType -> SplType
+mkSubstitution v1 t (SplTypeVariable v2) | v1 == v2 = t
+mkSubstitution _ _ t = t
 
 unifyAll :: Constraints -> Typecheck Unifier
 unifyAll cs = foldM unifyBlaat emptyUnifier cs
