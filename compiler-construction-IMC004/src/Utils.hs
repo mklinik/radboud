@@ -44,4 +44,4 @@ parse parser prog = unRight $ runParser_ "" parser prog
 
 unRight :: Either a b -> b
 unRight (Right x) = x
-unRight _ = undefined
+unRight _ = error "unRight: wasn't right"

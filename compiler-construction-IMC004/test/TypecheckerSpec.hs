@@ -35,7 +35,7 @@ typeVar x = PolymorphicType emptyMeta x
 -- Given a program and an identifier, infer the type of the identifier in the
 -- standard environment.
 typeOf :: String -> String -> String
-typeOf program identifier =
+typeOf identifier program =
   let ast = parse pProgram program
       (Right (typ, _), _) = runTypecheck $ typecheck ast >> envLookup identifier emptyMeta
   in
@@ -69,8 +69,23 @@ spec = do
 
   describe "typecheck" $ do
     it "identity function" $ do
-      typeOf "a id(b x){ return x; }" "id" `shouldBe` "(a -> a)"
+      typeOf "id" "a id(b x){ return x; }" `shouldBe` "(a -> a)"
     it "constant function" $ do
-      typeOf "a const(b x, c y){ return x; }" "const" `shouldBe` "(b a -> b)"
-    it "recursive list definition" $ do
-      typeOf "a x = True:x;" "x" `shouldBe` "[Bool]"
+      typeOf "const" "a const(b x, c y){ return x; }" `shouldBe` "(b a -> b)"
+    it "monomorphic recursive list definition" $ do
+      typeOf "x" "a x = 1:x;" `shouldBe` "[Int]"
+    it "polymorphic recursive list definition" $ do
+      typeOf "x" "a x = head(x):x;" `shouldBe` "[a]"
+    it "mutual recursive values" $ do
+      typeOf "x" "a x = y; b y = x;" `shouldBe` "a"
+      typeOf "y" "a x = y; b y = x;" `shouldBe` "a"
+    it "mutual recursive lists" $ do
+      typeOf "x" "a x = head(y):x; b y = head(x):y;" `shouldBe` "[a]"
+      typeOf "y" "a x = head(y):x; b y = head(x):y;" `shouldBe` "[a]"
+    it "mutual recursive functions" $ do
+      let prog = (unlines
+            ["a f(b x) { return g(x); }"
+            ,"a g(b x) { return f(x); }"
+            ])
+      typeOf "f" prog `shouldBe` "(a -> b)"
+      typeOf "g" prog `shouldBe` "(a -> b)"
