@@ -13,7 +13,7 @@ a const(a x, b y)
   return x;
 }
 
-Bool constInt(Int x, b y)
+Int constInt(a x, b y)
 {
   return x;
 }
