@@ -316,8 +316,8 @@ typecheck prog = do
   -- third pass: run unifier on all global identifiers
   _ <- inferType prog -- these constraints are empty, the juicy stuff is in the environment
   (i, (globals, locals)) <- lift get
-  let constraints = concatMap (snd . snd) $ Map.toList globals
-  u <- unifyAll constraints
+  let globalConstraints = concatMap (snd . snd) $ Map.toList globals
+  u <- unifyAll globalConstraints
   lift $ put (i, (Map.map (\(t, c) -> (substitute u t, c)) globals, locals)) -- apply the unifier to all globals
   return () -- success!
 
