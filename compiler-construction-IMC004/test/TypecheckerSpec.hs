@@ -150,8 +150,11 @@ spec = do
       typeOf "x" "x x = True && True;" `shouldBe` "Bool"
       typeOf "x" "x x = True || True;" `shouldBe` "Bool"
 
-    -- quirky
     it "infers that the identity stays (a -> a) when applied to Int in body" $ do
       typeOf "id" "a id(a x) { id(1); return x; }" `shouldBe` "(a -> a)"
     it "infers that the identity stays (a -> a) when applied to int outside body" $ do
       typeOf "id" "a id(a x) { return x; } Int y = id(1);" `shouldBe` "(a -> a)"
+
+    it "fails extracting an Int from a tuple of Bools" $ do
+      typeOf "x" "Int x = fst((True, True));" `shouldBe`
+        "Couldn't match expected type `Int' with actual type `Bool' at position 1:1"
