@@ -7,6 +7,7 @@ import Control.Monad.Trans.State.Lazy
 import Control.Monad.Trans.Class (lift)
 import Control.Monad (foldM, liftM)
 import Data.Char (ord, chr)
+import Text.ParserCombinators.UU.BasicInstances (LineColPos)
 
 import Ast
 import SplType
@@ -16,7 +17,7 @@ type Environment = (Map.Map String (SplType, Constraints), Map.Map String (SplTy
 type TypecheckState = (Integer, Environment)
 type Typecheck a = EitherT CompileError (State TypecheckState) a
 
-type Constraints = [(SplType, SplType)]
+type Constraints = [(LineColPos, (SplType, SplType))]
 
 noConstraints :: Constraints
 noConstraints = []
@@ -57,7 +58,7 @@ makeFreshTypeVariables (t, constraints) = do
 
 typeVarsInConstraints :: Constraints -> [String]
 typeVarsInConstraints [] = []
-typeVarsInConstraints ((t1, t2):cs) = typeVars t1 ++ typeVars t2 ++ typeVarsInConstraints cs
+typeVarsInConstraints ((_, (t1, t2)):cs) = typeVars t1 ++ typeVars t2 ++ typeVarsInConstraints cs
 
 -- If the identifier already exists, it is replaced.
 -- TODO: explicitly distinguish between updating and adding global identifiers, to generate error messages for updates
@@ -108,20 +109,23 @@ instance (Substitute a, Substitute b) => Substitute (a, b) where
 instance Substitute a => Substitute [a] where
   substitute u l = map (substitute u) l
 
-unify :: (SplType, SplType) -> Typecheck Unifier
-unify (SplBaseType BaseTypeInt, SplBaseType BaseTypeInt) = return id
-unify (SplBaseType BaseTypeBool, SplBaseType BaseTypeBool) = return id
-unify (SplBaseType BaseTypeVoid, SplBaseType BaseTypeVoid) = return id
-unify (SplTypeVariable v1, SplTypeVariable v2) | v1 == v2 = return id
-unify (SplListType t1, SplListType t2) = unify (t1, t2)
-unify (SplTupleType a1 b1, SplTupleType a2 b2) = unifyAll [(a1, a2), (b1, b2)]
-unify (t1@(SplFunctionType args1 ret1), t2@(SplFunctionType args2 ret2)) =
+instance Substitute LineColPos where
+  substitute _ p = p
+
+unify :: (LineColPos, (SplType, SplType)) -> Typecheck Unifier
+unify (_, (SplBaseType BaseTypeInt, SplBaseType BaseTypeInt)) = return id
+unify (_, (SplBaseType BaseTypeBool, SplBaseType BaseTypeBool)) = return id
+unify (_, (SplBaseType BaseTypeVoid, SplBaseType BaseTypeVoid)) = return id
+unify (_, (SplTypeVariable v1, SplTypeVariable v2)) | v1 == v2 = return id
+unify (p, (SplListType t1, SplListType t2)) = unify (p, (t1, t2))
+unify (p, (SplTupleType a1 b1, SplTupleType a2 b2)) = unifyAll [(p, (a1, a2)), (p, (b1, b2))]
+unify (p, (t1@(SplFunctionType args1 ret1), t2@(SplFunctionType args2 ret2))) =
   if length args1 == length args2
-    then unifyAll $ zip (ret1:args1) (ret2:args2)
-    else left $ TypeError t1 t2 emptyMeta
-unify (SplTypeVariable v, t) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
-unify (t, SplTypeVariable v) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
-unify (t1, t2) = left $ TypeError t1 t2 emptyMeta
+    then unifyAll $ zip (repeat p) $ zip (ret1:args1) (ret2:args2)
+    else left $ TypeError t1 t2 p
+unify (_, (SplTypeVariable v, t)) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
+unify (_, (t, SplTypeVariable v)) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
+unify (p, (t1, t2)) = left $ TypeError t1 t2 p
 
 mkSubstitution :: String -> SplType -> SplType -> SplType
 mkSubstitution v1 t (SplTypeVariable v2) | v1 == v2 = t
@@ -130,9 +134,9 @@ mkSubstitution _ _ t = t
 unifyAll :: Constraints -> Typecheck Unifier
 unifyAll cs = foldM unifyBlaat emptyUnifier cs
 
-unifyBlaat :: Unifier -> (SplType, SplType) -> Typecheck Unifier
-unifyBlaat u (a, b) = do
- u2 <- unify (substitute u a, substitute u b)
+unifyBlaat :: Unifier -> (LineColPos, (SplType, SplType)) -> Typecheck Unifier
+unifyBlaat u (p, (a, b)) = do
+ u2 <- unify (p, (substitute u a, substitute u b))
  return (u2 . u)
 
 -- Makes fresh type variables for each type variable occuring in the given AstType.
@@ -222,7 +226,7 @@ instance InferType AstDeclaration where
   inferType (AstVarDeclaration meta _ name expr) = do
     (splType, _) <- envLookup name meta
     (exprType, exprConstraints) <- inferType expr
-    envAddConstraints name ((splType,exprType):exprConstraints) meta
+    envAddConstraints name ((sourceLocation meta, (splType,exprType)):exprConstraints) meta
     return dontCare
 
   inferType (AstFunDeclaration meta returnType name formalArgs decls body) = do
@@ -240,7 +244,7 @@ instance InferType AstDeclaration where
     envClearLocals
 
     let inferredType = SplFunctionType (map (fst . snd) freshArgTypes) freshReturnType
-    envAddGlobal name (functionType, (functionConstraints ++ (functionType,inferredType):bodyConstraints ++ declConstraints))
+    envAddGlobal name (functionType, (functionConstraints ++ (sourceLocation meta, (functionType,inferredType)):bodyConstraints ++ declConstraints))
 
     return dontCare
     where
@@ -253,33 +257,33 @@ dontCare :: (SplType, Constraints)
 dontCare = (splTypeVoid, noConstraints)
 
 instance InferType AstStatement where
-  inferType (AstReturn _ Nothing) = do
+  inferType (AstReturn meta Nothing) = do
     (returnType, returnConstraints) <- envLookup returnSymbol emptyMeta
-    return (returnType, (splTypeVoid, returnType):returnConstraints)
-  inferType (AstReturn _ (Just expr)) = do
+    return (returnType, (sourceLocation meta, (splTypeVoid, returnType)):returnConstraints)
+  inferType (AstReturn meta (Just expr)) = do
     (returnType, returnConstraints) <- envLookup returnSymbol emptyMeta
     (exprType, exprConstraints) <- inferType expr
-    return (returnType, (exprType, returnType):returnConstraints ++ exprConstraints)
+    return (returnType, (sourceLocation meta, (exprType, returnType)):returnConstraints ++ exprConstraints)
 
-  inferType (AstIfThenElse _ astCondition thenStmt elseStmt) = do
+  inferType (AstIfThenElse meta astCondition thenStmt elseStmt) = do
     (conditionType, conditionConstraints) <- inferType astCondition
     (_, thenConstraints) <- inferType thenStmt
     (_, elseConstraints) <- inferType elseStmt
-    return (splTypeVoid, (conditionType, splTypeBool):conditionConstraints ++ thenConstraints ++ elseConstraints)
+    return (splTypeVoid, (sourceLocation meta, (conditionType, splTypeBool)):conditionConstraints ++ thenConstraints ++ elseConstraints)
 
   inferType (AstBlock stmts) = do
     blaat <- mapM inferType stmts
     return (splTypeVoid, concatMap snd blaat)
 
-  inferType (AstWhile _ condition body) = do
+  inferType (AstWhile meta condition body) = do
     (conditionType, conditionConstraints) <- inferType condition
     (_, bodyConstraints) <- inferType body
-    return (splTypeVoid, (conditionType, splTypeBool):conditionConstraints ++ bodyConstraints)
+    return (splTypeVoid, (sourceLocation meta, (conditionType, splTypeBool)):conditionConstraints ++ bodyConstraints)
 
   inferType (AstAssignment meta name expr) = do
     (exprType, exprConstraints) <- inferType expr
     (nameType, nameConstraints) <- envLookup name meta
-    return (splTypeVoid, (exprType, nameType):exprConstraints ++ nameConstraints)
+    return (splTypeVoid, (sourceLocation meta, (exprType, nameType)):exprConstraints ++ nameConstraints)
 
   inferType (AstFunctionCallStmt f) = inferType f
 
@@ -303,7 +307,7 @@ instance InferType AstFunctionCall where
     (functionType, functionConstraints) <- envLookup f meta
     (actualArgTypes, actualArgsConstraints) <- liftM unzip $ mapM inferType actualArgs
     returnType <- fresh
-    return (returnType, (functionType, SplFunctionType actualArgTypes returnType):functionConstraints ++ concat actualArgsConstraints)
+    return (returnType, (sourceLocation meta, (functionType, SplFunctionType actualArgTypes returnType)):functionConstraints ++ concat actualArgsConstraints)
 
 
 initializeEnvironment :: Typecheck ()
@@ -328,7 +332,7 @@ initializeEnvironment = sequence_
 
   , do
     a <- fresh
-    envAddGlobal "tail" ((SplFunctionType [SplListType a] a), noConstraints)
+    envAddGlobal "tail" ((SplFunctionType [SplListType a] (SplListType a)), noConstraints)
 
   , do
     a <- fresh

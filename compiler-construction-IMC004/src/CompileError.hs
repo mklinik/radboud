@@ -5,16 +5,16 @@ import Ast
 import SplType
 
 data CompileError
-  = TypeError SplType SplType AstMeta
+  = TypeError SplType SplType LineColPos
   | UnknownIdentifier String AstMeta
   | ParseError String
   | InternalError String
 
 instance Show CompileError where
-  show (TypeError expected got meta) =
+  show (TypeError expected got p) =
     "Couldn't match expected type `" ++ show expected
     ++ "' with actual type `" ++ show got ++ "' "
-    ++ position meta
+    ++ lcpToString p
   show (UnknownIdentifier ident meta) =
     "Unknown identifier `" ++ ident ++ "' " ++ position meta
   show (ParseError message) = message
