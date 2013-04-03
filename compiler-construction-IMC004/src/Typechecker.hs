@@ -29,9 +29,8 @@ type Typecheck a = EitherT CompileError (State TypecheckState) a
 --   second type is the actual type
 newtype Constraint = Constraint (LineColPos, (SplType, SplType))
 
--- We do a tiny bit of optimization here, because constraints express an equivalence relation
 instance Eq Constraint where
-  (==) (Constraint (_, (a1, a2))) (Constraint (_, (b1, b2))) = a1 == b1 && a2 == b2 || a1 == b2 && a2 == b1
+  (==) (Constraint (_, (a1, a2))) (Constraint (_, (b1, b2))) = a1 == b1 && a2 == b2
 
 instance Ord Constraint where
   (<=) (Constraint (_, (a1, a2))) (Constraint (_, (b1, b2))) = a1 <= b1 && a2 <= b2
