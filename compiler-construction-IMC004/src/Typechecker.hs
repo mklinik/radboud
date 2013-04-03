@@ -2,13 +2,12 @@ module Typechecker where
 
 import qualified Data.Map as Map
 import qualified Data.Set as Set
-import Data.Set (Set)
 import Control.Monad.Trans.Either
 import Control.Monad.Trans.State.Lazy
 import Control.Monad.Trans.Class (lift)
 import Control.Monad (foldM, liftM)
 import Data.Char (ord, chr)
-import Text.ParserCombinators.UU.BasicInstances
+import Text.ParserCombinators.UU.BasicInstances (LineColPos)
 import Data.List (intersperse)
 
 import Ast
@@ -27,15 +26,8 @@ type Typecheck a = EitherT CompileError (State TypecheckState) a
 -- the convention is (for nice error messages):
 --   first type is the expected type
 --   second type is the actual type
-newtype Constraint = Constraint (LineColPos, (SplType, SplType))
-
-instance Eq Constraint where
-  (==) (Constraint (_, (a1, a2))) (Constraint (_, (b1, b2))) = a1 == b1 && a2 == b2
-
-instance Ord Constraint where
-  (<=) (Constraint (_, (a1, a2))) (Constraint (_, (b1, b2))) = a1 <= b1 && a2 <= b2
-
-type Constraints = Set Constraint
+type Constraint = (LineColPos, (SplType, SplType))
+type Constraints = [Constraint]
 
 instance Show CompileError where
   show (TypeError expected got p) =
@@ -48,7 +40,7 @@ instance Show CompileError where
   show (InternalError x) = "Internal error `" ++ x ++ "'" -- should never happen, but you know...
 
 noConstraints :: Constraints
-noConstraints = Set.empty
+noConstraints = []
 
 fresh :: Typecheck SplType
 fresh = do
@@ -101,7 +93,8 @@ makeFreshTypeVariables (t, constraints) = do
       return (u . mkSubstitution var a)
 
 typeVarsInConstraints :: Constraints -> [String]
-typeVarsInConstraints s = Set.foldl (\vars (Constraint (_, (t1, t2))) -> typeVars t1 ++ typeVars t2 ++ vars) [] s
+typeVarsInConstraints [] = []
+typeVarsInConstraints ((_, (t1, t2)):cs) = typeVars t1 ++ typeVars t2 ++ typeVarsInConstraints cs
 
 -- If the identifier already exists, it is replaced.
 -- TODO: explicitly distinguish between updating and adding global identifiers, to generate error messages for updates
@@ -124,9 +117,9 @@ envAddConstraints :: String -> Constraints -> AstMeta -> Typecheck ()
 envAddConstraints ident newCs meta = do
   env <- lift get
   case Map.lookup ident (locals env) of
-    Just (t, oldCs) -> lift $ put $ env { locals = Map.insert ident (t, oldCs `Set.union` newCs) (locals env) }
+    Just (t, oldCs) -> lift $ put $ env { locals = Map.insert ident (t, oldCs ++ newCs) (locals env) }
     Nothing  -> case Map.lookup ident (globals env) of
-      Just (t, oldCs) -> lift $ put $ env { globals = Map.insert ident (t, oldCs `Set.union` newCs) (globals env) }
+      Just (t, oldCs) -> lift $ put $ env { globals = Map.insert ident (t, oldCs ++ newCs) (globals env) }
       Nothing  -> left $ UnknownIdentifier ident meta
 
 typeVars :: SplType -> [String]
@@ -146,37 +139,40 @@ instance Substitute SplType where
   substitute u (SplListType x) = SplListType (substitute u x)
   substitute u (SplFunctionType argTypes returnType) = SplFunctionType (map (substitute u) argTypes) (substitute u returnType)
 
-instance (Substitute a, Ord a) => Substitute (Set a) where
-  substitute u s = Set.map (substitute u) s
+instance (Substitute a, Substitute b) => Substitute (a, b) where
+  substitute u (a, b) = (substitute u a, substitute u b)
 
-instance Substitute Constraint where
-  substitute u (Constraint (p, (t1, t2))) = Constraint (p, (substitute u t1, substitute u t2))
+instance Substitute a => Substitute [a] where
+  substitute u l = map (substitute u) l
+
+instance Substitute LineColPos where
+  substitute _ p = p
 
 unify :: Constraint -> Typecheck Unifier
-unify (Constraint (_, (SplBaseType BaseTypeInt, SplBaseType BaseTypeInt))) = return id
-unify (Constraint (_, (SplBaseType BaseTypeBool, SplBaseType BaseTypeBool))) = return id
-unify (Constraint (_, (SplBaseType BaseTypeVoid, SplBaseType BaseTypeVoid))) = return id
-unify (Constraint (_, (SplTypeVariable v1, SplTypeVariable v2))) | v1 == v2 = return id
-unify (Constraint (p, (SplListType t1, SplListType t2))) = unify $ Constraint (p, (t1, t2))
-unify (Constraint (p, (SplTupleType a1 b1, SplTupleType a2 b2))) = unifyAll $ Set.fromList [Constraint (p, (a1, a2)), Constraint (p, (b1, b2))]
-unify (Constraint (p, (t1@(SplFunctionType args1 ret1), t2@(SplFunctionType args2 ret2)))) =
+unify (_, (SplBaseType BaseTypeInt, SplBaseType BaseTypeInt)) = return id
+unify (_, (SplBaseType BaseTypeBool, SplBaseType BaseTypeBool)) = return id
+unify (_, (SplBaseType BaseTypeVoid, SplBaseType BaseTypeVoid)) = return id
+unify (_, (SplTypeVariable v1, SplTypeVariable v2)) | v1 == v2 = return id
+unify (p, (SplListType t1, SplListType t2)) = unify (p, (t1, t2))
+unify (p, (SplTupleType a1 b1, SplTupleType a2 b2)) = unifyAll [(p, (a1, a2)), (p, (b1, b2))]
+unify (p, (t1@(SplFunctionType args1 ret1), t2@(SplFunctionType args2 ret2))) =
   if length args1 == length args2
-    then unifyAll $ Set.fromList $ map Constraint $ zip (repeat p) $ zip (ret1:args1) (ret2:args2)
+    then unifyAll $ zip (repeat p) $ zip (ret1:args1) (ret2:args2)
     else left $ TypeError t1 t2 p
-unify (Constraint (_, (SplTypeVariable v, t))) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
-unify (Constraint (_, (t, SplTypeVariable v))) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
-unify (Constraint (p, (t1, t2))) = left $ TypeError t1 t2 p
+unify (_, (SplTypeVariable v, t)) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
+unify (_, (t, SplTypeVariable v)) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
+unify (p, (t1, t2)) = left $ TypeError t1 t2 p
 
 mkSubstitution :: String -> SplType -> SplType -> SplType
 mkSubstitution v1 t (SplTypeVariable v2) | v1 == v2 = t
 mkSubstitution _ _ t = t
 
 unifyAll :: Constraints -> Typecheck Unifier
-unifyAll cs = foldM unifyBlaat emptyUnifier $ Set.toList cs
+unifyAll cs = foldM unifyBlaat emptyUnifier cs
 
 unifyBlaat :: Unifier -> Constraint -> Typecheck Unifier
-unifyBlaat u (Constraint (p, (a, b))) = do
- u2 <- unify $ Constraint (p, (substitute u a, substitute u b))
+unifyBlaat u (p, (a, b)) = do
+ u2 <- unify (p, (substitute u a, substitute u b))
  return (u2 . u)
 
 -- Makes fresh type variables for each type variable occuring in the given AstType.
@@ -192,10 +188,10 @@ astFreshTypeVariables astType = do
       a <- fresh
       return (s, a)
     -- Gets all type variables in an AstType.
-    astTypeVariables :: Set String
+    astTypeVariables :: Set.Set String
     astTypeVariables = astTypeVariables_ astType Set.empty
 
-    astTypeVariables_ :: AstType -> Set String -> Set String
+    astTypeVariables_ :: AstType -> Set.Set String -> Set.Set String
     astTypeVariables_ (BaseType _ _) s = s
     astTypeVariables_ (TupleType _ a b) s = astTypeVariables_ b $ astTypeVariables_ a s
     astTypeVariables_ (ListType _ a) s = astTypeVariables_ a s
@@ -268,7 +264,7 @@ instance InferType AstDeclaration where
     setCurrentDeclaration name
     (splType, _) <- envLookup name meta
     (exprType, exprConstraints) <- inferType expr
-    envAddConstraints name (Set.insert (Constraint (sourceLocation meta, (splType,exprType))) exprConstraints) meta
+    envAddConstraints name ((sourceLocation meta, (splType,exprType)):exprConstraints) meta
     clearCurrentDeclaration
     envLookup name meta
 
@@ -283,17 +279,12 @@ instance InferType AstDeclaration where
     envAddLocal returnSymbol (freshReturnType, noConstraints)
     blaat2 <- mapM inferType decls
     blaat <- mapM inferType body
-    let bodyConstraints = Set.unions $ map snd blaat
-    let declConstraints = Set.unions $ map snd blaat2
+    let bodyConstraints = concatMap snd blaat
+    let declConstraints = concatMap snd blaat2
     envClearLocals
 
     let inferredType = SplFunctionType (map (fst . snd) freshArgTypes) freshReturnType
-    envAddGlobal name (functionType,
-      Set.unions [ functionConstraints
-                 , bodyConstraints
-                 , declConstraints
-                 , Set.singleton $ Constraint (sourceLocation meta, (functionType,inferredType))
-                 ])
+    envAddGlobal name (functionType, (functionConstraints ++ (sourceLocation meta, (functionType,inferredType)):bodyConstraints ++ declConstraints))
 
     clearCurrentDeclaration
     return dontCare
@@ -309,44 +300,31 @@ dontCare = (splTypeVoid, noConstraints)
 instance InferType AstStatement where
   inferType (AstReturn meta Nothing) = do
     (returnType, returnConstraints) <- envLookup returnSymbol emptyMeta
-    return (returnType, Set.insert (Constraint (sourceLocation meta, (returnType, splTypeVoid))) returnConstraints)
+    return (returnType, (sourceLocation meta, (returnType, splTypeVoid)):returnConstraints)
   inferType (AstReturn meta (Just expr)) = do
     (returnType, returnConstraints) <- envLookup returnSymbol emptyMeta
     (exprType, exprConstraints) <- inferType expr
-    return (returnType, Set.unions [ Set.singleton $ Constraint (sourceLocation meta, (returnType, exprType))
-                                   , returnConstraints
-                                   , exprConstraints
-                                   ])
+    return (returnType, (sourceLocation meta, (returnType, exprType)):returnConstraints ++ exprConstraints)
 
   inferType (AstIfThenElse meta astCondition thenStmt elseStmt) = do
     (conditionType, conditionConstraints) <- inferType astCondition
     (_, thenConstraints) <- inferType thenStmt
     (_, elseConstraints) <- inferType elseStmt
-    return (splTypeVoid, Set.unions [ Set.singleton $ Constraint (sourceLocation meta, (splTypeBool, conditionType))
-                                    , conditionConstraints
-                                    , thenConstraints
-                                    , elseConstraints
-                                    ])
+    return (splTypeVoid, (sourceLocation meta, (splTypeBool, conditionType)):conditionConstraints ++ thenConstraints ++ elseConstraints)
 
   inferType (AstBlock stmts) = do
     blaat <- mapM inferType stmts
-    return (splTypeVoid, Set.unions $ map snd blaat)
+    return (splTypeVoid, concatMap snd blaat)
 
   inferType (AstWhile meta condition body) = do
     (conditionType, conditionConstraints) <- inferType condition
     (_, bodyConstraints) <- inferType body
-    return (splTypeVoid, Set.unions [ Set.singleton $ Constraint (sourceLocation meta, (splTypeBool, conditionType))
-                                    , conditionConstraints
-                                    , bodyConstraints
-                                    ])
+    return (splTypeVoid, (sourceLocation meta, (splTypeBool, conditionType)):conditionConstraints ++ bodyConstraints)
 
   inferType (AstAssignment meta name expr) = do
     (exprType, exprConstraints) <- inferType expr
     (nameType, nameConstraints) <- envLookup name meta
-    return (splTypeVoid, Set.unions [ Set.singleton $ Constraint (sourceLocation meta, (exprType, nameType))
-                                    , exprConstraints
-                                    , nameConstraints
-                                    ])
+    return (splTypeVoid, (sourceLocation meta, (exprType, nameType)):exprConstraints ++ nameConstraints)
 
   inferType (AstFunctionCallStmt f) = inferType f
 
@@ -363,18 +341,14 @@ instance InferType AstExpr where
   inferType (AstTuple _ a b) = do
     (aType, aConstraints) <- inferType a
     (bType, bConstraints) <- inferType b
-    return (SplTupleType aType bType, aConstraints `Set.union` bConstraints)
+    return (SplTupleType aType bType, aConstraints ++ bConstraints)
 
 instance InferType AstFunctionCall where
   inferType (AstFunctionCall meta f actualArgs) = do
     (functionType, functionConstraints) <- envLookup f meta
     (actualArgTypes, actualArgsConstraints) <- liftM unzip $ mapM inferType actualArgs
     returnType <- fresh
-    return (returnType, Set.unions
-      ([ Set.singleton $ Constraint (sourceLocation meta, (functionType, SplFunctionType actualArgTypes returnType))
-       , functionConstraints
-       ] ++ actualArgsConstraints
-      ))
+    return (returnType, (sourceLocation meta, (functionType, SplFunctionType actualArgTypes returnType)):functionConstraints ++ concat actualArgsConstraints)
 
 
 initializeEnvironment :: Typecheck ()
@@ -452,10 +426,10 @@ prettyprintGlobals env =
   where blaat = Map.toList $ globals env
 
 prettyprintConstraints :: Constraints -> String
-prettyprintConstraints cs = concat $ intersperse ", " $ map prettyprintConstraint $ Set.toList cs
+prettyprintConstraints cs = concat $ intersperse ", " $ map prettyprintConstraint cs
 
 prettyprintConstraint :: Constraint -> String
-prettyprintConstraint (Constraint (_, (t1, t2))) = show t1 ++ " = " ++ show t2
+prettyprintConstraint (_, (t1, t2)) = show t1 ++ " = " ++ show t2
 
 -- Replaces auto-type variables with letters from a-z
 makeNiceAutoTypeVariables :: SplType -> SplType
