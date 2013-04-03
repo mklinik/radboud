@@ -120,9 +120,15 @@ spec = do
     it "can use different instantiations of globals in statements" $ do
       typeOf "f" "a id(a x) { return x; } a f() { id(10); id(True); return 10; }" `shouldBe` "( -> Int)"
 
-    it "cannot use different instantiatons of locals" $ do
-      typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
-        "Couldn't match expected type `Int' with actual type `Bool' at position 1:27"
+    it "can use different instantiations of a global list when using the value" $ do
+      typeOf "f" "[a] x = []; a f() { return (1:x, True:x); }" `shouldBe` "( -> ([Int], [Bool]))"
+
+    it "cannot use different instantiations of a global list when assigning the value" $ do
+      typeOf "f" "[Int] x = []; Void f() { x = 1:[]; x = True:[]; return; }" `shouldBe`
+        "Couldn't match expected type `(a [a] -> [a])' with actual type `(Bool [a] -> [Int])' at position 1:44"
+
+    it "assignment to a global list inside a function must determine it's type" $ do
+      typeOf "x" "[a] x = []; a f() { x = 1:[]; return; }" `shouldBe` "[Int]"
 
     let double = "a double(f f, x x) { return f(f(x)); }"
 
@@ -157,10 +163,23 @@ spec = do
 
     it "fails extracting an Int from a tuple of Bools" $ do
       typeOf "x" "Int x = fst((True, True));" `shouldBe`
-        "Couldn't match expected type `Int' with actual type `Bool' at position 1:9"
+        "Couldn't match expected type `((b, a) -> b)' with actual type `((Bool, Bool) -> Int)' at position 1:9"
 
-    it "typechecks mutually recursive local variables" $ do
-      typeOf "foo" "Int foo() { var x = y; var y = z; var z = x; return y; }" `shouldBe` "( -> Int)"
+    describe "local variables" $ do
+
+      it "typechecks mutually recursive local variables" $ do
+        typeOf "foo" "Int foo() { var x = y; var y = z; var z = x; return y; }" `shouldBe` "( -> Int)"
+
+      it "cannot use different instantiatons of function arguments" $ do
+        typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
+          "Couldn't match expected type `(Int -> a)' with actual type `(Bool -> a)' at position 1:27"
+
+      -- it "can use different instantiations of local variables" $ do
+        -- typeOf "f" "a f() { var x = []; return (1:x, True:x); }" `shouldBe` "( -> ([Int], [Bool]))"
+
+      -- it "cannot assign different instantiations to local variables" $ do
+        -- typeOf "f" "a f() { var x = []; x = 1:[]; x = True:[]; return; }" `shouldBe`
+          -- "Couldnt't match expected type ..."
 
     describe "conditionals" $ do
 
@@ -213,16 +232,16 @@ spec = do
       it "infers the type of a local variable transitively through assignments" $ do
         typeOf "f" "a f() { x x = x; y y = y; z z = z; z = True; y = z; x = y; return x; }" `shouldBe` "( -> Bool)"
 
-      it "unifies both a and b from const and const2 as Int" $ do
-        typeOf "f" (unlines
-          ["a const(a x, b y) { return x; }"
-          ,"b const2(a x, b y) { return y; }"
-          ,"a f() {"
-          ,"  var foo = head([]);"
-          ,"  if(True) foo = const; else foo = const2;"
-          ,"  return foo(10, 20);"
-          ,"}"
-          ]) `shouldBe` "( -> Int)"
+      -- it "unifies both a and b from const and const2 as Int" $ do
+        -- typeOf "f" (unlines
+          -- ["a const(a x, b y) { return x; }"
+          -- ,"b const2(a x, b y) { return y; }"
+          -- ,"a f() {"
+          -- ,"  var foo = head([]);"
+          -- ,"  if(True) foo = const; else foo = const2;"
+          -- ,"  return foo(10, 20);"
+          -- ,"}"
+          -- ]) `shouldBe` "( -> Int)"
 
       it "unifies both a and b from const and const2 as Int" $ do
         typeOf "f" (unlines
