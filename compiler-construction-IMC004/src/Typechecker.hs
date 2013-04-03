@@ -23,6 +23,9 @@ data Environment = Environment
 type TypecheckState = Environment
 type Typecheck a = EitherT CompileError (State TypecheckState) a
 
+-- the convention is (for nice error messages):
+--   first type is the expected type
+--   second type is the actual type
 type Constraint = (LineColPos, (SplType, SplType))
 type Constraints = [Constraint]
 
@@ -257,6 +260,7 @@ returnSymbol = "#return"
 instance InferType AstDeclaration where
 
   inferType (AstVarDeclaration meta _ name expr) = do
+    -- We ignore the type here. It has been taken into account by initDeclaration.
     setCurrentDeclaration name
     (splType, _) <- envLookup name meta
     (exprType, exprConstraints) <- inferType expr
@@ -296,17 +300,17 @@ dontCare = (splTypeVoid, noConstraints)
 instance InferType AstStatement where
   inferType (AstReturn meta Nothing) = do
     (returnType, returnConstraints) <- envLookup returnSymbol emptyMeta
-    return (returnType, (sourceLocation meta, (splTypeVoid, returnType)):returnConstraints)
+    return (returnType, (sourceLocation meta, (returnType, splTypeVoid)):returnConstraints)
   inferType (AstReturn meta (Just expr)) = do
     (returnType, returnConstraints) <- envLookup returnSymbol emptyMeta
     (exprType, exprConstraints) <- inferType expr
-    return (returnType, (sourceLocation meta, (exprType, returnType)):returnConstraints ++ exprConstraints)
+    return (returnType, (sourceLocation meta, (returnType, exprType)):returnConstraints ++ exprConstraints)
 
   inferType (AstIfThenElse meta astCondition thenStmt elseStmt) = do
     (conditionType, conditionConstraints) <- inferType astCondition
     (_, thenConstraints) <- inferType thenStmt
     (_, elseConstraints) <- inferType elseStmt
-    return (splTypeVoid, (sourceLocation meta, (conditionType, splTypeBool)):conditionConstraints ++ thenConstraints ++ elseConstraints)
+    return (splTypeVoid, (sourceLocation meta, (splTypeBool, conditionType)):conditionConstraints ++ thenConstraints ++ elseConstraints)
 
   inferType (AstBlock stmts) = do
     blaat <- mapM inferType stmts
@@ -315,7 +319,7 @@ instance InferType AstStatement where
   inferType (AstWhile meta condition body) = do
     (conditionType, conditionConstraints) <- inferType condition
     (_, bodyConstraints) <- inferType body
-    return (splTypeVoid, (sourceLocation meta, (conditionType, splTypeBool)):conditionConstraints ++ bodyConstraints)
+    return (splTypeVoid, (sourceLocation meta, (splTypeBool, conditionType)):conditionConstraints ++ bodyConstraints)
 
   inferType (AstAssignment meta name expr) = do
     (exprType, exprConstraints) <- inferType expr

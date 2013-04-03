@@ -74,7 +74,7 @@ spec = do
     it "infers the identity function" $ do
       typeOf "id" "a id(b x){ return x; }" `shouldBe` "(a -> a)"
     it "infers the constant function" $ do
-      typeOf "const" "a const(b x, c y){ return x; }" `shouldBe` "(b a -> b)"
+      typeOf "const" "a const(b x, c y){ return x; }" `shouldBe` "(a b -> a)"
     it "infers a monomorphic recursive list definition" $ do
       typeOf "x" "a x = 1:x;" `shouldBe` "[Int]"
     it "infers a polymorphic recursive list definition" $ do
@@ -161,3 +161,52 @@ spec = do
 
     it "typechecks mutually recursive local variables" $ do
       typeOf "foo" "Int foo() { var x = y; var y = z; var z = x; return y; }" `shouldBe` "( -> Int)"
+
+    describe "conditionals" $ do
+
+      it "infers that the condition of an if-then-else must be Bool" $ do
+        typeOf "f" "a f(b x) { if(x) return 10; else return 20; }" `shouldBe` "(Bool -> Int)"
+
+      it "complains when the condition of an if-then-else is not Bool" $ do
+        typeOf "f" "Int f() { if( 10 ) return 10; else return 20; }" `shouldBe`
+          "Couldn't match expected type `Bool' with actual type `Int' at position 1:11"
+
+    describe "return values" $ do
+
+      it "infers that all returned values must be of the same type" $ do
+        typeOf "f" "a f(b x) { return 10; return x; }" `shouldBe` "(Int -> Int)"
+
+      it "complains when a returned value doesn't match the return type of the function" $ do
+        typeOf "f" "Int f() { return True; }" `shouldBe`
+          "Couldn't match expected type `Int' with actual type `Bool' at position 1:11"
+
+      it "complains when not all returned values are of the same type" $ do
+        typeOf "f" "a f() { return True; return 10; }" `shouldBe`
+          "Couldn't match expected type `Bool' with actual type `Int' at position 1:22"
+
+      it "complains when a Void function returns a value" $ do
+        typeOf "f" "Void f() { return 10; }" `shouldBe`
+          "Couldn't match expected type `Void' with actual type `Int' at position 1:12"
+
+      it "complains when a non-Void function returns without a value" $ do
+        typeOf "f" "Int f() { return; }" `shouldBe`
+          "Couldn't match expected type `Int' with actual type `Void' at position 1:11"
+
+    describe "while loops" $ do
+
+      it "infers that the condition of while must be Bool" $ do
+        typeOf "f" "Void f(b x) { while(x) return; }" `shouldBe` "(Bool -> Void)"
+
+      it "complains when the condition of while isn't Bool" $ do
+        typeOf "f" "Void f() { while(10) return; }" `shouldBe`
+          "Couldn't match expected type `Bool' with actual type `Int' at position 1:12"
+
+
+    describe "assignments" $ do
+
+      it "typechecks assignment to self" $ do
+        typeOf "f" "a f() { var x = 10; x = x; return x; }" `shouldBe` "( -> Int)"
+      it "typechecks assignment between locals" $ do
+        typeOf "f" "a f() { var x = 10; var y = 20; x = y; y = x; return y; }" `shouldBe` "( -> Int)"
+      it "infers the type of a local variable" $ do
+        typeOf "f" "a f() { x x = y; y y = z; z z = True; return x; }" `shouldBe` "( -> Bool)"

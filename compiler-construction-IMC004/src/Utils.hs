@@ -7,6 +7,7 @@ import Text.ParserCombinators.UU.BasicInstances
 
 import Parser
 import CompileError
+import Typechecker
 
 execParser_ :: SplParser a -> String -> (a, [Error LineColPos])
 execParser_ p = parse_h ((,) <$> p <*> pEnd) . createStr (LineColPos 0 0 0)
@@ -42,6 +43,7 @@ runParser_ inputName p s | (a,b) <- execParser_ p s = do
 parse :: (SplParser a) -> String -> a
 parse parser prog = unRight $ runParser_ "" parser prog
 
-unRight :: Either a b -> b
+-- for unit testing
+unRight :: Show a => Either a b -> b
 unRight (Right x) = x
-unRight _ = error "unRight: wasn't right"
+unRight (Left a) = error $ "unRight: wasn't right, but: " ++ show a
