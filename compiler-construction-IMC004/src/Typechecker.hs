@@ -266,7 +266,7 @@ instance InferType AstDeclaration where
     (exprType, exprConstraints) <- inferType expr
     envAddConstraints name ((sourceLocation meta, (splType,exprType)):exprConstraints) meta
     clearCurrentDeclaration
-    return dontCare
+    envLookup name meta
 
   inferType (AstFunDeclaration meta returnType name formalArgs decls body) = do
     setCurrentDeclaration name
