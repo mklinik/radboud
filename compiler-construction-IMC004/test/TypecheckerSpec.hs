@@ -174,12 +174,12 @@ spec = do
         typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
           "Couldn't match expected type `(Int -> a)' with actual type `(Bool -> a)' at position 1:27"
 
-      -- it "can use different instantiations of local variables" $ do
-        -- typeOf "f" "a f() { var x = []; return (1:x, True:x); }" `shouldBe` "( -> ([Int], [Bool]))"
+      it "can use different instantiations of local variables" $ do
+        typeOf "f" "a f() { var x = []; return (1:x, True:x); }" `shouldBe` "( -> ([Int], [Bool]))"
 
-      -- it "cannot assign different instantiations to local variables" $ do
-        -- typeOf "f" "a f() { var x = []; x = 1:[]; x = True:[]; return; }" `shouldBe`
-          -- "Couldnt't match expected type ..."
+      it "cannot assign different instantiations to local variables" $ do
+        typeOf "f" "a f() { var x = []; x = 1:[]; x = True:[]; return; }" `shouldBe`
+          "Couldn't match expected type `(a [a] -> [a])' with actual type `(Bool [a] -> [Int])' at position 1:39"
 
     describe "conditionals" $ do
 
@@ -232,16 +232,16 @@ spec = do
       it "infers the type of a local variable transitively through assignments" $ do
         typeOf "f" "a f() { x x = x; y y = y; z z = z; z = True; y = z; x = y; return x; }" `shouldBe` "( -> Bool)"
 
-      -- it "unifies both a and b from const and const2 as Int" $ do
-        -- typeOf "f" (unlines
-          -- ["a const(a x, b y) { return x; }"
-          -- ,"b const2(a x, b y) { return y; }"
-          -- ,"a f() {"
-          -- ,"  var foo = head([]);"
-          -- ,"  if(True) foo = const; else foo = const2;"
-          -- ,"  return foo(10, 20);"
-          -- ,"}"
-          -- ]) `shouldBe` "( -> Int)"
+      it "unifies both a and b from const and const2 as Int" $ do
+        typeOf "f" (unlines
+          ["a const(a x, b y) { return x; }"
+          ,"b const2(a x, b y) { return y; }"
+          ,"a f() {"
+          ,"  var foo = head([]);"
+          ,"  if(True) foo = const; else foo = const2;"
+          ,"  return foo(10, 20);"
+          ,"}"
+          ]) `shouldBe` "( -> Int)"
 
       it "unifies both a and b from const and const2 as Int" $ do
         typeOf "f" (unlines
