@@ -21,6 +21,16 @@ type Typecheck a = EitherT CompileError (State TypecheckState) a
 type Constraint = (LineColPos, (SplType, SplType))
 type Constraints = [Constraint]
 
+instance Show CompileError where
+  show (TypeError expected got p) =
+    "Couldn't match expected type `" ++ (show $ makeNiceAutoTypeVariables expected)
+    ++ "' with actual type `" ++ (show $ makeNiceAutoTypeVariables got) ++ "' "
+    ++ position p
+  show (UnknownIdentifier ident meta) =
+    "Unknown identifier `" ++ ident ++ "' " ++ (position $ sourceLocation meta)
+  show (ParseError message) = message
+  show (InternalError x) = "Internal error `" ++ x ++ "'" -- should never happen, but you know...
+
 noConstraints :: Constraints
 noConstraints = []
 
