@@ -6,7 +6,7 @@ data SplBaseType
  = BaseTypeInt
  | BaseTypeBool
  | BaseTypeVoid
- deriving (Eq)
+ deriving (Eq, Ord)
 
 data SplType
  = SplBaseType SplBaseType
@@ -14,7 +14,7 @@ data SplType
  | SplTupleType SplType SplType
  | SplListType SplType
  | SplFunctionType [SplType] SplType
- deriving (Eq)
+ deriving (Eq, Ord)
 
 -- for convenience
 splTypeVoid, splTypeInt, splTypeBool :: SplType

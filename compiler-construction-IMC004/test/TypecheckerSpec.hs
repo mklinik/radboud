@@ -182,7 +182,7 @@ spec = do
 
       it "complains when not all returned values are of the same type" $ do
         typeOf "f" "a f() { return True; return 10; }" `shouldBe`
-          "Couldn't match expected type `Bool' with actual type `Int' at position 1:22"
+          "Couldn't match expected type `Int' with actual type `Bool' at position 1:9"
 
       it "complains when a Void function returns a value" $ do
         typeOf "f" "Void f() { return 10; }" `shouldBe`
