@@ -18,6 +18,7 @@ data Environment = Environment
   { globals :: Map.Map String (SplType, Constraints)
   , locals :: Map.Map String (SplType, Constraints)
   , nextAutoVar :: Integer
+  , currentDeclaration :: Maybe String
   }
 type TypecheckState = Environment
 type Typecheck a = EitherT CompileError (State TypecheckState) a
@@ -45,13 +46,28 @@ fresh = do
   lift $ put $ env { nextAutoVar = i+1 }
   return $ SplTypeVariable ("<" ++ show i ++ ">")
 
+setCurrentDeclaration :: String -> Typecheck ()
+setCurrentDeclaration name = do
+  env <- lift get
+  lift $ put $ env { currentDeclaration = Just name }
+
+clearCurrentDeclaration :: Typecheck ()
+clearCurrentDeclaration = do
+  env <- lift get
+  lift $ put $ env { currentDeclaration = Nothing }
+
 type Unifier = SplType -> SplType
 
 emptyUnifier :: Unifier
 emptyUnifier = id
 
 emptyEnvironment :: Environment
-emptyEnvironment = Environment { globals = Map.empty, locals = Map.empty, nextAutoVar = 0 }
+emptyEnvironment = Environment
+  { globals = Map.empty
+  , locals = Map.empty
+  , nextAutoVar = 0
+  , currentDeclaration = Nothing
+  }
 
 envLookup :: String -> AstMeta -> Typecheck (SplType, Constraints)
 envLookup ident meta = do
@@ -59,7 +75,7 @@ envLookup ident meta = do
   case Map.lookup ident (locals env) of
     (Just t) -> right t
     Nothing  -> case Map.lookup ident (globals env) of
-      (Just t) -> makeFreshTypeVariables t
+      (Just t) -> if currentDeclaration env == (Just ident) then right t else makeFreshTypeVariables t
       Nothing  -> left $ UnknownIdentifier ident meta
 
 makeFreshTypeVariables :: (SplType, Constraints) -> Typecheck (SplType, Constraints)
@@ -241,8 +257,10 @@ returnSymbol = "#return"
 instance InferType AstDeclaration where
 
   inferType (AstVarDeclaration meta _ name expr) = do
+    setCurrentDeclaration name
     (splType, _) <- envLookup name meta
     (exprType, exprConstraints) <- inferType expr
+    clearCurrentDeclaration
     envAddConstraints name ((sourceLocation meta, (splType,exprType)):exprConstraints) meta
     return dontCare
 
