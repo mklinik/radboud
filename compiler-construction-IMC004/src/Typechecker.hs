@@ -214,6 +214,8 @@ instance InferType AstProgram where
 
     return dontCare
 
+returnSymbol :: String
+returnSymbol = "#return"
 
 instance InferType AstDeclaration where
 
@@ -230,7 +232,7 @@ instance InferType AstDeclaration where
     mapM_ (uncurry envAddLocal) freshArgTypes
     mapM_ (initDeclaration envAddLocal) decls
     freshReturnType <- astType2splType returnType
-    envAddLocal "#return" (freshReturnType, noConstraints)
+    envAddLocal returnSymbol (freshReturnType, noConstraints)
     blaat2 <- mapM inferType decls
     blaat <- mapM inferType body
     let bodyConstraints = concatMap snd blaat
@@ -252,10 +254,10 @@ dontCare = (splTypeVoid, noConstraints)
 
 instance InferType AstStatement where
   inferType (AstReturn _ Nothing) = do
-    (returnType, returnConstraints) <- envLookup "#return" emptyMeta
+    (returnType, returnConstraints) <- envLookup returnSymbol emptyMeta
     return (returnType, (splTypeVoid, returnType):returnConstraints)
   inferType (AstReturn _ (Just expr)) = do
-    (returnType, returnConstraints) <- envLookup "#return" emptyMeta
+    (returnType, returnConstraints) <- envLookup returnSymbol emptyMeta
     (exprType, exprConstraints) <- inferType expr
     return (returnType, (exprType, returnType):returnConstraints ++ exprConstraints)
 
