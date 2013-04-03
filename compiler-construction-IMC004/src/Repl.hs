@@ -5,7 +5,6 @@ import qualified System.Console.Readline as Readline
 import Parser
 import Typechecker
 import Utils
-import Interpreter
 
 readEvalPrintLoop :: IO ()
 readEvalPrintLoop = do
