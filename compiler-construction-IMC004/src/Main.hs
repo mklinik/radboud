@@ -64,7 +64,7 @@ run opts = do
 
 typecheck :: AstProgram -> String
 typecheck ast =
-  let (result, (_, env)) = TC.runTypecheck $ TC.typecheck ast
+  let (result, env) = TC.runTypecheck $ TC.typecheck ast
   in
     show result ++ "\n" ++ TC.prettyprintGlobals env
 

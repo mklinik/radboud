@@ -18,7 +18,7 @@ main = hspec spec
 
 -- evaluate a typecheck action in an empty environment
 evalTypecheckBare :: (Typecheck a) -> a
-evalTypecheckBare t = unRight $ evalState (runEitherT (t)) (0, emptyEnvironment)
+evalTypecheckBare t = unRight $ evalState (runEitherT (t)) emptyEnvironment
 
 parseConvertShow :: String -> String
 parseConvertShow s = convertShow $ parse pReturnType s

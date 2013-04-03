@@ -17,8 +17,9 @@ import CompileError
 data Environment = Environment
   { globals :: Map.Map String (SplType, Constraints)
   , locals :: Map.Map String (SplType, Constraints)
+  , nextAutoVar :: Integer
   }
-type TypecheckState = (Integer, Environment)
+type TypecheckState = Environment
 type Typecheck a = EitherT CompileError (State TypecheckState) a
 
 type Constraint = (LineColPos, (SplType, SplType))
@@ -39,8 +40,9 @@ noConstraints = []
 
 fresh :: Typecheck SplType
 fresh = do
-  (i, env) <- lift get
-  lift $ put (i+1, env)
+  env <- lift get
+  let i = nextAutoVar env
+  lift $ put $ env { nextAutoVar = i+1 }
   return $ SplTypeVariable ("<" ++ show i ++ ">")
 
 type Unifier = SplType -> SplType
@@ -49,11 +51,11 @@ emptyUnifier :: Unifier
 emptyUnifier = id
 
 emptyEnvironment :: Environment
-emptyEnvironment = Environment { globals = Map.empty, locals = Map.empty }
+emptyEnvironment = Environment { globals = Map.empty, locals = Map.empty, nextAutoVar = 0 }
 
 envLookup :: String -> AstMeta -> Typecheck (SplType, Constraints)
 envLookup ident meta = do
-  (_, env) <- lift get
+  env <- lift get
   case Map.lookup ident (locals env) of
     (Just t) -> right t
     Nothing  -> case Map.lookup ident (globals env) of
@@ -79,26 +81,26 @@ typeVarsInConstraints ((_, (t1, t2)):cs) = typeVars t1 ++ typeVars t2 ++ typeVar
 -- TODO: explicitly distinguish between updating and adding global identifiers, to generate error messages for updates
 envAddGlobal :: String -> (SplType, Constraints) -> Typecheck ()
 envAddGlobal ident t = do
-  (i, env) <- lift get
-  lift $ put (i, env { globals = Map.insert ident t (globals env) } )
+  env <- lift get
+  lift $ put env { globals = Map.insert ident t (globals env) }
 
 envAddLocal :: String -> (SplType, Constraints) -> Typecheck ()
 envAddLocal name value = do
-  (i, env) <- lift get
-  lift $ put (i, env { locals =  Map.insert name value (locals env) } )
+  env <- lift get
+  lift $ put env { locals =  Map.insert name value (locals env) }
 
 envClearLocals :: Typecheck ()
 envClearLocals = do
-  (i, env) <- lift get
-  lift $ put (i, env { locals = Map.empty } )
+  env <- lift get
+  lift $ put env { locals = Map.empty }
 
 envAddConstraints :: String -> Constraints -> AstMeta -> Typecheck ()
 envAddConstraints ident newCs meta = do
-  (i, env) <- lift get
+  env <- lift get
   case Map.lookup ident (locals env) of
-    Just (t, oldCs) -> lift $ put (i, env { locals = Map.insert ident (t, oldCs ++ newCs) (locals env) } )
+    Just (t, oldCs) -> lift $ put $ env { locals = Map.insert ident (t, oldCs ++ newCs) (locals env) }
     Nothing  -> case Map.lookup ident (globals env) of
-      Just (t, oldCs) -> lift $ put (i, env { globals = Map.insert ident (t, oldCs ++ newCs) (globals env) } )
+      Just (t, oldCs) -> lift $ put $ env { globals = Map.insert ident (t, oldCs ++ newCs) (globals env) }
       Nothing  -> left $ UnknownIdentifier ident meta
 
 typeVars :: SplType -> [String]
@@ -381,9 +383,9 @@ typecheck :: AstProgram -> Typecheck ()
 typecheck prog = do
   -- third pass: run unifier on all global identifiers
   _ <- inferType prog -- these constraints are empty, the juicy stuff is in the environment
-  (i, env) <- lift get
+  env <- lift get
   unifiedGlobals <- mapM unifyOneGlobal $ Map.toList $ globals env
-  lift $ put (i, env { globals = Map.fromList unifiedGlobals } )
+  lift $ put $ env { globals = Map.fromList unifiedGlobals }
   return () -- success!
 
 unifyOneGlobal :: (String, (SplType, Constraints)) -> Typecheck (String, (SplType, Constraints))
@@ -392,7 +394,7 @@ unifyOneGlobal (name, (typ, constraints)) = do
   return $ (name, (substitute u typ, constraints))
 
 runTypecheck :: (Typecheck a) -> (Either CompileError a, TypecheckState)
-runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnvironment)
+runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) emptyEnvironment
 
 prettyprintGlobals :: Environment -> String
 prettyprintGlobals env =
