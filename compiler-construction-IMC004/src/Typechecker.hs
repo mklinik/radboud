@@ -157,7 +157,9 @@ unify (p, (SplListType t1, SplListType t2)) = unify (p, (t1, t2))
 unify (p, (SplTupleType a1 b1, SplTupleType a2 b2)) = unifyAll [(p, (a1, a2)), (p, (b1, b2))]
 unify (p, (t1@(SplFunctionType args1 ret1), t2@(SplFunctionType args2 ret2))) =
   if length args1 == length args2
-    then unifyAll $ zip (repeat p) $ zip (ret1:args1) (ret2:args2)
+    then case runTypecheck (unifyAll $ zip (repeat p) $ zip (ret1:args1) (ret2:args2)) of
+      (Left _, _) -> left $ TypeError t1 t2 p
+      (Right u, _) -> right u
     else left $ TypeError t1 t2 p
 unify (_, (SplTypeVariable v, t)) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
 unify (_, (t, SplTypeVariable v)) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
