@@ -14,7 +14,10 @@ import Ast
 import SplType
 import CompileError
 
-type Environment = (Map.Map String (SplType, Constraints), Map.Map String (SplType, Constraints))
+data Environment = Environment
+  { globals :: Map.Map String (SplType, Constraints)
+  , locals :: Map.Map String (SplType, Constraints)
+  }
 type TypecheckState = (Integer, Environment)
 type Typecheck a = EitherT CompileError (State TypecheckState) a
 
@@ -46,14 +49,14 @@ emptyUnifier :: Unifier
 emptyUnifier = id
 
 emptyEnvironment :: Environment
-emptyEnvironment = (Map.empty, Map.empty)
+emptyEnvironment = Environment { globals = Map.empty, locals = Map.empty }
 
 envLookup :: String -> AstMeta -> Typecheck (SplType, Constraints)
 envLookup ident meta = do
-  (_, (globals, locals)) <- lift get
-  case Map.lookup ident locals of
+  (_, env) <- lift get
+  case Map.lookup ident (locals env) of
     (Just t) -> right t
-    Nothing  -> case Map.lookup ident globals of
+    Nothing  -> case Map.lookup ident (globals env) of
       (Just t) -> makeFreshTypeVariables t
       Nothing  -> left $ UnknownIdentifier ident meta
 
@@ -76,26 +79,26 @@ typeVarsInConstraints ((_, (t1, t2)):cs) = typeVars t1 ++ typeVars t2 ++ typeVar
 -- TODO: explicitly distinguish between updating and adding global identifiers, to generate error messages for updates
 envAddGlobal :: String -> (SplType, Constraints) -> Typecheck ()
 envAddGlobal ident t = do
-  (i, (globals, locals)) <- lift get
-  lift $ put (i, (Map.insert ident t globals, locals))
+  (i, env) <- lift get
+  lift $ put (i, env { globals = Map.insert ident t (globals env) } )
 
 envAddLocal :: String -> (SplType, Constraints) -> Typecheck ()
 envAddLocal name value = do
-  (i, (globals, locals)) <- lift get
-  lift $ put (i, (globals, Map.insert name value locals))
+  (i, env) <- lift get
+  lift $ put (i, env { locals =  Map.insert name value (locals env) } )
 
 envClearLocals :: Typecheck ()
 envClearLocals = do
-  (i, (globals, _)) <- lift get
-  lift $ put (i, (globals, Map.empty))
+  (i, env) <- lift get
+  lift $ put (i, env { locals = Map.empty } )
 
 envAddConstraints :: String -> Constraints -> AstMeta -> Typecheck ()
 envAddConstraints ident newCs meta = do
-  (i, (globals, locals)) <- lift get
-  case Map.lookup ident locals of
-    Just (t, oldCs) -> lift $ put (i, (globals, Map.insert ident (t, oldCs ++ newCs) locals))
-    Nothing  -> case Map.lookup ident globals of
-      Just (t, oldCs) -> lift $ put (i, (Map.insert ident (t, oldCs ++ newCs) globals, locals))
+  (i, env) <- lift get
+  case Map.lookup ident (locals env) of
+    Just (t, oldCs) -> lift $ put (i, env { locals = Map.insert ident (t, oldCs ++ newCs) (locals env) } )
+    Nothing  -> case Map.lookup ident (globals env) of
+      Just (t, oldCs) -> lift $ put (i, env { globals = Map.insert ident (t, oldCs ++ newCs) (globals env) } )
       Nothing  -> left $ UnknownIdentifier ident meta
 
 typeVars :: SplType -> [String]
@@ -378,9 +381,9 @@ typecheck :: AstProgram -> Typecheck ()
 typecheck prog = do
   -- third pass: run unifier on all global identifiers
   _ <- inferType prog -- these constraints are empty, the juicy stuff is in the environment
-  (i, (globals, locals)) <- lift get
-  unifiedGlobals <- mapM unifyOneGlobal $ Map.toList globals
-  lift $ put (i, (Map.fromList unifiedGlobals, locals))
+  (i, env) <- lift get
+  unifiedGlobals <- mapM unifyOneGlobal $ Map.toList $ globals env
+  lift $ put (i, env { globals = Map.fromList unifiedGlobals } )
   return () -- success!
 
 unifyOneGlobal :: (String, (SplType, Constraints)) -> Typecheck (String, (SplType, Constraints))
@@ -392,9 +395,9 @@ runTypecheck :: (Typecheck a) -> (Either CompileError a, TypecheckState)
 runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnvironment)
 
 prettyprintGlobals :: Environment -> String
-prettyprintGlobals (globals, _) =
+prettyprintGlobals env =
     concatMap (\(name, (typ, constr)) -> name ++ " : " ++ show typ ++ " | " ++ prettyprintConstraints constr ++ "\n") blaat
-  where blaat = Map.toList globals
+  where blaat = Map.toList $ globals env
 
 prettyprintConstraints :: Constraints -> String
 prettyprintConstraints cs = concat $ intersperse ", " $ map prettyprintConstraint cs

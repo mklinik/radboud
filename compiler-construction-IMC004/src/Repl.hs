@@ -7,14 +7,16 @@ import Typechecker
 import Utils
 
 readEvalPrintLoop :: IO ()
-readEvalPrintLoop = do
-  maybeLine <- Readline.readline "> "
-  case maybeLine of
-    Nothing     -> return () -- EOF / control-d
-    Just line   -> do
-      Readline.addHistory line
-      case runParser_ "interactive" pProgram line of
-        Right ast -> print $ runTypecheck (inferType ast)
-        -- Right ast -> runProgram ast >>= putStrLn
-        Left err -> print err
-      readEvalPrintLoop
+-- readEvalPrintLoop = do
+  -- maybeLine <- Readline.readline "> "
+  -- case maybeLine of
+    -- Nothing     -> return () -- EOF / control-d
+    -- Just line   -> do
+      -- Readline.addHistory line
+      -- case runParser_ "interactive" pProgram line of
+        -- Right ast -> print $ runTypecheck (inferType ast)
+        -- -- Right ast -> runProgram ast >>= putStrLn
+        -- Left err -> print err
+      -- readEvalPrintLoop
+
+readEvalPrintLoop = undefined
