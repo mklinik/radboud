@@ -8,6 +8,7 @@ import Control.Monad.Trans.Class (lift)
 import Control.Monad (foldM, liftM)
 import Data.Char (ord, chr)
 import Text.ParserCombinators.UU.BasicInstances (LineColPos)
+import Data.List (intersperse)
 
 import Ast
 import SplType
@@ -17,7 +18,8 @@ type Environment = (Map.Map String (SplType, Constraints), Map.Map String (SplTy
 type TypecheckState = (Integer, Environment)
 type Typecheck a = EitherT CompileError (State TypecheckState) a
 
-type Constraints = [(LineColPos, (SplType, SplType))]
+type Constraint = (LineColPos, (SplType, SplType))
+type Constraints = [Constraint]
 
 noConstraints :: Constraints
 noConstraints = []
@@ -381,8 +383,14 @@ runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) (0, emptyEnv
 
 prettyprintGlobals :: Environment -> String
 prettyprintGlobals (globals, _) =
-    concatMap (\(name, (typ, constr)) -> name ++ " : " ++ show typ ++ " | " ++ show constr ++ "\n") blaat
+    concatMap (\(name, (typ, constr)) -> name ++ " : " ++ show typ ++ " | " ++ prettyprintConstraints constr ++ "\n") blaat
   where blaat = Map.toList globals
+
+prettyprintConstraints :: Constraints -> String
+prettyprintConstraints cs = concat $ intersperse ", " $ map prettyprintConstraint cs
+
+prettyprintConstraint :: Constraint -> String
+prettyprintConstraint (_, (t1, t2)) = show t1 ++ " = " ++ show t2
 
 -- Replaces auto-type variables with letters from a-z
 makeNiceAutoTypeVariables :: SplType -> SplType
