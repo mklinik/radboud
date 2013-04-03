@@ -260,11 +260,12 @@ instance InferType AstDeclaration where
     setCurrentDeclaration name
     (splType, _) <- envLookup name meta
     (exprType, exprConstraints) <- inferType expr
-    clearCurrentDeclaration
     envAddConstraints name ((sourceLocation meta, (splType,exprType)):exprConstraints) meta
+    clearCurrentDeclaration
     return dontCare
 
   inferType (AstFunDeclaration meta returnType name formalArgs decls body) = do
+    setCurrentDeclaration name
     (functionType, functionConstraints) <- envLookup name meta
 
     freshArgTypes <- mapM makeSplArgType formalArgs
@@ -281,6 +282,7 @@ instance InferType AstDeclaration where
     let inferredType = SplFunctionType (map (fst . snd) freshArgTypes) freshReturnType
     envAddGlobal name (functionType, (functionConstraints ++ (sourceLocation meta, (functionType,inferredType)):bodyConstraints ++ declConstraints))
 
+    clearCurrentDeclaration
     return dontCare
     where
       makeSplArgType :: AstFunctionArgument -> Typecheck (String, (SplType, Constraints))

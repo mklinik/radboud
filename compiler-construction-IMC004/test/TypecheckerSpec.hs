@@ -150,8 +150,8 @@ spec = do
       typeOf "x" "x x = True && True;" `shouldBe` "Bool"
       typeOf "x" "x x = True || True;" `shouldBe` "Bool"
 
-    it "infers that the identity stays (a -> a) when applied to Int in body" $ do
-      typeOf "id" "a id(a x) { id(1); return x; }" `shouldBe` "(a -> a)"
+    it "infers that the identity becomes (Int -> Int) when applied to Int in body" $ do
+      typeOf "id" "a id(a x) { id(1); return x; }" `shouldBe` "(Int -> Int)"
     it "infers that the identity stays (a -> a) when applied to int outside body" $ do
       typeOf "id" "a id(a x) { return x; } Int y = id(1);" `shouldBe` "(a -> a)"
 
