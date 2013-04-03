@@ -208,5 +208,29 @@ spec = do
         typeOf "f" "a f() { var x = 10; x = x; return x; }" `shouldBe` "( -> Int)"
       it "typechecks assignment between locals" $ do
         typeOf "f" "a f() { var x = 10; var y = 20; x = y; y = x; return y; }" `shouldBe` "( -> Int)"
-      it "infers the type of a local variable" $ do
+      it "infers the type of a local variable transitively through declarations" $ do
         typeOf "f" "a f() { x x = y; y y = z; z z = True; return x; }" `shouldBe` "( -> Bool)"
+      it "infers the type of a local variable transitively through assignments" $ do
+        typeOf "f" "a f() { x x = x; y y = y; z z = z; z = True; y = z; x = y; return x; }" `shouldBe` "( -> Bool)"
+
+      it "unifies both a and b from const and const2 as Int" $ do
+        typeOf "f" (unlines
+          ["a const(a x, b y) { return x; }"
+          ,"b const2(a x, b y) { return y; }"
+          ,"a f() {"
+          ,"  var foo = head([]);"
+          ,"  if(True) foo = const; else foo = const2;"
+          ,"  return foo(10, 20);"
+          ,"}"
+          ]) `shouldBe` "( -> Int)"
+
+      it "unifies both a and b from const and const2 as Int" $ do
+        typeOf "f" (unlines
+          ["a const(a x, b y) { return x; }"
+          ,"b const2(a x, b y) { return y; }"
+          ,"a f() {"
+          ,"  var foo = const;"
+          ,"  if(True) foo = const2;"
+          ,"  return foo(10, 20);"
+          ,"}"
+          ]) `shouldBe` "( -> Int)"
