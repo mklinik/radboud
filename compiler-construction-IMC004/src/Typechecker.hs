@@ -17,7 +17,7 @@ import CompileError
 data Environment = Environment
   { globals :: Map.Map String (SplType, Constraints)
   , locals :: Map.Map String (SplType, Constraints)
-  , formalArgs :: Map.Map String (SplType, Constraints)
+  , formalParams :: Map.Map String (SplType, Constraints)
   , nextAutoVar :: Integer
   , currentDeclaration :: Maybe String
   }
@@ -69,20 +69,26 @@ emptyEnvironment :: Environment
 emptyEnvironment = Environment
   { globals = Map.empty
   , locals = Map.empty
-  , formalArgs = Map.empty
+  , formalParams = Map.empty
   , nextAutoVar = 0
   , currentDeclaration = Nothing
   }
 
 envLookup :: String -> AstMeta -> Typecheck (SplType, Constraints)
-envLookup ident meta = do
+envLookup ident meta = envLookup_ True ident meta
+
+envLookup_ :: Bool -> String -> AstMeta -> Typecheck (SplType, Constraints)
+envLookup_ isRValue ident meta = do
   env <- lift get
+  let recursiveUse = currentDeclaration env == (Just ident)
+  let isAllQuantified = isRValue && not recursiveUse
   case Map.lookup ident (locals env) of
-    (Just t) -> right t
-    Nothing -> case Map.lookup ident (formalArgs env) of
+    (Just t) -> if isAllQuantified then makeFreshTypeVariables t else right t
+    -- (Just t) -> right t
+    Nothing -> case Map.lookup ident (formalParams env) of
       (Just t) -> right t
       Nothing  -> case Map.lookup ident (globals env) of
-        (Just t) -> if currentDeclaration env == (Just ident) then right t else makeFreshTypeVariables t
+        (Just t) -> if isAllQuantified then makeFreshTypeVariables t else right t
         Nothing  -> left $ UnknownIdentifier ident meta
 
 makeFreshTypeVariables :: (SplType, Constraints) -> Typecheck (SplType, Constraints)
@@ -115,20 +121,20 @@ envAddLocal name value = do
 envAddFormalArg :: String -> (SplType, Constraints) -> Typecheck ()
 envAddFormalArg name value = do
   env <- lift get
-  lift $ put env { formalArgs =  Map.insert name value (formalArgs env) }
+  lift $ put env { formalParams =  Map.insert name value (formalParams env) }
 
 envClearLocals :: Typecheck ()
 envClearLocals = do
   env <- lift get
-  lift $ put env { locals = Map.empty, formalArgs = Map.empty }
+  lift $ put env { locals = Map.empty, formalParams = Map.empty }
 
 envAddConstraints :: String -> Constraints -> AstMeta -> Typecheck ()
 envAddConstraints ident newCs meta = do
   env <- lift get
   case Map.lookup ident (locals env) of
     Just (t, oldCs) -> lift $ put $ env { locals = Map.insert ident (t, oldCs ++ newCs) (locals env) }
-    Nothing -> case Map.lookup ident (formalArgs env) of
-      Just (t, oldCs) -> lift $ put $ env { globals = Map.insert ident (t, oldCs ++ newCs) (formalArgs env) }
+    Nothing -> case Map.lookup ident (formalParams env) of
+      Just (t, oldCs) -> lift $ put $ env { formalParams = Map.insert ident (t, oldCs ++ newCs) (formalParams env) }
       Nothing  -> case Map.lookup ident (globals env) of
         Just (t, oldCs) -> lift $ put $ env { globals = Map.insert ident (t, oldCs ++ newCs) (globals env) }
         Nothing  -> left $ UnknownIdentifier ident meta
@@ -289,7 +295,7 @@ instance InferType AstDeclaration where
     mapM_ (uncurry envAddFormalArg) freshArgTypes
     mapM_ (initDeclaration envAddLocal) decls
     freshReturnType <- astType2splType returnType
-    envAddLocal returnSymbol (freshReturnType, noConstraints)
+    envAddFormalArg returnSymbol (freshReturnType, noConstraints)
     blaat2 <- mapM inferType decls
     blaat <- mapM inferType body
     let bodyConstraints = concatMap snd blaat
@@ -336,7 +342,8 @@ instance InferType AstStatement where
 
   inferType (AstAssignment meta name expr) = do
     (exprType, exprConstraints) <- inferType expr
-    (nameType, nameConstraints) <- envLookup name meta
+    (nameType, nameConstraints) <- envLookup_ False name meta
+    envAddConstraints name ((sourceLocation meta, (nameType, exprType)):exprConstraints) meta
     return (splTypeVoid, (sourceLocation meta, (exprType, nameType)):exprConstraints ++ nameConstraints)
 
   inferType (AstFunctionCallStmt f) = inferType f
