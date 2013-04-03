@@ -61,10 +61,10 @@ typeVarsInConstraints ((t1, t2):cs) = typeVars t1 ++ typeVars t2 ++ typeVarsInCo
 
 -- If the identifier already exists, it is replaced.
 -- TODO: explicitly distinguish between updating and adding global identifiers, to generate error messages for updates
-envAddGlobal :: String -> SplType -> Constraints -> Typecheck ()
-envAddGlobal ident t constraints = do
+envAddGlobal :: String -> (SplType, Constraints) -> Typecheck ()
+envAddGlobal ident t = do
   (i, (globals, locals)) <- lift get
-  lift $ put (i, (Map.insert ident (t, constraints) globals, locals))
+  lift $ put (i, (Map.insert ident t globals, locals))
 
 envAddLocal :: String -> (SplType, Constraints) -> Typecheck ()
 envAddLocal name value = do
@@ -75,6 +75,15 @@ envClearLocals :: Typecheck ()
 envClearLocals = do
   (i, (globals, _)) <- lift get
   lift $ put (i, (globals, Map.empty))
+
+envAddConstraints :: String -> Constraints -> AstMeta -> Typecheck ()
+envAddConstraints ident newCs meta = do
+  (i, (globals, locals)) <- lift get
+  case Map.lookup ident locals of
+    Just (t, oldCs) -> lift $ put (i, (globals, Map.insert ident (t, oldCs ++ newCs) locals))
+    Nothing  -> case Map.lookup ident globals of
+      Just (t, oldCs) -> lift $ put (i, (Map.insert ident (t, oldCs ++ newCs) globals, locals))
+      Nothing  -> left $ UnknownIdentifier ident meta
 
 typeVars :: SplType -> [String]
 typeVars (SplBaseType _) = []
@@ -185,20 +194,20 @@ astType2splType t = do
 class InferType a where
   inferType :: a -> Typecheck (SplType, Constraints)
 
-initDeclaration :: AstDeclaration -> Typecheck ()
-initDeclaration (AstVarDeclaration _ astType name _) = do
+-- initDeclaration :: AstDeclaration -> Typecheck ()
+initDeclaration doAdd (AstVarDeclaration _ astType name _) = do
   a <- astType2splType astType
-  envAddGlobal name a noConstraints
-initDeclaration (AstFunDeclaration _ astReturnType name formalArgs _ _) = do
+  doAdd name (a, noConstraints)
+initDeclaration doAdd (AstFunDeclaration _ astReturnType name formalArgs _ _) = do
   -- we're building a fake Ast node here: the function type
   a <- astType2splType (FunctionType (map (\(AstFunctionArgument _ ty _) -> ty) formalArgs) astReturnType)
-  envAddGlobal name a noConstraints
+  doAdd name (a, noConstraints)
 
 instance InferType AstProgram where
   inferType (AstProgram decls) = do
     -- two passes:
     -- first pass: put all global identifiers to environment
-    mapM_ initDeclaration decls
+    mapM_ (initDeclaration envAddGlobal) decls
 
     -- second pass: infer type of global identifiers
     mapM_ inferType decls
@@ -209,24 +218,27 @@ instance InferType AstProgram where
 instance InferType AstDeclaration where
 
   inferType (AstVarDeclaration meta _ name expr) = do
-    (splType, constraints) <- envLookup name meta
+    (splType, _) <- envLookup name meta
     (exprType, exprConstraints) <- inferType expr
-    envAddGlobal name splType (constraints ++ ((splType,exprType):exprConstraints))
+    envAddConstraints name ((splType,exprType):exprConstraints) meta
     return dontCare
 
-  inferType (AstFunDeclaration meta returnType name formalArgs _ body) = do
+  inferType (AstFunDeclaration meta returnType name formalArgs decls body) = do
     (functionType, functionConstraints) <- envLookup name meta
 
     freshArgTypes <- mapM makeSplArgType formalArgs
     mapM_ (uncurry envAddLocal) freshArgTypes
+    mapM_ (initDeclaration envAddLocal) decls
     freshReturnType <- astType2splType returnType
     envAddLocal "#return" (freshReturnType, noConstraints)
+    blaat2 <- mapM inferType decls
     blaat <- mapM inferType body
     let bodyConstraints = concatMap snd blaat
+    let declConstraints = concatMap snd blaat2
     envClearLocals
 
     let inferredType = SplFunctionType (map (fst . snd) freshArgTypes) freshReturnType
-    envAddGlobal name functionType (functionConstraints ++ (functionType,inferredType):bodyConstraints)
+    envAddGlobal name (functionType, (functionConstraints ++ (functionType,inferredType):bodyConstraints ++ declConstraints))
 
     return dontCare
     where
@@ -296,52 +308,52 @@ initializeEnvironment :: Typecheck ()
 initializeEnvironment = sequence_
   [ do
     a <- fresh
-    envAddGlobal "print" (SplFunctionType [a] splTypeVoid) noConstraints
+    envAddGlobal "print" ((SplFunctionType [a] splTypeVoid), noConstraints)
 
   , do
     a <- fresh
     b <- fresh
-    envAddGlobal "fst" (SplFunctionType [SplTupleType a b] a) noConstraints
+    envAddGlobal "fst" ((SplFunctionType [SplTupleType a b] a), noConstraints)
 
   , do
     a <- fresh
     b <- fresh
-    envAddGlobal "snd" (SplFunctionType [SplTupleType a b] b) noConstraints
+    envAddGlobal "snd" ((SplFunctionType [SplTupleType a b] b), noConstraints)
 
   , do
     a <- fresh
-    envAddGlobal "head" (SplFunctionType [SplListType a] a) noConstraints
+    envAddGlobal "head" ((SplFunctionType [SplListType a] a), noConstraints)
 
   , do
     a <- fresh
-    envAddGlobal "tail" (SplFunctionType [SplListType a] a) noConstraints
+    envAddGlobal "tail" ((SplFunctionType [SplListType a] a), noConstraints)
 
   , do
     a <- fresh
-    envAddGlobal "isEmpty" (SplFunctionType [SplListType a] splTypeBool) noConstraints
+    envAddGlobal "isEmpty" ((SplFunctionType [SplListType a] splTypeBool), noConstraints)
 
   -- unary and binary operators are put here with invalid identifiers
   , do
-    envAddGlobal "unary !" (SplFunctionType [splTypeBool] splTypeBool) noConstraints
+    envAddGlobal "unary !" ((SplFunctionType [splTypeBool] splTypeBool), noConstraints)
 
   , do
-    envAddGlobal "unary -" (SplFunctionType [splTypeInt] (splTypeInt)) noConstraints
+    envAddGlobal "unary -" ((SplFunctionType [splTypeInt] (splTypeInt)), noConstraints)
 
   , do
-    mapM_ (\o -> envAddGlobal o (SplFunctionType [splTypeInt, splTypeInt] (splTypeInt)) noConstraints)
+    mapM_ (\o -> envAddGlobal o ((SplFunctionType [splTypeInt, splTypeInt] (splTypeInt)), noConstraints))
       ["+", "-", "*", "/", "%"]
 
   , do
-    mapM_ (\o -> envAddGlobal o (SplFunctionType [splTypeInt, splTypeInt] (splTypeBool)) noConstraints)
+    mapM_ (\o -> envAddGlobal o ((SplFunctionType [splTypeInt, splTypeInt] (splTypeBool)), noConstraints))
       ["<", ">", "<=", ">=", "==", "!="]
 
   , do
-    mapM_ (\o -> envAddGlobal o (SplFunctionType [splTypeBool, splTypeBool] (splTypeBool)) noConstraints)
+    mapM_ (\o -> envAddGlobal o ((SplFunctionType [splTypeBool, splTypeBool] (splTypeBool)), noConstraints))
       ["&&", "||"]
 
   , do
     a <- fresh
-    envAddGlobal ":" (SplFunctionType [a, SplListType a] (SplListType a)) noConstraints
+    envAddGlobal ":" ((SplFunctionType [a, SplListType a] (SplListType a)), noConstraints)
   ]
 
 typecheck :: AstProgram -> Typecheck ()
