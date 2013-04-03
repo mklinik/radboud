@@ -17,6 +17,7 @@ import CompileError
 data Environment = Environment
   { globals :: Map.Map String (SplType, Constraints)
   , locals :: Map.Map String (SplType, Constraints)
+  , formalArgs :: Map.Map String (SplType, Constraints)
   , nextAutoVar :: Integer
   , currentDeclaration :: Maybe String
   }
@@ -68,6 +69,7 @@ emptyEnvironment :: Environment
 emptyEnvironment = Environment
   { globals = Map.empty
   , locals = Map.empty
+  , formalArgs = Map.empty
   , nextAutoVar = 0
   , currentDeclaration = Nothing
   }
@@ -77,9 +79,11 @@ envLookup ident meta = do
   env <- lift get
   case Map.lookup ident (locals env) of
     (Just t) -> right t
-    Nothing  -> case Map.lookup ident (globals env) of
-      (Just t) -> if currentDeclaration env == (Just ident) then right t else makeFreshTypeVariables t
-      Nothing  -> left $ UnknownIdentifier ident meta
+    Nothing -> case Map.lookup ident (formalArgs env) of
+      (Just t) -> right t
+      Nothing  -> case Map.lookup ident (globals env) of
+        (Just t) -> if currentDeclaration env == (Just ident) then right t else makeFreshTypeVariables t
+        Nothing  -> left $ UnknownIdentifier ident meta
 
 makeFreshTypeVariables :: (SplType, Constraints) -> Typecheck (SplType, Constraints)
 makeFreshTypeVariables (t, constraints) = do
@@ -108,19 +112,26 @@ envAddLocal name value = do
   env <- lift get
   lift $ put env { locals =  Map.insert name value (locals env) }
 
+envAddFormalArg :: String -> (SplType, Constraints) -> Typecheck ()
+envAddFormalArg name value = do
+  env <- lift get
+  lift $ put env { formalArgs =  Map.insert name value (formalArgs env) }
+
 envClearLocals :: Typecheck ()
 envClearLocals = do
   env <- lift get
-  lift $ put env { locals = Map.empty }
+  lift $ put env { locals = Map.empty, formalArgs = Map.empty }
 
 envAddConstraints :: String -> Constraints -> AstMeta -> Typecheck ()
 envAddConstraints ident newCs meta = do
   env <- lift get
   case Map.lookup ident (locals env) of
     Just (t, oldCs) -> lift $ put $ env { locals = Map.insert ident (t, oldCs ++ newCs) (locals env) }
-    Nothing  -> case Map.lookup ident (globals env) of
-      Just (t, oldCs) -> lift $ put $ env { globals = Map.insert ident (t, oldCs ++ newCs) (globals env) }
-      Nothing  -> left $ UnknownIdentifier ident meta
+    Nothing -> case Map.lookup ident (formalArgs env) of
+      Just (t, oldCs) -> lift $ put $ env { globals = Map.insert ident (t, oldCs ++ newCs) (formalArgs env) }
+      Nothing  -> case Map.lookup ident (globals env) of
+        Just (t, oldCs) -> lift $ put $ env { globals = Map.insert ident (t, oldCs ++ newCs) (globals env) }
+        Nothing  -> left $ UnknownIdentifier ident meta
 
 typeVars :: SplType -> [String]
 typeVars (SplBaseType _) = []
@@ -275,7 +286,7 @@ instance InferType AstDeclaration where
     (functionType, functionConstraints) <- envLookup name meta
 
     freshArgTypes <- mapM makeSplArgType formalArgs
-    mapM_ (uncurry envAddLocal) freshArgTypes
+    mapM_ (uncurry envAddFormalArg) freshArgTypes
     mapM_ (initDeclaration envAddLocal) decls
     freshReturnType <- astType2splType returnType
     envAddLocal returnSymbol (freshReturnType, noConstraints)
