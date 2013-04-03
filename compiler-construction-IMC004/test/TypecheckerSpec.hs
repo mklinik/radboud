@@ -158,3 +158,6 @@ spec = do
     it "fails extracting an Int from a tuple of Bools" $ do
       typeOf "x" "Int x = fst((True, True));" `shouldBe`
         "Couldn't match expected type `Int' with actual type `Bool' at position 1:9"
+
+    it "typechecks mutually recursive local variables" $ do
+      typeOf "foo" "Int foo() { var x = y; var y = z; var z = x; return y; }" `shouldBe` "( -> Int)"
