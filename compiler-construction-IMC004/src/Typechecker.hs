@@ -124,7 +124,7 @@ instance Substitute a => Substitute [a] where
 instance Substitute LineColPos where
   substitute _ p = p
 
-unify :: (LineColPos, (SplType, SplType)) -> Typecheck Unifier
+unify :: Constraint -> Typecheck Unifier
 unify (_, (SplBaseType BaseTypeInt, SplBaseType BaseTypeInt)) = return id
 unify (_, (SplBaseType BaseTypeBool, SplBaseType BaseTypeBool)) = return id
 unify (_, (SplBaseType BaseTypeVoid, SplBaseType BaseTypeVoid)) = return id
@@ -146,7 +146,7 @@ mkSubstitution _ _ t = t
 unifyAll :: Constraints -> Typecheck Unifier
 unifyAll cs = foldM unifyBlaat emptyUnifier cs
 
-unifyBlaat :: Unifier -> (LineColPos, (SplType, SplType)) -> Typecheck Unifier
+unifyBlaat :: Unifier -> Constraint -> Typecheck Unifier
 unifyBlaat u (p, (a, b)) = do
  u2 <- unify (p, (substitute u a, substitute u b))
  return (u2 . u)
