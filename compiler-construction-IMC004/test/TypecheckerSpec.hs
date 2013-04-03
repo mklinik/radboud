@@ -122,7 +122,7 @@ spec = do
 
     it "cannot use different instantiatons of locals" $ do
       typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
-        "Couldn't match expected type `Int' with actual type `Bool' at position 1:1"
+        "Couldn't match expected type `Int' with actual type `Bool' at position 1:27"
 
     let double = "a double(f f, x x) { return f(f(x)); }"
 
@@ -157,4 +157,4 @@ spec = do
 
     it "fails extracting an Int from a tuple of Bools" $ do
       typeOf "x" "Int x = fst((True, True));" `shouldBe`
-        "Couldn't match expected type `Int' with actual type `Bool' at position 1:1"
+        "Couldn't match expected type `Int' with actual type `Bool' at position 1:9"
