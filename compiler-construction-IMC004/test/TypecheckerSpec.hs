@@ -176,7 +176,7 @@ spec = do
 
     it "fails extracting an Int from a tuple of Bools" $ do
       typeOf "x" "Int x = fst((True, True));" `shouldBe`
-        "Couldn't match expected type `((a, b) -> a)' with actual type `((Bool, Bool) -> Int)' at position 1:9"
+        "Couldn't match expected type `Int' with actual type `Bool' at position 1:13"
 
     describe "local variables" $ do
 
@@ -185,7 +185,7 @@ spec = do
 
       it "cannot use different instantiatons of function arguments" $ do
         typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
-          "Couldn't match expected type `(Int -> a)' with actual type `(Bool -> a)' at position 1:27"
+          "Couldn't match expected type `Int' with actual type `Bool' at position 1:29"
 
       it "can use different instantiations of local variables in function body" $ do
         typeOf "f" "a f() { var x = []; return (1:x, True:x); }" `shouldBe` "( -> ([Int], [Bool]))"
