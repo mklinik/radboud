@@ -130,6 +130,18 @@ spec = do
     it "assignment to a global list inside a function must determine it's type" $ do
       typeOf "x" "[a] x = []; a f() { x = 1:[]; return; }" `shouldBe` "[Int]"
 
+    it "propagates types transitively through global variables, forwards" $ do
+      let prog = "z z = True; y y = z; x x = y;"
+      typeOf "x" prog `shouldBe` "Bool"
+      typeOf "y" prog `shouldBe` "Bool"
+      typeOf "z" prog `shouldBe` "Bool"
+
+    it "propagates types transitively through global variables, backwards" $ do
+      let prog = "x x = y; y y = z; z z = True;"
+      typeOf "x" prog `shouldBe` "Bool"
+      typeOf "y" prog `shouldBe` "Bool"
+      typeOf "z" prog `shouldBe` "Bool"
+
     let double = "a double(f f, x x) { return f(f(x)); }"
 
     it "can type the double function" $ do
@@ -174,8 +186,17 @@ spec = do
         typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
           "Couldn't match expected type `(Int -> a)' with actual type `(Bool -> a)' at position 1:27"
 
-      it "can use different instantiations of local variables" $ do
+      it "can use different instantiations of local variables in function body" $ do
         typeOf "f" "a f() { var x = []; return (1:x, True:x); }" `shouldBe` "( -> ([Int], [Bool]))"
+
+      it "can use different instantiations of local variables in other initializers" $ do
+        typeOf "f" "a f() { var x = []; var y = 1:x; var z = True:x; return (y, z); }" `shouldBe` "( -> ([Int], [Bool]))"
+
+      it "can use different instantiations of local variables in other initializers, reverse order" $ do
+        typeOf "f" "a f() { var y = 1:x; var z = True:x; var x = []; return (y, z); }" `shouldBe` "( -> ([Int], [Bool]))"
+
+      it "can use different instantiations of local variables in other initializers, reverse order" $ do
+        typeOf "f" "a f() { var y = 1:x; var z = True:x; var x = []; x = 1:[]; return (y, z); }" `shouldBe` "( -> ([Int], [Bool]))"
 
       it "cannot assign different instantiations to local variables" $ do
         typeOf "f" "a f() { var x = []; x = 1:[]; x = True:[]; return; }" `shouldBe`
