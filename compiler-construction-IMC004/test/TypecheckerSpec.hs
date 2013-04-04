@@ -18,7 +18,7 @@ main = hspec spec
 
 -- evaluate a typecheck action in an empty environment
 evalTypecheckBare :: (Typecheck a) -> a
-evalTypecheckBare t = unRight $ evalState (runEitherT (t)) emptyEnvironment
+evalTypecheckBare t = unRight $ evalState (runEitherT (t)) emptyTypecheckState
 
 parseConvertShow :: String -> String
 parseConvertShow s = convertShow $ parse pReturnType s
@@ -38,10 +38,11 @@ typeVar x = PolymorphicType emptyMeta x
 typeOf :: String -> String -> String
 typeOf identifier program =
   let ast = parse pProgram program
-      (result, _) = runTypecheck $ typecheck ast >> envLookup identifier emptyMeta
   in
-    case result of
-      Right (typ, _) -> prettyprintType $ makeNiceAutoTypeVariables typ
+    case runTypecheck $ typecheck ast of
+      Right env -> case runTypecheck $ envLookup emptyMeta identifier env of
+          Right typ -> prettyprintType $ makeNiceAutoTypeVariables typ
+          Left err -> show err
       Left err -> show err
 
 spec :: Spec

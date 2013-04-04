@@ -116,8 +116,8 @@ unify p (SplTupleType a1 b1) (SplTupleType a2 b2) = unifyAll p [(a1, a2), (b1, b
 unify p t1@(SplFunctionType args1 ret1) t2@(SplFunctionType args2 ret2) =
   if length args1 == length args2
     then case runTypecheck (unifyAll p $ zip (ret1:args1) (ret2:args2)) of
-      (Left _, _) -> left $ TypeError t1 t2 $ sourceLocation p
-      (Right u, _) -> right u
+      Left _ -> left $ TypeError t1 t2 $ sourceLocation p
+      Right u -> right u
     else left $ TypeError t1 t2 $ sourceLocation p
 unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
 unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
@@ -314,9 +314,9 @@ instance InferType AstExpr where
     a <- fresh
     u <- unify meta (SplListType a) s
     return (u, env)
-  inferType (AstBinOp meta name lhs rhs) = inferType (AstFunctionCall meta name [lhs, rhs])
-  inferType (AstUnaryOp meta name arg) = inferType (AstFunctionCall meta ("unary " ++ name) [arg])
-  -}
+    -}
+  inferType env (AstBinOp meta name lhs rhs) s = inferType env (AstFunctionCall meta name [lhs, rhs]) s
+  inferType env (AstUnaryOp meta name arg) s = inferType env (AstFunctionCall meta ("unary " ++ name) [arg]) s
   inferType env (AstTuple meta aExpr bExpr) s = do
     a <- fresh
     b <- fresh
@@ -340,13 +340,18 @@ instance InferType AstFunctionCall where
         (u2,_) <- blaat (substitute u env) (substitute u xs)
         return (u2 . u, env)
 
-  {-
+defaultEnvironment :: Typecheck Environment
+defaultEnvironment = return $
+    envAdd "unary -" (SplFunctionType [splTypeInt] (splTypeInt)) $
+    envAdd "unary !" (SplFunctionType [splTypeBool] (splTypeBool)) $
+    foldl (\env o -> envAdd o (SplFunctionType [splTypeInt, splTypeInt] (splTypeInt)) env) emptyEnvironment ["+", "-", "*", "/", "%"]
 
-initializeEnvironment :: Typecheck ()
-initializeEnvironment = sequence_
+
+{-
   [ do
     a <- fresh
-    envAddGlobal "print" ((SplFunctionType [a] splTypeVoid), noConstraints)
+    return ("print", (SplFunctionType [a] splTypeVoid))
+  ]
 
   , do
     a <- fresh
@@ -375,7 +380,7 @@ initializeEnvironment = sequence_
     envAddGlobal "unary !" ((SplFunctionType [splTypeBool] splTypeBool), noConstraints)
 
   , do
-    envAddGlobal "unary -" ((SplFunctionType [splTypeInt] (splTypeInt)), noConstraints)
+    envAddGlobal "unary -" (, noConstraints)
 
   , do
     mapM_ (\o -> envAddGlobal o ((SplFunctionType [splTypeInt, splTypeInt] (splTypeInt)), noConstraints))
@@ -397,11 +402,12 @@ initializeEnvironment = sequence_
     -}
 typecheck :: AstProgram -> Typecheck Environment
 typecheck prog = do
-  (_, env) <- inferType emptyEnvironment prog splTypeVoid
+  e <- defaultEnvironment
+  (_, env) <- inferType e prog splTypeVoid
   return env
 
-runTypecheck :: (Typecheck a) -> (Either CompileError a, TypecheckState)
-runTypecheck t = runState (runEitherT t) emptyTypecheckState
+runTypecheck :: (Typecheck a) -> Either CompileError a
+runTypecheck t = evalState (runEitherT t) emptyTypecheckState
 
 prettyprintGlobals :: Environment -> String
 prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show typ ++ "\n") env
