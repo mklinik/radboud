@@ -34,4 +34,4 @@ prettyprintType (SplTypeVariable v) = v
 prettyprintType (SplTupleType x y) = "(" ++ prettyprintType x ++ ", " ++ prettyprintType y ++ ")"
 prettyprintType (SplListType x) = "[" ++ prettyprintType x ++ "]"
 prettyprintType (SplFunctionType argTypes returnType) = "(" ++ concat (intersperse " " (map prettyprintType argTypes)) ++ " -> " ++ prettyprintType returnType ++ ")"
-prettyprintType (SplForall vars t) = "forall " ++ (concat $ intersperse " " vars) ++ ". " ++ prettyprintType t
+prettyprintType (SplForall vars t) = "forall " ++ (concat $ intersperse " " vars) ++ ", " ++ prettyprintType t
