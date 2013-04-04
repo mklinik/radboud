@@ -229,7 +229,7 @@ instance InferType AstProgram where
     let env2 = foldl (flip $ uncurry envAdd) env splArgs :: Environment
     let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
     let env3 = envAdd name splFunctionType env2
-    (u,_) <- inferType env3 (AstBlock body) splReturnType
+    (u,_) <- inferType env3 (AstBlock body) $ trace (prettyprintGlobals env3) splReturnType
 
     let splFunctionType2 = substitute u splFunctionType
     let env21 = substitute u env
@@ -302,7 +302,7 @@ instance InferType AstStatement where
 
   -}
   inferType env (AstFunctionCallStmt f) _ = do
-    a <- fresh
+    a <- fresh -- return value is discarded and doesn't matter
     inferType env f a
 
 instance InferType AstExpr where
@@ -334,18 +334,18 @@ instance InferType AstExpr where
 
 instance InferType AstFunctionCall where
   inferType env (AstFunctionCall meta name actualArgs) s = do
-    freshArgTypes <- mapM (\arg -> fresh >>= return . (,) arg) actualArgs
-    (u,_) <- blaat env freshArgTypes
+    freshArgTypes <- mapM (\arg -> fresh >>= return . (,) arg) actualArgs :: Typecheck [(AstExpr, SplType)]
     functionType <- envLookup meta name env
-    u2 <- unify meta functionType (SplFunctionType (substitute u $ map snd freshArgTypes) (substitute u s))
+    u <- unify meta functionType (SplFunctionType (map snd freshArgTypes) s)
+    u2 <- blaat (substitute u env) (substitute u freshArgTypes)
     return (u2 . u, env)
     where
-      blaat :: Environment -> [(AstExpr, SplType)] -> Typecheck (Unifier, Environment)
-      blaat e [] = return (emptyUnifier, e)
+      blaat :: Environment -> [(AstExpr, SplType)] -> Typecheck Unifier
+      blaat e [] = return emptyUnifier
       blaat e ((expr,typ):xs) = do
         (u,_) <- inferType e expr typ
-        (u2,_) <- blaat (substitute u e) (substitute u xs)
-        return (u2 . u, e)
+        u2 <- blaat (substitute u e) (substitute u xs)
+        return (u2 . u)
 
 defaultEnvironment :: Typecheck Environment
 defaultEnvironment = do
