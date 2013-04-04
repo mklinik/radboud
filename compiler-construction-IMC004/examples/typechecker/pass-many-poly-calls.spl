@@ -1,0 +1,12 @@
+
+b bar()
+{
+  foo(const, 10, True);
+}
+
+a foo(d f, b x, b y)
+{
+  return f(x, y);
+}
+
+a const(x x, y y) { return x; }

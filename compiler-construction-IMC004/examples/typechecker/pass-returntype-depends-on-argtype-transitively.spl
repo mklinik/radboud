@@ -1,0 +1,8 @@
+a f(Int x)
+{
+  y y = x;
+  z z = y;
+  b b = z;
+
+  return b;
+}

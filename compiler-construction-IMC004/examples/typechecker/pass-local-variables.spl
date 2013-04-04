@@ -1,0 +1,5 @@
+a foo()
+{
+  a x = 10;
+  return x;
+}

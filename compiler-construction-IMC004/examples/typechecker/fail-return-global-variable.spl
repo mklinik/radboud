@@ -1,0 +1,5 @@
+a x = head([]);
+
+Int foo() { return x; }
+
+Bool bar() { return x; }

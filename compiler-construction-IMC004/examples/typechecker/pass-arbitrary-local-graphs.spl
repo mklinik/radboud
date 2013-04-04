@@ -1,0 +1,20 @@
+a f()
+{
+  x x = y;
+  y y = True;
+  return x;
+}
+
+
+a g()
+{
+  y y = True;
+  x x = y;
+  return x;
+}
+
+
+
+X X = Y;
+Y Y = Z;
+Z Z = True;

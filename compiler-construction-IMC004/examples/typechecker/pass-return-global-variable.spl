@@ -1,0 +1,5 @@
+a x = head([]);
+
+a foo() { x = 10; x = True; return x; }
+
+Bool bar() { return x; }

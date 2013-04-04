@@ -1,0 +1,6 @@
+a f()
+{ x x = y;
+  y y = z;
+  z z = True;
+  return x;
+}

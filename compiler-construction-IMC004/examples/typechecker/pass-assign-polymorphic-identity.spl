@@ -1,0 +1,10 @@
+a id(a x) { return x; }
+Int idInt(Int x) { return x; }
+
+a foo()
+{
+  x x = id;
+  if(True)
+    x = idInt;
+  return x(True);
+}

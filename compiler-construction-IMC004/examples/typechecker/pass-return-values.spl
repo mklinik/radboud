@@ -1,0 +1,7 @@
+a foo()
+{
+  if( True )
+    return 10;
+  else
+    return 20;
+}

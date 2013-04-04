@@ -1,0 +1,8 @@
+Int foo(var x)
+{
+  var x = y;
+  var y = z;
+  var z = x;
+
+  return z;
+}

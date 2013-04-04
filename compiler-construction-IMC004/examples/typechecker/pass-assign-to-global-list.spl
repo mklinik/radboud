@@ -1,0 +1,9 @@
+var x = [];
+
+[Int] y = 1:[];
+
+a f()
+{
+  x = y;
+  return;
+}
