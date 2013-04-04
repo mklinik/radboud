@@ -64,9 +64,11 @@ run opts = do
 
 typecheck :: AstProgram -> String
 typecheck ast =
-  let (result, env) = TC.runTypecheck $ TC.typecheck ast
+  let (result, _) = TC.runTypecheck $ TC.typecheck ast
   in
-    show result ++ "\n" ++ TC.prettyprintGlobals env
+    case result of
+    (Left err) -> show err
+    (Right env) -> TC.prettyprintGlobals env
 
 cleanUp :: Options -> IO ()
 cleanUp opts = do

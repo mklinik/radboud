@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+
 module Typechecker where
 
 import qualified Data.Map as Map
@@ -8,27 +10,23 @@ import Control.Monad.Trans.Class (lift)
 import Control.Monad (foldM, liftM)
 import Data.Char (ord, chr)
 import Text.ParserCombinators.UU.BasicInstances (LineColPos)
-import Data.List (intersperse)
+import Data.List (intersperse, (\\))
+import Debug.Trace
 
 import Ast
 import SplType
 import CompileError
 
-data Environment = Environment
-  { globals :: Map.Map String (SplType, Constraints)
-  , locals :: Map.Map String (SplType, Constraints)
-  , formalParams :: Map.Map String (SplType, Constraints)
-  , nextAutoVar :: Integer
-  , currentDeclaration :: Maybe String
+data TypecheckState = TypecheckState
+  { nextAutoVar :: Integer
   }
-type TypecheckState = Environment
 type Typecheck a = EitherT CompileError (State TypecheckState) a
-
--- the convention is (for nice error messages):
---   first type is the expected type
---   second type is the actual type
-type Constraint = (LineColPos, (SplType, SplType))
+type Constraint = (SplType, SplType)
 type Constraints = [Constraint]
+type Environment = [(String, SplType)]
+
+emptyEnvironment :: Environment
+emptyEnvironment = []
 
 instance Show CompileError where
   show (TypeError expected got p) =
@@ -50,94 +48,38 @@ fresh = do
   lift $ put $ env { nextAutoVar = i+1 }
   return $ SplTypeVariable ("<" ++ show i ++ ">")
 
-setCurrentDeclaration :: String -> Typecheck ()
-setCurrentDeclaration name = do
-  env <- lift get
-  lift $ put $ env { currentDeclaration = Just name }
-
-clearCurrentDeclaration :: Typecheck ()
-clearCurrentDeclaration = do
-  env <- lift get
-  lift $ put $ env { currentDeclaration = Nothing }
-
 type Unifier = SplType -> SplType
 
 emptyUnifier :: Unifier
 emptyUnifier = id
 
-emptyEnvironment :: Environment
-emptyEnvironment = Environment
-  { globals = Map.empty
-  , locals = Map.empty
-  , formalParams = Map.empty
-  , nextAutoVar = 0
-  , currentDeclaration = Nothing
+emptyTypecheckState :: TypecheckState
+emptyTypecheckState = TypecheckState
+  { nextAutoVar = 0
   }
 
-envLookup :: String -> AstMeta -> Typecheck (SplType, Constraints)
-envLookup ident meta = envLookup_ True ident meta
+envLookup :: String -> AstMeta -> Environment -> Typecheck SplType
+envLookup ident meta [] = left $ UnknownIdentifier ident meta
+envLookup ident meta ((name,typ):env)
+  | ident == name = right typ
+  | otherwise     = envLookup ident meta env
 
-envLookup_ :: Bool -> String -> AstMeta -> Typecheck (SplType, Constraints)
-envLookup_ isRValue ident meta = do
-  env <- lift get
-  let recursiveUse = currentDeclaration env == (Just ident)
-  let isAllQuantified = isRValue && not recursiveUse
-  case Map.lookup ident (locals env) of
-    (Just t) -> if isAllQuantified then makeFreshTypeVariables t else right t
-    -- (Just t) -> right t
-    Nothing -> case Map.lookup ident (formalParams env) of
-      (Just t) -> right t
-      Nothing  -> case Map.lookup ident (globals env) of
-        (Just t) -> if isAllQuantified then makeFreshTypeVariables t else right t
-        Nothing  -> left $ UnknownIdentifier ident meta
-
-makeFreshTypeVariables :: (SplType, Constraints) -> Typecheck (SplType, Constraints)
-makeFreshTypeVariables (t, constraints) = do
-  let tvars = Set.toList $ Set.fromList $ typeVarsInConstraints constraints ++ typeVars t
-  u <- foldM foobar emptyUnifier tvars
-  return $ (substitute u t, substitute u constraints)
+makeFreshTypeVariables :: SplType -> Typecheck Unifier
+makeFreshTypeVariables t = do
+  let tvars = Set.toList $ Set.fromList $ typeVars t
+  foldM foobar emptyUnifier tvars
   where
     foobar :: Unifier -> String -> Typecheck Unifier
     foobar u var = do
       a <- fresh
       return (u . mkSubstitution var a)
 
-typeVarsInConstraints :: Constraints -> [String]
-typeVarsInConstraints [] = []
-typeVarsInConstraints ((_, (t1, t2)):cs) = typeVars t1 ++ typeVars t2 ++ typeVarsInConstraints cs
+envAdd :: String -> SplType -> Environment -> Environment
+envAdd ident typ env = (ident,typ):env
 
--- If the identifier already exists, it is replaced.
--- TODO: explicitly distinguish between updating and adding global identifiers, to generate error messages for updates
-envAddGlobal :: String -> (SplType, Constraints) -> Typecheck ()
-envAddGlobal ident t = do
-  env <- lift get
-  lift $ put env { globals = Map.insert ident t (globals env) }
-
-envAddLocal :: String -> (SplType, Constraints) -> Typecheck ()
-envAddLocal name value = do
-  env <- lift get
-  lift $ put env { locals =  Map.insert name value (locals env) }
-
-envAddFormalArg :: String -> (SplType, Constraints) -> Typecheck ()
-envAddFormalArg name value = do
-  env <- lift get
-  lift $ put env { formalParams =  Map.insert name value (formalParams env) }
-
-envClearLocals :: Typecheck ()
-envClearLocals = do
-  env <- lift get
-  lift $ put env { locals = Map.empty, formalParams = Map.empty }
-
-envAddConstraints :: String -> Constraints -> AstMeta -> Typecheck ()
-envAddConstraints ident newCs meta = do
-  env <- lift get
-  case Map.lookup ident (locals env) of
-    Just (t, oldCs) -> lift $ put $ env { locals = Map.insert ident (t, oldCs ++ newCs) (locals env) }
-    Nothing -> case Map.lookup ident (formalParams env) of
-      Just (t, oldCs) -> lift $ put $ env { formalParams = Map.insert ident (t, oldCs ++ newCs) (formalParams env) }
-      Nothing  -> case Map.lookup ident (globals env) of
-        Just (t, oldCs) -> lift $ put $ env { globals = Map.insert ident (t, oldCs ++ newCs) (globals env) }
-        Nothing  -> left $ UnknownIdentifier ident meta
+envFreeTypeVars :: Environment -> [String]
+envFreeTypeVars [] = []
+envFreeTypeVars ((_, t):env) = typeVars t ++ envFreeTypeVars env
 
 typeVars :: SplType -> [String]
 typeVars (SplBaseType _) = []
@@ -145,6 +87,7 @@ typeVars (SplTypeVariable v) = [v]
 typeVars (SplTupleType x y) = typeVars x ++ typeVars y
 typeVars (SplListType x) = typeVars x
 typeVars (SplFunctionType argTypes returnType) = foldl (\accum argType -> typeVars argType ++ accum) (typeVars returnType) argTypes
+typeVars (SplForall vars t) = typeVars t \\ vars
 
 class Substitute a where
   substitute :: Unifier -> a -> a
@@ -156,43 +99,39 @@ instance Substitute SplType where
   substitute u (SplListType x) = SplListType (substitute u x)
   substitute u (SplFunctionType argTypes returnType) = SplFunctionType (map (substitute u) argTypes) (substitute u returnType)
 
-instance (Substitute a, Substitute b) => Substitute (a, b) where
-  substitute u (a, b) = (substitute u a, substitute u b)
+instance Substitute Environment where
+  substitute u [] = []
+  substitute u ((name, typ):env) = (name, substitute u typ) : substitute u env
 
-instance Substitute a => Substitute [a] where
-  substitute u l = map (substitute u) l
-
-instance Substitute LineColPos where
-  substitute _ p = p
-
-unify :: Constraint -> Typecheck Unifier
-unify (_, (SplBaseType BaseTypeInt, SplBaseType BaseTypeInt)) = return id
-unify (_, (SplBaseType BaseTypeBool, SplBaseType BaseTypeBool)) = return id
-unify (_, (SplBaseType BaseTypeVoid, SplBaseType BaseTypeVoid)) = return id
-unify (_, (SplTypeVariable v1, SplTypeVariable v2)) | v1 == v2 = return id
-unify (p, (SplListType t1, SplListType t2)) = unify (p, (t1, t2))
-unify (p, (SplTupleType a1 b1, SplTupleType a2 b2)) = unifyAll [(p, (a1, a2)), (p, (b1, b2))]
-unify (p, (t1@(SplFunctionType args1 ret1), t2@(SplFunctionType args2 ret2))) =
+-- TODO: just use Either instead of Typecheck
+unify :: AstMeta -> SplType -> SplType -> Typecheck Unifier
+unify _ (SplBaseType BaseTypeInt) (SplBaseType BaseTypeInt) = return id
+unify _ (SplBaseType BaseTypeBool) (SplBaseType BaseTypeBool) = return id
+unify _ (SplBaseType BaseTypeVoid) (SplBaseType BaseTypeVoid) = return id
+unify _ (SplTypeVariable v1) (SplTypeVariable v2) | v1 == v2 = return id
+unify p (SplListType t1) (SplListType t2) = unify p t1 t2
+unify p (SplTupleType a1 b1) (SplTupleType a2 b2) = unifyAll p [(a1, a2), (b1, b2)]
+unify p t1@(SplFunctionType args1 ret1) t2@(SplFunctionType args2 ret2) =
   if length args1 == length args2
-    then case runTypecheck (unifyAll $ zip (repeat p) $ zip (ret1:args1) (ret2:args2)) of
-      (Left _, _) -> left $ TypeError t1 t2 p
+    then case runTypecheck (unifyAll p $ zip (ret1:args1) (ret2:args2)) of
+      (Left _, _) -> left $ TypeError t1 t2 $ sourceLocation p
       (Right u, _) -> right u
-    else left $ TypeError t1 t2 p
-unify (_, (SplTypeVariable v, t)) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
-unify (_, (t, SplTypeVariable v)) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
-unify (p, (t1, t2)) = left $ TypeError t1 t2 p
+    else left $ TypeError t1 t2 $ sourceLocation p
+unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
+unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
+unify p t1 t2 = left $ TypeError t1 t2 $ sourceLocation p
 
 mkSubstitution :: String -> SplType -> SplType -> SplType
 mkSubstitution v1 t (SplTypeVariable v2) | v1 == v2 = t
 mkSubstitution _ _ t = t
 
-unifyAll :: Constraints -> Typecheck Unifier
-unifyAll cs = foldM unifyBlaat emptyUnifier cs
-
-unifyBlaat :: Unifier -> Constraint -> Typecheck Unifier
-unifyBlaat u (p, (a, b)) = do
- u2 <- unify (p, (substitute u a, substitute u b))
- return (u2 . u)
+unifyAll :: AstMeta -> Constraints -> Typecheck Unifier
+unifyAll meta cs = foldM (unifyBlaat meta) emptyUnifier cs
+  where
+  unifyBlaat :: AstMeta -> Unifier -> Constraint -> Typecheck Unifier
+  unifyBlaat meta u (a, b) = do
+    u2 <- unify meta (substitute u a) (substitute u b)
+    return (u2 . u)
 
 -- Makes fresh type variables for each type variable occuring in the given AstType.
 -- The same type variables in the AstType get the same fresh type variables.
@@ -251,41 +190,42 @@ astType2splType t = do
 
 
 class InferType a where
-  inferType :: a -> Typecheck (SplType, Constraints)
+  inferType :: Environment -> a -> SplType -> Typecheck (Unifier, Environment)
 
--- initDeclaration :: AstDeclaration -> Typecheck ()
-initDeclaration doAdd (AstVarDeclaration _ astType name _) = do
-  a <- astType2splType astType
-  doAdd name (a, noConstraints)
-initDeclaration doAdd (AstFunDeclaration _ astReturnType name formalArgs _ _) = do
-  -- we're building a fake Ast node here: the function type
-  a <- astType2splType (FunctionType (map (\(AstFunctionArgument _ ty _) -> ty) formalArgs) astReturnType)
-  doAdd name (a, noConstraints)
-
-instance InferType AstProgram where
-  inferType (AstProgram decls) = do
-    -- two passes:
-    -- first pass: put all global identifiers to environment
-    mapM_ (initDeclaration envAddGlobal) decls
-
-    -- second pass: infer type of global identifiers
-    mapM_ inferType decls
-
-    return dontCare
+dontCare :: (SplType, Constraints)
+dontCare = (splTypeVoid, noConstraints)
 
 returnSymbol :: String
 returnSymbol = "#return"
 
-instance InferType AstDeclaration where
+quantify vars t = if null vars then t else (SplForall vars t)
 
-  inferType (AstVarDeclaration meta _ name expr) = do
-    -- We ignore the type here. It has been taken into account by initDeclaration.
-    setCurrentDeclaration name
-    (splType, _) <- envLookup name meta
-    (exprType, exprConstraints) <- inferType expr
-    envAddConstraints name ((sourceLocation meta, (splType,exprType)):exprConstraints) meta
-    clearCurrentDeclaration
-    envLookup name meta
+instance InferType AstProgram where
+  inferType env (AstProgram []) _ = return (emptyUnifier, env)
+
+  inferType env (AstProgram ((AstVarDeclaration meta astType name expr):decls)) s = do
+    a <- astType2splType astType
+    (u,_) <- inferType (envAdd name a env) expr a
+    let env2 = substitute u env
+    let a2 = substitute u a
+    let bs = typeVars a2 \\ envFreeTypeVars (substitute u env2)
+    inferType (envAdd name (quantify bs a2) env2) (AstProgram decls) (substitute u s)
+
+  inferType env (AstProgram ((AstFunDeclaration meta returnType name formalArgs localDecls (body:_)):decls)) s = do
+    splArgs <- mapM (\((AstFunctionArgument _ typ name)) -> astType2splType typ >>= return . (,) name) formalArgs
+    splReturnType <- astType2splType returnType
+    let env2 = foldl (flip $ uncurry envAdd) env splArgs :: Environment
+    let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
+    let env3 = envAdd name splFunctionType env2
+    (u,_) <- inferType env2 body splReturnType
+
+    let splFunctionType2 = substitute u splFunctionType
+    let env21 = substitute u env
+    let bs = typeVars splFunctionType2 \\ envFreeTypeVars (substitute u env21)
+    inferType (envAdd name (quantify bs splFunctionType2) env21) (AstProgram decls) (substitute u s)
+
+{-
+instance InferType AstDeclaration where
 
   inferType (AstFunDeclaration meta returnType name formalArgs decls body) = do
     setCurrentDeclaration name
@@ -312,12 +252,11 @@ instance InferType AstDeclaration where
       makeSplArgType (AstFunctionArgument _ typ nam) = do
         typ_ <- astType2splType typ
         return (nam, (typ_, noConstraints))
-
-dontCare :: (SplType, Constraints)
-dontCare = (splTypeVoid, noConstraints)
+        -}
 
 instance InferType AstStatement where
-  inferType (AstReturn meta Nothing) = do
+  inferType _ (AstReturn meta Nothing) _ = undefined
+    {-
     (returnType, returnConstraints) <- envLookup returnSymbol emptyMeta
     return (returnType, (sourceLocation meta, (returnType, splTypeVoid)):returnConstraints)
   inferType (AstReturn meta (Just expr)) = do
@@ -347,11 +286,17 @@ instance InferType AstStatement where
     return (splTypeVoid, (sourceLocation meta, (exprType, nameType)):exprConstraints ++ nameConstraints)
 
   inferType (AstFunctionCallStmt f) = inferType f
+  -}
 
 instance InferType AstExpr where
+  {-
   inferType (AstIdentifier meta x) = envLookup x meta
   inferType (AstBoolean _ _) = return (splTypeBool, noConstraints)
-  inferType (AstInteger _ _) = return (splTypeInt, noConstraints)
+  -}
+  inferType env (AstInteger meta _) s = do
+    u <- unify meta s splTypeInt
+    return (u, env)
+  {-
   inferType (AstEmptyList _) = do
     a <- fresh
     return (SplListType a, noConstraints)
@@ -423,35 +368,24 @@ initializeEnvironment = sequence_
     envAddGlobal ":" ((SplFunctionType [a, SplListType a] (SplListType a)), noConstraints)
   ]
 
-typecheck :: AstProgram -> Typecheck ()
+    -}
+typecheck :: AstProgram -> Typecheck Environment
 typecheck prog = do
-  -- third pass: run unifier on all global identifiers
-  _ <- inferType prog -- these constraints are empty, the juicy stuff is in the environment
-  env <- lift get
-  let constraints = concatMap (snd . snd) $ Map.toList $ globals env
-  -- u <- unifyAll $ trace (prettyprintConstraints constraints) $ trace (prettyprintGlobals env) $ constraints
-  u <- unifyAll constraints
-  unifiedGlobals <- mapM (unifyOneGlobal u) $ Map.toList $ globals env
-  lift $ put $ env { globals = Map.fromList unifiedGlobals }
-  return () -- success!
-
-unifyOneGlobal :: Unifier -> (String, (SplType, Constraints)) -> Typecheck (String, (SplType, Constraints))
-unifyOneGlobal u (name, (typ, constraints)) = do
-  return $ (name, (substitute u typ, constraints))
+  let env = emptyEnvironment
+  (_, env) <- inferType env prog splTypeVoid
+  return env
 
 runTypecheck :: (Typecheck a) -> (Either CompileError a, TypecheckState)
-runTypecheck t = runState (runEitherT (initializeEnvironment >> t)) emptyEnvironment
+runTypecheck t = runState (runEitherT t) emptyTypecheckState
 
 prettyprintGlobals :: Environment -> String
-prettyprintGlobals env =
-    concatMap (\(name, (typ, constr)) -> name ++ " : " ++ show typ ++ " | " ++ prettyprintConstraints constr ++ "\n") blaat
-  where blaat = Map.toList $ globals env
+prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show typ ++ "\n") env
 
-prettyprintConstraints :: Constraints -> String
-prettyprintConstraints cs = concat $ intersperse ", " $ map prettyprintConstraint cs
+-- prettyprintConstraints :: Constraints -> String
+-- prettyprintConstraints cs = concat $ intersperse ", " $ map prettyprintConstraint cs
 
-prettyprintConstraint :: Constraint -> String
-prettyprintConstraint (_, (t1, t2)) = show t1 ++ " = " ++ show t2
+-- prettyprintConstraint :: Constraint -> String
+-- prettyprintConstraint (_, (t1, t2)) = show t1 ++ " = " ++ show t2
 
 -- Replaces auto-type variables with letters from a-z
 makeNiceAutoTypeVariables :: SplType -> SplType
