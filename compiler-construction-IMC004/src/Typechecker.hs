@@ -276,7 +276,7 @@ instance InferType AstStatement where
     inferType env expr nameType
 
   inferType env (AstFunctionCallStmt f) _ = do
-    a <- fresh -- return value is discarded and doesn't matter
+    a <- fresh -- return value is discarded and doesnt matter
     inferType env f a
 
 
@@ -306,7 +306,6 @@ instance InferType AstExpr where
     (u2,_) <- inferType (substitute u1 env) bExpr b
     u3 <- unify meta s (SplTupleType (substitute (u2 . u1) a) (substitute (u2 . u1) b))
     return (u3 . u2 . u1, env)
-
 
 instance InferType AstFunctionCall where
   inferType env (AstFunctionCall meta name actualArgs) s = do
