@@ -220,8 +220,6 @@ instance InferType AstProgram where
     (u,_) <- inferType (envAdd name a env) expr a
     let env2 = substitute u env
     let a2 = substitute u a
-    -- let bs = typeVars a2 \\ envFreeTypeVars (substitute u env2)
-    -- inferType (envAdd name (quantify bs a2) env2) (AstProgram decls) (substitute u s)
     inferType (envAdd name a2 env2) (AstProgram decls) (substitute u s)
 
   inferType env (AstProgram ((AstFunDeclaration _ returnType name formalArgs localDecls body):decls)) s = do
@@ -337,7 +335,7 @@ instance InferType AstFunctionCall where
     return (u2 . u, env)
     where
       blaat :: Environment -> [(AstExpr, SplType)] -> Typecheck Unifier
-      blaat e [] = return emptyUnifier
+      blaat _ [] = return emptyUnifier
       blaat e ((expr,typ):xs) = do
         (u,_) <- inferType e expr typ
         u2 <- blaat (substitute u e) (substitute u xs)
@@ -379,12 +377,6 @@ runTypecheck t = evalState (runEitherT t) emptyTypecheckState
 
 prettyprintGlobals :: Environment -> String
 prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show typ ++ "\n") env
-
--- prettyprintConstraints :: Constraints -> String
--- prettyprintConstraints cs = concat $ intersperse ", " $ map prettyprintConstraint cs
-
--- prettyprintConstraint :: Constraint -> String
--- prettyprintConstraint (_, (t1, t2)) = show t1 ++ " = " ++ show t2
 
 -- Replaces auto-type variables with letters from a-z
 makeNiceAutoTypeVariables :: SplType -> SplType
