@@ -202,8 +202,10 @@ astType2splType t = do
     right $ SplFunctionType argTypes_ returnType_
 
 
-quantify :: [String] -> SplType -> SplType
-quantify vars t = if null vars then t else (SplForall (nub vars) t)
+quantify :: Environment -> SplType -> SplType
+quantify env t =
+  let freeVars = typeVars t \\ envFreeTypeVars env in
+    if null freeVars then t else (SplForall (nub freeVars) t)
 
 
 class InferType a where
@@ -217,33 +219,51 @@ instance InferType a => InferType [a] where
     (u2,env3) <- inferType (substitute u env2) xs (substitute u s)
     return (u2 . u, env3)
 
+mapSnd :: (a -> b) -> (c, a) -> (c, b)
+mapSnd f (c, a) = (c, f a)
+
+inferDecls :: Environment -> [AstDeclaration] -> Typecheck (Unifier, Environment)
+inferDecls env decls = do
+    freshVars <- mapM (\d -> claimedType d >>= return . (,) (declName d)) decls :: Typecheck [(String, SplType)]
+    let env_ = foldl (flip $ uncurry envAdd) env freshVars
+    un <- blaat env_ emptyUnifier $ zip decls (map snd freshVars)
+    let quantifiedVars = map (mapSnd $ quantify (substitute un env) . substitute un) freshVars -- apply quantify to all types
+    let env3 = foldl (flip $ uncurry envAdd) (substitute un env) quantifiedVars
+    return (un, env3)
+
+    where
+      declName (AstVarDeclaration _ _ name _) = name
+      declName (AstFunDeclaration _ _ name _ _ _) = name
+
+      claimedType (AstVarDeclaration _ astType _ _) = astType2splType astType
+      claimedType (AstFunDeclaration _ returnType _ formalArgs _ _) = do
+        splArgs <- mapM (\((AstFunctionArgument _ typ _)) -> astType2splType typ) formalArgs
+        splReturnType <- astType2splType returnType
+        return $ SplFunctionType splArgs splReturnType
+
+      blaat _ u [] = return u
+      blaat e u ((d,a):rest) = do
+        (u1,_) <- inferType (substitute u e) d (substitute u a)
+        u2 <- blaat e u1 rest
+        return (u2 . u1)
 
 instance InferType AstProgram where
-  inferType env (AstProgram decls) s = inferType env decls s
+  inferType env (AstProgram decls) s = inferDecls env decls
 
 
 instance InferType AstDeclaration where
   inferType env (AstVarDeclaration _ astType name expr) s = do
-    a <- astType2splType astType
-    (u,_) <- inferType (envAdd name a env) expr a
-    let env2 = substitute u env
-    let a2 = substitute u a
-    return (u, envAdd name a2 env2)
+    inferType env expr s
 
-  inferType env (AstFunDeclaration _ returnType name formalArgs localDecls body) s = do
+  inferType env (AstFunDeclaration meta returnType name formalArgs localDecls body) s = do
     splArgs <- mapM (\((AstFunctionArgument _ typ nam)) -> astType2splType typ >>= return . (,) nam) formalArgs
     splReturnType <- astType2splType returnType
     let env2 = foldl (flip $ uncurry envAdd) env splArgs :: Environment
     let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
-    let env3 = envAdd name splFunctionType env2
-    (u1,env4) <- inferType env3 localDecls s
-    (u2,_) <- inferType (substitute u1 env4) (AstBlock body) splReturnType
-
-    let u = u2 . u1
-    let splFunctionType2 = substitute u splFunctionType
-    let env21 = substitute u env
-    let bs = typeVars splFunctionType2 \\ envFreeTypeVars (substitute u env21)
-    return (u, envAdd name (quantify bs splFunctionType2) env21)
+    (u, env3) <- inferDecls env2 localDecls
+    (u2,_) <- inferType env3 (AstBlock body) (substitute u splReturnType)
+    u3 <- unify meta (substitute u2 s) (substitute u2 splFunctionType)
+    return (u3 . u2 . u, env)
 
 
 instance InferType AstStatement where
