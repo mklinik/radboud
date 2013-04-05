@@ -14,7 +14,7 @@ type SplParser a = P (UU.Str Char String UU.LineColPos) a
 type SplParserTrafo a b = SplParser a -> SplParser b
 
 pProgram :: SplParser AstProgram
-pProgram = AstProgram <$ lexeme (pure ()) <*> some pDeclaration
+pProgram = AstProgram <$ lexeme (pure ()) <*> pListSep (pSymbol "=====") (some pDeclaration)
 
 pDeclaration :: SplParser AstDeclaration
 pDeclaration = pVarDeclaration <|> pFunDeclaration

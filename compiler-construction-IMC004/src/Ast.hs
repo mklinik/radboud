@@ -15,7 +15,7 @@ instance Eq AstMeta where
 emptyMeta :: AstMeta
 emptyMeta = AstMeta { sourceLocation = UU.LineColPos 0 0 0 }
 
-data AstProgram = AstProgram [AstDeclaration]
+data AstProgram = AstProgram [[AstDeclaration]]
   deriving (Show, Eq)
 
 data AstDeclaration

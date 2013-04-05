@@ -10,7 +10,7 @@ import Control.Monad.Trans.Class (lift)
 import Control.Monad (foldM)
 import Data.Char (ord, chr)
 import Data.List ((\\), nub)
-import Debug.Trace
+-- import Debug.Trace
 
 import Ast
 import SplType
@@ -224,10 +224,11 @@ mapSnd f (c, a) = (c, f a)
 
 inferDecls :: Environment -> [AstDeclaration] -> Typecheck (Unifier, Environment)
 inferDecls env decls = do
-    freshVars <- mapM (\d -> claimedType d >>= return . (,) (declName d)) decls :: Typecheck [(String, SplType)]
-    let env_ = foldl (flip $ uncurry envAdd) env freshVars
-    un <- blaat env_ emptyUnifier $ zip decls (map snd freshVars)
-    let quantifiedVars = map (mapSnd $ quantify (substitute un env) . substitute un) freshVars -- apply quantify to all types
+    freshVars <- mapM (\d -> claimedType d >>= \t -> return ((declName d, t), doQuantify d)) decls
+      :: Typecheck [((String, SplType), Environment -> SplType -> SplType)]
+    let env_ = foldl (flip $ uncurry envAdd) env $ map fst freshVars
+    un <- blaat env_ emptyUnifier $ zip decls (map (snd . fst) freshVars)
+    let quantifiedVars = map (\((name, typ), quant) -> (name, quant (substitute un env) $ substitute un typ)) freshVars -- apply quantify to all types
     let env3 = foldl (flip $ uncurry envAdd) (substitute un env) quantifiedVars
     return (un, env3)
 
@@ -247,15 +248,21 @@ inferDecls env decls = do
         u2 <- blaat e u1 rest
         return (u2 . u1)
 
+      doQuantify (AstVarDeclaration _ _ _ _) = flip const -- don't quantify variable declarations
+      doQuantify (AstFunDeclaration _ _ _ _ _ _) = quantify
+
 instance InferType AstProgram where
-  inferType env (AstProgram decls) s = inferDecls env decls
+  inferType env (AstProgram []) _ = return (emptyUnifier, env)
+  inferType env (AstProgram (decls:declss)) s = do
+    (_, env2) <- inferDecls env decls
+    inferType env2 (AstProgram declss) s
 
 
 instance InferType AstDeclaration where
-  inferType env (AstVarDeclaration _ astType name expr) s = do
+  inferType env (AstVarDeclaration _ _ _ expr) s = do
     inferType env expr s
 
-  inferType env (AstFunDeclaration meta returnType name formalArgs localDecls body) s = do
+  inferType env (AstFunDeclaration meta returnType _ formalArgs localDecls body) s = do
     splArgs <- mapM (\((AstFunctionArgument _ typ nam)) -> astType2splType typ >>= return . (,) nam) formalArgs
     splReturnType <- astType2splType returnType
     let env2 = foldl (flip $ uncurry envAdd) env splArgs :: Environment

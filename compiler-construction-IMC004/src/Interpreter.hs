@@ -91,7 +91,7 @@ type Spl a = EitherT Value (StateT Environment IO) a
 interpretProgram :: AstProgram -> Spl Value
 interpretProgram (AstProgram globals) = do
   -- put all global declarations in the environment
-  env <- foldM (envAddDeclaration envAddGlobal) emptyEnvironment globals
+  env <- foldM (envAddDeclaration envAddGlobal) emptyEnvironment $ concat globals
   lift $ put env
 
   -- put all built-in functions in the environment
