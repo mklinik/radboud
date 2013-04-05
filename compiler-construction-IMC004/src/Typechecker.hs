@@ -120,8 +120,14 @@ unify _ (SplBaseType BaseTypeInt) (SplBaseType BaseTypeInt) = return id
 unify _ (SplBaseType BaseTypeBool) (SplBaseType BaseTypeBool) = return id
 unify _ (SplBaseType BaseTypeVoid) (SplBaseType BaseTypeVoid) = return id
 unify _ (SplTypeVariable v1) (SplTypeVariable v2) | v1 == v2 = return id
-unify p (SplListType t1) (SplListType t2) = unify p t1 t2
-unify p (SplTupleType a1 b1) (SplTupleType a2 b2) = unifyAll p [(a1, a2), (b1, b2)]
+unify p s@(SplListType t1) t@(SplListType t2) =
+  case runTypecheck (unify p t1 t2) of
+    Left _ -> left $ TypeError s t $ sourceLocation p
+    Right u -> right u
+unify p s@(SplTupleType a1 b1) t@(SplTupleType a2 b2) =
+  case runTypecheck (unifyAll p [(a1, a2), (b1, b2)]) of
+    Left _ -> left $ TypeError s t $ sourceLocation p
+    Right u -> right u
 unify p t1@(SplFunctionType args1 ret1) t2@(SplFunctionType args2 ret2) =
   if length args1 == length args2
     then case runTypecheck (unifyAll p $ zip (ret1:args1) (ret2:args2)) of
@@ -212,58 +218,42 @@ returnSymbol = "#return"
 quantify :: [String] -> SplType -> SplType
 quantify vars t = if null vars then t else (SplForall (nub vars) t)
 
-instance InferType AstProgram where
-  inferType env (AstProgram []) _ = return (emptyUnifier, env)
 
-  inferType env (AstProgram ((AstVarDeclaration _ astType name expr):decls)) s = do
+instance InferType a => InferType [a] where
+  inferType env [] _ = return (emptyUnifier, env)
+  inferType env (x:xs) s = do
+    (u,env2) <- inferType env x s
+    (u2,env3) <- inferType (substitute u env2) xs (substitute u s)
+    return (u2 . u, env3)
+
+
+instance InferType AstProgram where
+  inferType env (AstProgram decls) s = inferType env decls s
+
+
+instance InferType AstDeclaration where
+  inferType env (AstVarDeclaration _ astType name expr) s = do
     a <- astType2splType astType
     (u,_) <- inferType (envAdd name a env) expr a
     let env2 = substitute u env
     let a2 = substitute u a
-    inferType (envAdd name a2 env2) (AstProgram decls) (substitute u s)
+    return (u, envAdd name a2 env2)
 
-  inferType env (AstProgram ((AstFunDeclaration _ returnType name formalArgs localDecls body):decls)) s = do
+  inferType env (AstFunDeclaration _ returnType name formalArgs localDecls body) s = do
     splArgs <- mapM (\((AstFunctionArgument _ typ nam)) -> astType2splType typ >>= return . (,) nam) formalArgs
     splReturnType <- astType2splType returnType
     let env2 = foldl (flip $ uncurry envAdd) env splArgs :: Environment
     let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
     let env3 = envAdd name splFunctionType env2
-    (u,_) <- inferType env3 (AstBlock body) splReturnType
+    (u1,env4) <- inferType env3 localDecls s
+    (u2,_) <- inferType (substitute u1 env4) (AstBlock body) splReturnType
 
+    let u = u2 . u1
     let splFunctionType2 = substitute u splFunctionType
     let env21 = substitute u env
     let bs = typeVars splFunctionType2 \\ envFreeTypeVars (substitute u env21)
-    inferType (envAdd name (quantify bs splFunctionType2) env21) (AstProgram decls) (substitute u s)
+    return (u, envAdd name (quantify bs splFunctionType2) env21)
 
-{-
-instance InferType AstDeclaration where
-
-  inferType (AstFunDeclaration meta returnType name formalArgs decls body) = do
-    setCurrentDeclaration name
-    (functionType, functionConstraints) <- envLookup name meta
-
-    freshArgTypes <- mapM makeSplArgType formalArgs
-    mapM_ (uncurry envAddFormalArg) freshArgTypes
-    mapM_ (initDeclaration envAddLocal) decls
-    freshReturnType <- astType2splType returnType
-    envAddFormalArg returnSymbol (freshReturnType, noConstraints)
-    blaat2 <- mapM inferType decls
-    blaat <- mapM inferType body
-    let bodyConstraints = concatMap snd blaat
-    let declConstraints = concatMap snd blaat2
-    envClearLocals
-
-    let inferredType = SplFunctionType (map (fst . snd) freshArgTypes) freshReturnType
-    envAddGlobal name (functionType, (functionConstraints ++ (sourceLocation meta, (functionType,inferredType)):bodyConstraints ++ declConstraints))
-
-    clearCurrentDeclaration
-    return dontCare
-    where
-      makeSplArgType :: AstFunctionArgument -> Typecheck (String, (SplType, Constraints))
-      makeSplArgType (AstFunctionArgument _ typ nam) = do
-        typ_ <- astType2splType typ
-        return (nam, (typ_, noConstraints))
-        -}
 
 instance InferType AstStatement where
   inferType env (AstReturn meta Nothing) s = do
@@ -278,7 +268,6 @@ instance InferType AstStatement where
     (u2,_) <- inferType (substitute u1 env) thenStmt (substitute u1 s)
     (u3,_) <- inferType (substitute (u2 . u1) env) elseStmt (substitute (u2 . u1) s)
     return (u3 . u2 . u1, env)
-
 
   inferType env (AstBlock []) _ = return (emptyUnifier, env)
   inferType env (AstBlock (stmt:stmts)) s = do
@@ -298,6 +287,7 @@ instance InferType AstStatement where
   inferType env (AstFunctionCallStmt f) _ = do
     a <- fresh -- return value is discarded and doesn't matter
     inferType env f a
+
 
 instance InferType AstExpr where
   inferType env (AstIdentifier meta name) s = do
@@ -326,6 +316,7 @@ instance InferType AstExpr where
     u3 <- unify meta s (SplTupleType (substitute (u2 . u1) a) (substitute (u2 . u1) b))
     return (u3 . u2 . u1, env)
 
+
 instance InferType AstFunctionCall where
   inferType env (AstFunctionCall meta name actualArgs) s = do
     freshArgTypes <- mapM (\arg -> fresh >>= return . (,) arg) actualArgs :: Typecheck [(AstExpr, SplType)]
@@ -340,6 +331,7 @@ instance InferType AstFunctionCall where
         (u,_) <- inferType e expr typ
         u2 <- blaat (substitute u e) (substitute u xs)
         return (u2 . u)
+
 
 defaultEnvironment :: Typecheck Environment
 defaultEnvironment = do
