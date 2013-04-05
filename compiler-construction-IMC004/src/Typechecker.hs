@@ -220,8 +220,9 @@ instance InferType AstProgram where
     (u,_) <- inferType (envAdd name a env) expr a
     let env2 = substitute u env
     let a2 = substitute u a
-    let bs = typeVars a2 \\ envFreeTypeVars (substitute u env2)
-    inferType (envAdd name (quantify bs a2) env2) (AstProgram decls) (substitute u s)
+    -- let bs = typeVars a2 \\ envFreeTypeVars (substitute u env2)
+    -- inferType (envAdd name (quantify bs a2) env2) (AstProgram decls) (substitute u s)
+    inferType (envAdd name a2 env2) (AstProgram decls) (substitute u s)
 
   inferType env (AstProgram ((AstFunDeclaration _ returnType name formalArgs localDecls body):decls)) s = do
     splArgs <- mapM (\((AstFunctionArgument _ typ nam)) -> astType2splType typ >>= return . (,) nam) formalArgs
@@ -229,7 +230,7 @@ instance InferType AstProgram where
     let env2 = foldl (flip $ uncurry envAdd) env splArgs :: Environment
     let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
     let env3 = envAdd name splFunctionType env2
-    (u,_) <- inferType env3 (AstBlock body) $ trace (prettyprintGlobals env3) splReturnType
+    (u,_) <- inferType env3 (AstBlock body) splReturnType
 
     let splFunctionType2 = substitute u splFunctionType
     let env21 = substitute u env
@@ -292,15 +293,10 @@ instance InferType AstStatement where
     (u2,_) <- inferType (substitute u env) body (substitute u s)
     return (u2 . u, env)
 
-    {-
+  inferType env (AstAssignment meta name expr) _ = do
+    nameType <- envLookup meta name env
+    inferType env expr nameType
 
-  inferType (AstAssignment meta name expr) = do
-    (exprType, exprConstraints) <- inferType expr
-    (nameType, nameConstraints) <- envLookup_ False name meta
-    envAddConstraints name ((sourceLocation meta, (nameType, exprType)):exprConstraints) meta
-    return (splTypeVoid, (sourceLocation meta, (exprType, nameType)):exprConstraints ++ nameConstraints)
-
-  -}
   inferType env (AstFunctionCallStmt f) _ = do
     a <- fresh -- return value is discarded and doesn't matter
     inferType env f a
