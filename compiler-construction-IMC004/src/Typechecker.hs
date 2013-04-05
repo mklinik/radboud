@@ -9,8 +9,7 @@ import Control.Monad.Trans.State.Lazy
 import Control.Monad.Trans.Class (lift)
 import Control.Monad (foldM)
 import Data.Char (ord, chr)
--- import Text.ParserCombinators.UU.BasicInstances (LineColPos)
-import Data.List ({-intersperse,-} (\\), nub)
+import Data.List ((\\), nub)
 import Debug.Trace
 
 import Ast
@@ -32,8 +31,6 @@ instance Show CompileError where
   show (TypeError expected got p) =
     "Couldn't match expected type `" ++ (show $ makeNiceAutoTypeVariables expected)
     ++ "' with actual type `" ++ (show $ makeNiceAutoTypeVariables got) ++ "' "
-    -- "Couldn't match expected type `" ++ (show expected)
-    -- ++ "' with actual type `" ++ (show got) ++ "' "
     ++ position p
   show (UnknownIdentifier ident meta) =
     "Unknown identifier `" ++ ident ++ "' " ++ (position $ sourceLocation meta)
@@ -114,7 +111,6 @@ instance Substitute a => Substitute (b, a) where
 instance Substitute a => Substitute [a] where
   substitute u l = map (substitute u) l
 
--- TODO: just use Either instead of Typecheck
 unify :: AstMeta -> SplType -> SplType -> Typecheck Unifier
 unify _ (SplBaseType BaseTypeInt) (SplBaseType BaseTypeInt) = return id
 unify _ (SplBaseType BaseTypeBool) (SplBaseType BaseTypeBool) = return id
@@ -206,17 +202,12 @@ astType2splType t = do
     right $ SplFunctionType argTypes_ returnType_
 
 
-class InferType a where
-  inferType :: Environment -> a -> SplType -> Typecheck (Unifier, Environment)
-
-dontCare :: (SplType, Constraints)
-dontCare = (splTypeVoid, noConstraints)
-
-returnSymbol :: String
-returnSymbol = "#return"
-
 quantify :: [String] -> SplType -> SplType
 quantify vars t = if null vars then t else (SplForall (nub vars) t)
+
+
+class InferType a where
+  inferType :: Environment -> a -> SplType -> Typecheck (Unifier, Environment)
 
 
 instance InferType a => InferType [a] where
