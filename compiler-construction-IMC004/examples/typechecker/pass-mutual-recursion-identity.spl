@@ -1,0 +1,6 @@
+a id(a x) { return x; }
+
+=====
+
+a g(b x) { id(True); return f(x); }
+a f(b x) { id(10);   return g(x); }
