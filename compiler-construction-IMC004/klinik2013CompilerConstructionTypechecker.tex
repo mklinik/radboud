@@ -350,13 +350,33 @@ both get type $\forall a b . (a \arr a \arr b)$.
 \begin{prooftree}
 \AxiomC{$\tau = \Gamma(i)$}
 \AxiomC{$* = \mathcal{U}(\sigma, \tau)$}
-\LeftLabel{(Identifier)}
+\LeftLabel{(identifier)}
 \RightLabel{$i$ identifier}
 \BinaryInfC{$\Gamma \vdash \oftype{i}{\sigma} | *$}
 \end{prooftree}
 
-If $\Gamma$ is an environment, and $i$ is an identifier, then looking up the
-type of $i$ is defined as follows.
+\begin{prooftree}
+\AxiomC{$\Gamma \vdash \oftype{\odot(e_1, e_2)}{\sigma} | *$}
+\LeftLabel{(binary operator)}
+\RightLabel{$\odot$ binary operator}
+\UnaryInfC{$\Gamma \vdash \oftype{e_1 \odot e_2}{\sigma} | *$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\Gamma \vdash \oftype{\bullet(e)}{\sigma} | *$}
+\LeftLabel{(unary operator)}
+\RightLabel{$\bullet$ unary operator}
+\UnaryInfC{$\Gamma \vdash \oftype{\bullet e}{\sigma} | *$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{todo$$}
+\LeftLabel{(function call)}
+\UnaryInfC{$\Gamma \vdash \oftype{f(\vec{e})}{\sigma} | *$}
+\end{prooftree}
+
+Looking up the type of an identifier $i$ in an environment $\Gamma$ is defined
+as follows.
 
 \begin{equation*}
 \Gamma(i) = \text{if } (i, \forall \vec{\alpha}.\tau) \in \Gamma \text{ then } \tau[\vec{\alpha} \mapsto
