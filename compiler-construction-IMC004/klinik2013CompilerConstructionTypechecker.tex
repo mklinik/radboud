@@ -24,15 +24,27 @@
 \author{Markus Klinik (s4220315)}
 \maketitle
 
-%\begin{abstract}
+\section{Implementation Language}
 
-%Blah
+The SPL parser and type checker are written in Haskell, because a
+functional language is well-suited for the various programming tasks
+that arise when implementing a compiler.
 
-%\end{abstract}
+\begin{itemize}
 
-\section{Introduction}
+  \item Traversing trees by pattern matching and recursion on algebraic
+  data types is most convenient.
 
-blah
+  \item Immutable data structures and sharing allow a style of
+  programming that resembles mathematical definitions.  This comes in
+  handy for example when an environment needs to be passed modified to
+  a subcomputation, but the original environment is needed to continue
+  later.
+
+  \item Haskell has a rich set of standard and third-party libraries
+  which allows focusing on the problem at hand.
+
+\end{itemize}
 
 \section{Preliminaries}
 
