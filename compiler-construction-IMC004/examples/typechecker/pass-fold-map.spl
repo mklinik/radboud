@@ -1,0 +1,23 @@
+a foldl(b f, c z, d list)
+{
+  if( isEmpty(list) )
+    return z;
+  else
+    return foldl(f, f(z, head(list)), tail(list));
+}
+
+a foldr(b f, c z, d list)
+{
+  if( isEmpty(list) )
+    return z;
+  else
+    return f(head(list), foldr(f, z, tail(list)));
+}
+
+a map(b f, c list)
+{
+  if( isEmpty(list) )
+    return [];
+  else
+    return f(head(list)) : map(f, tail(list));
+}
