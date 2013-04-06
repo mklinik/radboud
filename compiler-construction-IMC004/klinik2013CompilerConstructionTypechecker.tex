@@ -355,6 +355,18 @@ both get type $\forall a b . (a \arr a \arr b)$.
 \BinaryInfC{$\Gamma \vdash \oftype{i}{\sigma} | *$}
 \end{prooftree}
 
+If $\Gamma$ is an environment, and $i$ is an identifier, then looking up the
+type of $i$ is defined as follows.
+
+\begin{equation*}
+\Gamma(i) = \text{if } (i, \forall \vec{\alpha}.\tau) \in \Gamma \text{ then } \tau[\vec{\alpha} \mapsto
+\vec{\beta}], \text{ where } \vec{\beta} \text{ fresh}
+\end{equation*}
+
+That is, we generate a fresh type variable for each bound type variable (if any)
+in the type of $i$, then we remove the quantifier and replace all
+previously bound variables with the fresh ones.
+
 \section{Further work}
 
 Forbid assignment to functions
