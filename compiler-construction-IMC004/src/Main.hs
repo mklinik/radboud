@@ -13,6 +13,7 @@ import Utils
 import Ast
 import qualified Typechecker as TC
 import Repl
+import System.Exit
 
 main :: IO ()
 main = do
