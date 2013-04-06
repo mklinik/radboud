@@ -268,7 +268,7 @@ instance InferType AstDeclaration where
     let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
     (u, env3) <- inferDecls env2 localDecls
     (u2,_) <- inferType env3 (AstBlock body) (substitute u splReturnType)
-    u3 <- unify meta (substitute u2 s) (substitute u2 splFunctionType)
+    u3 <- unify meta (substitute (u2 . u) s) (substitute (u2 . u) splFunctionType)
     return (u3 . u2 . u, env)
 
 
