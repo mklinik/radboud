@@ -370,9 +370,12 @@ both get type $\forall a b . (a \arr a \arr b)$.
 \end{prooftree}
 
 \begin{prooftree}
-\AxiomC{todo$$}
+\AxiomC{$\tau = \Gamma(f)$}
+\AxiomC{$* = \mathcal{U}(\tau, (\vec{\alpha} \arr \sigma))$}
+\AxiomC{$\Gamma^*\ \vec{\vdash}\ \oftype{\vec{e}}{(\vec{\alpha})^*} | *_1$}
 \LeftLabel{(function call)}
-\UnaryInfC{$\Gamma \vdash \oftype{f(\vec{e})}{\sigma} | *$}
+\RightLabel{$\vec{\alpha}$ fresh and $|\vec{\alpha}| = |\vec{e}|$}
+\TrinaryInfC{$\Gamma \vdash \oftype{f(\vec{e})}{\sigma} | *_1 \circ\,*$}
 \end{prooftree}
 
 Looking up the type of an identifier $i$ in an environment $\Gamma$ is defined
@@ -386,6 +389,23 @@ as follows.
 That is, we generate a fresh type variable for each bound type variable (if any)
 in the type of $i$, then we remove the quantifier and replace all
 previously bound variables with the fresh ones.
+
+Inferring the types of a vector of expressions is defined by recursion on the
+length of the vector as follows. It is assumed that $|\vec{e}| =
+|\vec{\alpha}|$.
+
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$\Gamma\ \vec{\vdash}\ \oftype{\langle\rangle}{\langle\rangle} | \text{id}$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\Gamma \vdash \oftype{e_1}{\alpha_1}|*$}
+\AxiomC{$\Gamma^*\ \vec{\vdash}\ \oftype{\langle e_2, \ldots, e_n
+\rangle}{(\langle \alpha_2, \ldots, \alpha_n\rangle)^*}|*_1$}
+\BinaryInfC{$\Gamma\ \vec{\vdash}\ \oftype{\langle e_1, e_2, \ldots,
+e_n\rangle}{\langle \alpha_1, \alpha_2, \ldots, \alpha_n\rangle} | *_1 \circ\,*$}
+\end{prooftree}
 
 \section{Further work}
 
