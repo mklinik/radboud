@@ -152,14 +152,14 @@ simultaneously.  Otherwise, the types of the functions become too general.
 Consider the following mutually recursive functions $f$ and $g$.
 
 \begin{verbatim}
-a f(b x) { return g(x); }
-a g(b x) { return f(x); }
+a f(b x, c y) { return g(y, x); }
+a g(b x, c y) { return f(x, y); }
 \end{verbatim}
 
-The type of both of them must be $\forall a . (a \arr a)$, but if the type
-inference algorithm would introduce $f$ all-quantified into the context before
-calculating the constraints of $g$, it would infer the type $\forall a b .  (a
-\arr b)$ for both $f$ and $g$.
+The type of both of them must be $\forall a b . (a \arr a \arr b)$, but if the
+type inference algorithm would introduce $f$ all-quantified into the context
+before calculating the constraints of $g$, it would infer the type $\forall a b
+c .  (a \arr b \arr c)$ for both $f$ and $g$.
 
 On the other hand, the constraints of functions which are not mutually recursive
 must never be unified simultaneously, because otherwise they would get types
@@ -182,8 +182,8 @@ program would give either a type error for \emph{id} or too general types to
 
 \begin{verbatim}
 a id(a x) { return x; }
-a f(b x) { id(10); return g(x); }
-a g(b x) { id(True); return f(x); }
+a f(b x, c y) { id(10); return g(y, x); }
+a g(b x, c y) { id(True); return f(x, y); }
 \end{verbatim}
 
 It appears that we must choose one of the following alternatives.
@@ -231,10 +231,10 @@ First, we change the production rule for SPL programs as follows:
 
 An SPL program is therefore a list of blocks of declarations, which are
 separated by a token consisting of five equal signs.  This is of course to be
-considered as a proof-of-concept, rather than something that can be given to
-real programmers.
+considered as a proof-of-concept, rather than something that can be handed out
+to real programmers.
 
-The scoping rules for global identifiers is then as follows.
+The scoping rules for global identifiers are then as follows.
 
 \begin{itemize}
 
@@ -243,6 +243,9 @@ The scoping rules for global identifiers is then as follows.
 
   \item Identifiers from earlier blocks are visible in later blocks, but not
   vice versa.
+
+  \item When a name collision occurs, the earlier declaration is silently
+  shadowed.  There are no error or warning messages yet.
 
 \end{itemize}
 
@@ -255,6 +258,18 @@ For local identifiers, there is only one scoping rule.
 
 \end{itemize}
 
+This way, the problematic example from above can be correctly typed, when given
+as follows.
+
+\begin{verbatim}
+a id(a x) { return x; }
+=====
+a f(b x, c y) { id(10); return g(y, x); }
+a g(b x, c y) { id(True); return f(x, y); }
+\end{verbatim}
+
+The function \emph{id}, gets type $\forall a .  (a \arr a)$, and $f$ and $g$
+both get type $\forall a b . (a \arr a \arr b)$.
 
 
 \end{document}
