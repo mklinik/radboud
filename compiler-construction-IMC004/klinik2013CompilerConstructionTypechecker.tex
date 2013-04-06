@@ -317,6 +317,14 @@ both get type $\forall a b . (a \arr a \arr b)$.
 
 \section{Typing rules}
 
+The typing relation is a 4-place relation of an environment $\Gamma$, a
+syntactic construct, a type and a substitution.  We read a typing judgement
+$\Gamma \vdash \oftype{e}{\sigma} | *$ as ``In the environment $\Gamma$, the
+syntactic construct $e$ has type $\sigma$, under the substitution $*$''.  The
+premises of the typing rules are to be read from left to right.
+
+The typing relation is defined by recursion on the abstract syntax as follows.
+
 \begin{prooftree}
 \AxiomC{$* = \mathcal{U}(\sigma, \text{Bool})$}
 \LeftLabel{(Bool)}
@@ -432,16 +440,6 @@ both get type $\forall a b . (a \arr a \arr b)$.
 \UnaryInfC{$\Gamma \vdash \oftype{i = e}{\sigma} | *$}
 \end{prooftree}
 
-    %splArgs <- mapM (\((AstFunctionArgument _ typ nam)) -> astType2splType typ >>= return . (,) nam) formalArgs
-    %splReturnType <- astType2splType returnType
-    %let env2 = foldl (flip $ uncurry envAdd) env splArgs :: Environment
-    %let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
-    %(u, env3) <- inferDecls env2 localDecls
-
-    %(u2,_) <- inferType env3 (AstBlock body) (substitute u splReturnType)
-    %u3 <- unify meta (substitute u2 s) (substitute u2 splFunctionType)
-    %return (u3 . u2 . u, env)
-
 \begin{prooftree}
 \AxiomC{$P_1$}
 \AxiomC{$P_2$}
@@ -499,12 +497,13 @@ e_n\rangle}{\langle \alpha_1, \alpha_2, \ldots, \alpha_n\rangle} | *_1 \circ\,*$
 In the rule (function call statement), we use the rule (function call
 expression) in the premise, and discard the inferred type.
 
-The function \emph{derive}, used in rules BLAH and BLUBB generates fresh types,
-similar to \emph{fresh}, but \emph{derive} uses the type annotation present in
-the abstract syntax tree to generate a fresh type of that shape.  The same
-variables in the type annotation become the same fresh type variables.  For
-example, if $(a \arr b \arr a)$ is a type annotation, then \emph{derive}$(a \arr
-b \arr a)$ returns $(c \arr d \arr c)$, with $c$ and $d$ fresh.
+The function \emph{derive}, used in the rule (function declaration) and by the
+function \emph{intro}, generates fresh types, similar to \emph{fresh}, but
+\emph{derive} uses the type annotation present in the abstract syntax tree to
+generate a fresh type of that shape.  The same variables in the type annotation
+become the same fresh type variables.  For example, if $(a \arr b \arr a)$ is a
+type annotation, then \emph{derive}$(a \arr b \arr a)$ returns $(c \arr d \arr
+c)$, with $c$ and $d$ fresh.
 
 The function \emph{intro}, used in rules (function declaration) and (program),
 is the clause of the type inference function that we have seen in the lecture on
@@ -526,9 +525,38 @@ these lists is type checked simultaneously, then added to the environment.
 These two things are done by \emph{intro}.  The rest of the program is type
 checked in the modified environment returned by \emph{intro}.
 
+Type checking starts in an initial environment which is pre-loaded with the
+definitions for the built in functions and operators.  Both binary and unary
+operators are treated as function calls, so their type is looked up in the
+environment.
+
 \section{Further work}
 
-Forbid assignment to functions
+There are a few open points in the current implementation.
+
+\begin{itemize}
+
+  \item All identifiers are tracked in the same environment.  Therefore, the
+  type checker doesn't forbid assignments to identifiers which refer to
+  functions, or even built-in functions.
+
+  \item There are no warnings or errors when name clashes occur.  The previously
+  defined identifier is silently shadowed.
+
+  \item Requiring the programmer to explicitly separate blocks of declarations
+  could be automated by a dependency analysis.
+
+  \item Putting the inferred type information into the abstract syntax tree is
+  not implemented yet.  Instead, when type inference is successful, all global
+  definitions are printed on standard output, together with their inferred type.
+  Type variables in the inferred type are pretty-printed so they don't show up
+  as numbers.
+
+\end{itemize}
+
+
+\section{Examples}
+
 
 \end{document}
 
