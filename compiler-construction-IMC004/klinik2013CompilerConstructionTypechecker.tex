@@ -70,7 +70,7 @@ making use of the backtracking features of uu-parsinglib.  Focus was
 put more on conciseness of the implementation rather than run-time
 performance.
 
-There are two important changes to the grammar.  The first one is the
+There are three important changes to the grammar.  The first one is the
 introduction of intermediate non-terminals to account for the different
 precedence levels of binary operators.  These intermediate
 non-terminals are not given names, they arise by mapping parser
@@ -81,6 +81,9 @@ according to their associativity.
 The second change to the grammar is one left-factorization in the rule
 for expressions, to get rid of backtracking when an expression in the
 input starts with many opening parenthesis.
+
+The third grammar change is due to scoping issues, and described in the next
+section.
 
 \section{Scoping rules}
 
@@ -139,9 +142,118 @@ The grammar for SPL, as given in the first exercise, does not allow type
 annotations of function types.  We therefore have to either choose the first
 interpretation, or add function types to the grammar to choose the second
 interpretation.  The first interpretation seemed more challenging, so the
-present implementation of the SPL compiler cooses this one.
+present implementation of the SPL compiler chooses this one.
 
 \subsection{Polymorphism and mutual recursion}
+
+When inferring the type of a set of mutually recursive functions, all
+constraints that arise in the bodies of the functions have to be unified
+simultaneously.  Otherwise, the types of the functions become too general.
+Consider the following mutually recursive functions $f$ and $g$.
+
+\begin{verbatim}
+a f(b x) { return g(x); }
+a g(b x) { return f(x); }
+\end{verbatim}
+
+The type of both of them must be $\forall a . (a \arr a)$, but if the type
+inference algorithm would introduce $f$ all-quantified into the context before
+calculating the constraints of $g$, it would infer the type $\forall a b .  (a
+\arr b)$ for both $f$ and $g$.
+
+On the other hand, the constraints of functions which are not mutually recursive
+must never be unified simultaneously, because otherwise they would get types
+which are not general enough.  Consider the following example.
+
+\begin{verbatim}
+a id(a x) { return x; }
+Void h() { id(10); return; }
+\end{verbatim}
+
+If the type inference algorithm would unify the types of \emph{h} and \emph{id}
+simultaneously, it would infer the type $(\text{Int} \arr \text{Int})$ for
+\emph{id}.  This means that the type inference algorithm must first infer the
+type of \emph{id} separately, introduce it all-quantified as $\forall a . (a
+\arr a)$ to the context, and then infer the type of \emph{h}.
+
+It therefore seems that no matter which of the above we choose, the following
+program would give either a type error for \emph{id} or too general types to
+\emph{f} and \emph{g}.
+
+\begin{verbatim}
+a id(a x) { return x; }
+a f(b x) { id(10); return g(x); }
+a g(b x) { id(True); return f(x); }
+\end{verbatim}
+
+It appears that we must choose one of the following alternatives.
+
+\begin{itemize}
+  
+  \item Forbid mutual recursion.
+
+  \item Require forward declarations, like in C.
+
+  \item Let the programmer explicitly specify the functions whose types should
+  be unified simultaneously.
+
+  \item Make the type checker analyse dependencies of function definitions to
+  find cycles and thus automatically determine which functions to unify
+  simultaneously.
+
+\end{itemize}
+
+The first alternative would result in a much easier implementation of the type
+checker, at the cost of flexibility for the programmer.
+
+The second alternative would run counter to the idea of type inference.
+
+The third alternative, realizable for example by explicit let-bindings which
+allow several bindings to be defined at once, places the burden of resolving
+dependencies on the programmer.
+
+Clearly, the fourth alternative would be preferable, and it should indeed be
+possible to automatically determine dependencies between functions by just
+looking at the free variables that occur in the function bodies.
+
+The implementation at hand chooses the third alternative, mostly because of time
+constraints due to upcoming deadlines.  The scoping rules implied by the design
+decisions discussed so far are described in the following section.
+
+\subsection{Scoping rules}
+
+First, we change the production rule for SPL programs as follows:
+
+\begin{IEEEeqnarray*}{rCl}
+\text{Prog} & ::= & \text{Decl}\!+\ \text{Scope}*\\
+\text{Scope} & ::= & `\text{=====}`\ \text{Decl}\!+
+\end{IEEEeqnarray*}
+
+An SPL program is therefore a list of blocks of declarations, which are
+separated by a token consisting of five equal signs.  This is of course to be
+considered as a proof-of-concept, rather than something that can be given to
+real programmers.
+
+The scoping rules for global identifiers is then as follows.
+
+\begin{itemize}
+
+  \item All identifiers within the same block of declarations are visible
+  simultaneously to each other.
+
+  \item Identifiers from earlier blocks are visible in later blocks, but not
+  vice versa.
+
+\end{itemize}
+
+For local identifiers, there is only one scoping rule.
+
+\begin{itemize}
+
+  \item All local identifiers defined in a function body are visible
+  simultaneously, inside the whole function body.
+
+\end{itemize}
 
 
 
