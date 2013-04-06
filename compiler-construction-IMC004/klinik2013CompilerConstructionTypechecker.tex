@@ -217,7 +217,47 @@ possible to automatically determine dependencies between functions by just
 looking at the free variables that occur in the function bodies.
 
 The implementation at hand chooses the third alternative, mostly because of time
-constraints due to upcoming deadlines.  The scoping rules implied by the design
+constraints due to upcoming deadlines.
+
+\subsection{Polymorphism and assignments}
+
+Another issue is polymorphic type inference in presence of assignments.  The
+question is whether to all-quantify free type variables in local and global
+variables.  To illustrate the problem, consider the following, not well-typed,
+program.
+
+\begin{verbatim}
+fun f() {
+  var x = [];
+  x = 1:[];
+  x = True:[];
+}
+\end{verbatim}
+
+If the type checker would introduce $x$ all-quantified to the environment when
+type checking the function body, $x$ would be of type $\forall a . [a]$, which
+could be specialized to $[\text{Int}]$ in the first assignment, and to
+$[\text{Bool}]$ in the second.  Clearly, this is unsound.  Pierce, in his
+chapter about mutable references \cite{TaPL}, solves this problem by
+all-quantifying the type of an identifier only if its initializer is a syntactic
+value.  He argues that this restriction has no big impact on usability.  In his
+language, reference cell constructors are not values, so identifiers initialized
+with a reference cell are never all-quantified.  In SPL, as variables are always
+mutable, every variable is always implicitly a reference cell, so by adopting
+the \emph{value restriction} in the type checker at hand, the types of variables
+are never all-quantified.  This gives the desired type error for the program
+above, with the tradeoff that programs like the following, in which an identifier
+is never assigned to, also give type errors. This is because the type of $x$ gets
+constrained to both $[\text{Int}]$ and $[\text{Bool}]$.
+
+\begin{verbatim}
+fun f() {
+  var x = [];
+  return (1:x, True:x);
+}
+\end{verbatim}
+
+The scoping rules implied by the design
 decisions discussed so far are described in the following section.
 
 \subsection{Scoping rules}
@@ -258,8 +298,8 @@ For local identifiers, there is only one scoping rule.
 
 \end{itemize}
 
-This way, the problematic example from above can be correctly typed, when given
-as follows.
+This way, the problematic example with mutual recursion from above can be
+correctly typed, when given as follows.
 
 \begin{verbatim}
 a id(a x) { return x; }
