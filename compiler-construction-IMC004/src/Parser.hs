@@ -13,8 +13,10 @@ import Ast
 type SplParser a = P (UU.Str Char String UU.LineColPos) a
 type SplParserTrafo a b = SplParser a -> SplParser b
 
+pScopeSeparator = pSymbol "====="
+
 pProgram :: SplParser AstProgram
-pProgram = AstProgram <$ lexeme (pure ()) <*> pListSep (pSymbol "=====") (some pDeclaration)
+pProgram = AstProgram <$ lexeme (pure ()) <* opt pScopeSeparator "" <*> pListSep pScopeSeparator (some pDeclaration)
 
 pDeclaration :: SplParser AstDeclaration
 pDeclaration = pVarDeclaration <|> pFunDeclaration

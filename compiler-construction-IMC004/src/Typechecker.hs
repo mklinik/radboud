@@ -379,7 +379,13 @@ typecheck :: AstProgram -> Typecheck Environment
 typecheck prog = do
   e <- defaultEnvironment
   (_, env) <- inferType e prog splTypeVoid
-  return env
+  return $ env `without` e
+  where
+    without :: Environment -> Environment -> Environment
+    without env e =
+      filter (\(name, _) -> not $ name `elem` eNames) env
+      where
+        eNames = map fst e
 
 runTypecheck :: (Typecheck a) -> Either CompileError a
 runTypecheck t = evalState (runEitherT t) emptyTypecheckState

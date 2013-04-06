@@ -15,7 +15,9 @@ class Prettyprint a where
 
 instance Prettyprint AstProgram where
   pp _ (AstProgram []) = id
-  pp level (AstProgram (d:decls)) = undefined -- \s -> pp level d "\n" ++ pp level (AstProgram decls) s
+  pp level (AstProgram (d:decls)) = \s -> ds ++ pp level (AstProgram decls) s
+    where
+      ds = (foldl (.) id $ intersperse ("\n" ++) $ map (pp level) d) "\n"
 
 instance Prettyprint AstDeclaration where
   pp level (AstVarDeclaration _ typ ident expr) = \s -> replicate level ' ' ++ pp level typ " " ++ ident ++ " = " ++ pp level expr ";\n" ++ s
