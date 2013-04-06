@@ -10,6 +10,9 @@
 % needs debian package texlive-math-extra
 \usepackage{stmaryrd} % for \llbracket, \rrbracket (scott brackets)
 
+\usepackage{bussproofs}
+\def\defaultHypSeparation{\hskip .1in}
+
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usetikzlibrary{matrix}
@@ -311,6 +314,50 @@ a g(b x, c y) { id(True); return f(x, y); }
 The function \emph{id}, gets type $\forall a .  (a \arr a)$, and $f$ and $g$
 both get type $\forall a b . (a \arr a \arr b)$.
 
+
+\section{Typing rules}
+
+\begin{prooftree}
+\AxiomC{$* = \mathcal{U}(\sigma, \text{Bool})$}
+\LeftLabel{(Bool)}
+\RightLabel{$b \in \{\text{True}, \text{False}\}$}
+\UnaryInfC{$\Gamma \vdash \oftype{b}{\sigma} | *$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$* = \mathcal{U}(\sigma, \text{Int})$}
+\LeftLabel{(Int)}
+\RightLabel{$i \in \mathbb{Z}$}
+\UnaryInfC{$\Gamma \vdash \oftype{i}{\sigma} | *$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$* = \mathcal{U}(\sigma, a)$}
+\LeftLabel{(empty list)}
+\RightLabel{$a$ fresh}
+\UnaryInfC{$\vdash \oftype{[]}{\sigma} | *$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\Gamma \vdash \oftype{e_1}{a_1} | *_1$}
+\AxiomC{$\Gamma^{*_1} \vdash \oftype{e_2}{a_2} | *_2$}
+\AxiomC{$*_3 = \mathcal{U}(\sigma^{*_2 \circ *_1}, (a_1, a_2)^{*_2 \circ *_1})$}
+\LeftLabel{(tuple)}
+\RightLabel{$a_1$, $a_2$ fresh}
+\TrinaryInfC{$\Gamma \vdash \oftype{(e_1, e_2)}{\sigma} | *_3 \circ *_2 \circ *_1$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\tau = \Gamma(i)$}
+\AxiomC{$* = \mathcal{U}(\sigma, \tau)$}
+\LeftLabel{(Identifier)}
+\RightLabel{$i$ identifier}
+\BinaryInfC{$\Gamma \vdash \oftype{i}{\sigma} | *$}
+\end{prooftree}
+
+\section{Further work}
+
+Forbid assignment to functions
 
 \end{document}
 
