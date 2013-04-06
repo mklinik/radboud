@@ -492,7 +492,12 @@ e_n\rangle}{\langle \alpha_1, \alpha_2, \ldots, \alpha_n\rangle} | *_1 \circ\,*$
 In the rule (function call statement), we use the rule (function call
 expression) in the premise, and discard the inferred type.
 
-The function \emph{derive}, used in rules BLAH and BLUBB is defined as follows.
+The function \emph{derive}, used in rules BLAH and BLUBB generates fresh types,
+similar to \emph{fresh}, but \emph{derive} uses the type annotation present in
+the abstract syntax tree to generate a fresh type of that shape.  The same
+variables in the type annotation become the same fresh type variables.  For
+example, if $(a \arr b \arr a)$ is a type annotation, then \emph{derive}$(a \arr
+b \arr a)$ returns $(c \arr d \arr c)$, with $c$ and $d$ fresh.
 
 The function \emph{intro}, used in rules BLOOT and BLAAT, is defined as follows.
 
