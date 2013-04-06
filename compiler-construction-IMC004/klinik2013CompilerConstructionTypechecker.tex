@@ -506,7 +506,25 @@ variables in the type annotation become the same fresh type variables.  For
 example, if $(a \arr b \arr a)$ is a type annotation, then \emph{derive}$(a \arr
 b \arr a)$ returns $(c \arr d \arr c)$, with $c$ and $d$ fresh.
 
-The function \emph{intro}, used in rules BLOOT and BLAAT, is defined as follows.
+The function \emph{intro}, used in rules (function declaration) and (program),
+is the clause of the type inference function that we have seen in the lecture on
+slide 13, ``Multiple recursion (2)'', with these differences:
+
+\begin{itemize}
+
+  \item Instead of fresh type variables, it uses \emph{derive}.
+
+  \item Free type variables in types of variables are never quantified.
+
+  \item Instead of recursing into the body of the let binding, \emph{intro}
+  returns the calculated modified environment and substitution.
+
+\end{itemize}
+
+In the rule (program), each $\vec{d}_i$ is a list of declarations.  Each of
+these lists is type checked simultaneously, then added to the environment.
+These two things are done by \emph{intro}.  The rest of the program is type
+checked in the modified environment returned by \emph{intro}.
 
 \section{Further work}
 
