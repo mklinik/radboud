@@ -238,9 +238,8 @@ inferDecls env decls = do
 
       claimedType (AstVarDeclaration _ astType _ _) = astType2splType astType
       claimedType (AstFunDeclaration _ returnType _ formalArgs _ _) = do
-        splArgs <- mapM (\((AstFunctionArgument _ typ _)) -> astType2splType typ) formalArgs
-        splReturnType <- astType2splType returnType
-        return $ SplFunctionType splArgs splReturnType
+        let argTypes = map (\(AstFunctionArgument _ typ _) -> typ) formalArgs
+        astType2splType $ FunctionType argTypes returnType
 
       blaat _ u [] = return u
       blaat e u ((d,a):rest) = do
@@ -248,7 +247,7 @@ inferDecls env decls = do
         u2 <- blaat e u1 rest
         return (u2 . u1)
 
-      doQuantify (AstVarDeclaration _ _ _ _) = flip const -- don't quantify variable declarations
+      doQuantify (AstVarDeclaration _ _ _ _) = flip const -- dont quantify variable declarations
       doQuantify (AstFunDeclaration _ _ _ _ _ _) = quantify
 
 instance InferType AstProgram where
@@ -380,18 +379,21 @@ typecheck prog = do
   e <- defaultEnvironment
   (_, env) <- inferType e prog splTypeVoid
   return $ env `without` e
+
+without :: Environment -> Environment -> Environment
+without env e =
+  filter (\(name, _) -> not $ name `elem` eNames) env
   where
-    without :: Environment -> Environment -> Environment
-    without env e =
-      filter (\(name, _) -> not $ name `elem` eNames) env
-      where
-        eNames = map fst e
+    eNames = map fst e
 
 runTypecheck :: (Typecheck a) -> Either CompileError a
 runTypecheck t = evalState (runEitherT t) emptyTypecheckState
 
 prettyprintGlobals :: Environment -> String
-prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show (makeNiceAutoTypeVariables typ) ++ "\n") env
+-- prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show (makeNiceAutoTypeVariables typ) ++ "\n") env
+prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show typ ++ "\n") (env `without` defEnv)
+  where defEnv = unRight $ runTypecheck defaultEnvironment
+        unRight (Right x) = x
 
 -- Replaces auto-type variables with letters from a-z
 makeNiceAutoTypeVariables :: SplType -> SplType
