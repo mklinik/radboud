@@ -1,4 +1,5 @@
 \documentclass[a4paper]{article}
+
 %\usepackage{mathptmx}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -24,6 +25,14 @@
 \author{Markus Klinik (s4220315)}
 \maketitle
 
+\begin{abstract}
+
+This report describes design decisions and typing rules for the
+implementation of the type checker for the course NWI-IMC004 Compiler
+Construction.
+
+\end{abstract}
+
 \section{Implementation Language}
 
 The SPL parser and type checker are written in Haskell, because a
@@ -38,17 +47,32 @@ that arise when implementing a compiler.
   \item Immutable data structures and sharing allow a style of
   programming that resembles mathematical definitions.  This comes in
   handy for example when an environment needs to be passed modified to
-  a subcomputation, but the original environment is needed to continue
-  later.
+  a subcomputation, but the original environment is needed again later.
 
   \item Haskell has a rich set of standard and third-party libraries
   which allows focusing on the problem at hand.
 
 \end{itemize}
 
-\section{Preliminaries}
+\section{Grammar}
 
-foo bar baz
+The Parser is implemented in a top-down style using the uu-parsinglib
+parser combinator library.  The grammar is kept mostly unmodified,
+making use of the backtracking features of uu-parsinglib.  Focus was
+put more on conciseness of the implementation rather than run-time
+performance.
+
+There are two important changes to the grammar.  The first one is the
+introduction of intermediate non-terminals to account for the different
+precedence levels of binary operators.  These intermediate
+non-terminals are not given names, they arise by mapping parser
+constructing functions over a suitably nested list of strings, followed
+by folding the result with left- and right chaining combinators,
+according to their associativity.
+
+The second change to the grammar is one left-factorization in the rule
+for expressions, to get rid of backtracking when an expression in the
+input starts with many opening parenthesis.
 
 \end{document}
 
