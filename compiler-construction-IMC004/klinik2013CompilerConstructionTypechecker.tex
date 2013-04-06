@@ -390,18 +390,19 @@ both get type $\forall a b . (a \arr a \arr b)$.
 \UnaryInfC{$\Gamma \vdash \oftype{\text{return e}}{\sigma} | *$}
 \end{prooftree}
 
-  %inferType env (AstIfThenElse _ astCondition thenStmt elseStmt) s = do
-    %(u1,_) <- inferType env astCondition splTypeBool
-    %(u2,_) <- inferType (substitute u1 env) thenStmt (substitute u1 s)
-    %(u3,_) <- inferType (substitute (u2 . u1) env) elseStmt (substitute (u2 . u1) s)
-    %return (u3 . u2 . u1, env)
-
 \begin{prooftree}
 \AxiomC{$\Gamma       \vdash \oftype{e}{\text{Bool}} | *_1$}
 \AxiomC{$\Gamma^{*_1} \vdash \oftype{s_1}{\sigma^{*_1}} | *_2$}
 \AxiomC{$\Gamma^{*_2 \circ *_1} \vdash \oftype{s_2}{\sigma^{*_2 \circ *_1}} | *_3$}
 \LeftLabel{(if-then-else)}
 \TrinaryInfC{$\Gamma \vdash \oftype{\text{if}(e) s_1 \text{ else } s_2}{\sigma} | *_3 \circ *_2 \circ\,*_1$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\Gamma\ \vec{\vdash}\ \oftype{\vec{s}}{\vec{\sigma}} | *$}
+\LeftLabel{(statement block)}
+\RightLabel{$\vec{\sigma} = \langle\sigma, \sigma, \ldots, \sigma\rangle$}
+\UnaryInfC{$\Gamma \vdash \oftype{\vec{s}}{\sigma} | *$}
 \end{prooftree}
 
 Looking up the type of an identifier $i$ in an environment $\Gamma$ is defined
