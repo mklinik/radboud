@@ -330,7 +330,7 @@ instance InferType AstExpr where
     b <- fresh
     (u1,_) <- inferType env aExpr a
     (u2,_) <- inferType (substitute u1 env) bExpr b
-    u3 <- unify meta (substitute (u2 . u1) s) (SplTupleType (substitute (u2 . u1) a) (substitute (u2 . u1) b))
+    u3 <- unify meta (substitute (u2 . u1) s) (substitute (u2 . u1) $ SplTupleType a b)
     return (u3 . u2 . u1, env)
 
 instance InferType AstFunctionCall where
