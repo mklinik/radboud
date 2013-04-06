@@ -426,6 +426,40 @@ both get type $\forall a b . (a \arr a \arr b)$.
 \UnaryInfC{$\Gamma \vdash \oftype{f(\vec{e})}{\sigma} | *$}
 \end{prooftree}
 
+\begin{prooftree}
+\AxiomC{$\Gamma \vdash \oftype{e}{\sigma} | *$}
+\LeftLabel{(variable declaration)}
+\UnaryInfC{$\Gamma \vdash \oftype{i = e}{\sigma} | *$}
+\end{prooftree}
+
+    %splArgs <- mapM (\((AstFunctionArgument _ typ nam)) -> astType2splType typ >>= return . (,) nam) formalArgs
+    %splReturnType <- astType2splType returnType
+    %let env2 = foldl (flip $ uncurry envAdd) env splArgs :: Environment
+    %let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
+    %(u, env3) <- inferDecls env2 localDecls
+
+    %(u2,_) <- inferType env3 (AstBlock body) (substitute u splReturnType)
+    %u3 <- unify meta (substitute u2 s) (substitute u2 splFunctionType)
+    %return (u3 . u2 . u, env)
+
+\begin{prooftree}
+\AxiomC{$P_1$}
+\AxiomC{$P_2$}
+\AxiomC{$P_3$}
+\LeftLabel{(function declaration)}
+\RightLabel{$\vec{\beta} = \text{derive}(\vec{\alpha}), \beta = \text{derive}(\alpha)$}
+\TrinaryInfC{$\Gamma \vdash \oftype{
+  \alpha f(\oftype{\vec{i}}{\vec{\alpha}})
+  \vec{l} s}{\sigma} | *_3 \circ *_2 \circ\,*_1$}
+\end{prooftree}
+
+Where the premises $P_1$ - $P_3$ are:
+\begin{IEEEeqnarray*}{rCl}
+(P_1) & : & (*_1, \Gamma') = \text{intro}(\vec{l}, (\Gamma, \oftype{\vec{i}}{\vec{\beta}}))\\
+(P_2) & : & \Gamma' \vdash \oftype{s}{\beta^{*_1}} | *_2\\
+(P_3) & : & *_3 = \mathcal{U}(\sigma^{*_2 \circ *_1}, (\vec{\beta} \arr \beta)^{*_2 \circ *_1})
+\end{IEEEeqnarray*}
+
 Looking up the type of an identifier $i$ in an environment $\Gamma$ is defined
 as follows.
 
@@ -455,8 +489,12 @@ length of the vector as follows. It is assumed that $|\vec{e}| =
 e_n\rangle}{\langle \alpha_1, \alpha_2, \ldots, \alpha_n\rangle} | *_1 \circ\,*$}
 \end{prooftree}
 
-In the rule (function call statement), we use the rule for (function call
+In the rule (function call statement), we use the rule (function call
 expression) in the premise, and discard the inferred type.
+
+The function \emph{derive}, used in rules BLAH and BLUBB is defined as follows.
+
+The function \emph{intro}, used in rules BLOOT and BLAAT, is defined as follows.
 
 \section{Further work}
 
