@@ -19,6 +19,14 @@
 %\newcommand{\todo}[1]{}
 \newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
 
+% church-style (explicit) abstraction. We adjust the spacing around the colon and dot
+\newcommand{\church}[4]{#1 #2\!:\!#3\,.\,#4}
+
+\newcommand{\curry}[3]{#1 #2\,.\,#3}
+
+% something is of type something  x : A, we adjust the spacing
+\newcommand{\oftype}[2]{#1\!:\!#2}
+
 \begin{document}
 
 \title{A Typechecker for SPL, the Simple~Programming~Language}
@@ -33,7 +41,7 @@ Construction.
 
 \end{abstract}
 
-\section{Implementation Language}
+\section{Implementation language}
 
 The SPL parser and type checker are written in Haskell, because a
 functional language is well-suited for the various programming tasks
@@ -73,6 +81,69 @@ according to their associativity.
 The second change to the grammar is one left-factorization in the rule
 for expressions, to get rid of backtracking when an expression in the
 input starts with many opening parenthesis.
+
+\section{Scoping rules}
+
+Before getting to scoping rules, we need to discuss the role of type
+annotations, and mutual recursion.
+
+\subsection{Type annotations}
+
+There are two different ways to interpret type
+annotations \cite{TaPL}.  Consider the following two lambda-terms, one
+in Curry-style without type annotations and the other one in
+Church-style with type annotations.
+
+\begin{IEEEeqnarray}{c}
+\label{curryterm}\curry{\lambda}{f}{\curry{\lambda}{x}{f(f x)}}\\
+\label{churchterm}\church{\lambda}{f}{a}{\church{\lambda}{x}{b}{f(f x)}}
+\end{IEEEeqnarray}
+
+When type checking term (\ref{curryterm}) in a polymorphic type system,
+the type inference algorithm would infer that the term has type
+$(a \arr a) \arr a \arr a$, and conclude that the term is
+well typed.  For term (\ref{churchterm}), considered under the same
+typing rules, the question arises what the meaning of the type
+variables $a$ and $b$ is.  These two are possible:
+
+\begin{enumerate}
+
+ \item \label{interp_exists} There exists a substitution ${}^*$ for
+ $a$, $b$, $c$ such that term (\ref{churchterm}) has type $(a \arr b
+ \arr c)^*$.
+
+ \item \label{interp_forall} For all substitutions ${}^{*_1}$ of $a$
+ and $b$, there exists a substitution ${}^{*_2}$ of $c$ such that term
+ (\ref{churchterm}) has type $(a^{*_1} \arr b^{*_1} \arr c^{*_2})$.
+
+\end{enumerate}
+
+Under the first interpretation, term (\ref{churchterm}) would
+be well-typed, because clearly such a substitution exists.  Take $[a
+\arr (\text{Int} \arr \text{Int}), b \arr \text{Int}, c \arr
+\text{Int}]$.
+
+Under the second interpretation, term (\ref{churchterm}) would not be
+well-typed, because for the substitution $[a \arr \text{Int}, b \arr
+\text{Int}]$, there is no substitution ${}^*$ for $c$ such that the term has
+type $(\text{Int} \arr \text{Int} \arr c^*)$.
+
+A similar term that would be well-typed under both the first and the second
+interpretation is the following one:
+
+\begin{IEEEeqnarray}{c}
+\label{churchterm2}\church{\lambda}{f}{a \arr a}{\church{\lambda}{x}{a}{f(f x)}}
+\end{IEEEeqnarray}
+
+The grammar for SPL, as given in the first exercise, does not allow type
+annotations of function types.  We therefore have to either choose the first
+interpretation, or add function types to the grammar to choose the second
+interpretation.  The first interpretation seemed more challenging, so the
+present implementation of the SPL compiler cooses this one.
+
+\subsection{Polymorphism and mutual recursion}
+
+
 
 \end{document}
 
