@@ -5,7 +5,6 @@ import System.IO
 import System.Console.GetOpt
 import Text.Printf (printf)
 import Control.Monad
-import System.Exit
 
 import Parser
 import Prettyprinter
@@ -18,7 +17,7 @@ import Repl
 main :: IO ()
 main = do
   opts <- getArgs >>= get
-  run opts
+  run opts >>= exitWith
 
 parseAnd :: (AstProgram -> String) -> Options -> IO ()
 parseAnd action opts = parseAnd_ (return . action) opts
@@ -31,16 +30,37 @@ parseAnd_ action opts = do
       action ast >>= hPutStrLn (outFile opts)
     Left err  -> print err
 
-run :: Options -> IO ()
+parseAndE :: Show a => (AstProgram -> Either a String) -> Options -> IO ExitCode
+parseAndE action opts = do
+  input <- hGetContents (inFile opts)
+  case runParser_ (inputFilename opts) pProgram input of
+    Right ast -> do
+      case action ast of
+        Right s -> do
+          hPutStrLn (outFile opts) s
+          return ExitSuccess
+        Left err -> do
+          hPutStrLn (outFile opts) $ show err
+          return $ ExitFailure 1
+    Left err -> do
+      hPutStrLn (outFile opts) $ show err
+      return $ ExitFailure 1
+
+
+run :: Options -> IO ExitCode
 run opts = do
-  case mode opts of
+  returnCode <- case mode opts of
     ModePrettyprint -> do
-      parseAnd prettyprint opts
+      parseAnd (prettyprint) opts
+      return ExitSuccess
 
     ModeShow -> do
       parseAnd show opts
+      return ExitSuccess
 
-    ModeHelp -> printHelp
+    ModeHelp -> do
+      printHelp
+      return ExitSuccess
 
     ModeCheckParser -> do
       input <- hGetContents (inFile opts)
@@ -48,27 +68,31 @@ run opts = do
         do ast1 <- runParser_ (inputFilename opts) pProgram input
            ast2 <- runParser_ (inputFilename opts) pProgram $ prettyprint ast1
            Right (ast1 == ast2)
+      return ExitSuccess
 
     ModeInterpret -> do
       parseAnd_ runProgram opts
+      return ExitSuccess
 
     ModeTypecheck -> do
-      parseAnd typecheck opts
+      parseAndE typecheck opts
 
     ModeInteractive -> do
       putStrLn ("Welcome to " ++ programName ++ " interactive mode.")
       putStrLn "Type Ctrl-d to exit."
       readEvalPrintLoop
+      return ExitSuccess
 
   cleanUp opts
+  return returnCode
 
-typecheck :: AstProgram -> String
+typecheck :: AstProgram -> Either String String
 typecheck ast =
   let result = TC.runTypecheck $ TC.typecheck ast
   in
     case result of
-    Left err -> show err
-    Right env -> TC.prettyprintGlobals env
+    Left err -> Left $ show err
+    Right env -> Right $ TC.prettyprintGlobals env
 
 cleanUp :: Options -> IO ()
 cleanUp opts = do
