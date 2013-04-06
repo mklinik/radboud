@@ -412,6 +412,20 @@ both get type $\forall a b . (a \arr a \arr b)$.
 \BinaryInfC{$\Gamma \vdash \oftype{\text{while}(e) s}{\sigma} | *_2 \circ *_1$}
 \end{prooftree}
 
+\begin{prooftree}
+\AxiomC{$\tau = \Gamma(i)$}
+\AxiomC{$\Gamma \vdash \oftype{e}{\tau} | *$}
+\LeftLabel{(assignment)}
+\BinaryInfC{$\Gamma \vdash \oftype{i := e}{\sigma} | *$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\Gamma \vdash \oftype{f(\vec{e})}{\alpha} | *$}
+\LeftLabel{(function call statement)}
+\RightLabel{$\alpha$ fresh}
+\UnaryInfC{$\Gamma \vdash \oftype{f(\vec{e})}{\sigma} | *$}
+\end{prooftree}
+
 Looking up the type of an identifier $i$ in an environment $\Gamma$ is defined
 as follows.
 
@@ -440,6 +454,9 @@ length of the vector as follows. It is assumed that $|\vec{e}| =
 \BinaryInfC{$\Gamma\ \vec{\vdash}\ \oftype{\langle e_1, e_2, \ldots,
 e_n\rangle}{\langle \alpha_1, \alpha_2, \ldots, \alpha_n\rangle} | *_1 \circ\,*$}
 \end{prooftree}
+
+In the rule (function call statement), we use the rule for (function call
+expression) in the premise, and discard the inferred type.
 
 \section{Further work}
 
