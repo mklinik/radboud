@@ -80,18 +80,19 @@ spec = do
       typeOf "x" "a x = 1:x;" `shouldBe` "[Int]"
     it "infers a polymorphic recursive list definition" $ do
       typeOf "x" "a x = head(x):x;" `shouldBe` "[a]"
-    it "cannot infer mutual recursive values" $ do
-      typeOf "x" "a x = y; b y = x;" `shouldBe` "Unknown identifier `y' at position 1:7"
-    it "cannot infer mutual recursive lists" $ do
-      typeOf "x" "a x = head(y):x; b y = head(x):y;" `shouldBe` "Unknown identifier `y' at position 1:12"
+    it "can infer mutual recursive values" $ do
+      typeOf "x" "a x = y; b y = x;" `shouldBe` "a"
+    it "can infer mutual recursive lists" $ do
+      typeOf "x" "a x = head(y):x; b y = head(x):y;" `shouldBe` "[a]"
 
     let mutualFandG = unlines
             ["a f(b x) { return g(x); }"
             ,"a g(b x) { return f(x); }"
             ]
 
-    it "cannot infer mutual recursive functions" $ do
-      typeOf "f" mutualFandG `shouldBe` "Unknown identifier `g' at position 1:19"
+    it "can infer mutual recursive functions" $ do
+      typeOf "f" mutualFandG `shouldBe` "(a -> b)"
+      typeOf "g" mutualFandG `shouldBe` "(a -> b)"
 
     it "infers that g must be a function" $ do
       typeOf "f" "Int f(a g) { return g(1); }" `shouldBe` "((Int -> Int) -> Int)"
@@ -99,13 +100,14 @@ spec = do
     it "infers that x must be a tuple" $ do
       typeOf "f" "Int f(a x) { return fst(x); }" `shouldBe` "((Int, a) -> Int)"
 
+    let identity = "a id(a x) { return x; } ===== "
+
     it "can use different instantiations of globals in tuples" $ do
-      let identity = "a id(a x) { return x; }"
       typeOf "x" (identity ++ "a x = (   10,     True );") `shouldBe` "(Int, Bool)"
       typeOf "x" (identity ++ "a x = (id(10), id(True));") `shouldBe` "(Int, Bool)"
 
     it "can use different instantiations of globals in statements" $ do
-      typeOf "f" "a id(a x) { return x; } a f() { id(10); id(True); return 10; }" `shouldBe` "( -> Int)"
+      typeOf "f" (identity ++ "a f() { id(10); id(True); return 10; }") `shouldBe` "( -> Int)"
 
     it "canot use different instantiations of a global list when using the value" $ do
       typeOf "f" "[a] x = []; a f() { return (1:x, True:x); }" `shouldBe`
@@ -124,9 +126,9 @@ spec = do
       typeOf "y" prog `shouldBe` "Bool"
       typeOf "z" prog `shouldBe` "Bool"
 
-    it "cannot propagate types transitively through global variables, backwards" $ do
+    it "propagate types transitively through global variables, backwards" $ do
       let prog = "x x = y; y y = z; z z = True;"
-      typeOf "x" prog `shouldBe` "Unknown identifier `y' at position 1:7"
+      typeOf "x" prog `shouldBe` "Bool"
 
     let double = "a double(f f, x x) { return f(f(x)); }"
 
@@ -157,7 +159,7 @@ spec = do
     it "infers that the identity becomes (Int -> Int) when applied to Int in body" $ do
       typeOf "id" "a id(a x) { id(1); return x; }" `shouldBe` "(Int -> Int)"
     it "infers that the identity stays (a -> a) when applied to int outside body" $ do
-      typeOf "id" "a id(a x) { return x; } Int y = id(1);" `shouldBe` "(a -> a)"
+      typeOf "id" "a id(a x) { return x; } ===== Int y = id(1);" `shouldBe` "(a -> a)"
 
     it "fails extracting an Int from a tuple of Bools" $ do
       typeOf "x" "Int x = fst((True, True));" `shouldBe`
@@ -165,9 +167,8 @@ spec = do
 
     describe "local variables" $ do
 
-      it "cannot typecheck mutually recursive local variables" $ do
-        typeOf "foo" "Int foo() { var x = y; var y = z; var z = x; return y; }" `shouldBe`
-          "Unknown identifier `y' at position 1:21"
+      it "can typecheck mutually recursive local variables" $ do
+        typeOf "foo" "Int foo() { var x = y; var y = z; var z = x; return y; }" `shouldBe` "( -> Int)"
 
       it "cannot use different instantiatons of function arguments" $ do
         typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
@@ -181,13 +182,13 @@ spec = do
         typeOf "f" "a f() { var x = []; var y = 1:x; var z = True:x; return (y, z); }" `shouldBe`
           "Couldn't match expected type `[Bool]' with actual type `[Int]' at position 1:47"
 
-      it "can use different instantiations of local variables in other initializers, reverse order" $ do
+      it "cannot use different instantiations of local variables in other initializers, reverse order" $ do
         typeOf "f" "a f() { var y = 1:x; var z = True:x; var x = []; return (y, z); }" `shouldBe`
-          "Unknown identifier `x' at position 1:19"
+          "Couldn't match expected type `[Bool]' with actual type `[Int]' at position 1:35"
 
-      it "can use different instantiations of local variables in other initializers, reverse order" $ do
+      it "cannot use different instantiations of local variables in other initializers, reverse order" $ do
         typeOf "f" "a f() { var y = 1:x; var z = True:x; var x = []; x = 1:[]; return (y, z); }" `shouldBe`
-          "Unknown identifier `x' at position 1:19"
+          "Couldn't match expected type `[Bool]' with actual type `[Int]' at position 1:35"
 
       it "cannot assign different instantiations to local variables" $ do
         typeOf "f" "a f() { var x = []; x = 1:[]; x = True:[]; return; }" `shouldBe`
@@ -239,8 +240,8 @@ spec = do
         typeOf "f" "a f() { var x = 10; x = x; return x; }" `shouldBe` "( -> Int)"
       it "typechecks assignment between locals" $ do
         typeOf "f" "a f() { var x = 10; var y = 20; x = y; y = x; return y; }" `shouldBe` "( -> Int)"
-      it "cannot infer the type of a local variable transitively through declarations, backwards" $ do
-        typeOf "f" "a f() { x x = y; y y = z; z z = True; return x; }" `shouldBe` "Unknown identifier `y' at position 1:15"
+      it "can infer the type of a local variable transitively through declarations, backwards" $ do
+        typeOf "f" "a f() { x x = y; y y = z; z z = True; return x; }" `shouldBe` "( -> Bool)"
       it "infers the type of a local variable transitively through assignments" $ do
         typeOf "f" "a f() { x x = x; y y = y; z z = z; z = True; y = z; x = y; return x; }" `shouldBe` "( -> Bool)"
 
