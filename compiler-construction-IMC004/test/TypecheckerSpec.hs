@@ -266,3 +266,35 @@ spec = do
           ,"  return foo(10, 20);"
           ,"}"
           ]) `shouldBe` "( -> Int)"
+
+    describe "standard examples" $ do
+      it "infers foldl" $ do
+        typeOf "foldl" (unlines
+          ["a foldl(b f, c z, d list)"
+          ,"{"
+          ,"  if( isEmpty(list) )"
+          ,"    return z;"
+          ,"  else"
+          ,"    return foldl(f, f(z, head(list)), tail(list));"
+          ,"}"
+          ]) `shouldBe` "((b a -> b) b [a] -> b)"
+      it "infers foldr" $ do
+        typeOf "foldr" (unlines
+          ["a foldr(b f, c z, d list)"
+          ,"{"
+          ,"  if( isEmpty(list) )"
+          ,"    return z;"
+          ,"  else"
+          ,"    return f(head(list), foldr(f, z, tail(list)));"
+          ,"}    "
+          ]) `shouldBe` "((a b -> b) b [a] -> b)"
+      it "infers map" $ do
+        typeOf "map" (unlines
+          ["a map(b f, c list)"
+          ,"{"
+          ,"  if( isEmpty(list) )"
+          ,"    return [];"
+          ,"  else"
+          ,"    return f(head(list)) : map(f, tail(list));"
+          ,"}"
+          ]) `shouldBe` "((a -> b) [a] -> [b])"
