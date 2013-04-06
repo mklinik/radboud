@@ -244,8 +244,8 @@ inferDecls env decls = do
       blaat _ u [] = return u
       blaat e u ((d,a):rest) = do
         (u1,_) <- inferType (substitute u e) d (substitute u a)
-        u2 <- blaat e u1 rest
-        return (u2 . u1)
+        u2 <- blaat e (u1 . u) rest
+        return (u2 . u1 . u)
 
       doQuantify (AstVarDeclaration _ _ _ _) = flip const -- dont quantify variable declarations
       doQuantify (AstFunDeclaration _ _ _ _ _ _) = quantify
