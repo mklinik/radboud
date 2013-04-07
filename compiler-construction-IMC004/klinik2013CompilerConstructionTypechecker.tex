@@ -137,9 +137,9 @@ type $(\text{Int} \arr \text{Int} \arr c^*)$.
 A similar term that would be well-typed under both the first and the second
 interpretation is the following one:
 
-\begin{IEEEeqnarray}{c}
-\label{churchterm2}\church{\lambda}{f}{a \arr a}{\church{\lambda}{x}{a}{f(f x)}}
-\end{IEEEeqnarray}
+\begin{IEEEeqnarray*}{c}
+\church{\lambda}{f}{a \arr a}{\church{\lambda}{x}{a}{f(f x)}}
+\end{IEEEeqnarray*}
 
 The grammar for SPL, as given in the first exercise, does not allow type
 annotations of function types.  We therefore have to either choose the first
@@ -165,7 +165,7 @@ before calculating the constraints of $g$, it would infer the type $\forall a b
 c .  (a \arr b \arr c)$ for both $f$ and $g$.
 
 On the other hand, the constraints of functions which are not mutually recursive
-must never be unified simultaneously, because otherwise they would get types
+must never be unified simultaneously, because otherwise they could get types
 which are not general enough.  Consider the following example.
 
 \begin{verbatim}
@@ -242,15 +242,16 @@ type checking the function body, $x$ would be of type $\forall a . [a]$, which
 could be specialized to $[\text{Int}]$ in the first assignment, and to
 $[\text{Bool}]$ in the second.  Clearly, this is unsound.  Pierce, in his
 chapter about mutable references \cite{Pierce2002a}, solves this problem by
-all-quantifying the type of an identifier only if its initializer is a syntactic
-value.  He argues that this restriction has no big impact on usability.  In his
-language, reference cell constructors are not values, so identifiers initialized
-with a reference cell are never all-quantified.  In SPL, as variables are always
-mutable, every variable is always implicitly a reference cell, so by adopting
-the \emph{value restriction} in the type checker at hand, the types of variables
-are never all-quantified.  This gives the desired type error for the program
-above, with the tradeoff that programs like the following, in which an identifier
-is never assigned to, also give type errors. This is because the type of $x$ gets
+all-quantifying the type of an identifier only if its initializer is a
+syntactic value.  He argues that this restriction has no big impact on
+usability.  In his language, reference cell constructors are not values, so
+identifiers initialized with a reference cell are never all-quantified.  In
+SPL, as variables are always mutable, every variable is always implicitly a
+reference cell, so by adopting the \emph{value restriction} in the type checker
+at hand, the types of variables are never all-quantified.  This gives the
+desired type error for the program above. Unfortunately this comes at the
+tradeoff that programs like the following, in which an identifier is never
+assigned to, also give type errors. This is because the type of $x$ gets
 constrained to both $[\text{Int}]$ and $[\text{Bool}]$.
 
 \begin{verbatim}
@@ -259,6 +260,9 @@ fun f() {
   return (1:x, True:x);
 }
 \end{verbatim}
+
+In the current implementation of the type checker for SPL, we adopt this
+restriction, and accept the tradeoff.
 
 The scoping rules implied by the design
 decisions discussed so far are described in the following section.
@@ -324,6 +328,8 @@ syntactic construct $e$ has type $\sigma$, under the substitution $*$''.  The
 premises of the typing rules are to be read from left to right.
 
 The typing relation is defined by recursion on the abstract syntax as follows.
+The label to the left is the name of the rule, while the label to the right
+describes side conditions.
 
 \begin{prooftree}
 \AxiomC{$* = \mathcal{U}(\sigma, \text{Bool})$}
