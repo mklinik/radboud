@@ -40,7 +40,7 @@ typeOf identifier program =
   let ast = parse pProgram program
   in
     case runTypecheck $ typecheck ast of
-      Right env -> case runTypecheck $ envLookup emptyMeta identifier env of
+      Right (env,_) -> case runTypecheck $ envLookup emptyMeta identifier env of
           Right typ -> prettyprintType $ makeNiceAutoTypeVariables typ
           Left err -> show err
       Left err -> show err
@@ -86,13 +86,13 @@ spec = do
       typeOf "x" "a x = head(y):x; b y = head(x):y;" `shouldBe` "[a]"
 
     let mutualFandG = unlines
-            ["a f(b x) { return g(x); }"
-            ,"a g(b x) { return f(x); }"
+            ["a f(b x, c y) { return g(y, x); }"
+            ,"a g(b x, c y) { return f(x, y); }"
             ]
 
     it "can infer mutual recursive functions" $ do
-      typeOf "f" mutualFandG `shouldBe` "(a -> b)"
-      typeOf "g" mutualFandG `shouldBe` "(a -> b)"
+      typeOf "f" mutualFandG `shouldBe` "(a a -> b)"
+      typeOf "g" mutualFandG `shouldBe` "(a a -> b)"
 
     it "infers that g must be a function" $ do
       typeOf "f" "Int f(a g) { return g(1); }" `shouldBe` "((Int -> Int) -> Int)"
