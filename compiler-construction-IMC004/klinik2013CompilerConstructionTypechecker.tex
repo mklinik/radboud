@@ -96,7 +96,7 @@ annotations, and mutual recursion.
 \subsection{Type annotations}
 
 There are two different ways to interpret type
-annotations \cite{TaPL}.  Consider the following two lambda-terms, one
+annotations \cite{Pierce2002a}.  Consider the following two lambda-terms, one
 in Curry-style without type annotations and the other one in
 Church-style with type annotations.
 
@@ -241,7 +241,7 @@ If the type checker would introduce $x$ all-quantified to the environment when
 type checking the function body, $x$ would be of type $\forall a . [a]$, which
 could be specialized to $[\text{Int}]$ in the first assignment, and to
 $[\text{Bool}]$ in the second.  Clearly, this is unsound.  Pierce, in his
-chapter about mutable references \cite{TaPL}, solves this problem by
+chapter about mutable references \cite{Pierce2002a}, solves this problem by
 all-quantifying the type of an identifier only if its initializer is a syntactic
 value.  He argues that this restriction has no big impact on usability.  In his
 language, reference cell constructors are not values, so identifiers initialized
@@ -1008,6 +1008,8 @@ a xMarksTheSpot(a x)
 }
 \end{verbatim}
 
+\bibliographystyle{plain}
+\bibliography{computer_science}
 
 \end{document}
 
