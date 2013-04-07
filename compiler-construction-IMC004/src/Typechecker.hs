@@ -292,7 +292,8 @@ instance InferType AstDeclaration where
     (u, env3, localDecls2) <- inferDecls env2 localDecls
     (u2,_,_) <- inferType env3 (AstBlock body) (substitute u splReturnType)
     u3 <- unify meta (substitute (u2 . u) s) (substitute (u2 . u) splFunctionType)
-    return (u3 . u2 . u, env, AstFunDeclaration meta returnType name formalArgs localDecls2 body)
+    localDecls3 <- assignType (substitute (u3.u2.u) env3) localDecls2
+    return (u3 . u2 . u, env, AstFunDeclaration meta returnType name formalArgs localDecls3 body)
 
 
 instance InferType AstStatement where
