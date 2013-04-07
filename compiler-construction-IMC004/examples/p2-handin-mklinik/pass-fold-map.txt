@@ -1,0 +1,36 @@
+a foldl((a b -> a) f, a z, [b] list)
+{
+  if( isEmpty(list) )
+    return z;
+  else
+    return foldl(f, f(z, head(list)), tail(list));
+}
+
+a foldr((b a -> a) f, a z, [b] list)
+{
+  if( isEmpty(list) )
+    return z;
+  else
+    return f(head(list), foldr(f, z, tail(list)));
+}
+
+[b] map((a -> b) f, [a] list)
+{
+  if( isEmpty(list) )
+    return [];
+  else
+    return (f(head(list)) : map(f, tail(list)));
+}
+
+[a] filter((a -> Bool) f, [a] list)
+{
+  if( isEmpty(list) )
+    return [];
+  else
+    if( f(head(list)) )
+      return (head(list) : filter(f, tail(list)));
+    else
+      return filter(f, tail(list));
+}
+
+

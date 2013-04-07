@@ -1,0 +1,3 @@
+// Demonstrates the error message given when an undefined identifier occurs in a program.
+
+Int x = y;

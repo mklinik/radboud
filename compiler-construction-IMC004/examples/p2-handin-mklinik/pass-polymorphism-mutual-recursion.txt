@@ -1,0 +1,18 @@
+a id(a x)
+{
+  return x;
+}
+
+b f(a x, a y)
+{
+  id(10);
+  return g(y, x);
+}
+
+b g(a x, a y)
+{
+  id(True);
+  return f(x, y);
+}
+
+

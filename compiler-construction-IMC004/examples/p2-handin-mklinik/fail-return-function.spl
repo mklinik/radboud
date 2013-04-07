@@ -1,0 +1,26 @@
+// It is not possible to directly call the return value of a function that returns another function.
+
+fun plus(x x, y y)
+{
+  return x + y;
+}
+
+fun minus(x x, y y)
+{
+  return x - y;
+}
+
+fun f(Bool x)
+{
+  if( x )
+    return plus;
+  else
+    return minus;
+}
+
+Void main()
+{
+  f(True)(10, 20);
+  f(False)(10, 20);
+  return;
+}

@@ -1,0 +1,20 @@
+// The polymorphic identity can be instantiated differently in two mutually recursive functions.
+// This works only because of the scope separator token, which causes $f$ and $g$ to be unified
+// independently of \emph{id}.  Removing the scope separator token gives a type error.  See
+// fail-polymorphism-mutual-recursion.spl
+
+a id(a x) { return x; }
+
+=====
+
+a f(b x, c y)
+{
+  id(10);
+  return g(y, x);
+}
+
+a g(b x, c y)
+{
+  id(True);
+  return f(x, y);
+}

@@ -1,0 +1,12 @@
+// Demonstrates the error message given when a function is called with too few arguments.
+
+fun f(x x, y y, z z)
+{
+  return x + y + z;
+}
+
+Void main()
+{
+  f(10, 20);
+  return;
+}

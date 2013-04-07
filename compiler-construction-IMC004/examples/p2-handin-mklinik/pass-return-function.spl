@@ -1,0 +1,28 @@
+// A function can return another function.
+
+fun plus(x x, y y)
+{
+  return x + y;
+}
+
+fun minus(x x, y y)
+{
+  return x - y;
+}
+
+fun f(Bool x)
+{
+  if( x )
+    return plus;
+  else
+    return minus;
+}
+
+Void main()
+{
+  var h = f(True);
+  var i = f(False);
+  h(10, 20);
+  i(10, 20);
+  return;
+}

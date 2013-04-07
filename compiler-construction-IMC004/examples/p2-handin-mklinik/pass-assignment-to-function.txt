@@ -1,0 +1,23 @@
+Bool f([a] x)
+{
+  return False;
+}
+
+Bool g([a] x)
+{
+  return True;
+}
+
+Void main()
+{
+  ([a] -> Bool) h = f;
+  [a] x = [];
+  h(x);
+  h = g;
+  h(x);
+  h = isEmpty;
+  h(x);
+  return;
+}
+
+

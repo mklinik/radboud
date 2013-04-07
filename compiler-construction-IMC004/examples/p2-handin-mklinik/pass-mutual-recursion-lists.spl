@@ -1,0 +1,5 @@
+// Two mutually recursive lists.  The third list constrains all three of them to be of type [Int].
+
+a x = head(y):x;
+a y = head(x):y;
+a z = 1:x;

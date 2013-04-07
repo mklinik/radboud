@@ -1,0 +1,18 @@
+// It should be forbidden to assign to identifiers which are bound to global functions.  To be done.
+
+fun f([a] x)
+{
+  return False;
+}
+
+fun g([a] x)
+{
+  return True;
+}
+
+Void main()
+{
+  f = g;
+  isEmpty = g;
+  return;
+}

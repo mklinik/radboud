@@ -1,0 +1,11 @@
+// Assigning to a global variable constrains its type, even if it is initialized with a polymorphic
+// value.  Therefore, it is forbidden to assign values of different types to a global variable.
+
+a x = [];
+
+Void main()
+{
+  x = 1:[];
+  x = True:[];
+  return;
+}

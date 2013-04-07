@@ -1,0 +1,10 @@
+// The return type of the function constrains all local variables to be of type $\text{Int}$, which
+// constrains the function argument to be also of type $\text{Int}$.
+
+Int f(var a)
+{
+  var x = y;
+  var y = z;
+  var z = a;
+  return z;
+}

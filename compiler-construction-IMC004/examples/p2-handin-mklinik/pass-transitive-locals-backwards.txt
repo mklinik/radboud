@@ -1,0 +1,9 @@
+Int f(Int a)
+{
+  Int x = y;
+  Int y = z;
+  Int z = a;
+  return z;
+}
+
+

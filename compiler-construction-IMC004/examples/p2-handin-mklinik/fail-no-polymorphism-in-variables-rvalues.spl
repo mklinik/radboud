@@ -1,0 +1,9 @@
+// Using a global variable in an expression constrains its type, even if it could be polymorphic.
+// This is the tradeoff we had to make for assignments to be sound.
+
+var x = [];
+
+fun f()
+{
+  return (1:x, True:x);
+}

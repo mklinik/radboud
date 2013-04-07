@@ -1,0 +1,11 @@
+b f(a x, a y)
+{
+  return g(y, x);
+}
+
+b g(a x, a y)
+{
+  return f(x, y);
+}
+
+

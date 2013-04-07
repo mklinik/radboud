@@ -1,0 +1,23 @@
+// It is possible to bind functions to local variables, assign to them, and call them.
+
+fun f([a] x)
+{
+  return False;
+}
+
+fun g([a] x)
+{
+  return True;
+}
+
+Void main()
+{
+  var h = f;
+  var x = [];
+  h(x);
+  h = g;
+  h(x);
+  h = isEmpty;
+  h(x);
+  return;
+}

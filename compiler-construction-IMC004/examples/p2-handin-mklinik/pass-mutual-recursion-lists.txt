@@ -1,0 +1,7 @@
+[Int] x = (head(y) : x);
+
+[Int] y = (head(x) : y);
+
+[Int] z = (1 : x);
+
+

@@ -551,6 +551,68 @@ There are a few open points in the current implementation.
 
 \section{Examples}
 
+\subsection{Examples for p2}
+
+This section contains descriptions for the example programs that accompany this
+document.  Each example is given in an .spl file, and the output of the compiler
+is given in a .txt file with the same filename.
+
+\begin{description}
+
+  \item[pass-fold-map.spl] Functions usually found in functional programming
+  \emph{foldl}, \emph{foldr}, \emph{map} and \emph{filter}.
+
+  \item[pass-mutual-recursion.spl] Two mutually recursive functions. The
+  arguments are flipped in the recursive calls, constraining their types to $(a
+  \arr a \arr b)$.
+
+  \item[pass-mutual-recursion-lists.spl] Two mutually recursive lists.  The
+  third list constrains all three of them to be of type $[\text{Int}]$.
+
+  \item[pass-polymorphism-mutual-recursion.spl] The polymorphic identity can be
+  instantiated differently in two mutually recursive functions.  This works only
+  because of the scope separator token, which causes $f$ and $g$ to be unified
+  independently of \emph{id}.  Removing the scope separator token gives a type
+  error.  See fail-polymorphism-mutual-recursion.spl
+
+  \item[fail-polymorphism-mutual-recursion.spl] The polymorphic identity cannot
+  be instantiated differently in two mutually recursive functions.  That is
+  because the types of all three functions are unified simultaneously.
+
+  \item[pass-transitive-locals-backwards.spl] The return type of the function
+  constrains all local variables to be of type $\text{Int}$, which constrains
+  the function argument to be also of type $\text{Int}$.
+
+  \item[fail-unknown-identifier.spl] Demonstrates the error message given when
+  an undefined identifier occurs in a program.
+
+  \item[fail-not-enough-function-arguments.spl] Demonstrates the error message
+  given when a function is called with too few arguments.
+
+  \item[fail-no-polymorphism-in-variables-lvalues.txt] Assigning to a global
+  variable constrains its type, even if it is initialized with a polymorphic
+  value.  Therefore, it is forbidden to assign values of different types to a
+  global variable.
+
+  \item[fail-no-polymorphism-in-variables-rvalues.spl] Using a global variable
+  in an expression constrains its type, even if it could be polymorphic.  This
+  is the tradeoff we had to make for assignments to be sound.
+
+  \item[pass-assignment-to-function.spl] It is possible to bind functions to
+  local variables, assign to them, and call them.
+
+  \item[shouldfail-assignment-to-function.spl] It should be forbidden to assign
+  to identifiers which are bound to global functions.  To be done.
+
+  \item[pass-return-function.spl] A function can return another function.
+
+  \item[fail-return-function.spl] It is not possible to directly call the return
+  value of a function that returns another function.
+
+\end{description}
+
+\subsection{Examples from p1}
+
 This section contains the compilation results for the provided examples.  One
 of them had to be slightly modified, because it contained non-capitalized
 boolen constants \texttt{true} and \texttt{false} instead of \texttt{True} and

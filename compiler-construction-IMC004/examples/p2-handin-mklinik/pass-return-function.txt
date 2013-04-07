@@ -1,0 +1,28 @@
+Int plus(Int x, Int y)
+{
+  return (x + y);
+}
+
+Int minus(Int x, Int y)
+{
+  return (x - y);
+}
+
+(Int Int -> Int) f(Bool x)
+{
+  if( x )
+    return plus;
+  else
+    return minus;
+}
+
+Void main()
+{
+  (Int Int -> Int) h = f(True);
+  (Int Int -> Int) i = f(False);
+  h(10, 20);
+  i(10, 20);
+  return;
+}
+
+

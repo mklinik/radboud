@@ -1,0 +1,12 @@
+// Two mutually recursive functions. The arguments are flipped in the recursive
+// calls, constraining their types to (a a -> b).
+
+a f(b x, c y)
+{
+  return g(y, x);
+}
+
+a g(b x, c y)
+{
+  return f(x, y);
+}
