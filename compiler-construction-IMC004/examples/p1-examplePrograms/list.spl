@@ -1,0 +1,6 @@
+//Jan  Groothuijse (e727426)
+Bool equals([a] a, [a] b) {
+	if (isEmpty(a) && isEmpty(b)) return True;
+	if (isEmpty(a) || isEmpty(b)) return False;
+	return (head(a) == head(b)) && equals (tail(a), tail(b));	
+}

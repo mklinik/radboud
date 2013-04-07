@@ -1,0 +1,10 @@
+//Jan  Groothuijse (e727426)
+Void keepGoingI (Int n) {
+	while (True) {
+		n = n + 1;
+	}
+}
+
+Void keepGoingR (Int n) {
+	return keepGoingR (n + 1);
+}
