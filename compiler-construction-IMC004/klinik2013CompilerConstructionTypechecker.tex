@@ -546,36 +546,42 @@ There are a few open points in the current implementation.
   \item Requiring the programmer to explicitly separate blocks of declarations
   could be automated by a dependency analysis.
 
-  \item Putting the inferred type information into the abstract syntax tree is
-  not implemented yet.  Instead, when type inference is successful, all global
-  definitions are printed on standard output, together with their inferred type.
-  Type variables in the inferred type are pretty-printed so they don't show up
-  as numbers.
-
 \end{itemize}
 
 
 \section{Examples}
 
-This section contains the compilation results for the provided examples.  Some
-of them had to be slightly modified, because they contained non-capitalized
+This section contains the compilation results for the provided examples.  One
+of them had to be slightly modified, because it contained non-capitalized
 boolen constants \texttt{true} and \texttt{false} instead of \texttt{True} and
 \texttt{False}.
 
 When parsing or type checking fails, the compiler prints an error message
 indicating the cause of the error.  When both these phases succeed, the compiler
-prints all global definitions, together with their inferred type.
+prettyprints the program, with inferred types instead of type annotations.
 
-Function types are pretty-printed as a space separated list of the argument
-types, followed by an arrow symbol, followed by the return type.  For example,
-the type of the constant function is printed as \texttt{(a b -> a)}, and the
-type of the main function as \texttt{( -> Void)}.
+Function types in error messages are pretty-printed as a space separated list
+of the argument types, followed by an arrow symbol, followed by the return
+type.  For example, the type of the constant function is printed as \texttt{(a
+b -> a)}, and the type of the main function as \texttt{( -> Void)}.
 
 \begin{verbatim}
 $ ./spl --typecheck -i examplePrograms/2D.spl
-scale : ((Int, Int) Int -> (Int, Int))
-transpose : ((Int, Int) (Int, Int) -> (Int, Int))
-foo : (Int -> (Int, Int))
+(Int, Int) foo(Int n)
+{
+  return (2, 2);
+}
+
+(Int, Int) transpose((Int, Int) p1, (Int, Int) p2)
+{
+  return ((fst(p1) + fst(p2)), (snd(p1) + snd(p2)));
+}
+
+(Int, Int) scale((Int, Int) p, Int scalar)
+{
+  return ((fst(p) * scalar), (snd(p) * scalar));
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/3D.spl
@@ -588,8 +594,19 @@ $ ./spl --typecheck -i examplePrograms/booleans.spl
 "Unknown identifier `null' at position 10:19"
 
 $ ./spl --typecheck -i examplePrograms/bool.spl
-implies : (Bool Bool -> Bool)
-xor : (Bool Bool -> Bool)
+Bool xor(Bool a, Bool b)
+{
+  return ((a || b) && !(a && b));
+}
+
+Bool implies(Bool a, Bool b)
+{
+  if( !a )
+    return True;
+  else
+    return b;
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/empty.spl
@@ -608,56 +625,260 @@ $ ./spl --typecheck -i examplePrograms/Example.spl
 "Couldn't match expected type `[Int]' with actual type `(a -> Int)' at position 21:55"
 
 $ ./spl --typecheck -i examplePrograms/factorial.spl
-fromTo : (Int Int -> [Int])
-product : ([Int] -> Int)
-facL : (Int -> Int)
-main : ( -> Void)
-facI : (Int -> Int)
-facR : (Int -> Int)
+Int facR(Int n)
+{
+  if( (n < 2) )
+    return 1;
+  else
+    return (n * facR((n - 1)));
+}
+
+Int facI(Int n)
+{
+  Int r = 1;
+  while( (n > 1) )
+  {
+    r = (r * n);
+    n = (n - 1);
+  }
+  return r;
+}
+
+Void main()
+{
+  Int n = 0;
+  Int facN = 1;
+  Bool ok = True;
+  while( (n < 20) )
+  {
+    facN = facR(n);
+    if( ((facN != facI(n)) || (facN != facL(n))) )
+    {
+      print((n : (facN : (facI(n) : (facL(n) : [])))));
+      ok = False;
+    }
+    else
+    {
+    }
+    n = (n + 1);
+  }
+  print(ok);
+}
+
+Int facL(Int n)
+{
+  return product(fromTo(1, n));
+}
+
+Int product([Int] list)
+{
+  if( isEmpty(list) )
+    return 1;
+  else
+    return (head(list) * product(tail(list)));
+}
+
+[Int] fromTo(Int from, Int to)
+{
+  if( (from <= to) )
+    return (from : fromTo((from + 1), to));
+  else
+    return [];
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/Fib.spl
-fib : (Int -> Int)
+Int fib(Int n)
+{
+  if( (n < 2) )
+    return 1;
+  else
+    return (fib((n - 1)) + fib((n - 2)));
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/integers.spl
-abs : (Int -> Int)
+Int abs(Int n)
+{
+  if( (n < 0) )
+    return -n;
+  else
+    return n;
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/list.spl
-equals : ([Int] [Int] -> Bool)
+Bool equals([Int] a, [Int] b)
+{
+  if( (isEmpty(a) && isEmpty(b)) )
+    return True;
+  else
+  {
+  }
+  if( (isEmpty(a) || isEmpty(b)) )
+    return False;
+  else
+  {
+  }
+  return ((head(a) == head(b)) && equals(tail(a), tail(b)));
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/lists.spl
-main : ( -> Void)
-product : ([Int] -> Int)
-sum : ([Int] -> Int)
-reverse : ([a] -> [a])
+[a] reverse([a] list)
+{
+  [a] accu = [];
+  while( !isEmpty(list) )
+  {
+    accu = (head(list) : accu);
+    list = tail(list);
+  }
+  return accu;
+}
+
+Int sum([Int] list)
+{
+  return (head(list) + sum(tail(list)));
+}
+
+Int product([Int] list)
+{
+  return (head(list) * product(tail(list)));
+}
+
+Void main()
+{
+  [Int] list = (1 : (3 : (5 : [])));
+  print(sum(list));
+  print(product(list));
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/mergeSort.spl
-main : ( -> Void)
-merge : ([Int] [Int] -> [Int])
-merge_sort : ([Int] -> [Int])
-merge_sort_aux : ([Int] -> [Int])
-split : ([Int] Int -> ([Int], [Int]))
-split_aux : ([Int] Int -> ([Int], [Int]))
-append : ([Int] Int -> [Int])
-length : ([Int] -> Int)
+Int length([Int] list)
+{
+  if( isEmpty(list) )
+    return 0;
+  else
+    return (1 + length(tail(list)));
+}
+
+[Int] append([Int] list, Int value)
+{
+  if( isEmpty(list) )
+    return (value : []);
+  else
+    return (head(list) : append(tail(list), value));
+}
+
+([Int], [Int]) split_aux([Int] list, Int n)
+{
+  ([a], [a]) tl = split(tail(list), (n - 1));
+  return ((head(list) : fst(tl)), snd(tl));
+}
+
+([Int], [Int]) split([Int] list, Int n)
+{
+  if( (isEmpty(list) || (n == 0)) )
+    return ([], list);
+  else
+    return split_aux(list, n);
+}
+
+[Int] merge_sort_aux([Int] m)
+{
+  Int middle = (length(m) / 2);
+  ([Int], [Int]) parts = split(m, middle);
+  [Int] left = fst(parts);
+  [Int] right = snd(parts);
+  left = merge_sort(left);
+  right = merge_sort(right);
+  return merge(left, right);
+}
+
+[Int] merge_sort([Int] m)
+{
+  if( (isEmpty(m) || isEmpty(tail(m))) )
+    return m;
+  else
+  {
+  }
+  return merge_sort_aux(m);
+}
+
+[Int] merge([Int] left, [Int] right)
+{
+  [Int] result = [];
+  while( !(isEmpty(left) || !isEmpty(right)) )
+  {
+    if( !(isEmpty(left) && !isEmpty(right)) )
+    {
+      if( (head(left) <= head(right)) )
+      {
+        result = append(result, head(left));
+        left = tail(left);
+      }
+      else
+      {
+        result = append(result, head(right));
+        right = tail(right);
+      }
+    }
+    else
+      if( !isEmpty(left) )
+      {
+        result = append(result, head(left));
+        left = tail(left);
+      }
+      else
+        if( !isEmpty(right) )
+        {
+          result = append(result, head(right));
+          right = tail(right);
+        }
+        else
+        {
+        }
+  }
+  return result;
+}
+
+Void main()
+{
+  [Int] list = (8 : (10 : (3 : (7 : (9 : (6 : (4 : (1 : (2 : (5 : []))))))))));
+  print(merge_sort(list));
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/mklinik.spl
-foobar : ( -> Int)
+Int foobar()
+{
+  return -10;
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/op.spl
-op2 : Bool
-op : Bool
-n : Int
+Int n = 5;
+
+Bool op = (((1 + (n / 2)) - (n % 2)) < n);
+
+Bool op2 = ((((1 + n) / 2) - (n % 2)) < n);
+
 
 
 $ ./spl --typecheck -i examplePrograms/pass_nested_expr.spl
-main : ( -> Int)
+Int main()
+{
+  return 5;
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/problematic_programs.spl
@@ -688,17 +909,41 @@ Expected  at position LineColPos 25 13 346 expecting one of [Comment, Whitespace
 
 
 $ ./spl --typecheck -i examplePrograms/while.spl
-keepGoingR : (Int -> Void)
-keepGoingI : (Int -> Void)
+Void keepGoingI(Int n)
+{
+  while( True )
+  {
+    n = (n + 1);
+  }
+}
+
+Void keepGoingR(Int n)
+{
+  return keepGoingR((n + 1));
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/whitespaces.spl
-tabbed : ( -> Void)
-CAPPS : (Int Bool -> Void)
+Void CAPPS(Int X, Bool S)
+{
+  X = 0;
+  S = True;
+  return;
+}
+
+Void tabbed()
+{
+  return;
+}
+
 
 
 $ ./spl --typecheck -i examplePrograms/x.spl
-xMarksTheSpot : (a -> a)
+a xMarksTheSpot(a x)
+{
+  return x;
+}
 \end{verbatim}
 
 
