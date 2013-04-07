@@ -557,6 +557,150 @@ There are a few open points in the current implementation.
 
 \section{Examples}
 
+This section contains the compilation results for the provided examples.  Some
+of them had to be slightly modified, because they contained non-capitalized
+boolen constants \texttt{true} and \texttt{false} instead of \texttt{True} and
+\texttt{False}.
+
+When parsing or type checking fails, the compiler prints an error message
+indicating the cause of the error.  When both these phases succeed, the compiler
+prints all global definitions, together with their inferred type.
+
+Function types are pretty-printed as a space separated list of the argument
+types, followed by an arrow symbol, followed by the return type.  For example,
+the type of the constant function is printed as \texttt{(a b -> a)}, and the
+type of the main function as \texttt{( -> Void)}.
+
+\begin{verbatim}
+$ ./spl --typecheck -i examplePrograms/2D.spl
+scale : ((Int, Int) Int -> (Int, Int))
+transpose : ((Int, Int) (Int, Int) -> (Int, Int))
+foo : (Int -> (Int, Int))
+
+
+$ ./spl --typecheck -i examplePrograms/3D.spl
+"Unknown identifier `first' at position 3:32"
+
+$ ./spl --typecheck -i examplePrograms/arguments.spl
+"Couldn't match expected type `(Int Bool [Int] -> [Int])' with actual type `( -> a)' at position 15:5"
+
+$ ./spl --typecheck -i examplePrograms/booleans.spl
+"Unknown identifier `null' at position 10:19"
+
+$ ./spl --typecheck -i examplePrograms/bool.spl
+implies : (Bool Bool -> Bool)
+xor : (Bool Bool -> Bool)
+
+
+$ ./spl --typecheck -i examplePrograms/empty.spl
+Failed parsing 'examplePrograms/empty.spl' :
+Expected  at position LineColPos 5 0 122 expecting one of [Comment, Whitespace, "[", "(", Identifier, "return", Identifier, Identifier, "while", "if", "{"] at 6:1 :
+                              v
+rseerd worden. Void main () { }  
+                              ^
+
+
+
+$ ./spl --typecheck -i examplePrograms/example10.spl
+"Unknown identifier `null' at position 10:16"
+
+$ ./spl --typecheck -i examplePrograms/Example.spl
+"Couldn't match expected type `[Int]' with actual type `(a -> Int)' at position 21:55"
+
+$ ./spl --typecheck -i examplePrograms/factorial.spl
+fromTo : (Int Int -> [Int])
+product : ([Int] -> Int)
+facL : (Int -> Int)
+main : ( -> Void)
+facI : (Int -> Int)
+facR : (Int -> Int)
+
+
+$ ./spl --typecheck -i examplePrograms/Fib.spl
+fib : (Int -> Int)
+
+
+$ ./spl --typecheck -i examplePrograms/integers.spl
+abs : (Int -> Int)
+
+
+$ ./spl --typecheck -i examplePrograms/list.spl
+equals : ([Int] [Int] -> Bool)
+
+
+$ ./spl --typecheck -i examplePrograms/lists.spl
+main : ( -> Void)
+product : ([Int] -> Int)
+sum : ([Int] -> Int)
+reverse : ([a] -> [a])
+
+
+$ ./spl --typecheck -i examplePrograms/mergeSort.spl
+main : ( -> Void)
+merge : ([Int] [Int] -> [Int])
+merge_sort : ([Int] -> [Int])
+merge_sort_aux : ([Int] -> [Int])
+split : ([Int] Int -> ([Int], [Int]))
+split_aux : ([Int] Int -> ([Int], [Int]))
+append : ([Int] Int -> [Int])
+length : ([Int] -> Int)
+
+
+$ ./spl --typecheck -i examplePrograms/mklinik.spl
+foobar : ( -> Int)
+
+
+$ ./spl --typecheck -i examplePrograms/op.spl
+op2 : Bool
+op : Bool
+n : Int
+
+
+$ ./spl --typecheck -i examplePrograms/pass_nested_expr.spl
+main : ( -> Int)
+
+
+$ ./spl --typecheck -i examplePrograms/problematic_programs.spl
+"Couldn't match expected type `(Int Int -> Int)' with actual type `(a b -> Void)' at position 8:53"
+
+$ ./spl --typecheck -i examplePrograms/problematic.spl
+"Couldn't match expected type `Int' with actual type `( -> Int)' at position 10:16"
+
+$ ./spl --typecheck -i examplePrograms/stress.spl
+Failed parsing 'examplePrograms/stress.spl' :
+Expected  at position LineColPos 10 1 367 expecting one of [Comment, Whitespace, "return", Identifier, Identifier, "while", "if", "{", "}"] at 11:2 :
+                              v
+rse as (!1):2, not !(1:2) */  [([foo],bar)] y = this_is_fine((1,(2,3)))
+                              ^
+
+
+
+$ ./spl --typecheck -i examplePrograms/SumProduct.spl
+"Couldn't match expected type `([Bool] -> Bool)' with actual type `(a -> Int)' at position 6:22"
+
+$ ./spl --typecheck -i examplePrograms/sum.spl
+Failed parsing 'examplePrograms/sum.spl' :
+Expected  at position LineColPos 25 13 346 expecting one of [Comment, Whitespace, "]"] at 26:14 :
+                              v
+}  Void main() {  print (sum([1:2:3:[]]));  print (sum1([1:2:3:[]]));  
+                              ^
+
+
+
+$ ./spl --typecheck -i examplePrograms/while.spl
+keepGoingR : (Int -> Void)
+keepGoingI : (Int -> Void)
+
+
+$ ./spl --typecheck -i examplePrograms/whitespaces.spl
+tabbed : ( -> Void)
+CAPPS : (Int Bool -> Void)
+
+
+$ ./spl --typecheck -i examplePrograms/x.spl
+xMarksTheSpot : (a -> a)
+\end{verbatim}
+
 
 \end{document}
 
