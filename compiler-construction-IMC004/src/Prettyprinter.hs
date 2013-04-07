@@ -3,6 +3,7 @@ module Prettyprinter where
 import Data.List (intersperse)
 
 import Ast
+import SplType
 
 prettyprint :: Prettyprint a => a -> String
 prettyprint a = pp 0 a ""
@@ -19,12 +20,33 @@ instance Prettyprint AstProgram where
     where
       ds = (foldl (.) id $ intersperse ("\n" ++) $ map (pp level) d) "\n"
 
+ppMaybeTyp :: Int -> AstDeclaration -> (String -> String)
+ppMaybeTyp level (AstVarDeclaration meta typ _ _) =
+  case inferredType meta of
+    Nothing -> pp level typ
+    Just t  -> pp level t
+
+ppMaybeTyp level (AstFunDeclaration meta typ name args _ _) = \s ->
+  case inferredType meta of
+    Just (SplFunctionType argTypes returnType) -> pp level returnType " " ++ name ++ "(" ++ argumentsNice argTypes ++ ")" ++ s
+    _ -> pp level typ " " ++ name ++ "(" ++ arguments ++ ")" ++ s
+  where
+    arguments = (foldl (.) id $ intersperse (", " ++) $ map (pp level) args) ""
+    argumentsNice argTypes = (foldl (.) id $ intersperse (", " ++) $ map (ppOneArg level) (zip args argTypes)) ""
+    ppOneArg :: Int -> (AstFunctionArgument, SplType) -> (String -> String)
+    ppOneArg level (AstFunctionArgument _ _ argName, argType) = \s -> pp level argType " " ++ argName ++ s
+
+
+
+  -- case inferredType meta of
+    -- Just (SplFunctionType _ returnType) -> pp level returnType
+    -- _ -> pp level typ
+
 instance Prettyprint AstDeclaration where
-  pp level (AstVarDeclaration _ typ ident expr) = \s -> replicate level ' ' ++ pp level typ " " ++ ident ++ " = " ++ pp level expr ";\n" ++ s
-  pp level (AstFunDeclaration _ typ ident args decls stmts) = \s ->
-      pp level typ " " ++ ident ++ "(" ++ arguments ++ ")" ++ "\n{\n" ++ declarations ++ statements ++ "}\n" ++ s
+  pp level ast@(AstVarDeclaration _ _ ident expr) = \s -> replicate level ' ' ++ ppMaybeTyp level ast " " ++ ident ++ " = " ++ pp level expr ";\n" ++ s
+  pp level ast@(AstFunDeclaration _ _ _ _ decls stmts) = \s ->
+    ppMaybeTyp level ast "\n{\n" ++ declarations ++ statements ++ "}\n" ++ s
     where
-      arguments = (foldl (.) id $ intersperse (", " ++) $ map (pp level) args) ""
       declarations = (foldl (.) id $ map (indent level) decls) ""
       statements = (foldl (.) id $ map (indent level) stmts) ""
 
@@ -35,8 +57,14 @@ instance Prettyprint AstType where
   pp level (TupleType _ a b) = \s -> "(" ++ pp level a ", " ++ pp level b ")" ++ s
   pp level (ListType _ t) = \s -> "[" ++ pp level t "]" ++ s
 
+ppMaybeTypArg :: Int -> AstFunctionArgument -> (String -> String)
+ppMaybeTypArg level (AstFunctionArgument meta typ _) =
+  case inferredType meta of
+    Nothing -> pp level typ
+    Just  t -> pp level t
+
 instance Prettyprint AstFunctionArgument where
-  pp level (AstFunctionArgument _ typ ident) = \s -> pp level typ " " ++ ident ++ s
+  pp level ast@(AstFunctionArgument _ _ ident) = \s -> ppMaybeTypArg level ast " " ++ ident ++ s
 
 instance Prettyprint AstExpr where
   pp _ (AstIdentifier _ ident) = (ident ++)
@@ -65,3 +93,6 @@ instance Prettyprint AstStatement where
 indent_ :: Int -> AstStatement -> (String -> String)
 indent_ level a@(AstBlock _) = pp level a -- Blocks don't need to be indented ...
 indent_ level a = indent level a          -- ... but everything else does.
+
+instance Prettyprint SplType where
+  pp _ t = \s -> prettyprintType t ++ s

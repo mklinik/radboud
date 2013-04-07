@@ -208,16 +208,37 @@ quantify env t =
     if null freeVars then t else (SplForall (nub freeVars) t)
 
 
+class AssignType a where
+  assignType :: Environment -> a -> Typecheck a
+
+instance AssignType a => AssignType [a] where
+  assignType env list = mapM (assignType env) list
+
+instance AssignType AstDeclaration where
+  assignType env (AstVarDeclaration meta astType name expr) = do
+    t <- envLookup meta name env
+    return $ AstVarDeclaration (meta { inferredType = Just t }) astType name expr
+  assignType env (AstFunDeclaration meta returnType name formalArgs decls body) = do
+    t <- envLookup meta name env
+    -- formalArgs2 <- assignType env formalArgs
+    return $ AstFunDeclaration (meta { inferredType = Just t }) returnType name formalArgs decls body
+
+instance AssignType AstFunctionArgument where
+  assignType env (AstFunctionArgument meta astType name) = do
+    t <- envLookup meta name env
+    return $ AstFunctionArgument (meta { inferredType = Just t }) astType name
+
+
 class InferType a where
-  inferType :: Environment -> a -> SplType -> Typecheck (Unifier, Environment)
+  inferType :: Environment -> a -> SplType -> Typecheck (Unifier, Environment, a)
 
 
 instance InferType a => InferType [a] where
-  inferType env [] _ = return (emptyUnifier, env)
+  inferType env [] _ = return (emptyUnifier, env, [])
   inferType env (x:xs) s = do
-    (u,env2) <- inferType env x s
-    (u2,env3) <- inferType (substitute u env2) xs (substitute u s)
-    return (u2 . u, env3)
+    (u,env2,y) <- inferType env x s
+    (u2,env3,ys) <- inferType (substitute u env2) xs (substitute u s)
+    return (u2 . u, env3, y:ys)
 
 mapSnd :: (a -> b) -> (c, a) -> (c, b)
 mapSnd f (c, a) = (c, f a)
@@ -243,7 +264,7 @@ inferDecls env decls = do
 
       blaat _ u [] = return u
       blaat e u ((d,a):rest) = do
-        (u1,_) <- inferType (substitute u e) d (substitute u a)
+        (u1,_,_) <- inferType (substitute u e) d (substitute u a)
         u2 <- blaat e (u1 . u) rest
         return (u2 . u1 . u)
 
@@ -251,100 +272,113 @@ inferDecls env decls = do
       doQuantify (AstFunDeclaration _ _ _ _ _ _) = quantify
 
 instance InferType AstProgram where
-  inferType env (AstProgram []) _ = return (emptyUnifier, env)
+  inferType env ast@(AstProgram []) _ = return (emptyUnifier, env, ast)
   inferType env (AstProgram (decls:declss)) s = do
     (_, env2) <- inferDecls env decls
-    inferType env2 (AstProgram declss) s
+    (u, env3, (AstProgram progg)) <- inferType env2 (AstProgram declss) s
+    decls2 <- assignType env2 decls
+    return (u, env3, AstProgram $ decls2:progg)
 
 
 instance InferType AstDeclaration where
-  inferType env (AstVarDeclaration _ _ _ expr) s = do
-    inferType env expr s
+  inferType env ast@(AstVarDeclaration _ _ _ expr) s = do
+    (u, _, _) <- inferType env expr s
+    return (u, env, ast)
 
-  inferType env (AstFunDeclaration meta returnType _ formalArgs localDecls body) s = do
+  inferType env ast@(AstFunDeclaration meta returnType _ formalArgs localDecls body) s = do
     splArgs <- mapM (\((AstFunctionArgument _ typ nam)) -> astType2splType typ >>= return . (,) nam) formalArgs
     splReturnType <- astType2splType returnType
     let env2 = foldl (flip $ uncurry envAdd) env splArgs :: Environment
     let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
     (u, env3) <- inferDecls env2 localDecls
-    (u2,_) <- inferType env3 (AstBlock body) (substitute u splReturnType)
+    (u2,_,_) <- inferType env3 (AstBlock body) (substitute u splReturnType)
     u3 <- unify meta (substitute (u2 . u) s) (substitute (u2 . u) splFunctionType)
-    return (u3 . u2 . u, env)
+    return (u3 . u2 . u, env, ast)
 
 
 instance InferType AstStatement where
-  inferType env (AstReturn meta Nothing) s = do
+  inferType env ast@(AstReturn meta Nothing) s = do
     u <- unify meta s splTypeVoid
-    return (u, env)
-  inferType env (AstReturn _ (Just expr)) s = do
-    (u,_) <- inferType env expr s
-    return (u, env)
+    return (u, env, ast)
+  inferType env ast@(AstReturn _ (Just expr)) s = do
+    (u,_,_) <- inferType env expr s
+    return (u, env, ast)
 
-  inferType env (AstIfThenElse _ astCondition thenStmt elseStmt) s = do
-    (u1,_) <- inferType env astCondition splTypeBool
-    (u2,_) <- inferType (substitute u1 env) thenStmt (substitute u1 s)
-    (u3,_) <- inferType (substitute (u2 . u1) env) elseStmt (substitute (u2 . u1) s)
-    return (u3 . u2 . u1, env)
+  inferType env ast@(AstIfThenElse _ astCondition thenStmt elseStmt) s = do
+    (u1,_,_) <- inferType env astCondition splTypeBool
+    (u2,_,_) <- inferType (substitute u1 env) thenStmt (substitute u1 s)
+    (u3,_,_) <- inferType (substitute (u2 . u1) env) elseStmt (substitute (u2 . u1) s)
+    return (u3 . u2 . u1, env, ast)
 
-  inferType env (AstBlock []) _ = return (emptyUnifier, env)
-  inferType env (AstBlock (stmt:stmts)) s = do
-    (u,_) <- inferType env stmt s
-    (u2,_) <- inferType (substitute u env) (AstBlock stmts) (substitute u s)
-    return (u2 . u, env)
+  inferType env ast@(AstBlock []) _ = return (emptyUnifier, env, ast)
+  inferType env ast@(AstBlock (stmt:stmts)) s = do
+    (u,_,_) <- inferType env stmt s
+    (u2,_,_) <- inferType (substitute u env) (AstBlock stmts) (substitute u s)
+    return (u2 . u, env, ast)
 
-  inferType env (AstWhile _ condition body) s = do
-    (u,_) <- inferType env condition splTypeBool
-    (u2,_) <- inferType (substitute u env) body (substitute u s)
-    return (u2 . u, env)
+  inferType env ast@(AstWhile _ condition body) s = do
+    (u,_,_) <- inferType env condition splTypeBool
+    (u2,_,_) <- inferType (substitute u env) body (substitute u s)
+    return (u2 . u, env, ast)
 
   inferType env (AstAssignment meta name expr) _ = do
     nameType <- envLookup meta name env
-    inferType env expr nameType
+    (u, _, expr2) <- inferType env expr nameType
+    return (u, env, AstAssignment (meta { inferredType = Just splTypeVoid }) name expr2)
 
   inferType env (AstFunctionCallStmt f) _ = do
     a <- fresh -- return value is discarded and doesnt matter
-    inferType env f a
+    (u, _, f2) <- inferType env f a
+    return (u, env, AstFunctionCallStmt f2)
 
 
 instance InferType AstExpr where
-  inferType env (AstIdentifier meta name) s = do
+  inferType env ast@(AstIdentifier meta name) s = do
     typ <- envLookup meta name env
     u <- unify meta s typ
-    return (u, env)
+    return (u, env, ast)
 
-  inferType env (AstBoolean meta _) s = do
+  inferType env ast@(AstBoolean meta _) s = do
     u <- unify meta s splTypeBool
-    return (u, env)
+    return (u, env, ast)
 
-  inferType env (AstInteger meta _) s = do
+  inferType env ast@(AstInteger meta _) s = do
     u <- unify meta s splTypeInt
-    return (u, env)
+    return (u, env, ast)
 
-  inferType env (AstFunctionCallExpr f) s = inferType env f s
+  inferType env ast@(AstFunctionCallExpr f) s = do
+    (u, _, _) <- inferType env f s
+    return (u, env, ast)
 
-  inferType env (AstEmptyList meta) s = inferType env (AstIdentifier meta "[]") s
-  inferType env (AstBinOp meta name lhs rhs) s = inferType env (AstFunctionCall meta name [lhs, rhs]) s
-  inferType env (AstUnaryOp meta name arg) s = inferType env (AstFunctionCall meta ("unary " ++ name) [arg]) s
-  inferType env (AstTuple meta aExpr bExpr) s = do
+  inferType env ast@(AstEmptyList meta) s = do
+    (u, _, _) <- inferType env (AstIdentifier meta "[]") s
+    return (u, env, ast)
+  inferType env ast@(AstBinOp meta name lhs rhs) s = do
+    (u, _, _) <- inferType env (AstFunctionCall meta name [lhs, rhs]) s
+    return (u, env, ast)
+  inferType env ast@(AstUnaryOp meta name arg) s = do
+    (u, _, _) <- inferType env (AstFunctionCall meta ("unary " ++ name) [arg]) s
+    return (u, env, ast)
+  inferType env ast@(AstTuple meta aExpr bExpr) s = do
     a <- fresh
     b <- fresh
-    (u1,_) <- inferType env aExpr a
-    (u2,_) <- inferType (substitute u1 env) bExpr b
+    (u1,_,_) <- inferType env aExpr a
+    (u2,_,_) <- inferType (substitute u1 env) bExpr b
     u3 <- unify meta (substitute (u2 . u1) s) (substitute (u2 . u1) $ SplTupleType a b)
-    return (u3 . u2 . u1, env)
+    return (u3 . u2 . u1, env, ast)
 
 instance InferType AstFunctionCall where
-  inferType env (AstFunctionCall meta name actualArgs) s = do
+  inferType env ast@(AstFunctionCall meta name actualArgs) s = do
     freshArgTypes <- mapM (\arg -> fresh >>= return . (,) arg) actualArgs :: Typecheck [(AstExpr, SplType)]
     functionType <- envLookup meta name env
     u <- unify meta functionType (SplFunctionType (map snd freshArgTypes) s)
     u2 <- blaat (substitute u env) (substitute u freshArgTypes)
-    return (u2 . u, env)
+    return (u2 . u, env, ast)
     where
       blaat :: Environment -> [(AstExpr, SplType)] -> Typecheck Unifier
       blaat _ [] = return emptyUnifier
       blaat e ((expr,typ):xs) = do
-        (u,_) <- inferType e expr typ
+        (u,_,_) <- inferType e expr typ
         u2 <- blaat (substitute u e) (substitute u xs)
         return (u2 . u)
 
@@ -374,11 +408,11 @@ defaultEnvironment = do
 apply_ :: a -> (a -> a) -> a
 apply_ x f = f x
 
-typecheck :: AstProgram -> Typecheck Environment
+typecheck :: AstProgram -> Typecheck (Environment, AstProgram)
 typecheck prog = do
   e <- defaultEnvironment
-  (_, env) <- inferType e prog splTypeVoid
-  return $ env `without` e
+  (_, env, prog2) <- inferType e prog splTypeVoid
+  return (env `without` e, prog2)
 
 without :: Environment -> Environment -> Environment
 without env e =

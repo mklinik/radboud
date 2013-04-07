@@ -2,10 +2,12 @@
 module Ast where
 
 import Text.ParserCombinators.UU.BasicInstances as UU
+import SplType
 
 -- Meta information for ast nodes
 data AstMeta = AstMeta
   { sourceLocation :: UU.LineColPos
+  , inferredType :: Maybe SplType
   }
   deriving (Show)
 
@@ -13,7 +15,10 @@ instance Eq AstMeta where
   (==) _ _ = True
 
 emptyMeta :: AstMeta
-emptyMeta = AstMeta { sourceLocation = UU.LineColPos 0 0 0 }
+emptyMeta = AstMeta
+  { sourceLocation = UU.LineColPos 0 0 0
+  , inferredType = Nothing
+  }
 
 data AstProgram = AstProgram [[AstDeclaration]]
   deriving (Show, Eq)

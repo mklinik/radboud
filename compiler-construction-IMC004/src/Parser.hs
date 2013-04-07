@@ -22,7 +22,7 @@ pDeclaration :: SplParser AstDeclaration
 pDeclaration = pVarDeclaration <|> pFunDeclaration
 
 pSourceLocation :: SplParser AstMeta
-pSourceLocation = (\s -> AstMeta { sourceLocation = UU.pos s }) <$> pState
+pSourceLocation = (\s -> AstMeta { sourceLocation = UU.pos s, inferredType = Nothing }) <$> pState
 
 pVarDeclaration :: SplParser AstDeclaration
 pVarDeclaration = AstVarDeclaration <$> pSourceLocation <*> pType defaultBaseTypes <* pSpace <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"

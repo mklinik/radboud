@@ -93,7 +93,7 @@ typecheck ast =
   in
     case result of
     Left err -> Left $ show err
-    Right env -> Right $ TC.prettyprintGlobals env
+    Right (env, ast2) -> Right $ TC.prettyprintGlobals env ++ prettyprint ast2
 
 cleanUp :: Options -> IO ()
 cleanUp opts = do
