@@ -23,7 +23,7 @@ instance Prettyprint AstProgram where
 
 ppMaybeTyp :: Int -> AstDeclaration -> (String -> String)
 ppMaybeTyp level (AstVarDeclaration meta typ _ _) =
-  case inferredType meta of
+  case fmap makeNiceAutoTypeVariables (inferredType meta) of
     Nothing -> pp level typ
     Just t  -> pp level t
 
