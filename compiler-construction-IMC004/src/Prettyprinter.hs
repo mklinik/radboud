@@ -4,6 +4,7 @@ import Data.List (intersperse)
 
 import Ast
 import SplType
+import Typechecker
 
 prettyprint :: Prettyprint a => a -> String
 prettyprint a = pp 0 a ""
@@ -27,14 +28,14 @@ ppMaybeTyp level (AstVarDeclaration meta typ _ _) =
     Just t  -> pp level t
 
 ppMaybeTyp level (AstFunDeclaration meta typ name args _ _) = \s ->
-  case inferredType meta of
+  case fmap makeNiceAutoTypeVariables (inferredType meta) of
     Just (SplFunctionType argTypes returnType) -> pp level returnType " " ++ name ++ "(" ++ argumentsNice argTypes ++ ")" ++ s
     _ -> pp level typ " " ++ name ++ "(" ++ arguments ++ ")" ++ s
   where
     arguments = (foldl (.) id $ intersperse (", " ++) $ map (pp level) args) ""
     argumentsNice argTypes = (foldl (.) id $ intersperse (", " ++) $ map (ppOneArg level) (zip args argTypes)) ""
     ppOneArg :: Int -> (AstFunctionArgument, SplType) -> (String -> String)
-    ppOneArg level (AstFunctionArgument _ _ argName, argType) = \s -> pp level argType " " ++ argName ++ s
+    ppOneArg lev (AstFunctionArgument _ _ argName, argType) = \s -> pp lev argType " " ++ argName ++ s
 
 
 
