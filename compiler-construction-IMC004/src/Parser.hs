@@ -25,7 +25,7 @@ pSourceLocation :: SplParser AstMeta
 pSourceLocation = (\s -> AstMeta { sourceLocation = UU.pos s }) <$> pState
 
 pVarDeclaration :: SplParser AstDeclaration
-pVarDeclaration = AstVarDeclaration <$> pSourceLocation <*> pType defaultBaseTypes <* some pSpace <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
+pVarDeclaration = AstVarDeclaration <$> pSourceLocation <*> pType defaultBaseTypes <* pSpace <*> pIdentifier <* pSymbol "=" <*> pExpr <* pSymbol ";"
 
 defaultBaseTypes :: [String]
 defaultBaseTypes = ["Int", "Bool"]

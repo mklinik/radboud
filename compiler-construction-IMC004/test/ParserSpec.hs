@@ -161,7 +161,7 @@ spec = do
 
   describe "pVarDeclaration" $ do
     let p = parse pVarDeclaration
-    it "integer variable" $ p "Int x = 5;" `shouldBe` AstVarDeclaration emptyMeta (BaseType emptyMeta "Int") "x" (AstInteger emptyMeta 5)
+    it "integer variable" $ p "Int    x = 5;" `shouldBe` AstVarDeclaration emptyMeta (BaseType emptyMeta "Int") "x" (AstInteger emptyMeta 5)
     -- it "integer variable" $ p "Int x = 5" `shouldThrow` anyException
 
   describe "pStatement" $ do
