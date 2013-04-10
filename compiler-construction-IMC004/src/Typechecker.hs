@@ -213,6 +213,7 @@ astType2splType t = do
 
 
 data Quantify = Quantify String SplType (Bool, AstMeta)
+  deriving (Show)
 
 instance InferType Quantify where
   inferType env q@(Quantify name typ (doQuantify, meta)) _ = do
@@ -276,9 +277,10 @@ inferDecls env decls = do
     (un, decls2) <- blaat env_ emptyUnifier $ zip decls (map (\(Quantify _ t _) -> t) freshVars)
     -- let quantifiedVars = map (\((name, typ), quant) -> (name, quant (substitute un env) $ substitute un typ)) freshVars -- apply quantify to all types
     -- quantifiedVars <- mapM (quantify (substitute un env) un) freshVars -- apply quantify to all types
-    (u2, _, quantifiedVars) <- inferType (substitute un env) freshVars splTypeVoid
-    decls3 <- assignType (substitute (u2 . un) env_) decls2
+    (u2, _, quantifiedVars) <- inferType (substitute un env) freshVars splTypeVoid -- apply quantify to all types
     let env3 = foldl (flip $ uncurry envAdd) (substitute (u2 . un) env) $ map (\(Quantify n t _) -> (n, t)) quantifiedVars
+    -- decls3 <- assignType (substitute (u2 . un) env_) decls2
+    decls3 <- assignType env3 $ decls2
     return (u2 . un, substitute (u2 . un) env3, decls3)
 
     where

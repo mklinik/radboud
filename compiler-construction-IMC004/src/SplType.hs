@@ -31,7 +31,7 @@ prettyprintType :: SplType -> String
 prettyprintType (SplBaseType BaseTypeInt) = "Int"
 prettyprintType (SplBaseType BaseTypeBool) = "Bool"
 prettyprintType (SplBaseType BaseTypeVoid) = "Void"
-prettyprintType (SplBaseType (BaseTypeDummy s)) = s
+prettyprintType (SplBaseType (BaseTypeDummy s)) = "?" ++ s
 prettyprintType (SplTypeVariable v) = v
 prettyprintType (SplTupleType x y) = "(" ++ prettyprintType x ++ ", " ++ prettyprintType y ++ ")"
 prettyprintType (SplListType x) = "[" ++ prettyprintType x ++ "]"
