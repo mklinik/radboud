@@ -50,6 +50,13 @@ fresh = do
   lift $ put $ env { nextAutoVar = i+1 }
   return $ SplTypeVariable ("<" ++ show i ++ ">")
 
+freshDummyType :: Typecheck SplType
+freshDummyType = do
+  env <- lift get
+  let i = nextAutoVar env
+  lift $ put $ env { nextAutoVar = i+1 }
+  return $ SplBaseType $ BaseTypeDummy ("<" ++ show i ++ ">")
+
 type Unifier = SplType -> SplType
 
 emptyUnifier :: Unifier
@@ -205,15 +212,27 @@ astType2splType t = do
     right $ SplFunctionType argTypes_ returnType_
 
 
-quantify :: Environment -> Unifier -> ((String, SplType), (Bool, AstMeta)) -> Typecheck (String, SplType)
-quantify env u ((name, t_), (doQuantify, meta)) = do
-  let t = substitute u t_
-  let freeVars = typeVars t \\ envFreeTypeVars env
-  if doQuantify then
-    if null freeVars then right (name, t) else right (name, SplForall (nub freeVars) t)
-  else
-    if null freeVars then right (name, t) else left $ PolymorphicVariable name meta
+data Quantify = Quantify String SplType (Bool, AstMeta)
 
+instance InferType Quantify where
+  inferType env q@(Quantify name typ (doQuantify, meta)) _ = do
+    let freeVars = typeVars typ \\ envFreeTypeVars env
+    if doQuantify then
+      if null freeVars
+        then right $ (emptyUnifier, env, q)
+        else right $ (emptyUnifier, env, Quantify name (SplForall (nub freeVars) typ) (doQuantify, meta))
+    else
+      if null freeVars
+        then right $ (emptyUnifier, env, q)
+        else do
+          u <- mkDummyTypes freeVars
+          right $ (u, env, Quantify name (substitute u typ) (doQuantify, meta))
+
+mkDummyTypes :: [String] -> Typecheck Unifier
+mkDummyTypes freeVars = do
+  freshDummyTypes <- mapM (\v -> freshDummyType >>= right . (,) v) freeVars
+  let u = foldl (.) id $ map (uncurry mkSubstitution) freshDummyTypes
+  return u
 
 class AssignType a where
   assignType :: Environment -> a -> Typecheck a
@@ -251,15 +270,16 @@ mapSnd f (c, a) = (c, f a)
 
 inferDecls :: Environment -> [AstDeclaration] -> Typecheck (Unifier, Environment, [AstDeclaration])
 inferDecls env decls = do
-    freshVars <- mapM (\d -> claimedType d >>= \t -> return ((declName d, t), doQuantify d)) decls
-      :: Typecheck [((String, SplType), (Bool, AstMeta))]
-    let env_ = foldl (flip $ uncurry envAdd) env $ map fst freshVars
-    (un, decls2) <- blaat env_ emptyUnifier $ zip decls (map (snd . fst) freshVars)
-    decls3 <- assignType (substitute un env_) decls2
+    freshVars <- mapM (\d -> claimedType d >>= \t -> return (Quantify (declName d) t (doQuantify d))) decls
+      :: Typecheck [Quantify]
+    let env_ = foldl (flip $ uncurry envAdd) env $ map (\(Quantify n t _) -> (n, t)) freshVars
+    (un, decls2) <- blaat env_ emptyUnifier $ zip decls (map (\(Quantify _ t _) -> t) freshVars)
     -- let quantifiedVars = map (\((name, typ), quant) -> (name, quant (substitute un env) $ substitute un typ)) freshVars -- apply quantify to all types
-    quantifiedVars <- mapM (quantify (substitute un env) un) freshVars -- apply quantify to all types
-    let env3 = foldl (flip $ uncurry envAdd) (substitute un env) quantifiedVars
-    return (un, env3, decls3)
+    -- quantifiedVars <- mapM (quantify (substitute un env) un) freshVars -- apply quantify to all types
+    (u2, _, quantifiedVars) <- inferType (substitute un env) freshVars splTypeVoid
+    decls3 <- assignType (substitute (u2 . un) env_) decls2
+    let env3 = foldl (flip $ uncurry envAdd) (substitute (u2 . un) env) $ map (\(Quantify n t _) -> (n, t)) quantifiedVars
+    return (u2 . un, substitute (u2 . un) env3, decls3)
 
     where
       declName (AstVarDeclaration _ _ name _) = name
@@ -270,6 +290,7 @@ inferDecls env decls = do
         let argTypes = map (\(AstFunctionArgument _ typ _) -> typ) formalArgs
         astType2splType $ FunctionType argTypes returnType
 
+      blaat :: Environment -> Unifier -> [(AstDeclaration, SplType)] -> Typecheck (Unifier, [AstDeclaration])
       blaat _ u [] = return (u,[])
       blaat e u ((d,a):rest) = do
         (u1,_,d2) <- inferType (substitute u e) d (substitute u a)
