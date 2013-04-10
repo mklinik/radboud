@@ -13,13 +13,17 @@ import Ast
 type SplParser a = P (UU.Str Char String UU.LineColPos) a
 type SplParserTrafo a b = SplParser a -> SplParser b
 
-pScopeSeparator = pSymbol "====="
-
 pProgram :: SplParser AstProgram
-pProgram = AstProgram <$ lexeme (pure ()) <* opt pScopeSeparator "" <*> pListSep pScopeSeparator (some pDeclaration)
+pProgram = AstProgram <$ lexeme (pure ()) <*> some pDeclaration
 
-pDeclaration :: SplParser AstDeclaration
-pDeclaration = pVarDeclaration <|> pFunDeclaration
+pDeclaration :: SplParser [AstDeclaration]
+pDeclaration =  ((:[]) <$> pSingleDecl) <|> pFunDeclBlock
+
+pSingleDecl :: SplParser AstDeclaration
+pSingleDecl = pVarDeclaration <|> pFunDeclaration
+
+pFunDeclBlock :: SplParser [AstDeclaration]
+pFunDeclBlock = pSymbol "{" *> many pFunDeclaration <* pSymbol "}"
 
 pSourceLocation :: SplParser AstMeta
 pSourceLocation = (\s -> AstMeta { sourceLocation = UU.pos s, inferredType = Nothing }) <$> pState
