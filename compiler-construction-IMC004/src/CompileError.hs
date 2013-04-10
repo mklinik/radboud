@@ -8,6 +8,7 @@ data CompileError
   = TypeError SplType SplType LineColPos
   | UnknownIdentifier String AstMeta
   | ParseError String
+  | PolymorphicVariable String AstMeta
   | InternalError String
 
 -- default show LineColPos is not nice

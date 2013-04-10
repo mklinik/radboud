@@ -36,6 +36,9 @@ instance Show CompileError where
     "Unknown identifier `" ++ ident ++ "' " ++ (position $ sourceLocation meta)
   show (ParseError message) = message
   show (InternalError x) = "Internal error `" ++ x ++ "'" -- should never happen, but you know...
+  show (PolymorphicVariable name meta) = "Variables cannot be polymorphic. Please specify a concrete type for `"
+    ++ name ++ "' "
+    ++ (position $ sourceLocation meta)
 
 noConstraints :: Constraints
 noConstraints = []
@@ -202,10 +205,14 @@ astType2splType t = do
     right $ SplFunctionType argTypes_ returnType_
 
 
-quantify :: Environment -> SplType -> SplType
-quantify env t =
-  let freeVars = typeVars t \\ envFreeTypeVars env in
-    if null freeVars then t else (SplForall (nub freeVars) t)
+quantify :: Environment -> Unifier -> ((String, SplType), (Bool, AstMeta)) -> Typecheck (String, SplType)
+quantify env u ((name, t_), (doQuantify, meta)) = do
+  let t = substitute u t_
+  let freeVars = typeVars t \\ envFreeTypeVars env
+  if doQuantify then
+    if null freeVars then right (name, t) else right (name, SplForall (nub freeVars) t)
+  else
+    if null freeVars then right (name, t) else left $ PolymorphicVariable name meta
 
 
 class AssignType a where
@@ -245,11 +252,12 @@ mapSnd f (c, a) = (c, f a)
 inferDecls :: Environment -> [AstDeclaration] -> Typecheck (Unifier, Environment, [AstDeclaration])
 inferDecls env decls = do
     freshVars <- mapM (\d -> claimedType d >>= \t -> return ((declName d, t), doQuantify d)) decls
-      :: Typecheck [((String, SplType), Environment -> SplType -> SplType)]
+      :: Typecheck [((String, SplType), (Bool, AstMeta))]
     let env_ = foldl (flip $ uncurry envAdd) env $ map fst freshVars
     (un, decls2) <- blaat env_ emptyUnifier $ zip decls (map (snd . fst) freshVars)
     decls3 <- assignType (substitute un env_) decls2
-    let quantifiedVars = map (\((name, typ), quant) -> (name, quant (substitute un env) $ substitute un typ)) freshVars -- apply quantify to all types
+    -- let quantifiedVars = map (\((name, typ), quant) -> (name, quant (substitute un env) $ substitute un typ)) freshVars -- apply quantify to all types
+    quantifiedVars <- mapM (quantify (substitute un env) un) freshVars -- apply quantify to all types
     let env3 = foldl (flip $ uncurry envAdd) (substitute un env) quantifiedVars
     return (un, env3, decls3)
 
@@ -268,14 +276,16 @@ inferDecls env decls = do
         (u2,rest2) <- blaat e (u1 . u) rest
         return (u2 . u1 . u, d2:rest2)
 
-      doQuantify (AstVarDeclaration _ _ _ _) = flip const -- dont quantify variable declarations
-      doQuantify (AstFunDeclaration _ _ _ _ _ _) = quantify
+      doQuantify (AstVarDeclaration meta _ _ _) = (False, meta) -- dont quantify variable declarations
+      doQuantify (AstFunDeclaration meta _ _ _ _ _) = (True, meta)
 
 instance InferType AstProgram where
   inferType env ast@(AstProgram []) _ = return (emptyUnifier, env, ast)
   inferType env (AstProgram (decls:declss)) s = do
     (_, env2, decls2) <- inferDecls env decls
     (u, env3, (AstProgram progg)) <- inferType env2 (AstProgram declss) s
+    --  ^-- at this point, I have to check if there are polymorphic variables, not in quantify! That's too early.
+    --  Some variables declared with type variables may be constrained to monomorphic types
     return (u, env3, AstProgram $ decls2:progg)
 
 
@@ -291,6 +301,9 @@ instance InferType AstDeclaration where
     let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
     (u, env3, localDecls2) <- inferDecls env2 localDecls
     (u2,_,_) <- inferType env3 (AstBlock body) (substitute u splReturnType)
+    --    ^-- at this point, I have to check if there are polymorphic
+    -- variables, not in inferDecls/quantify! That's too early.  Some variables
+    -- declared with type variables may be constrained to monomorphic types
     u3 <- unify meta (substitute (u2 . u) s) (substitute (u2 . u) splFunctionType)
     localDecls3 <- assignType (substitute (u3.u2.u) env3) localDecls2
     return (u3 . u2 . u, env, AstFunDeclaration meta returnType name formalArgs localDecls3 body)
