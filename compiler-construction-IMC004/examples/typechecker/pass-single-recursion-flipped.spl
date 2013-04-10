@@ -1,0 +1,7 @@
+// The arguments are flipped in the recursive call, which must constrain the
+// type of f to be (a a -> b)
+
+fun f(x x, y y)
+{
+  return f(y, x);
+}
