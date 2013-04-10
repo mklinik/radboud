@@ -461,9 +461,6 @@ runTypecheck t = evalState (runEitherT t) emptyTypecheckState
 
 prettyprintGlobals :: Environment -> String
 prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show (makeNiceAutoTypeVariables typ) ++ "\n") env
--- prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show typ ++ "\n") (env `without` defEnv)
-  where defEnv = unRight $ runTypecheck defaultEnvironment
-        unRight (Right x) = x
 
 -- Replaces auto-type variables with letters from a-z
 makeNiceAutoTypeVariables :: SplType -> SplType
