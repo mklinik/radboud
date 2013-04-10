@@ -1,0 +1,14 @@
+[a] list = [];
+
+Void assign([a] l)
+{
+  list = l;
+  return;
+}
+
+Void main()
+{
+  assign(1:[]);
+  assign(True:[]);
+  return;
+}

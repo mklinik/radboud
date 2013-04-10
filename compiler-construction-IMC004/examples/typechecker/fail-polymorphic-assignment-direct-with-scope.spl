@@ -1,0 +1,10 @@
+[a] list = [];
+
+=====
+
+Void main()
+{
+  list = 1:[];
+  list = True:[];
+  return;
+}
