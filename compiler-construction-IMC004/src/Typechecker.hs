@@ -40,9 +40,6 @@ instance Show CompileError where
     ++ name ++ "' "
     ++ (position $ sourceLocation meta)
 
-noConstraints :: Constraints
-noConstraints = []
-
 fresh :: Typecheck SplType
 fresh = do
   env <- lift get
