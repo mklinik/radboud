@@ -47,13 +47,6 @@ fresh = do
   lift $ put $ env { nextAutoVar = i+1 }
   return $ SplTypeVariable ("<" ++ show i ++ ">")
 
-freshDummyType :: Typecheck SplType
-freshDummyType = do
-  env <- lift get
-  let i = nextAutoVar env
-  lift $ put $ env { nextAutoVar = i+1 }
-  return $ SplBaseType $ BaseTypeDummy ("<" ++ show i ++ ">")
-
 type Unifier = SplType -> SplType
 
 emptyUnifier :: Unifier
@@ -222,15 +215,7 @@ instance InferType Quantify where
     else
       if null freeVars
         then right $ (emptyUnifier, env, q)
-        else do
-          u <- mkDummyTypes freeVars
-          right $ (u, env, Quantify name (substitute u typ) (doQuantify, meta))
-
-mkDummyTypes :: [String] -> Typecheck Unifier
-mkDummyTypes freeVars = do
-  freshDummyTypes <- mapM (\v -> freshDummyType >>= right . (,) v) freeVars
-  let u = foldl (.) id $ map (uncurry mkSubstitution) freshDummyTypes
-  return u
+        else left $ PolymorphicVariable name meta
 
 class AssignType a where
   assignType :: Environment -> a -> Typecheck a
