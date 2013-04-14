@@ -58,16 +58,20 @@ emptyTypecheckState = TypecheckState
   }
 
 envLookup :: AstMeta -> String -> Environment -> Typecheck SplType
-envLookup meta ident [] = left $ UnknownIdentifier ident meta
-envLookup meta ident ((name,typ):env)
-  | ident == name =
-      case typ of
-        (SplForall vars t1) -> do
-          freshVars <- mapM (\var -> fresh >>= return . (,) var) vars
-          let u2 = foldl (\u (v, a) -> u . mkSubstitution v a) id freshVars
-          right $ substitute u2 t1
-        _ -> right typ
-  | otherwise     = envLookup meta ident env
+envLookup meta ident env = do
+  typ <- envLookupBare meta ident env
+  case typ of
+    (SplForall vars t1) -> do
+      freshVars <- mapM (\var -> fresh >>= return . (,) var) vars
+      let u2 = foldl (\u (v, a) -> u . mkSubstitution v a) id freshVars
+      right $ substitute u2 t1
+    _ -> right typ
+
+envLookupBare :: AstMeta -> String -> Environment -> Typecheck SplType
+envLookupBare meta ident [] = left $ UnknownIdentifier ident meta
+envLookupBare meta ident ((name,typ):env)
+  | ident == name = right typ
+  | otherwise     = envLookupBare meta ident env
 
 makeFreshTypeVariables :: SplType -> Typecheck Unifier
 makeFreshTypeVariables t = do
@@ -103,13 +107,22 @@ instance Substitute SplType where
   substitute u (SplTupleType x y) = SplTupleType (substitute u x) (substitute u y)
   substitute u (SplListType x) = SplListType (substitute u x)
   substitute u (SplFunctionType argTypes returnType) = SplFunctionType (map (substitute u) argTypes) (substitute u returnType)
-  substitute u (SplForall vars t) = SplForall vars $ substitute u t
+  -- don't substitute under quantifiers. This is okay, because there never are free variables in quantified types
+  substitute u (SplForall vars t) = SplForall vars t
 
-instance Substitute a => Substitute (b, a) where
-  substitute u (b, a) = (b, substitute u a)
+-- Takes care of substitution in tuples, lists, Maybe, etc.
+instance (Functor b, Substitute a) => Substitute (b a) where
+  substitute u a = fmap (substitute u) a
 
-instance Substitute a => Substitute [a] where
-  substitute u l = map (substitute u) l
+instance Substitute AstMeta where
+  substitute u meta = meta { inferredType = substitute u (inferredType meta) }
+
+instance Substitute AstProgram where
+  substitute u (AstProgram decls) = AstProgram (substitute u decls)
+
+instance Substitute AstDeclaration where
+  substitute u (AstVarDeclaration meta typ name expr) = AstVarDeclaration (substitute u meta) typ name expr
+  substitute u (AstFunDeclaration meta typ name args locals body) = AstFunDeclaration (substitute u meta) typ name args locals body
 
 unify :: AstMeta -> SplType -> SplType -> Typecheck Unifier
 unify _ (SplBaseType BaseTypeInt) (SplBaseType BaseTypeInt) = return id
@@ -205,6 +218,9 @@ astType2splType t = do
 data Quantify = Quantify String SplType (Bool, AstMeta)
   deriving (Show)
 
+instance Substitute Quantify where
+  substitute u (Quantify name typ foo) = Quantify name (substitute u typ) foo
+
 instance InferType Quantify where
   inferType env q@(Quantify name typ (doQuantify, meta)) _ = do
     let freeVars = typeVars typ \\ envFreeTypeVars env
@@ -212,10 +228,7 @@ instance InferType Quantify where
       if null freeVars
         then right $ (emptyUnifier, env, q)
         else right $ (emptyUnifier, env, Quantify name (SplForall (nub freeVars) typ) (doQuantify, meta))
-    else
-      if null freeVars
-        then right $ (emptyUnifier, env, q)
-        else left $ PolymorphicVariable name meta
+    else right $ (emptyUnifier, env, q)
 
 class AssignType a where
   assignType :: Environment -> a -> Typecheck a
@@ -225,17 +238,11 @@ instance AssignType a => AssignType [a] where
 
 instance AssignType AstDeclaration where
   assignType env (AstVarDeclaration meta astType name expr) = do
-    t <- envLookup meta name env
+    t <- envLookupBare meta name env
     return $ AstVarDeclaration (meta { inferredType = Just t }) astType name expr
   assignType env (AstFunDeclaration meta returnType name formalArgs decls body) = do
-    t <- envLookup meta name env
+    t <- envLookupBare meta name env
     return $ AstFunDeclaration (meta { inferredType = Just t }) returnType name formalArgs decls body
-
-instance AssignType AstFunctionArgument where
-  assignType env (AstFunctionArgument meta astType name) = do
-    t <- envLookup meta name env
-    return $ AstFunctionArgument (meta { inferredType = Just t }) astType name
-
 
 class InferType a where
   inferType :: Environment -> a -> SplType -> Typecheck (Unifier, Environment, a)
@@ -255,14 +262,11 @@ inferDecls :: Environment -> [AstDeclaration] -> Typecheck (Unifier, Environment
 inferDecls env decls = do
     freshVars <- mapM (\d -> claimedType d >>= \t -> return (Quantify (declName d) t (doQuantify d))) decls
       :: Typecheck [Quantify]
-    let env_ = foldl (flip $ uncurry envAdd) env $ map (\(Quantify n t _) -> (n, t)) freshVars
-    (un, decls2) <- blaat env_ emptyUnifier $ zip decls (map (\(Quantify _ t _) -> t) freshVars)
-    -- let quantifiedVars = map (\((name, typ), quant) -> (name, quant (substitute un env) $ substitute un typ)) freshVars -- apply quantify to all types
-    -- quantifiedVars <- mapM (quantify (substitute un env) un) freshVars -- apply quantify to all types
-    (u2, _, quantifiedVars) <- inferType (substitute un env) freshVars splTypeVoid -- apply quantify to all types
-    let env3 = foldl (flip $ uncurry envAdd) (substitute (u2 . un) env) $ map (\(Quantify n t _) -> (n, t)) quantifiedVars
-    -- decls3 <- assignType (substitute (u2 . un) env_) decls2
-    decls3 <- assignType env3 $ decls2
+    let env_ = foldl (flip $ uncurry envAdd) env $ map (\(Quantify n t _) -> (n, t)) freshVars -- put fresh types in environment
+    (un, decls2) <- blaat env_ emptyUnifier $ zip decls (map (\(Quantify _ t _) -> t) freshVars) -- infer declarations
+    (u2, _, quantifiedVars) <- inferType (substitute un env) (substitute un freshVars) splTypeVoid -- apply quantify to all types
+    let env3 = foldl (flip $ uncurry envAdd) (substitute (u2 . un) env) $ map (\(Quantify n t _) -> (n, t)) quantifiedVars -- put inferred types to environment
+    decls3 <- assignType env3 decls2
     return (u2 . un, substitute (u2 . un) env3, decls3)
 
     where
@@ -442,7 +446,8 @@ runTypecheck :: (Typecheck a) -> Either CompileError a
 runTypecheck t = evalState (runEitherT t) emptyTypecheckState
 
 prettyprintGlobals :: Environment -> String
-prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show (makeNiceAutoTypeVariables typ) ++ "\n") env
+-- prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show (makeNiceAutoTypeVariables typ) ++ "\n") env
+prettyprintGlobals env = concatMap (\(name, typ) -> name ++ " : " ++ show typ ++ "\n") env
 
 -- Replaces auto-type variables with letters from a-z
 makeNiceAutoTypeVariables :: SplType -> SplType

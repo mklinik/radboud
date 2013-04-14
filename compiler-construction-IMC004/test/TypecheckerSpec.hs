@@ -89,8 +89,8 @@ spec = do
         "Variables cannot be polymorphic. Please specify a concrete type for `x' at position 1:1"
 
     let mutualFandG = unlines
-            ["a f(b x, c y) { return g(y, x); }"
-            ,"a g(b x, c y) { return f(x, y); }"
+            ["{a f(b x, c y) { return g(y, x); }"
+            ,"a g(b x, c y) { return f(x, y); }}"
             ]
 
     it "can infer mutual recursive functions" $ do
@@ -103,7 +103,7 @@ spec = do
     it "infers that x must be a tuple" $ do
       typeOf "f" "Int f(a x) { return fst(x); }" `shouldBe` "((Int, a) -> Int)"
 
-    let identity = "a id(a x) { return x; } ===== "
+    let identity = "a id(a x) { return x; }"
 
     it "can use different instantiations of globals in tuples" $ do
       typeOf "x" (identity ++ "a x = (   10,     True );") `shouldBe` "(Int, Bool)"
@@ -162,7 +162,7 @@ spec = do
     it "infers that the identity becomes (Int -> Int) when applied to Int in body" $ do
       typeOf "id" "a id(a x) { id(1); return x; }" `shouldBe` "(Int -> Int)"
     it "infers that the identity stays (a -> a) when applied to int outside body" $ do
-      typeOf "id" "a id(a x) { return x; } ===== Int y = id(1);" `shouldBe` "(a -> a)"
+      typeOf "id" "a id(a x) { return x; } Int y = id(1);" `shouldBe` "(a -> a)"
 
     it "fails extracting an Int from a tuple of Bools" $ do
       typeOf "x" "Int x = fst((True, True));" `shouldBe`
