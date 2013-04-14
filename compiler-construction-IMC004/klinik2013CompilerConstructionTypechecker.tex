@@ -272,24 +272,24 @@ decisions discussed so far are described in the following section.
 First, we change the production rule for SPL programs as follows:
 
 \begin{IEEEeqnarray*}{rCl}
-\text{Prog} & ::= & \text{Decl}\!+\ \text{Scope}*\\
-\text{Scope} & ::= & `\text{=====}`\ \text{Decl}\!+
+\text{Prog} & ::= & \text{Decl}\!+\\
+\text{Decl} & ::= & \text{SingleDecl}\ |\ \text{FunDeclBlock}\\
+\text{SingleDecl} & ::= & \text{VarDecl}\ |\ \text{FunDecl}\\
+\text{FunDeclBlock} & ::= & `\{`\ \text{FunDecl}\!+ `\}`
 \end{IEEEeqnarray*}
 
-An SPL program is therefore a list of blocks of declarations, which are
-separated by a token consisting of five equal signs.  This is of course to be
-considered as a proof-of-concept, rather than something that can be handed out
-to real programmers.
+An SPL program is therefore a list of declarations, where a declaration is
+either a single variable or function declaration, or a block of function
+declarations.
 
 The scoping rules for global identifiers are then as follows.
 
 \begin{itemize}
 
-  \item All identifiers within the same block of declarations are visible
+  \item All identifiers within a block of declarations are visible
   simultaneously to each other.
 
-  \item Identifiers from earlier blocks are visible in later blocks, but not
-  vice versa.
+  \item Identifiers defined earlier are visible later, but not vice versa.
 
   \item When a name collision occurs, the earlier declaration is silently
   shadowed.  There are no error or warning messages yet.
@@ -310,9 +310,10 @@ correctly typed, when given as follows.
 
 \begin{verbatim}
 a id(a x) { return x; }
-=====
+{
 a f(b x, c y) { id(10); return g(y, x); }
 a g(b x, c y) { id(True); return f(x, y); }
+}
 \end{verbatim}
 
 The function \emph{id}, gets type $\forall a .  (a \arr a)$, and $f$ and $g$

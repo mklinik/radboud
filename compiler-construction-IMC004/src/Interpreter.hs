@@ -62,6 +62,7 @@ envAdd _ _ _ = error "envAdd: fatal error"
 
 envAddDeclaration :: (String -> Value -> Environment -> Environment) -> Environment -> AstDeclaration -> Spl Environment
 envAddDeclaration doAdd env (AstVarDeclaration _ _ name expression) = do
+  lift $ put env
   value <- eval expression
   lift $ return $ doAdd name value env
 envAddDeclaration doAdd env (AstFunDeclaration _ _ name formalArgs localVars body) = do
