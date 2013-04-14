@@ -25,10 +25,10 @@ instance Prettyprint AstProgram where
       (startToken,middleToken,endToken) = if length d > 1 then ("{", "", "}\n") else ("", "\n", "\n")
 
 ppMaybeTyp :: Int -> AstDeclaration -> (String -> String)
-ppMaybeTyp level (AstVarDeclaration meta typ _ _) =
+ppMaybeTyp level (AstVarDeclaration meta typ name _) =
   case fmap makeNiceAutoTypeVariables (inferredType meta) of
     Nothing -> pp level typ
-    Just t  -> pp level t
+    Just t  -> \s -> "\n// " ++ name ++ " : " ++ pp level (inferredType meta) "\n" ++ pp level t s
 
 ppMaybeTyp level (AstFunDeclaration meta typ name args _ _) = \s ->
   case fmap makeNiceAutoTypeVariables (inferredType meta) of
