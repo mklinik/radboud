@@ -1,5 +1,5 @@
 Failed parsing 'fail-return-function.spl' :
-Expected  at position LineColPos 20 9 175 expecting one of [Comment, Whitespace, ";"] at 21:10 :
+Expected  at position LineColPos 22 9 277 expecting one of [Comment, Whitespace, ";"] at 23:10 :
                               v
 us; }  Void main() {   f(True)(10, 20);   f(False)(10, 20);   return; }
                               ^
