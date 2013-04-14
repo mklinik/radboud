@@ -606,10 +606,10 @@ is given in a .txt file with the same filename.
   allowed.
 
   \item[pass-polymorphism-mutual-recursion.spl] The polymorphic identity can be
-  instantiated differently in two mutually recursive functions.  This works only
-  because of the scope separator token, which causes $f$ and $g$ to be unified
-  independently of \emph{id}.  Removing the scope separator token gives a type
-  error.  See fail-polymorphism-mutual-recursion.spl
+  instantiated differently in two mutually recursive functions.  This works
+  because $f$ and $g$ are marked to be unified together, but independently of
+  \emph{id}.  Removing the braces around $f$ and $g$ gives a type error.  See
+  fail-polymorphism-mutual-recursion.spl
 
   \item[fail-polymorphism-mutual-recursion.spl] The polymorphic identity cannot
   be instantiated differently in two mutually recursive functions.  That is

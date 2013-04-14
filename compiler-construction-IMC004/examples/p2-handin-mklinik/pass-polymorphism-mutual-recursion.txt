@@ -1,18 +1,23 @@
+
+// id : forall <3>, (<3> -> <3>)
 a id(a x)
 {
   return x;
 }
 
+{
+// f : forall <19> <21>, (<19> <19> -> <21>)
 b f(a x, a y)
 {
   id(10);
   return g(y, x);
 }
 
+// g : forall <19> <21>, (<19> <19> -> <21>)
 b g(a x, a y)
 {
   id(True);
   return f(x, y);
 }
-
+}
 
