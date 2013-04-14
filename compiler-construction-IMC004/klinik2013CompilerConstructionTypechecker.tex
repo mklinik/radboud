@@ -226,8 +226,7 @@ constraints due to upcoming deadlines.
 
 Another issue is polymorphic type inference in presence of assignments.  The
 question is whether to all-quantify free type variables in local and global
-variables.  To illustrate the problem, consider the following, not well-typed,
-program.
+variables.  To illustrate the problem, consider the following program.
 
 \begin{verbatim}
 fun f() {
@@ -263,6 +262,36 @@ fun f() {
 
 In the current implementation of the type checker for SPL, we adopt this
 restriction, and accept the tradeoff.
+
+Special care must be taken for function arguments involved in assignments.
+Consider the following program.
+
+\begin{verbatim}
+var x = [];
+fun f(y y, z z) {
+  x = y;
+  return z;
+}
+Void main() {
+  f(True:[], True);
+  f(10:[], 10);
+  return;
+}
+\end{verbatim}
+
+To be sound, we must preclude the type of $y$ to be generalized when $f$ is
+introduced to the environment.  Otherwise, it would be possible to use the
+all-quantification of $f$ to assign values of different types to the global $x$.
+Fortunately, this is easy.  By adopting the value restriction, the type of $x$
+is not all-quantified, which means it's type has a free variable.  It gets type,
+say, $[z]$, where $z$ is fresh.  The algorithm then generalizes the free
+variables of functions only if they are not free in the environment.  In the
+example above, the type of $y$ is constrained to the type of $x$, which has a
+free type variable, so the type of $f$ would be $\forall a . ([z] \arr a \arr
+a)$, where z is the same fresh type variable used for the type of $x$.  This
+way, the type of the first argument of $f$ and the type of $x$ are constrained
+together, which will give a type error in one of the two calls of $f$ in
+\emph{main}.
 
 The scoping rules implied by the design
 decisions discussed so far are described in the following section.
