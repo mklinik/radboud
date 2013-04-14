@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+
 module Prettyprinter where
 
 import Data.List (intersperse)
@@ -19,7 +21,7 @@ instance Prettyprint AstProgram where
   pp _ (AstProgram []) = id
   pp level (AstProgram (d:decls)) = \s -> ds ++ pp level (AstProgram decls) s
     where
-      ds = (foldl (.) id $ intersperse ("\n" ++) $ map (pp level) d) "\n"
+      ds = "{" ++ (foldl (.) id $ intersperse ("\n" ++) $ map (pp level) d) "}\n"
 
 ppMaybeTyp :: Int -> AstDeclaration -> (String -> String)
 ppMaybeTyp level (AstVarDeclaration meta typ _ _) =
@@ -29,7 +31,9 @@ ppMaybeTyp level (AstVarDeclaration meta typ _ _) =
 
 ppMaybeTyp level (AstFunDeclaration meta typ name args _ _) = \s ->
   case fmap makeNiceAutoTypeVariables (inferredType meta) of
-    Just (SplFunctionType argTypes returnType) -> pp level returnType " " ++ name ++ "(" ++ argumentsNice argTypes ++ ")" ++ s
+    Just (SplFunctionType argTypes returnType) ->
+      "\n// " ++ name ++ " : " ++ pp level (inferredType meta) "\n" ++
+        pp level returnType " " ++ name ++ "(" ++ argumentsNice argTypes ++ ")" ++ s
     _ -> pp level typ " " ++ name ++ "(" ++ arguments ++ ")" ++ s
   where
     arguments = (foldl (.) id $ intersperse (", " ++) $ map (pp level) args) ""
@@ -37,11 +41,9 @@ ppMaybeTyp level (AstFunDeclaration meta typ name args _ _) = \s ->
     ppOneArg :: Int -> (AstFunctionArgument, SplType) -> (String -> String)
     ppOneArg lev (AstFunctionArgument _ _ argName, argType) = \s -> pp lev argType " " ++ argName ++ s
 
-
-
-  -- case inferredType meta of
-    -- Just (SplFunctionType _ returnType) -> pp level returnType
-    -- _ -> pp level typ
+instance Prettyprint (Maybe SplType) where
+  pp level Nothing = id
+  pp level (Just t) = \s -> prettyprintType t ++ s
 
 instance Prettyprint AstDeclaration where
   pp level ast@(AstVarDeclaration _ _ ident expr) = \s -> replicate level ' ' ++ ppMaybeTyp level ast " " ++ ident ++ " = " ++ pp level expr ";\n" ++ s
