@@ -674,129 +674,22 @@ type.  For example, the type of the constant function is printed as \texttt{(a
 b -> a)}, and the type of the main function as \texttt{( -> Void)}.
 
 \begin{verbatim}
-$ ./spl --typecheck -i examplePrograms/2D.spl
-(Int, Int) foo(Int n)
-{
-  return (2, 2);
-}
-
-(Int, Int) transpose((Int, Int) p1, (Int, Int) p2)
-{
-  return ((fst(p1) + fst(p2)), (snd(p1) + snd(p2)));
-}
-
-(Int, Int) scale((Int, Int) p, Int scalar)
-{
-  return ((fst(p) * scalar), (snd(p) * scalar));
-}
-
-
-
-$ ./spl --typecheck -i examplePrograms/3D.spl
-"Unknown identifier `first' at position 3:32"
-
-$ ./spl --typecheck -i examplePrograms/arguments.spl
+$ ./spl --typecheck -i examples/p1-examplePrograms/arguments.spl
 "Couldn't match expected type `(Int Bool [Int] -> [Int])' with actual type `( -> a)' at position 15:5"
 
-$ ./spl --typecheck -i examplePrograms/booleans.spl
-"Unknown identifier `null' at position 10:19"
+$ ./spl --typecheck -i examples/p1-examplePrograms/x.spl
 
-$ ./spl --typecheck -i examplePrograms/bool.spl
-Bool xor(Bool a, Bool b)
+// xMarksTheSpot : forall <3>, (<3> -> <3>)
+a xMarksTheSpot(a x)
 {
-  return ((a || b) && !(a && b));
-}
-
-Bool implies(Bool a, Bool b)
-{
-  if( !a )
-    return True;
-  else
-    return b;
+  return x;
 }
 
 
 
-$ ./spl --typecheck -i examplePrograms/empty.spl
-Failed parsing 'examplePrograms/empty.spl' :
-Expected  at position LineColPos 5 0 122 expecting one of [Comment, Whitespace, "[", "(", Identifier, "return", Identifier, Identifier, "while", "if", "{"] at 6:1 :
-                              v
-rseerd worden. Void main () { }  
-                              ^
+$ ./spl --typecheck -i examples/p1-examplePrograms/Fib.spl
 
-
-
-$ ./spl --typecheck -i examplePrograms/example10.spl
-"Unknown identifier `null' at position 10:16"
-
-$ ./spl --typecheck -i examplePrograms/Example.spl
-"Couldn't match expected type `[Int]' with actual type `(a -> Int)' at position 21:55"
-
-$ ./spl --typecheck -i examplePrograms/factorial.spl
-Int facR(Int n)
-{
-  if( (n < 2) )
-    return 1;
-  else
-    return (n * facR((n - 1)));
-}
-
-Int facI(Int n)
-{
-  Int r = 1;
-  while( (n > 1) )
-  {
-    r = (r * n);
-    n = (n - 1);
-  }
-  return r;
-}
-
-Void main()
-{
-  Int n = 0;
-  Int facN = 1;
-  Bool ok = True;
-  while( (n < 20) )
-  {
-    facN = facR(n);
-    if( ((facN != facI(n)) || (facN != facL(n))) )
-    {
-      print((n : (facN : (facI(n) : (facL(n) : [])))));
-      ok = False;
-    }
-    else
-    {
-    }
-    n = (n + 1);
-  }
-  print(ok);
-}
-
-Int facL(Int n)
-{
-  return product(fromTo(1, n));
-}
-
-Int product([Int] list)
-{
-  if( isEmpty(list) )
-    return 1;
-  else
-    return (head(list) * product(tail(list)));
-}
-
-[Int] fromTo(Int from, Int to)
-{
-  if( (from <= to) )
-    return (from : fromTo((from + 1), to));
-  else
-    return [];
-}
-
-
-
-$ ./spl --typecheck -i examplePrograms/Fib.spl
+// fib : (Int -> Int)
 Int fib(Int n)
 {
   if( (n < 2) )
@@ -807,18 +700,193 @@ Int fib(Int n)
 
 
 
-$ ./spl --typecheck -i examplePrograms/integers.spl
-Int abs(Int n)
+$ ./spl --typecheck -i examples/p1-examplePrograms/2D.spl
+
+// foo : (Int -> (Int, Int))
+(Int, Int) foo(Int n)
 {
-  if( (n < 0) )
-    return -n;
-  else
-    return n;
+  return (2, 2);
+}
+
+
+// transpose : ((Int, Int) (Int, Int) -> (Int, Int))
+(Int, Int) transpose((Int, Int) p1, (Int, Int) p2)
+{
+  return ((fst(p1) + fst(p2)), (snd(p1) + snd(p2)));
+}
+
+
+// scale : ((Int, Int) Int -> (Int, Int))
+(Int, Int) scale((Int, Int) p, Int scalar)
+{
+  return ((fst(p) * scalar), (snd(p) * scalar));
 }
 
 
 
-$ ./spl --typecheck -i examplePrograms/list.spl
+$ ./spl --typecheck -i examples/p1-examplePrograms/Example.spl
+"Couldn't match expected type `[Int]' with actual type `(a -> Int)' at position 21:55"
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/whitespaces.spl
+
+// CAPPS : (Int Bool -> Void)
+Void CAPPS(Int X, Bool S)
+{
+  X = 0;
+  S = True;
+  return;
+}
+
+
+// tabbed : ( -> Void)
+Void tabbed()
+{
+  return;
+}
+
+
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/lists.spl
+
+// reverse : forall <3>, ([<3>] -> [<3>])
+[a] reverse([a] list)
+{
+  // accu : [<3>]
+  [a] accu = [];
+  while( !isEmpty(list) )
+  {
+    accu = (head(list) : accu);
+    list = tail(list);
+  }
+  return accu;
+}
+
+
+// sum : ([Int] -> Int)
+Int sum([Int] list)
+{
+  return (head(list) + sum(tail(list)));
+}
+
+
+// product : ([Int] -> Int)
+Int product([Int] list)
+{
+  return (head(list) * product(tail(list)));
+}
+
+
+// main : ( -> Void)
+Void main()
+{
+  // list : [Int]
+  [Int] list = (1 : (3 : (5 : [])));
+  print(sum(list));
+  print(product(list));
+}
+
+
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/stress.spl
+Failed parsing 'examples/p1-examplePrograms/stress.spl' :
+Expected  at position LineColPos 10 1 367 expecting one of [Comment, Whitespace, "return", Identifier, Identifier, "while", "if", "{", "}"] at 11:2 :
+                              v
+rse as (!1):2, not !(1:2) */  [([foo],bar)] y = this_is_fine((1,(2,3)))
+                              ^
+
+
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/SumProduct.spl
+
+// sum : ([Int] -> Int)
+Int sum([Int] list)
+{
+  if( isEmpty(list) )
+    return 0;
+  else
+  {
+  }
+  return (head(list) + sum(tail(list)));
+}
+
+
+// product : ([Int] -> Int)
+Int product([Int] list)
+{
+  if( isEmpty(list) )
+    return 1;
+  else
+  {
+  }
+  return (head(list) * sum(tail(list)));
+}
+
+
+// sum : ([Bool] -> Bool)
+Bool sum([Bool] list)
+{
+  if( isEmpty(list) )
+    return False;
+  else
+  {
+  }
+  return (head(list) || sum(tail(list)));
+}
+
+
+// product : ([Bool] -> Bool)
+Bool product([Bool] list)
+{
+  if( isEmpty(list) )
+    return True;
+  else
+  {
+  }
+  return (head(list) && sum(tail(list)));
+}
+
+
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/problematic_programs.spl
+"Couldn't match expected type `(Int Int -> Int)' with actual type `(a b -> Void)' at position 8:53"
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/factorial.spl
+"Unknown identifier `facL' at position 33:36"
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/booleans.spl
+"Unknown identifier `null' at position 10:19"
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/pass_nested_expr.spl
+
+// main : ( -> Int)
+Int main()
+{
+  return 5;
+}
+
+
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/empty.spl
+Failed parsing 'examples/p1-examplePrograms/empty.spl' :
+Expected  at position LineColPos 5 0 122 expecting one of [Comment, Whitespace, "[", "(", Identifier, "return", Identifier, Identifier, "while", "if", "{"] at 6:1 :
+                              v
+rseerd worden. Void main () { }  
+                              ^
+
+
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/problematic.spl
+"Couldn't match expected type `Int' with actual type `( -> Int)' at position 10:16"
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/3D.spl
+"Unknown identifier `first' at position 3:32"
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/example10.spl
+"Unknown identifier `null' at position 10:16"
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/list.spl
+
+// equals : ([Int] [Int] -> Bool)
 Bool equals([Int] a, [Int] b)
 {
   if( (isEmpty(a) && isEmpty(b)) )
@@ -836,187 +904,9 @@ Bool equals([Int] a, [Int] b)
 
 
 
-$ ./spl --typecheck -i examplePrograms/lists.spl
-[a] reverse([a] list)
-{
-  [a] accu = [];
-  while( !isEmpty(list) )
-  {
-    accu = (head(list) : accu);
-    list = tail(list);
-  }
-  return accu;
-}
+$ ./spl --typecheck -i examples/p1-examplePrograms/while.spl
 
-Int sum([Int] list)
-{
-  return (head(list) + sum(tail(list)));
-}
-
-Int product([Int] list)
-{
-  return (head(list) * product(tail(list)));
-}
-
-Void main()
-{
-  [Int] list = (1 : (3 : (5 : [])));
-  print(sum(list));
-  print(product(list));
-}
-
-
-
-$ ./spl --typecheck -i examplePrograms/mergeSort.spl
-Int length([Int] list)
-{
-  if( isEmpty(list) )
-    return 0;
-  else
-    return (1 + length(tail(list)));
-}
-
-[Int] append([Int] list, Int value)
-{
-  if( isEmpty(list) )
-    return (value : []);
-  else
-    return (head(list) : append(tail(list), value));
-}
-
-([Int], [Int]) split_aux([Int] list, Int n)
-{
-  ([a], [a]) tl = split(tail(list), (n - 1));
-  return ((head(list) : fst(tl)), snd(tl));
-}
-
-([Int], [Int]) split([Int] list, Int n)
-{
-  if( (isEmpty(list) || (n == 0)) )
-    return ([], list);
-  else
-    return split_aux(list, n);
-}
-
-[Int] merge_sort_aux([Int] m)
-{
-  Int middle = (length(m) / 2);
-  ([Int], [Int]) parts = split(m, middle);
-  [Int] left = fst(parts);
-  [Int] right = snd(parts);
-  left = merge_sort(left);
-  right = merge_sort(right);
-  return merge(left, right);
-}
-
-[Int] merge_sort([Int] m)
-{
-  if( (isEmpty(m) || isEmpty(tail(m))) )
-    return m;
-  else
-  {
-  }
-  return merge_sort_aux(m);
-}
-
-[Int] merge([Int] left, [Int] right)
-{
-  [Int] result = [];
-  while( !(isEmpty(left) || !isEmpty(right)) )
-  {
-    if( !(isEmpty(left) && !isEmpty(right)) )
-    {
-      if( (head(left) <= head(right)) )
-      {
-        result = append(result, head(left));
-        left = tail(left);
-      }
-      else
-      {
-        result = append(result, head(right));
-        right = tail(right);
-      }
-    }
-    else
-      if( !isEmpty(left) )
-      {
-        result = append(result, head(left));
-        left = tail(left);
-      }
-      else
-        if( !isEmpty(right) )
-        {
-          result = append(result, head(right));
-          right = tail(right);
-        }
-        else
-        {
-        }
-  }
-  return result;
-}
-
-Void main()
-{
-  [Int] list = (8 : (10 : (3 : (7 : (9 : (6 : (4 : (1 : (2 : (5 : []))))))))));
-  print(merge_sort(list));
-}
-
-
-
-$ ./spl --typecheck -i examplePrograms/mklinik.spl
-Int foobar()
-{
-  return -10;
-}
-
-
-
-$ ./spl --typecheck -i examplePrograms/op.spl
-Int n = 5;
-
-Bool op = (((1 + (n / 2)) - (n % 2)) < n);
-
-Bool op2 = ((((1 + n) / 2) - (n % 2)) < n);
-
-
-
-$ ./spl --typecheck -i examplePrograms/pass_nested_expr.spl
-Int main()
-{
-  return 5;
-}
-
-
-
-$ ./spl --typecheck -i examplePrograms/problematic_programs.spl
-"Couldn't match expected type `(Int Int -> Int)' with actual type `(a b -> Void)' at position 8:53"
-
-$ ./spl --typecheck -i examplePrograms/problematic.spl
-"Couldn't match expected type `Int' with actual type `( -> Int)' at position 10:16"
-
-$ ./spl --typecheck -i examplePrograms/stress.spl
-Failed parsing 'examplePrograms/stress.spl' :
-Expected  at position LineColPos 10 1 367 expecting one of [Comment, Whitespace, "return", Identifier, Identifier, "while", "if", "{", "}"] at 11:2 :
-                              v
-rse as (!1):2, not !(1:2) */  [([foo],bar)] y = this_is_fine((1,(2,3)))
-                              ^
-
-
-
-$ ./spl --typecheck -i examplePrograms/SumProduct.spl
-"Couldn't match expected type `([Bool] -> Bool)' with actual type `(a -> Int)' at position 6:22"
-
-$ ./spl --typecheck -i examplePrograms/sum.spl
-Failed parsing 'examplePrograms/sum.spl' :
-Expected  at position LineColPos 25 13 346 expecting one of [Comment, Whitespace, "]"] at 26:14 :
-                              v
-}  Void main() {  print (sum([1:2:3:[]]));  print (sum1([1:2:3:[]]));  
-                              ^
-
-
-
-$ ./spl --typecheck -i examplePrograms/while.spl
+// keepGoingI : (Int -> Void)
 Void keepGoingI(Int n)
 {
   while( True )
@@ -1025,6 +915,8 @@ Void keepGoingI(Int n)
   }
 }
 
+
+// keepGoingR : (Int -> Void)
 Void keepGoingR(Int n)
 {
   return keepGoingR((n + 1));
@@ -1032,25 +924,69 @@ Void keepGoingR(Int n)
 
 
 
-$ ./spl --typecheck -i examplePrograms/whitespaces.spl
-Void CAPPS(Int X, Bool S)
+$ ./spl --typecheck -i examples/p1-examplePrograms/op.spl
+// n : Int
+Int n = 5;
+
+// op : Bool
+Bool op = (((1 + (n / 2)) - (n % 2)) < n);
+
+// op2 : Bool
+Bool op2 = ((((1 + n) / 2) - (n % 2)) < n);
+
+
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/sum.spl
+Failed parsing 'examples/p1-examplePrograms/sum.spl' :
+Expected  at position LineColPos 25 13 346 expecting one of [Comment, Whitespace, "]"] at 26:14 :
+                              v
+}  Void main() {  print (sum([1:2:3:[]]));  print (sum1([1:2:3:[]]));  
+                              ^
+
+
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/integers.spl
+
+// abs : (Int -> Int)
+Int abs(Int n)
 {
-  X = 0;
-  S = True;
-  return;
+  if( (n < 0) )
+    return -n;
+  else
+    return n;
 }
 
-Void tabbed()
+
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/bool.spl
+
+// xor : (Bool Bool -> Bool)
+Bool xor(Bool a, Bool b)
 {
-  return;
+  return ((a || b) && !(a && b));
+}
+
+
+// implies : (Bool Bool -> Bool)
+Bool implies(Bool a, Bool b)
+{
+  if( !a )
+    return True;
+  else
+    return b;
 }
 
 
 
-$ ./spl --typecheck -i examplePrograms/x.spl
-a xMarksTheSpot(a x)
+$ ./spl --typecheck -i examples/p1-examplePrograms/mergeSort.spl
+"Unknown identifier `split' at position 20:20"
+
+$ ./spl --typecheck -i examples/p1-examplePrograms/mklinik.spl
+
+// foobar : ( -> Int)
+Int foobar()
 {
-  return x;
+  return -10;
 }
 \end{verbatim}
 
