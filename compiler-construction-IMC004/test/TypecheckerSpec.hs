@@ -271,6 +271,13 @@ spec = do
           ,"}"
           ]) `shouldBe` "( -> Int)"
 
+      it "infers that the first argument of f must be of the same type as the global x" $ do
+        typeOf "f" (unlines
+          ["var x = [];"
+          ,"fun f(y y, z z) { x = y; return z; }"
+          ,"Void main() { x = 1:[]; return; }"
+          ]) `shouldBe` "([Int] a -> a)"
+
     describe "standard examples" $ do
       it "infers foldl" $ do
         typeOf "foldl" (unlines
