@@ -28,7 +28,7 @@ ppMaybeTyp :: Int -> AstDeclaration -> (String -> String)
 ppMaybeTyp level (AstVarDeclaration meta typ name _) =
   case fmap makeNiceAutoTypeVariables (inferredType meta) of
     Nothing -> pp level typ
-    Just t  -> \s -> "\n// " ++ name ++ " : " ++ pp level (inferredType meta) "\n" ++ pp level t s
+    Just t  -> \s -> "// " ++ name ++ " : " ++ pp level (inferredType meta) "\n" ++ replicate level ' ' ++ pp level t s
 
 ppMaybeTyp level (AstFunDeclaration meta typ name args _ _) = \s ->
   case fmap makeNiceAutoTypeVariables (inferredType meta) of
