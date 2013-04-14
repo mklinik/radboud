@@ -241,17 +241,17 @@ type checking the function body, $x$ would be of type $\forall a . [a]$, which
 could be specialized to $[\text{Int}]$ in the first assignment, and to
 $[\text{Bool}]$ in the second.  Clearly, this is unsound.  Pierce, in his
 chapter about mutable references \cite{Pierce2002a}, solves this problem by
-all-quantifying the type of an identifier only if its initializer is a
-syntactic value.  He argues that this restriction has no big impact on
-usability.  In his language, reference cell constructors are not values, so
-identifiers initialized with a reference cell are never all-quantified.  In
-SPL, as variables are always mutable, every variable is always implicitly a
-reference cell, so by adopting the \emph{value restriction} in the type checker
-at hand, the types of variables are never all-quantified.  This gives the
-desired type error for the program above. Unfortunately this comes at the
-tradeoff that programs like the following, in which an identifier is never
-assigned to, also give type errors. This is because the type of $x$ gets
-constrained to both $[\text{Int}]$ and $[\text{Bool}]$.
+all-quantifying the type of an identifier only if its initializer is a syntactic
+value.  He argues that this restriction has no big impact on usability.  In his
+language, reference cell constructors are not values, so identifiers initialized
+with a reference cell are never all-quantified.  In SPL, variables are always
+mutable, every variable is therefore always implicitly a reference cell, so by
+adopting the \emph{value restriction} in the type checker at hand, the types of
+variables are never all-quantified.  This gives the desired type error for the
+program above. Unfortunately this comes at the tradeoff that programs like the
+following, in which an identifier is never assigned to, also give type errors.
+This is because the type of $x$ gets constrained to both $[\text{Int}]$ and
+$[\text{Bool}]$.
 
 \begin{verbatim}
 fun f() {
@@ -283,11 +283,11 @@ To be sound, we must preclude the type of $y$ to be generalized when $f$ is
 introduced to the environment.  Otherwise, it would be possible to use the
 all-quantification of $f$ to assign values of different types to the global $x$.
 Fortunately, this is easy.  By adopting the value restriction, the type of $x$
-is not all-quantified, which means it's type has a free variable.  It gets type,
-say, $[z]$, where $z$ is fresh.  The algorithm then generalizes the free
-variables of functions only if they are not free in the environment.  In the
-example above, the type of $y$ is constrained to the type of $x$, which has a
-free type variable, so the type of $f$ would be $\forall a . ([z] \arr a \arr
+is not all-quantified, which means its type has a free variable.  The global $x$
+gets type, say, $[z]$, where $z$ is fresh.  The trick is now to generalize
+free variables of functions only if they are not free in the environment.  In
+the example above, the type of $y$ is constrained to the type of $x$, which has
+a free type variable, so the type of $f$ would be $\forall a . ([z] \arr a \arr
 a)$, where z is the same fresh type variable used for the type of $x$.  This
 way, the type of the first argument of $f$ and the type of $x$ are constrained
 together, which will give a type error in one of the two calls of $f$ in
@@ -308,7 +308,7 @@ First, we change the production rule for SPL programs as follows:
 \end{IEEEeqnarray*}
 
 An SPL program is therefore a list of declarations, where a declaration is
-either a single variable or function declaration, or a block of function
+either a single variable- or function declaration, or a block of function
 declarations.
 
 The scoping rules for global identifiers are then as follows.
