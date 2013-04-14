@@ -1,1 +1,1 @@
-"Couldn't match expected type `(Int Int Int -> Int)' with actual type `(b c -> a)' at position 8:3"
+"Couldn't match expected type `(Int Int Int -> Int)' with actual type `(b c -> a)' at position 10:3"
