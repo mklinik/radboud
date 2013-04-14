@@ -1,13 +1,19 @@
+
+// f : forall <4>, ([<4>] -> Bool)
 Bool f([a] x)
 {
   return False;
 }
 
+
+// g : forall <8>, ([<8>] -> Bool)
 Bool g([a] x)
 {
   return True;
 }
 
+
+// main : ( -> Void)
 Void main()
 {
   f = g;
