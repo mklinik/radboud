@@ -107,8 +107,9 @@ instance Substitute SplType where
   substitute u (SplTupleType x y) = SplTupleType (substitute u x) (substitute u y)
   substitute u (SplListType x) = SplListType (substitute u x)
   substitute u (SplFunctionType argTypes returnType) = SplFunctionType (map (substitute u) argTypes) (substitute u returnType)
-  -- don't substitute under quantifiers. This is okay, because there never are free variables in quantified types
-  substitute u (SplForall vars t) = SplForall vars t
+  -- The quantification process makes sure that we substitute only free type variables in quantified types.
+  -- This is because type variables which are free in the environment are not quantified.
+  substitute u (SplForall vars t) = SplForall vars (substitute u t)
 
 -- Takes care of substitution in tuples, lists, Maybe, etc.
 instance (Functor b, Substitute a) => Substitute (b a) where
@@ -143,6 +144,8 @@ unify p t1@(SplFunctionType args1 ret1) t2@(SplFunctionType args2 ret2) =
       Left _ -> left $ TypeError t1 t2 $ sourceLocation p
       Right u -> right u
     else left $ TypeError t1 t2 $ sourceLocation p
+-- unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
+-- unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
 unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
 unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
 unify p t1 t2 = left $ TypeError t1 t2 $ sourceLocation p
@@ -291,11 +294,9 @@ inferDecls env decls = do
 instance InferType AstProgram where
   inferType env ast@(AstProgram []) _ = return (emptyUnifier, env, ast)
   inferType env (AstProgram (decls:declss)) s = do
-    (_, env2, decls2) <- inferDecls env decls
-    (u, env3, (AstProgram progg)) <- inferType env2 (AstProgram declss) s
-    --  ^-- at this point, I have to check if there are polymorphic variables, not in quantify! That's too early.
-    --  Some variables declared with type variables may be constrained to monomorphic types
-    return (u, env3, AstProgram $ decls2:progg)
+    (u1, env2, decls2) <- inferDecls env decls
+    (u2, env3, (AstProgram progg)) <- inferType env2 (AstProgram declss) s
+    return (u2 . u1, env3, AstProgram $ substitute (u2 . u1) (decls2:progg))
 
 
 instance InferType AstDeclaration where
@@ -310,9 +311,6 @@ instance InferType AstDeclaration where
     let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
     (u, env3, localDecls2) <- inferDecls env2 localDecls
     (u2,_,_) <- inferType env3 (AstBlock body) (substitute u splReturnType)
-    --    ^-- at this point, I have to check if there are polymorphic
-    -- variables, not in inferDecls/quantify! That's too early.  Some variables
-    -- declared with type variables may be constrained to monomorphic types
     u3 <- unify meta (substitute (u2 . u) s) (substitute (u2 . u) splFunctionType)
     localDecls3 <- assignType (substitute (u3.u2.u) env3) localDecls2
     return (u3 . u2 . u, env, AstFunDeclaration meta returnType name formalArgs localDecls3 body)
