@@ -1,0 +1,4 @@
+// Mutually recursive values are not allowed.
+
+a x = head(y):x;
+a y = head(x):y;
