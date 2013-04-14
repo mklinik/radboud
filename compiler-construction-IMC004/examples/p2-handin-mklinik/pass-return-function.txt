@@ -1,13 +1,19 @@
+
+// plus : (Int Int -> Int)
 Int plus(Int x, Int y)
 {
   return (x + y);
 }
 
+
+// minus : (Int Int -> Int)
 Int minus(Int x, Int y)
 {
   return (x - y);
 }
 
+
+// f : (Bool -> (Int Int -> Int))
 (Int Int -> Int) f(Bool x)
 {
   if( x )
@@ -16,9 +22,13 @@ Int minus(Int x, Int y)
     return minus;
 }
 
+
+// main : ( -> Void)
 Void main()
 {
+  // h : (Int Int -> Int)
   (Int Int -> Int) h = f(True);
+  // i : (Int Int -> Int)
   (Int Int -> Int) i = f(False);
   h(10, 20);
   i(10, 20);
