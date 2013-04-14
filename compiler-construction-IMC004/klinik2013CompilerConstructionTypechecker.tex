@@ -608,8 +608,8 @@ is given in a .txt file with the same filename.
   \item[pass-polymorphism-mutual-recursion.spl] The polymorphic identity can be
   instantiated differently in two mutually recursive functions.  This works
   because $f$ and $g$ are marked to be unified together, but independently of
-  \emph{id}.  Removing the braces around $f$ and $g$ gives a type error.  See
-  fail-polymorphism-mutual-recursion.spl
+  \emph{id}.  Putting the braces around all \emph{id}, $f$ and $g$ gives a type
+  error.  See fail-polymorphism-mutual-recursion.spl
 
   \item[fail-polymorphism-mutual-recursion.spl] The polymorphic identity cannot
   be instantiated differently in two mutually recursive functions.  That is

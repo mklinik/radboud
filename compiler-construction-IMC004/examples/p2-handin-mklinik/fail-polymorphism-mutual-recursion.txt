@@ -1,1 +1,1 @@
-"Couldn't match expected type `Int' with actual type `Bool' at position 11:6"
+"Couldn't match expected type `Int' with actual type `Bool' at position 14:6"

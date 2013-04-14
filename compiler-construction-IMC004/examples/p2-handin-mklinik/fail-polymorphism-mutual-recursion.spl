@@ -1,6 +1,6 @@
 // The polymorphic identity cannot be instantiated differently in two mutually recursive functions.
 // That is because the types of all three functions are unified simultaneously.
-
+{
 a id(a x) { return x; }
 
 a f(b x, c y)
@@ -13,4 +13,5 @@ a g(b x, c y)
 {
   id(True);
   return f(x, y);
+}
 }
