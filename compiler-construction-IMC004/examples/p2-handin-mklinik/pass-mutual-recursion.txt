@@ -1,11 +1,14 @@
+{
+// f : forall <13> <15>, (<13> <13> -> <15>)
 b f(a x, a y)
 {
   return g(y, x);
 }
 
+// g : forall <13> <15>, (<13> <13> -> <15>)
 b g(a x, a y)
 {
   return f(x, y);
 }
-
+}
 
