@@ -7,7 +7,6 @@
 module Interpreter where
 
 import Control.Monad.Trans.State.Lazy
-import Control.Monad
 import Control.Monad.Trans.Either
 import Control.Monad.Trans.Class
 import Control.Monad.IO.Class (liftIO)
@@ -60,14 +59,15 @@ envAdd :: String -> Value -> Environment -> Environment
 envAdd name value (globals, l:locals) = (globals, (Map.insert name value l):locals)
 envAdd _ _ _ = error "envAdd: fatal error"
 
-envAddDeclaration :: (String -> Value -> Environment -> Environment) -> Environment -> AstDeclaration -> Spl Environment
-envAddDeclaration doAdd env (AstVarDeclaration _ _ name expression) = do
-  lift $ put env
+envAddDeclaration :: (String -> Value -> Environment -> Environment) -> AstDeclaration -> Spl ()
+envAddDeclaration doAdd (AstVarDeclaration _ _ name expression) = do
+  env <- lift get
   value <- eval expression
-  lift $ return $ doAdd name value env
-envAddDeclaration doAdd env (AstFunDeclaration _ _ name formalArgs localVars body) = do
+  lift $ put $ doAdd name value env
+envAddDeclaration doAdd (AstFunDeclaration _ _ name formalArgs localVars body) = do
+  env <- lift get
   let fun = mkFunction formalArgs localVars body
-  return $ doAdd name fun env
+  lift $ put $ doAdd name fun env
 
 envUpdate :: String -> Value -> Environment -> Environment
 envUpdate name value (globals, l:locals) =
@@ -92,8 +92,8 @@ type Spl a = EitherT Value (StateT Environment IO) a
 interpretProgram :: AstProgram -> Spl Value
 interpretProgram (AstProgram globals) = do
   -- put all global declarations in the environment
-  env <- foldM (envAddDeclaration envAddGlobal) emptyEnvironment $ concat globals
-  lift $ put env
+  lift $ put emptyEnvironment
+  sequence_ $ map (envAddDeclaration envAddGlobal) $ concat globals
 
   -- put all built-in functions in the environment
   lift $ sequence_ $ map (modify . uncurry envAddGlobal) builtins
@@ -121,8 +121,7 @@ mkFunction formalArgs decls stmts = F $ \actualArgs -> do
 
   -- put local declarations to environment
   env <- lift get
-  env_ <- foldM (envAddDeclaration envAdd) env decls
-  lift $ put env_
+  sequence_ $ map (envAddDeclaration envAdd) decls
 
   -- interpret statements, catch Left value of first encountered return statement
   (Left result) <- lift $ (runEitherT $ mapM interpret stmts)
