@@ -1,0 +1,21 @@
+// x : [Int]
+[Int] x = [];
+
+
+// f : forall <8>, ([Int] <8> -> <8>)
+a f([Int] y, a z)
+{
+  x = y;
+  return z;
+}
+
+
+// main : ( -> Void)
+Void main()
+{
+  f((1 : []), 1);
+  f((1 : []), True);
+  return;
+}
+
+

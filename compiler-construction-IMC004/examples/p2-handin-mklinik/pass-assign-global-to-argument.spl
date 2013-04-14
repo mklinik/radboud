@@ -1,0 +1,21 @@
+// Function f assigns its first argument, y, to the global x.  This ties their
+// types together, and as a result the type of y is not generalized.  The
+// concrete type of y is determined by the first occurrence where f is used.
+// Here, f is of type: forall a, ([Int] a -> a)
+
+var x = [];
+
+fun f(y y, z z)
+{
+  y = x; // This ties the types of x and y together
+  return z;
+}
+
+Void main()
+{
+  // The second argument of f may vary, but the first argument must stay of the
+  // same type in different calls to f.
+  f(1:[], 1);
+  f(1:[], True);
+  return;
+}

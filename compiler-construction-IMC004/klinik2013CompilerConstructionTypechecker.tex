@@ -645,6 +645,16 @@ is given in a .txt file with the same filename.
   \item[fail-return-function.spl] It is not possible to directly call the return
   value of a function that returns another function.
 
+  \item[pass-assign-global-to-argument.spl] Function $f$ assigns its first
+  argument, $y$, to the global $x$.  This ties their types together, and as a
+  result the type of $y$ is not generalized.  The concrete type of $y$ is
+  determined by the first occurrence where $f$ is used.  Here, $f$ is of type:
+  $\forall a . ([\text{Int}] \arr a \arr a)$.
+
+  \item[pass-assign-argument-to-global.spl] The same as
+  pass-assign-global-to-argument, but this time it's the argument that is
+  assigned to.
+
 \end{description}
 
 \subsection{Examples from p1}
