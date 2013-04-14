@@ -3,8 +3,8 @@
 
 Int f(var a)
 {
-  var x = y;
-  var y = z;
   var z = a;
-  return z;
+  var y = z;
+  var x = y;
+  return x;
 }

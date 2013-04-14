@@ -1,9 +1,14 @@
+
+// f : (Int -> Int)
 Int f(Int a)
 {
-  Int x = y;
-  Int y = z;
+  // z : Int
   Int z = a;
-  return z;
+  // y : Int
+  Int y = z;
+  // x : Int
+  Int x = y;
+  return x;
 }
 
 
