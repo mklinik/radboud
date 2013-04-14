@@ -21,7 +21,8 @@ instance Prettyprint AstProgram where
   pp _ (AstProgram []) = id
   pp level (AstProgram (d:decls)) = \s -> ds ++ pp level (AstProgram decls) s
     where
-      ds = "{" ++ (foldl (.) id $ intersperse ("\n" ++) $ map (pp level) d) "}\n"
+      ds = startToken ++ (foldl (.) id $ intersperse (middleToken ++) $ map (pp level) d) endToken
+      (startToken,middleToken,endToken) = if length d > 1 then ("{", "", "}\n") else ("", "\n", "\n")
 
 ppMaybeTyp :: Int -> AstDeclaration -> (String -> String)
 ppMaybeTyp level (AstVarDeclaration meta typ _ _) =
