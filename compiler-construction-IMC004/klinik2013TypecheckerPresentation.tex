@@ -73,4 +73,77 @@
 \end{frame}
 
 
+\begin{frame}{Type Inference for Functions}
+
+General idea:
+
+  \begin{enumerate}
+    \item Generate fresh type variables for parameters, subexpressions
+    and return type
+    \item Collect and unify constraints
+    \item Generalize any remaining type variables
+    \item Put name and type to environment, and typecheck rest
+  \end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Example}
+
+\begin{verbatim}
+fun f(x x, y y)
+{
+  print(x + 1);
+  return y;
+}
+\end{verbatim}
+
+Function $f$ gets type $\forall a . \text{Int} \arr a \arr a$
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Problem: Assignments}
+
+\onslide<+->
+
+Question: What is the type of $f$?
+
+\begin{verbatim}
+x x = [];
+Void f(y y) {
+  x = y;
+}
+\end{verbatim}
+
+\onslide<+->
+
+It must \emph{not} be: $\forall a . [a] \arr \text{Void}$, for otherwise
+this would be possible:
+
+\begin{verbatim}
+Void main() {
+  f(1:[]);
+  f(True:[]);
+}
+\end{verbatim}
+
+\end{frame}
+
+
+\begin{frame}{Solution: Be Less General}
+
+Answer: Adopt the \emph{value restriction}.
+
+\begin{itemize}
+  \item Don't generalize the type of variables
+  \item Don't generalize type variables in function types that are free
+  in the environment
+\end{itemize}
+
+See example in a minute.
+
+\end{frame}
+
+
 \end{document}
