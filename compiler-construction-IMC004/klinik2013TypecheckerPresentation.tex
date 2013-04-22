@@ -1,0 +1,76 @@
+\documentclass{beamer}
+
+\beamertemplatenavigationsymbolsempty
+
+\mode<presentation>
+{
+  \usetheme{default}
+}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{bussproofs}
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+% needs debian package texlive-math-extra
+\usepackage{stmaryrd} % for \llbracket, \rrbracket
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{matrix}
+
+\title
+{A Type Checker for SPL, the Simple Programming Language}
+
+\author
+{Markus~Klinik}
+
+\institute[Radboud University Nijmegen]
+{
+  Radboud University Nijmegen
+}
+
+\date
+{Compiler Construction 2013}
+
+
+\newcommand{\arr}{\rightarrow}
+\newcommand{\Arr}{\Rightarrow}
+\newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
+\newcommand{\semanticsFd}[1]{\semantics{#1}_{F\delta}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Features}
+
+  \begin{itemize}
+    \item Type inference
+    \item Polymorphic functions
+    \item Monomorphic variables
+    \item Mutual recursion
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Meta}
+
+  \begin{itemize}
+    \item Implementation language: Haskell
+    \item Time to implement: 80 hours
+    \item Lines of code: 520
+  \end{itemize}
+
+\end{frame}
+
+
+\end{document}

@@ -1,5 +1,8 @@
 PDFLATEXFLAGS=-halt-on-error
 
+klinik2013klinik2013TypecheckerPresentation.pdf: klinik2013TypecheckerPresentation.tex
+	pdflatex ${PDFLATEXFLAGS} $^
+
 klinik2013CompilerConstructionTypechecker.pdf: klinik2013CompilerConstructionTypechecker.tex
 	pdflatex ${PDFLATEXFLAGS} $^
 
