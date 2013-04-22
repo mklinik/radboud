@@ -146,4 +146,37 @@ See example in a minute.
 \end{frame}
 
 
+\begin{frame}[fragile]{Mutual recursion}
+
+\onslide<+->
+
+Problems with mutually recursive functions:
+
+\begin{itemize}
+  \item Functions use identifiers that are defined later
+  \item Functions must be unified together
+\end{itemize}
+
+\begin{verbatim}
+fun f(x x, y y) { return g(y, x); }
+fun g(x x, y y) { return f(x, y); }
+\end{verbatim}
+
+Should give $\forall ab . a \arr a \arr b$ and not $\forall abc . a
+\arr b \arr c$
+
+\onslide<+->
+
+\vspace{1em}
+
+Solution:
+
+\begin{itemize}
+  \item Programmer must tell the compiler which functions are mutually
+  recursive.
+\end{itemize}
+
+\end{frame}
+
+
 \end{document}
