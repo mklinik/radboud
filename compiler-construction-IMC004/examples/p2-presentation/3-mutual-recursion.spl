@@ -1,0 +1,15 @@
+{
+fun f(x x, y y) { print(x); return g(y, x); }
+fun g(x x, y y) {           return f(x, y); }
+}
+
+Void main()
+{
+    if(True)
+        f(0, 42);
+    else
+        f(True, False);
+    return;
+}
+
+// vim:ft=c
