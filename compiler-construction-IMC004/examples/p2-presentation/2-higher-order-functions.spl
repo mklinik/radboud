@@ -1,0 +1,22 @@
+fun plus3(x x) { return x + 3; }
+fun minus3(x x) { return x - 3; }
+fun greaterThan5(x x) { return x > 5; }
+
+fun map(f f, xs xs)
+{
+    if(isEmpty(xs)) return [];
+    else return f(head(xs)) : map(f, tail(xs));
+}
+
+/*fun decide(Bool b) { if(b) return plus3; else return minus3; }*/
+
+Void main()
+{
+    var xs = 1:2:3:4:5:[];
+    /*var f = decide(True);*/
+    print(map(plus3, xs));
+    /*print(map(greaterThan5, map(f, xs)));*/
+    return;
+}
+
+// vim:ft=c
