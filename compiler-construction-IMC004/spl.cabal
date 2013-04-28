@@ -44,3 +44,4 @@ test-suite spec
     , transformers
     , containers
     , either
+    , process
