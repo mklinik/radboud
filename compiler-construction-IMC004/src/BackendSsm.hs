@@ -2,6 +2,9 @@ module BackendSsm where
 
 import IntermediateRepresentation
 
+ssmTrue = -1
+ssmFalse = 0
+
 type Asm = [String] -- assembly program
 
 generateE :: Asm -> IrExpression -> Asm
@@ -15,11 +18,12 @@ genrerateBinOp OpMul = ["mul"]
 genrerateBinOp OpDiv = ["div"]
 genrerateBinOp OpMod = ["mod"]
 
-genrerateBinOp OpEq = ["eq"]
-genrerateBinOp OpLt = ["lt"]
+genrerateBinOp OpEq  = ["eq"]
+genrerateBinOp OpNeq = ["ne"]
+genrerateBinOp OpLt  = ["lt"]
 genrerateBinOp OpLte = ["le"]
-genrerateBinOp OpGt = ["gt"]
+genrerateBinOp OpGt  = ["gt"]
 genrerateBinOp OpGte = ["ge"]
 
 genrerateBinOp OpAnd = ["and"]
-genrerateBinOp OpOr = ["or"]
+genrerateBinOp OpOr  = ["or"]
