@@ -5,6 +5,7 @@ import System.IO
 import System.Console.GetOpt
 import Text.Printf (printf)
 import Control.Monad
+import Control.Monad.Trans.State (evalState)
 
 import Parser
 import Prettyprinter
@@ -14,6 +15,8 @@ import Ast
 import qualified Typechecker as TC
 import Repl
 import System.Exit
+import BackendSsm
+import IntermediateRepresentation
 
 main :: IO ()
 main = do
@@ -84,6 +87,13 @@ run opts = do
       readEvalPrintLoop
       return ExitSuccess
 
+    ModeCompile -> do
+      input <- hGetContents (inFile opts)
+      let ast = parse pProgram input
+      let asm = generateSs $ evalState (program2ir ast) ssmMachine
+      mapM_ (hPutStrLn (outFile opts)) asm
+      return ExitSuccess
+
   cleanUp opts
   return returnCode
 
@@ -111,6 +121,7 @@ data Mode
   | ModeInterpret
   | ModeTypecheck
   | ModeInteractive
+  | ModeCompile
   deriving (Show)
 
 data Options = Options
@@ -141,6 +152,7 @@ options =
   , Option []  ["interpret"]  (NoArg  (\  opts -> opts { mode = ModeInterpret }))          "parse, then interpret"
   , Option []  ["typecheck"]  (NoArg  (\  opts -> opts { mode = ModeTypecheck }))          "parse, then typecheck"
   , Option []  ["interactive"](NoArg  (\  opts -> opts { mode = ModeInteractive }))        "read-eval-print loop"
+  , Option ['c']  ["compile"] (NoArg  (\  opts -> opts { mode = ModeCompile }))            "generate assembly code for the Simple Stack Machine"
   ]
 
 get :: [String] -> IO Options

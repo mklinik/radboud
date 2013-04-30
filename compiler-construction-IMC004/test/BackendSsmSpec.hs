@@ -7,6 +7,7 @@ import Test.QuickCheck
 import System.IO
 import System.IO.Unsafe
 import System.Process
+import Control.Monad.Trans.State
 
 import Parser
 import Utils
@@ -22,13 +23,11 @@ testFilename = "test.ssm"
 
 runSsm :: [String] -> IO [String]
 runSsm asm = do
-  f <- openFile testFilename WriteMode
-  mapM_ (hPutStrLn f) asm
-  hClose f
+  withFile testFilename WriteMode (\f -> mapM_ (hPutStrLn f) asm)
   fmap lines $ readProcess "java" ["-jar", "ssm-nogui.jar", testFilename] []
 
 runE :: String -> String
-runE expr = head $ unsafePerformIO (runSsm $ generateE [] $ ast2ir $ parse pExpr expr)
+runE expr = head $ unsafePerformIO (runSsm $ generateE (evalState (exp2ir $ parse pExpr expr) ssmMachine) [])
 
 -- testBinOp :: (Show a, Show b) => (String, (a -> a -> b)) -> (a -> a -> Bool)
 testBinOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
@@ -38,7 +37,7 @@ testBinOpNonZero (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property 
   \arg1 (NonZero arg2) -> property $ runE (show arg1 ++ opStr ++ show arg2) == show (op arg1 arg2)
 
 testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
-  \arg1 arg2 -> runE (show arg1 ++ opStr ++ show arg2) == show (if op arg1 arg2 then ssmTrue else ssmFalse)
+  \arg1 arg2 -> runE (show arg1 ++ opStr ++ show arg2) == show (if op arg1 arg2 then machineTrue ssmMachine else machineFalse ssmMachine)
 
 spec :: Spec
 spec = do
