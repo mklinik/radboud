@@ -18,6 +18,8 @@ generateE :: IrExpression -> Asm -> Asm
 generateE (IrBinOp op lhs rhs) c = genrerateBinOp op $ generateE rhs $ generateE lhs c
 generateE (IrConst i) c = c ++ ["ldc " ++ show i]
 generateE (IrCall name args) c = c ++ ["ldc 0"] ++ concat (map (\a -> generateE a []) args) ++ ["bsr " ++ name, "ajs -" ++ show (length args)]
+generateE (IrTemp IrFramePointer) c = c ++ ["ldr MP"]
+generateE (IrTemp IrStackPointer) c = c ++ ["ldr SP"]
 
 generateS :: IrStatement -> Asm -> Asm
 generateS (IrAsm asm) c = c ++ asm
@@ -25,7 +27,9 @@ generateS (IrJump name) c = c ++ ["bra " ++ name]
 generateS (IrLabel name) c = c ++ [name ++ ":"]
 generateS (IrSeq s1 s2) c = generateS s2 (generateS s1 c)
 generateS (IrExp e) c = generateE e c ++ ["ajs -1"] -- TODO: don't pop value for calls to Void functions
-generateS (IrMove (IrMem (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst n))) val) c = generateE val c ++ ["stl " ++ show n]
+
+-- generateS (IrMove (IrMem (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst n))) val) c = generateE val c ++ ["stl " ++ show n]
+generateS (IrMove (IrMem dst) val) c = generateE dst (generateE val c) ++ ["sta 0"]
 
 generateSs :: [IrStatement] -> Asm
 generateSs stmts = generateE (IrCall "main" []) [] ++ ["halt"] ++ (concat $ map (\s -> generateS s []) stmts)
