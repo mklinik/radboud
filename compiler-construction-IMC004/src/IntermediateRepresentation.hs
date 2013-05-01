@@ -179,6 +179,7 @@ exp2ir (AstBinOp _ op lhs rhs) = do
   r <- exp2ir rhs
   return $ IrBinOp (op2ir op) l r
 exp2ir (AstIdentifier _ name) = envLookup name
+exp2ir (AstFunctionCallExpr f) = funCall2ir f
 
 op2ir :: String -> IrBinOp
 op2ir "+" = OpAdd
