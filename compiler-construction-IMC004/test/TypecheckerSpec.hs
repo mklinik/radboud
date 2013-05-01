@@ -78,15 +78,12 @@ spec = do
       typeOf "const" "a const(b x, c y){ return x; }" `shouldBe` "(b a -> b)"
     it "infers a monomorphic recursive list definition" $ do
       typeOf "x" "a x = 1:x;" `shouldBe` "[Int]"
-    it "cannot infer a polymorphic recursive list definition" $ do
-      typeOf "x" "a x = head(x):x;" `shouldBe`
-        "Variables cannot be polymorphic. Please specify a concrete type for `x' at position 1:1"
-    it "can infer mutual recursive values" $ do
-      typeOf "x" "a x = y; b y = x;" `shouldBe`
-        "Variables cannot be polymorphic. Please specify a concrete type for `x' at position 1:1"
-    it "can infer mutual recursive lists" $ do
-      typeOf "x" "a x = head(y):x; b y = head(x):y;" `shouldBe`
-        "Variables cannot be polymorphic. Please specify a concrete type for `x' at position 1:1"
+    it "can infer a polymorphic recursive list definition" $ do
+      typeOf "x" "a x = head(x):x;" `shouldBe` "[a]"
+    it "cannot infer mutual recursive values" $ do
+      typeOf "x" "a x = y; b y = x;" `shouldBe` "Unknown identifier `y' at position 1:7"
+    it "cannot infer mutual recursive lists" $ do
+      typeOf "x" "a x = head(y):x; b y = head(x):y;" `shouldBe` "Unknown identifier `y' at position 1:12"
 
     let mutualFandG = unlines
             ["{a f(b x, c y) { return g(y, x); }"
@@ -129,9 +126,9 @@ spec = do
       typeOf "y" prog `shouldBe` "Bool"
       typeOf "z" prog `shouldBe` "Bool"
 
-    it "propagate types transitively through global variables, backwards" $ do
+    it "propagate types transitively through global variables, backwards, fails" $ do
       let prog = "x x = y; y y = z; z z = True;"
-      typeOf "x" prog `shouldBe` "Bool"
+      typeOf "x" prog `shouldBe` "Unknown identifier `y' at position 1:7"
 
     let double = "a double(f f, x x) { return f(f(x)); }"
 
@@ -172,7 +169,7 @@ spec = do
 
       it "can typecheck mutually recursive local variables" $ do
         typeOf "foo" "Int foo() { var x = y; var y = z; var z = x; return y; }" `shouldBe`
-          "Variables cannot be polymorphic. Please specify a concrete type for `x' at position 1:13"
+          "( -> Int)"
 
       it "cannot use different instantiatons of function arguments" $ do
         typeOf "f" "a f(b x) { return (x(10), x(True)); }" `shouldBe`
@@ -180,7 +177,7 @@ spec = do
 
       it "cannot use different instantiations of local variables in function body" $ do
         typeOf "f" "a f() { var x = []; return (1:x, True:x); }" `shouldBe`
-          "Variables cannot be polymorphic. Please specify a concrete type for `x' at position 1:9"
+          "Couldn't match expected type `[Bool]' with actual type `[Int]' at position 1:39"
 
       it "cannot use different instantiations of local variables in other initializers" $ do
         typeOf "f" "a f() { var x = []; var y = 1:x; var z = True:x; return (y, z); }" `shouldBe`
@@ -196,7 +193,7 @@ spec = do
 
       it "cannot assign different instantiations to local variables" $ do
         typeOf "f" "a f() { var x = []; x = 1:[]; x = True:[]; return; }" `shouldBe`
-          "Variables cannot be polymorphic. Please specify a concrete type for `x' at position 1:9"
+          "Couldn't match expected type `Int' with actual type `Bool' at position 1:35"
 
     describe "conditionals" $ do
 
