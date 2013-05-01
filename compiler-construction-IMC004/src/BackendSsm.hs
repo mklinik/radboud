@@ -10,13 +10,13 @@ translateSsm prog = generateSs $ evalState (program2ir prog) ssmMachine
 
 ssmMachine = mkMachine (-1) 0 4 makePrologue makeEpilogue accessFunArg
 
-makePrologue :: Machine -> IR IrStatement
-makePrologue m = do
+makePrologue :: IR IrStatement
+makePrologue = do
   name <- gets machineCurFunctionName
   return $ IrAsm [name ++ ": ldr MP", "ldrr MP SP"]
 
-makeEpilogue :: Machine -> IR IrStatement
-makeEpilogue m = return $ IrAsm ["str MP", "ret"]
+makeEpilogue :: IR IrStatement
+makeEpilogue = return $ IrAsm ["str MP", "ret"]
 
 accessFunArg :: IR IrExpression
 accessFunArg = do

@@ -43,8 +43,8 @@ data Machine = Machine
   , machineWord  :: Int -- number of bytes in a machine word
   , machineEnv :: Map String IrExpression
   , machineFrameSize :: Int -- size of current frame; i.e. the number of local variables
-  , machineMakePrologue :: Machine -> IR IrStatement -- TOOD: remove Machine argument, it's already in IR
-  , machineMakeEpilogue :: Machine -> IR IrStatement
+  , machineMakePrologue :: IR IrStatement
+  , machineMakeEpilogue :: IR IrStatement
   , machineCurFunctionName :: String
   , machineCurFunctionArgCount :: Int
   , machineCurFunArgIndex :: Int
@@ -52,7 +52,7 @@ data Machine = Machine
   , machineLabelNumber :: Int
   }
 
--- mkMachine :: Int -> Int -> Int -> (Machine -> IR IrStatement) -> (Machine -> IR IrStatement) -> Machine
+mkMachine :: Int -> Int -> Int -> (IR IrStatement) -> (IR IrStatement) -> (IR IrExpression) -> Machine
 mkMachine tru fals word mkPrologue mkEpilogue accessFunArg = Machine
   { machineTrue = tru
   , machineFalse = fals
@@ -127,9 +127,9 @@ funDecl2ir (AstFunDeclaration _ _ name formalArgs _ body) = do
   oldEnv <- gets machineEnv
   mapM_ envAddFunArg formalArgs
   m <- get
-  prologue <- (machineMakePrologue m) m
+  prologue <- machineMakePrologue m
   b <- stmts2ir body
-  epilogue <- (machineMakeEpilogue m) m
+  epilogue <- machineMakeEpilogue m
   modify $ \m -> m { machineEnv = oldEnv }
   return $ IrSeq (IrSeq prologue b) (IrSeq (IrLabel $ name ++ "_return") epilogue)
 
