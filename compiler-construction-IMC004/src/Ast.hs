@@ -54,6 +54,7 @@ data AstStatement
   | AstWhile AstMeta AstExpr AstStatement
   | AstIfThenElse AstMeta AstExpr AstStatement AstStatement
   | AstFunctionCallStmt AstFunctionCall
+  | AstAsm [String]
   deriving (Show, Eq)
 
 data AstFunctionCall = AstFunctionCall AstMeta String [AstExpr]

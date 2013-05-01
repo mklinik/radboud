@@ -42,14 +42,16 @@ data Machine = Machine
   , machineWord  :: Int -- number of bytes in a machine word
   , machineEnv :: Map String IrExpression
   , machineFrameSize :: Int -- size of current frame; i.e. the number of local variables
-  , machineMakePrologue :: Machine -> IR IrStatement
+  , machineMakePrologue :: Machine -> IR IrStatement -- TOOD: remove Machine argument, it's already in IR
   , machineMakeEpilogue :: Machine -> IR IrStatement
   , machineCurFunctionName :: String
   , machineCurFunctionArgCount :: Int
+  , machineCurFunArgIndex :: Int
+  , machineAccessFunArg :: IR IrExpression
   }
 
-mkMachine :: Int -> Int -> Int -> (Machine -> IR IrStatement) -> (Machine -> IR IrStatement) -> Machine
-mkMachine tru fals word mkPrologue mkEpilogue = Machine
+-- mkMachine :: Int -> Int -> Int -> (Machine -> IR IrStatement) -> (Machine -> IR IrStatement) -> Machine
+mkMachine tru fals word mkPrologue mkEpilogue accessFunArg = Machine
   { machineTrue = tru
   , machineFalse = fals
   , machineWord = word
@@ -59,6 +61,8 @@ mkMachine tru fals word mkPrologue mkEpilogue = Machine
   , machineMakeEpilogue = mkEpilogue
   , machineCurFunctionName = ""
   , machineCurFunctionArgCount = 0
+  , machineCurFunArgIndex = 0
+  , machineAccessFunArg = accessFunArg
   }
 
 type IR a = State Machine a
@@ -70,8 +74,10 @@ curFrameSize = gets machineFrameSize
 bumpFrameSize :: IR ()
 bumpFrameSize = modify $ \m -> m { machineFrameSize = 1 + machineFrameSize m }
 
-envAdd :: String -> IrExpression -> IR ()
-envAdd name lookupCode = modify $ \m -> m { machineEnv = Map.insert name lookupCode (machineEnv m) }
+envAddFunArg :: AstFunctionArgument -> IR ()
+envAddFunArg (AstFunctionArgument _ _ name) = do
+  lookupCode <- gets machineAccessFunArg >>= id
+  modify $ \m -> m { machineEnv = Map.insert name lookupCode (machineEnv m) }
 
 envLookup :: String -> IR IrExpression
 envLookup name = do
@@ -105,12 +111,16 @@ envLookup name = do
 
 funDecl2ir :: AstDeclaration -> IR IrStatement
 funDecl2ir (AstFunDeclaration _ _ name formalArgs _ body) = do
+  modify $ \m -> m { machineCurFunArgIndex = 0 }
   modify $ \m -> m { machineCurFunctionName = name }
   modify $ \m -> m { machineCurFunctionArgCount = length formalArgs }
+  oldEnv <- gets machineEnv
+  mapM_ envAddFunArg formalArgs
   m <- get
   prologue <- (machineMakePrologue m) m
   b <- stmts2ir body
   epilogue <- (machineMakeEpilogue m) m
+  modify $ \m -> m { machineEnv = oldEnv }
   return $ IrSeq (IrSeq prologue b) (IrSeq (IrLabel $ name ++ "_return") epilogue)
 
 stmt2ir :: AstStatement -> IR IrStatement
@@ -125,6 +135,7 @@ stmt2ir (AstReturn _ (Just e)) = do
     (IrMove (IrMem $ IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst $ -(nArgs + 2) {- return address, frame pointer -})) expr)
     (IrJump $ name ++ "_return")
 stmt2ir (AstFunctionCallStmt f) = funCall2ir f >>= return . IrExp
+stmt2ir (AstAsm asm) = return $ IrAsm asm
 
 funCall2ir :: AstFunctionCall -> IR IrExpression
 funCall2ir (AstFunctionCall _ name actualArgs) = do
@@ -139,9 +150,17 @@ stmts2ir (s:ss) = do
   ss_ <- stmts2ir ss
   return $ IrSeq s_ ss_
 
+builtins :: [AstDeclaration]
+builtins =
+  [ AstFunDeclaration emptyMeta (BaseType emptyMeta "Void") "print"
+      [ AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "x" ]
+      []
+      [ AstAsm ["ldl -2", "trap 0"] ]
+  ]
+
 program2ir :: AstProgram -> IR [IrStatement]
 program2ir (AstProgram decls) =
-  decls2ir $ concat decls
+  decls2ir $ concat decls ++ builtins
 
 decls2ir :: [AstDeclaration] -> IR [IrStatement]
 decls2ir decls = mapM funDecl2ir funDecls
@@ -159,6 +178,7 @@ exp2ir (AstBinOp _ op lhs rhs) = do
   l <- exp2ir lhs
   r <- exp2ir rhs
   return $ IrBinOp (op2ir op) l r
+exp2ir (AstIdentifier _ name) = envLookup name
 
 op2ir :: String -> IrBinOp
 op2ir "+" = OpAdd
