@@ -92,11 +92,16 @@ run opts = do
           hPutStrLn stderr $ show err
           return $ ExitFailure 1
         Right asm -> do
-          mapM_ (hPutStrLn (outFile opts)) asm
+          mapM_ (prettyprintAsm (outFile opts)) asm
           return ExitSuccess
 
   cleanUp opts
   return returnCode
+
+prettyprintAsm :: Handle -> String -> IO ()
+prettyprintAsm file line = do
+  unless (':' `elem` line) (hPutStr file "    ") -- indent all but labelled lines
+  hPutStrLn file line
 
 typecheck :: AstProgram -> Either String String
 typecheck ast =
