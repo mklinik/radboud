@@ -34,13 +34,13 @@ generateS (IrAsm asm) c = c ++ asm
 generateS (IrJump name) c = c ++ ["bra " ++ name]
 generateS (IrLabel name) c = c ++ [name ++ ":"]
 generateS (IrSeq s1 s2) c = generateS s2 (generateS s1 c)
-generateS (IrExp e) c = generateE e c ++ ["ajs -1"] -- TODO: don't pop value for calls to Void functions
+generateS (IrExp e) c = generateE e c ++ ["ajs -1"]
 
 generateS (IrMove (IrMem (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst n))) val) c = generateE val c ++ ["stl " ++ show n]
 generateS (IrMove (IrMem dst) val) c = generateE dst (generateE val c) ++ ["sta 0"] -- standard fallback
 
 generateSs :: [IrStatement] -> Asm
-generateSs stmts = generateE (IrCall "main" []) [] ++ ["halt"] ++ (concat $ map (\s -> generateS s []) stmts)
+generateSs stmts = generateS (IrExp $ IrCall "main" []) [] ++ ["halt"] ++ (concat $ map (\s -> generateS s []) stmts)
 
 genrerateBinOp :: IrBinOp -> Asm -> Asm
 genrerateBinOp OpAdd c = c ++ ["add"]
