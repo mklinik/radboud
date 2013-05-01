@@ -45,6 +45,20 @@ testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
 
 spec :: Spec
 spec = do
+  describe "if-then-else" $ do
+    it "branches to then branch" $ run "Void main() { if(True ) print(13); else print(23); return; }" `shouldBe` ["13"]
+    it "branches to else branch" $ run "Void main() { if(False) print(13); else print(23); return; }" `shouldBe` ["23"]
+
+  describe "recursive functions" $ do
+    it "recursive countdown" $ run (unlines
+      [ "Void countdown(Int x) { print(x); if(x <= 0) return; else countdown(x - 1); }"
+      , "Void main() { countdown(10); }"
+      ]) `shouldBe` (map show $ reverse ([0..10]::[Int]))
+    it "recursive fac" $ run (unlines
+      [ "Int fac(Int x) { if(x<=0) return 1; else return x * fac(x - 1); }"
+      , "Void main() { print(fac(3)); }"
+      ]) `shouldBe` ["6"]
+
   describe "main function" $
     it "print 42" $ run "Void main() { print(42); }" `shouldBe` ["42"]
 

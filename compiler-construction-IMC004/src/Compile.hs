@@ -4,7 +4,6 @@ import Parser
 import Utils
 import CompileError
 import Typechecker
-import IntermediateRepresentation
 import BackendSsm
 
 compileSsm :: String -> String -> Either CompileError [String]

@@ -34,6 +34,7 @@ data IrStatement
   | IrJump String
   | IrAsm Asm
   | IrExp IrExpression
+  | IrCjump IrExpression IrStatement String IrStatement String
   deriving (Show)
 
 data Machine = Machine
@@ -48,6 +49,7 @@ data Machine = Machine
   , machineCurFunctionArgCount :: Int
   , machineCurFunArgIndex :: Int
   , machineAccessFunArg :: IR IrExpression
+  , machineLabelNumber :: Int
   }
 
 -- mkMachine :: Int -> Int -> Int -> (Machine -> IR IrStatement) -> (Machine -> IR IrStatement) -> Machine
@@ -63,6 +65,7 @@ mkMachine tru fals word mkPrologue mkEpilogue accessFunArg = Machine
   , machineCurFunctionArgCount = 0
   , machineCurFunArgIndex = 0
   , machineAccessFunArg = accessFunArg
+  , machineLabelNumber = 0
   }
 
 type IR a = State Machine a
@@ -85,6 +88,13 @@ envLookup name = do
   case Map.lookup name env of
     Nothing -> error ("unknown identifier " ++ name) -- should never happen
     Just e  -> return e
+
+freshLabel :: IR String
+freshLabel = do
+  name <- gets machineCurFunctionName
+  i <- gets machineLabelNumber
+  modify $ \m -> m { machineLabelNumber = i + 1 }
+  return $ name ++ "l" ++ show i
 
 -- addGlobalVariable :: String -> IR IrExpression
 -- addGlobalVariable name = do
@@ -136,6 +146,13 @@ stmt2ir (AstReturn _ (Just e)) = do
     (IrJump $ name ++ "_return")
 stmt2ir (AstFunctionCallStmt f) = funCall2ir f >>= return . IrExp
 stmt2ir (AstAsm asm) = return $ IrAsm asm
+stmt2ir (AstIfThenElse _ astCondition astThen astElse) = do
+  elseStartLabel <- freshLabel
+  elseEndLabel <- freshLabel
+  cond <- exp2ir astCondition
+  thenStmt <- stmt2ir astThen
+  elseStmt <- stmt2ir astElse
+  return $ IrCjump cond thenStmt elseStartLabel elseStmt elseEndLabel
 
 funCall2ir :: AstFunctionCall -> IR IrExpression
 funCall2ir (AstFunctionCall _ name actualArgs) = do
