@@ -31,6 +31,7 @@ generateE (IrConst i) c = c ++ ["ldc " ++ show i]
 generateE (IrCall name args) c = c ++ ["ldc 0"] ++ concat (map (\a -> generateE a []) args) ++ ["bsr " ++ name, "ajs -" ++ show (length args)]
 generateE (IrTemp IrFramePointer) c = c ++ ["ldr MP"]
 generateE (IrTemp IrStackPointer) c = c ++ ["ldr SP"]
+generateE (IrMem (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst n))) c = c ++ ["ldl " ++ show n]
 generateE (IrMem e) c = generateE e c ++ ["lda 0"]
 
 generateS :: IrStatement -> Asm -> Asm
