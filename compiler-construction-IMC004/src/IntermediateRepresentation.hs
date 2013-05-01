@@ -94,7 +94,7 @@ freshLabel = do
   name <- gets machineCurFunctionName
   i <- gets machineLabelNumber
   modify $ \m -> m { machineLabelNumber = i + 1 }
-  return $ name ++ "l" ++ show i
+  return $ name ++ "_l" ++ show i
 
 -- addGlobalVariable :: String -> IR IrExpression
 -- addGlobalVariable name = do
