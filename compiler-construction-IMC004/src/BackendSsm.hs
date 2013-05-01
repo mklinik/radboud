@@ -3,6 +3,10 @@ module BackendSsm where
 import Control.Monad.Trans.State
 
 import IntermediateRepresentation
+import Ast
+
+translateSsm :: AstProgram -> Asm
+translateSsm prog = generateSs $ evalState (program2ir prog) ssmMachine
 
 ssmMachine = mkMachine (-1) 0 4 makePrologue makeEpilogue accessFunArg
 

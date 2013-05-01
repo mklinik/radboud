@@ -5,7 +5,6 @@ import System.IO
 import System.Console.GetOpt
 import Text.Printf (printf)
 import Control.Monad
-import Control.Monad.Trans.State (evalState)
 
 import Parser
 import Prettyprinter
@@ -15,8 +14,7 @@ import Ast
 import qualified Typechecker as TC
 import Repl
 import System.Exit
-import BackendSsm
-import IntermediateRepresentation
+import Compile
 
 main :: IO ()
 main = do
@@ -89,10 +87,13 @@ run opts = do
 
     ModeCompile -> do
       input <- hGetContents (inFile opts)
-      let ast = parse pProgram input
-      let asm = generateSs $ evalState (program2ir ast) ssmMachine
-      mapM_ (hPutStrLn (outFile opts)) asm
-      return ExitSuccess
+      case compileSsm (inputFilename opts) input of
+        Left err -> do
+          hPutStrLn stderr $ show err
+          return $ ExitFailure 1
+        Right asm -> do
+          mapM_ (hPutStrLn (outFile opts)) asm
+          return ExitSuccess
 
   cleanUp opts
   return returnCode
