@@ -14,6 +14,7 @@ import Utils
 import BackendSsm
 import IntermediateRepresentation
 import TestUtils
+import Compile
 
 main :: IO ()
 main = hspec spec
@@ -29,8 +30,8 @@ runSsm asm = do
 runE :: String -> String
 runE expr = head $ unsafePerformIO (runSsm $ generateE (evalState (exp2ir $ parse pExpr expr) ssmMachine) [])
 
-runProg :: String -> [String]
-runProg prog = unsafePerformIO (runSsm $ generateSs (evalState (program2ir $ parse pProgram prog) ssmMachine))
+run :: String -> [String]
+run prog = unsafePerformIO $ runSsm $ unRight $ compileSsm "unittest" prog
 
 -- testBinOp :: (Show a, Show b) => (String, (a -> a -> b)) -> (a -> a -> Bool)
 testBinOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
@@ -45,16 +46,16 @@ testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
 spec :: Spec
 spec = do
   describe "main function" $
-    it "print 42" $ runProg "Void main() { print(42); }" `shouldBe` ["42"]
+    it "print 42" $ run "Void main() { print(42); }" `shouldBe` ["42"]
 
   describe "access to function arguments" $ do
-    it "identity function, Int, 3" $ runProg "a id(a x) { return x; } Void main() { print(id(3)); }" `shouldBe` ["3"]
-    it "identity function, Int, -42" $ runProg "a id(a x) { return x; } Void main() { print(id(-42)); }" `shouldBe` ["-42"]
-    it "identity function, Bool, True" $ runProg "a id(a x) { return x; } Void main() { print(id(True)); }" `shouldBe` ["-1"]
-    it "identity function, Bool, False" $ runProg "a id(a x) { return x; } Void main() { print(id(False)); }" `shouldBe` ["0"]
+    it "identity function, Int, 3" $ run "a id(a x) { return x; } Void main() { print(id(3)); }" `shouldBe` ["3"]
+    it "identity function, Int, -42" $ run "a id(a x) { return x; } Void main() { print(id(-42)); }" `shouldBe` ["-42"]
+    it "identity function, Bool, True" $ run "a id(a x) { return x; } Void main() { print(id(True)); }" `shouldBe` ["-1"]
+    it "identity function, Bool, False" $ run "a id(a x) { return x; } Void main() { print(id(False)); }" `shouldBe` ["0"]
 
-    it "square function" $ runProg "Int square(Int x) { return x * x; } Void main() { print(square(3)); }" `shouldBe` ["9"]
-    it "constant function" $ runProg "a const(a x, b y) { return x; } Void main() { print(const(42, True)); print(const(False, 100)); }"
+    it "square function" $ run "Int square(Int x) { return x * x; } Void main() { print(square(3)); }" `shouldBe` ["9"]
+    it "constant function" $ run "a const(a x, b y) { return x; } Void main() { print(const(42, True)); print(const(False, 100)); }"
       `shouldBe` ["42", "0"]
 
   describe "logical operators" $ do
