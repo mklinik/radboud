@@ -46,13 +46,10 @@ generateS (IrExp e) c = generateE e c ++ ["ajs -1"]
 generateS (IrMove (IrMem (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst n))) val) c = generateE val c ++ ["stl " ++ show n]
 generateS (IrMove (IrMem dst) val) c = generateE dst (generateE val c) ++ ["sta 0"] -- standard fallback
 
-generateS (IrCjump condition thenStmt elseStartLabel elseStmt elseEndLabel) c =
-  generateE condition c ++ ["brf " ++ elseStartLabel]
-    ++ generateS thenStmt []
-    ++ ["bra " ++ elseEndLabel]
-    ++ [elseStartLabel ++ ":"]
-    ++ generateS elseStmt []
-    ++ [elseEndLabel ++ ":"]
+generateS (IrCNjump condition elseLabel stmt endLabel) c =
+  generateE condition c ++ ["brf " ++ elseLabel]
+    ++ generateS stmt []
+    ++ [endLabel ++ ":"]
 
 
 generateSs :: [IrStatement] -> Asm

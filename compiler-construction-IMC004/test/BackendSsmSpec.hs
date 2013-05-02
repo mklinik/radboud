@@ -45,6 +45,38 @@ testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
 
 spec :: Spec
 spec = do
+  describe "while loops" $ do
+    it "iterative countdown" $ run (unlines
+      [ "Void countdown(Int x) {"
+      , "  while(x > 0) {"
+      , "    print(x);"
+      , "    x = x - 1;"
+      , "  }"
+      , "}"
+      , "Void main() { countdown(4); }"
+      ]) `shouldBe` ["4", "3", "2", "1"]
+    it "iterative factorial" $ run (unlines
+      [ "Int facI(Int x, Int acc) {" -- no local variables yet
+      , "  acc = 1;"
+      , "  while(x > 0) {"
+      , "    acc = acc * x;"
+      , "    x = x - 1;"
+      , "  }"
+      , "  return acc;"
+      , "}"
+      , ""
+      , "Void main() {"
+      , " print(facI(0, 0));"
+      , " print(facI(1, 0));"
+      , " print(facI(2, 0));"
+      , " print(facI(3, 0));"
+      , " print(facI(4, 0));"
+      , " print(facI(5, 0));"
+      , " print(facI(6, 0));"
+      , " print(facI(7, 0));"
+      , "}"
+      ]) `shouldBe` ["1", "1", "2", "6", "24", "120", "720", "5040"]
+
   describe "if-then-else" $ do
     it "branches to then branch" $ run "Void main() { if(True ) print(13); else print(23); return; }" `shouldBe` ["13"]
     it "branches to else branch" $ run "Void main() { if(False) print(13); else print(23); return; }" `shouldBe` ["23"]

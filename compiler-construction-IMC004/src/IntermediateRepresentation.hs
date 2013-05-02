@@ -34,7 +34,7 @@ data IrStatement
   | IrJump String
   | IrAsm Asm
   | IrExp IrExpression
-  | IrCjump IrExpression IrStatement String IrStatement String
+  | IrCNjump IrExpression String IrStatement String -- if (not condition) goto elseLabel body endLabel
   deriving (Show)
 
 data Machine = Machine
@@ -147,16 +147,29 @@ stmt2ir (AstReturn _ (Just e)) = do
 stmt2ir (AstFunctionCallStmt f) = funCall2ir f >>= return . IrExp
 stmt2ir (AstAsm asm) = return $ IrAsm asm
 stmt2ir (AstIfThenElse _ astCondition astThen astElse) = do
-  elseStartLabel <- freshLabel
-  elseEndLabel <- freshLabel
+  elseLabel <- freshLabel
+  endLabel <- freshLabel
   cond <- exp2ir astCondition
   thenStmt <- stmt2ir astThen
   elseStmt <- stmt2ir astElse
-  return $ IrCjump cond thenStmt elseStartLabel elseStmt elseEndLabel
+  return $ IrCNjump
+    cond
+    elseLabel
+    (IrSeq (IrSeq thenStmt (IrJump endLabel))
+           (IrSeq (IrLabel elseLabel) elseStmt)
+    )
+    endLabel
 stmt2ir (AstAssignment _ name value) = do
   src <- exp2ir value
   dst <- envLookup name
   return $ IrMove dst src
+stmt2ir (AstWhile _ condition body) = do
+  c <- exp2ir condition
+  b <- stmt2ir body
+  startLabel <- freshLabel
+  endLabel <- freshLabel
+  return $ IrSeq (IrLabel startLabel) (IrCNjump c endLabel (IrSeq b (IrJump startLabel)) endLabel)
+stmt2ir (AstBlock stmts) = stmts2ir stmts
 
 funCall2ir :: AstFunctionCall -> IR IrExpression
 funCall2ir (AstFunctionCall _ name actualArgs) = do
