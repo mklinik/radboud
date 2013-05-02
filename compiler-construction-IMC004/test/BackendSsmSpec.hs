@@ -33,13 +33,15 @@ runE expr = head $ unsafePerformIO (runSsm $ generateE (evalState (exp2ir $ pars
 run :: String -> [String]
 run prog = unsafePerformIO $ runSsm $ unRight $ compileSsm "unittest" prog
 
--- testBinOp :: (Show a, Show b) => (String, (a -> a -> b)) -> (a -> a -> Bool)
+testBinOp :: (Show a2, Show a1, Show a, Arbitrary a, Arbitrary a1) => ([Char], a -> a1 -> a2) -> ModifyParams
 testBinOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
   \arg1 arg2 -> runE (show arg1 ++ opStr ++ show arg2) == show (op arg1 arg2)
 
+testBinOpNonZero :: (Num a1, Ord a1, Show a2, Show a1, Show a, Arbitrary a, Arbitrary a1) => ([Char], a -> a1 -> a2) -> ModifyParams
 testBinOpNonZero (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
   \arg1 (NonZero arg2) -> property $ runE (show arg1 ++ opStr ++ show arg2) == show (op arg1 arg2)
 
+testCompareOp :: (Show a1, Show a, Arbitrary a, Arbitrary a1) => ([Char], a -> a1 -> Bool) -> ModifyParams
 testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
   \arg1 arg2 -> runE (show arg1 ++ opStr ++ show arg2) == show (if op arg1 arg2 then machineTrue ssmMachine else machineFalse ssmMachine)
 
