@@ -126,10 +126,9 @@ funDecl2ir (AstFunDeclaration _ _ name formalArgs _ body) = do
   modify $ \m -> m { machineCurFunctionArgCount = length formalArgs }
   oldEnv <- gets machineEnv
   mapM_ envAddFunArg formalArgs
-  m <- get
-  prologue <- machineMakePrologue m
+  prologue <- gets machineMakePrologue >>= id
   b <- stmts2ir body
-  epilogue <- machineMakeEpilogue m
+  epilogue <- gets machineMakeEpilogue >>= id
   modify $ \m -> m { machineEnv = oldEnv }
   return $ IrSeq (IrSeq prologue b) (IrSeq (IrLabel $ name ++ "_return") epilogue)
 
