@@ -72,6 +72,11 @@ spec = do
     it "constant function" $ run "a const(a x, b y) { return x; } Void main() { print(const(42, True)); print(const(False, 100)); }"
       `shouldBe` ["42", "0"]
 
+    it "assignments to function arguments" $ run (unlines
+      [ "Int f(Int x, Bool b) { if(b) x = x + 1; else x = x - 1; return x; }"
+      , "Void main() { print(f(5, True)); print(f(5, False)); }"
+      ]) `shouldBe` ["6", "4"]
+
   describe "logical operators" $ do
     it "logical and" $ testCompareOp ("&&", (&&)::(Bool -> Bool -> Bool))
     it "logical or"  $ testCompareOp ("||", (||)::(Bool -> Bool -> Bool))

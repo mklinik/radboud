@@ -153,6 +153,10 @@ stmt2ir (AstIfThenElse _ astCondition astThen astElse) = do
   thenStmt <- stmt2ir astThen
   elseStmt <- stmt2ir astElse
   return $ IrCjump cond thenStmt elseStartLabel elseStmt elseEndLabel
+stmt2ir (AstAssignment _ name value) = do
+  src <- exp2ir value
+  dst <- envLookup name
+  return $ IrMove dst src
 
 funCall2ir :: AstFunctionCall -> IR IrExpression
 funCall2ir (AstFunctionCall _ name actualArgs) = do
