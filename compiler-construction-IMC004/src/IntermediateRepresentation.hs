@@ -206,39 +206,61 @@ builtins =
       [ AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "x" ]
       []
       [ AstAsm ["ldl -2", "trap 0"] ]
-  , AstFunDeclaration emptyMeta (BaseType emptyMeta "(a, b)") "__mktuple__"
-      [ AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "a"
-      , AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "b") "b"
-      ]
+  , cons "__mktuple__"
+  , car "fst"
+  , cdr "snd"
+  , cons "__mklist__"
+  , car "head"
+  , cdr "tail"
+  , AstFunDeclaration emptyMeta (BaseType emptyMeta "Bool") "isEmpty"
+      [ AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "x" ]
       []
       [ AstAsm
-        [ "ldl -3 ; load first argument"
-        , "ldl -2 ; load second argument"
-        , "stmh 2 ; store both on the heap, and obtain pointer to second value"
-        , "stl -4 ; pop tuple pointer to return value"
-        ]
-      ]
-  , AstFunDeclaration emptyMeta (BaseType emptyMeta "a") "fst"
-      [ AstFunctionArgument emptyMeta (TupleType emptyMeta (PolymorphicType emptyMeta "a") (PolymorphicType emptyMeta "b")) "t"
-      ]
-      []
-      [ AstAsm
-        [ "ldl -2 ; load first argument"
-        , "ldh -1 ; tuple pointer points to second value, but we want the first"
-        , "stl -3 ; return value"
-        ]
-      ]
-  , AstFunDeclaration emptyMeta (BaseType emptyMeta "b") "snd"
-      [ AstFunctionArgument emptyMeta (TupleType emptyMeta (PolymorphicType emptyMeta "a") (PolymorphicType emptyMeta "b")) "t"
-      ]
-      []
-      [ AstAsm
-        [ "ldl -2 ; load first argument"
-        , "ldh 0  ; tuple pointer points to second value"
-        , "stl -3 ; return value"
+        [ "ldl -2"
+        , "ldc 0"
+        , "eq ; the empty list is just the null pointer"
+        , "stl -3"
         ]
       ]
   ]
+  where
+    cons name =
+      AstFunDeclaration emptyMeta (BaseType emptyMeta "(a, b)") name
+        [ AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "a"
+        , AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "b") "b"
+        ]
+        []
+        [ AstAsm
+          [ "ldl -3 ; load first argument"
+          , "ldl -2 ; load second argument"
+          , "stmh 2 ; store both on the heap, and obtain pointer to second value"
+          , "stl -4 ; pop tuple pointer to return value"
+          ]
+        ]
+
+    car name =
+      AstFunDeclaration emptyMeta (BaseType emptyMeta "a") name
+        [ AstFunctionArgument emptyMeta (TupleType emptyMeta (PolymorphicType emptyMeta "a") (PolymorphicType emptyMeta "b")) "t"
+        ]
+        []
+        [ AstAsm
+          [ "ldl -2 ; load first argument"
+          , "ldh -1 ; tuple pointer points to second value, but we want the first"
+          , "stl -3 ; return value"
+          ]
+        ]
+
+    cdr name =
+      AstFunDeclaration emptyMeta (BaseType emptyMeta "b") name
+        [ AstFunctionArgument emptyMeta (TupleType emptyMeta (PolymorphicType emptyMeta "a") (PolymorphicType emptyMeta "b")) "t"
+        ]
+        []
+        [ AstAsm
+          [ "ldl -2 ; load first argument"
+          , "ldh 0  ; tuple pointer points to second value"
+          , "stl -3 ; return value"
+          ]
+        ]
 
 program2ir :: AstProgram -> IR [IrStatement]
 program2ir (AstProgram decls) =
@@ -262,6 +284,10 @@ exp2ir (AstInteger _ i) = return $ IrConst $ fromInteger i
 exp2ir (AstBoolean _ b) = do
   m <- get
   return $ IrConst $ if b then machineTrue m else machineFalse m
+exp2ir (AstBinOp _ ":" lhs rhs) = do
+  hd <- exp2ir lhs
+  tl <- exp2ir rhs
+  return $ IrCall (IrName "__mklist__") [hd, tl]
 exp2ir (AstBinOp _ op lhs rhs) = do
   l <- exp2ir lhs
   r <- exp2ir rhs
@@ -279,6 +305,7 @@ exp2ir (AstTuple _ astA astB) = do
   a <- exp2ir astA
   b <- exp2ir astB
   return $ IrCall (IrName "__mktuple__") [a, b]
+exp2ir (AstEmptyList _) = return $ IrConst 0 -- the empty list is just the null pointer
 
 op2ir :: String -> IrBinOp
 op2ir "+" = OpAdd

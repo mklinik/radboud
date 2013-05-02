@@ -47,6 +47,29 @@ testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
 
 spec :: Spec
 spec = do
+  describe "map" $ do
+    it "map (+2) on [1, 2, 3] gives [3, 4, 5]" $ run (unlines
+      [ "Void printList(l l) { if(isEmpty(l)) return; else print(head(l)); printList(tail(l)); }"
+      , "[b] map(f f, [a] l) { if(isEmpty(l)) return []; else return f(head(l)):map(f, tail(l)); }"
+      , "a plus2(a a) { return a + 2; }"
+      , "Void main() { printList(map(plus2, 1:2:3:[])); }"
+      ]) `shouldBe` ["3", "4", "5"]
+
+  describe "printList" $ do
+    it "recursively print a list" $ run (unlines
+      [ "Void printList(l l) { if(isEmpty(l)) return; else print(head(l)); printList(tail(l)); }"
+      , "Void main() { printList(1:2:3:[]); }"
+      ]) `shouldBe` ["1", "2", "3"]
+
+  describe "lists" $ do
+    it "empty list" $ run "Void main() { var l = []; print(isEmpty(l)); }" `shouldBe` [show $ machineTrue ssmMachine]
+    it "non-empty list" $ run "Void main() { var l = 1:[]; print(isEmpty(l)); }" `shouldBe` [show $ machineFalse ssmMachine]
+    it "head of non-empty list" $ run "Void main() { var l = 1:[]; print(head(l)); }" `shouldBe` ["1"]
+    it "tail of one-element list is empty" $ run "Void main() { var l = 1:[]; print(isEmpty(tail(l))); }" `shouldBe`
+      [show $ machineTrue ssmMachine]
+    it "tail of two-element list is not empty" $ run "Void main() { var l = 1:2:[]; print(isEmpty(tail(l))); }" `shouldBe`
+      [show $ machineFalse ssmMachine]
+
   describe "tuples" $ do
     it "first projection" $ run (unlines
       [ "(Int, Int) t = (42, 100);"
