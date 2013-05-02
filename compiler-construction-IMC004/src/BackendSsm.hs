@@ -13,10 +13,13 @@ ssmMachine = mkMachine (-1) 0 4 makePrologue makeEpilogue accessFunArg
 makePrologue :: IR IrStatement
 makePrologue = do
   name <- gets machineCurFunctionName
-  return $ IrAsm [name ++ ": ldr MP", "ldrr MP SP"]
+  s <- gets machineFrameSize
+  return $ IrAsm [name ++ ": ldr MP", "ldrr MP SP", "ajs " ++ show s ++ " ; make space for locals "]
 
 makeEpilogue :: IR IrStatement
-makeEpilogue = return $ IrAsm ["str MP", "ret"]
+makeEpilogue = do
+  s <- gets machineFrameSize
+  return $ IrAsm ["ajs " ++ show (-s) ++ " ; pop locals", "str MP", "ret"]
 
 accessFunArg :: IR IrExpression
 accessFunArg = do
@@ -28,7 +31,10 @@ accessFunArg = do
 generateE :: IrExpression -> Asm -> Asm
 generateE (IrBinOp op lhs rhs) c = genrerateBinOp op $ generateE rhs $ generateE lhs c
 generateE (IrConst i) c = c ++ ["ldc " ++ show i]
-generateE (IrCall name args) c = c ++ ["ldc 0"] ++ concat (map (\a -> generateE a []) args) ++ ["bsr " ++ name, "ajs -" ++ show (length args)]
+generateE (IrCall name args) c =
+  c ++ ["ldc 0 ; make space for return value"]
+    ++ concat (map (\a -> generateE a []) args)
+    ++ ["bsr " ++ name, "ajs -" ++ show (length args) ++ " ; pop function arguments"]
 generateE (IrTemp IrFramePointer) c = c ++ ["ldr MP"]
 generateE (IrTemp IrStackPointer) c = c ++ ["ldr SP"]
 
@@ -41,7 +47,8 @@ generateS (IrAsm asm) c = c ++ asm
 generateS (IrJump name) c = c ++ ["bra " ++ name]
 generateS (IrLabel name) c = c ++ [name ++ ":"]
 generateS (IrSeq s1 s2) c = generateS s2 (generateS s1 c)
-generateS (IrExp e) c = generateE e c ++ ["ajs -1"]
+generateS (IrExp e) c = generateE e c ++ ["ajs -1 ; discard unused value"]
+generateS (IrSkip) c = c
 
 generateS (IrMove (IrMem (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst n))) val) c = generateE val c ++ ["stl " ++ show n]
 generateS (IrMove (IrMem dst) val) c = generateE dst (generateE val c) ++ ["sta 0"] -- standard fallback

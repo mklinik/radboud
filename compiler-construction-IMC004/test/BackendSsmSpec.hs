@@ -47,6 +47,45 @@ testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
 
 spec :: Spec
 spec = do
+  describe "local variables" $ do
+    it "lots of local variables" $ run (unlines
+      [ "Void main()"
+      , "{"
+      , "  var a = 1;"
+      , "  var b = 2;"
+      , "  var c = 3;"
+      , "  var d = 4;"
+      , ""
+      , "  print(a + b);"
+      , "  print(b + c);"
+      , "  print(c + d);"
+      , "  print(a + b + c + d);"
+      , ""
+      , "  return;"
+      , "}"
+      ]) `shouldBe` ["3", "5", "7", "10"]
+    it "iterative factorial with local variable" $ run (unlines
+      [ "Int facI(Int x) {"
+      , "  var acc = 1;"
+      , "  while(x > 0) {"
+      , "    acc = acc * x;"
+      , "    x = x - 1;"
+      , "  }"
+      , "  return acc;"
+      , "}"
+      , ""
+      , "Void main() {"
+      , " print(facI(0));"
+      , " print(facI(1));"
+      , " print(facI(2));"
+      , " print(facI(3));"
+      , " print(facI(4));"
+      , " print(facI(5));"
+      , " print(facI(6));"
+      , " print(facI(7));"
+      , "}"
+      ]) `shouldBe` ["1", "1", "2", "6", "24", "120", "720", "5040"]
+
   describe "unary negate" $ do
     let unaryNegate x = "Bool unaryNegate(Bool x) { return !x; } Void main() { print(unaryNegate("++show x++")); }"
     it "unary negate True"  $ run (unaryNegate True) `shouldBe` [show $ machineFalse ssmMachine]

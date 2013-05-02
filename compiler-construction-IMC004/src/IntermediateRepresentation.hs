@@ -3,6 +3,7 @@ module IntermediateRepresentation where
 import Control.Monad.Trans.State
 import qualified Data.Map as Map
 import Data.Map (Map)
+import Control.Monad (liftM)
 
 import Ast
 
@@ -35,6 +36,7 @@ data IrStatement
   | IrAsm Asm
   | IrExp IrExpression
   | IrCNjump IrExpression String IrStatement String -- if (not condition) goto elseLabel body endLabel
+  | IrSkip
   deriving (Show)
 
 data Machine = Machine
@@ -82,6 +84,9 @@ envAddFunArg (AstFunctionArgument _ _ name) = do
   lookupCode <- gets machineAccessFunArg >>= id
   modify $ \m -> m { machineEnv = Map.insert name lookupCode (machineEnv m) }
 
+envAdd :: String -> IrExpression -> IR ()
+envAdd name lookupCode = modify $ \m -> m { machineEnv = Map.insert name lookupCode (machineEnv m) }
+
 envLookup :: String -> IR IrExpression
 envLookup name = do
   env <- gets machineEnv
@@ -96,41 +101,37 @@ freshLabel = do
   modify $ \m -> m { machineLabelNumber = i + 1 }
   return $ name ++ "_l" ++ show i
 
--- addGlobalVariable :: String -> IR IrExpression
--- addGlobalVariable name = do
-  -- s <- curFrameSize
-  -- bumpFrameSize
-  -- envAdd name (IrMem $ IrConst s)
-  -- envLookup name
+addLocalVariable :: String -> IR ()
+addLocalVariable name = do
+  bumpFrameSize
+  s <- curFrameSize
+  envAdd name (IrMem $ (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst s)))
 
--- varDecl2ir :: AstDeclaration -> IR IrStatement
--- varDecl2ir (AstVarDeclaration _ _ name expr) = do
-  -- addr <- addGlobalVariable name
-  -- e <- exp2ir expr
-  -- return $ IrMove addr e
+varDecl2ir :: AstDeclaration -> IR IrStatement
+varDecl2ir (AstVarDeclaration _ _ name expr) = do
+  addLocalVariable name
+  e <- exp2ir expr
+  dst <- envLookup name
+  return $ IrMove dst e
 
--- varDecls2ir :: [AstDeclaration] -> IR IrStatement
--- varDecls2ir [] = do
-  -- s <- curFrameSize
-  -- let sp = (IrTemp IrStackPointer)
-  -- return $ IrMove sp (IrBinOp OpAdd sp (IrConst s))
--- varDecls2ir (d:ds) = do
-  -- foo <- varDecl2ir d
-  -- bar <- varDecls2ir ds
-  -- return $ IrSeq foo bar
+sequenceIr :: [IrStatement] -> IrStatement
+sequenceIr [] = IrSkip
+sequenceIr (s:ss) = IrSeq s (sequenceIr ss)
 
 funDecl2ir :: AstDeclaration -> IR IrStatement
-funDecl2ir (AstFunDeclaration _ _ name formalArgs _ body) = do
+funDecl2ir (AstFunDeclaration _ _ name formalArgs localVars body) = do
+  oldEnv <- gets machineEnv
   modify $ \m -> m { machineCurFunArgIndex = 0 }
   modify $ \m -> m { machineCurFunctionName = name }
   modify $ \m -> m { machineCurFunctionArgCount = length formalArgs }
-  oldEnv <- gets machineEnv
+  modify $ \m -> m { machineFrameSize = 0 }
   mapM_ envAddFunArg formalArgs
+  varInits <- liftM sequenceIr $ mapM varDecl2ir localVars
   prologue <- gets machineMakePrologue >>= id
   b <- stmts2ir body
   epilogue <- gets machineMakeEpilogue >>= id
   modify $ \m -> m { machineEnv = oldEnv }
-  return $ IrSeq (IrSeq prologue b) (IrSeq (IrLabel $ name ++ "_return") epilogue)
+  return $ IrSeq (IrSeq prologue (IrSeq varInits b)) (IrSeq (IrLabel $ name ++ "_return") epilogue)
 
 stmt2ir :: AstStatement -> IR IrStatement
 stmt2ir (AstReturn _ Nothing) = do
