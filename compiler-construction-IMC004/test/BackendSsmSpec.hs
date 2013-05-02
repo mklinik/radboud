@@ -47,6 +47,25 @@ testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
 
 spec :: Spec
 spec = do
+  describe "tuples" $ do
+    it "first projection" $ run (unlines
+      [ "(Int, Int) t = (42, 100);"
+      , "Void main() { print(fst(t)); }"
+      ]) `shouldBe` ["42"]
+    it "second projection" $ run (unlines
+      [ "(Int, Int) t = (42, 100);"
+      , "Void main() { print(snd(t)); }"
+      ]) `shouldBe` ["100"]
+    it "nested tuples" $ run (unlines
+      [ "(Int, ((Bool, Bool), Int)) t = (10, ((True, False), 42));"
+      , "Void main() {"
+      , "  print(fst(t));"
+      , "  print(fst(fst(snd(t))));"
+      , "  print(snd(fst(snd(t))));"
+      , "  print(snd(snd(t)));"
+      , "}"
+      ]) `shouldBe` ["10", show (machineTrue ssmMachine), show (machineFalse ssmMachine), "42"]
+
   describe "higher order functions" $ do
     it "store function in a variable" $ run "a id(a a) { return a; } Void main() { f f = id; print(f(42)); }" `shouldBe` ["42"]
     it "pass function as argument" $ run (unlines

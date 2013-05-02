@@ -199,12 +199,45 @@ stmts2ir (s:ss) = do
   ss_ <- stmts2ir ss
   return $ IrSeq s_ ss_
 
+-- the types of the arguments and the return type don't matter.  The number of arguments is crucial though.
 builtins :: [AstDeclaration]
 builtins =
   [ AstFunDeclaration emptyMeta (BaseType emptyMeta "Void") "print"
       [ AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "x" ]
       []
       [ AstAsm ["ldl -2", "trap 0"] ]
+  , AstFunDeclaration emptyMeta (BaseType emptyMeta "(a, b)") "__mktuple__"
+      [ AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "a"
+      , AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "b") "b"
+      ]
+      []
+      [ AstAsm
+        [ "ldl -3 ; load first argument"
+        , "ldl -2 ; load second argument"
+        , "stmh 2 ; store both on the heap, and obtain pointer to second value"
+        , "stl -4 ; pop tuple pointer to return value"
+        ]
+      ]
+  , AstFunDeclaration emptyMeta (BaseType emptyMeta "a") "fst"
+      [ AstFunctionArgument emptyMeta (TupleType emptyMeta (PolymorphicType emptyMeta "a") (PolymorphicType emptyMeta "b")) "t"
+      ]
+      []
+      [ AstAsm
+        [ "ldl -2 ; load first argument"
+        , "ldh -1 ; tuple pointer points to second value, but we want the first"
+        , "stl -3 ; return value"
+        ]
+      ]
+  , AstFunDeclaration emptyMeta (BaseType emptyMeta "b") "snd"
+      [ AstFunctionArgument emptyMeta (TupleType emptyMeta (PolymorphicType emptyMeta "a") (PolymorphicType emptyMeta "b")) "t"
+      ]
+      []
+      [ AstAsm
+        [ "ldl -2 ; load first argument"
+        , "ldh 0  ; tuple pointer points to second value"
+        , "stl -3 ; return value"
+        ]
+      ]
   ]
 
 program2ir :: AstProgram -> IR [IrStatement]
@@ -242,6 +275,10 @@ exp2ir (AstUnaryOp _ "!" operand) = do
   e <- exp2ir operand
   return $ IrBinOp OpXor (IrConst (-1)) e -- TODO: need a platform-independent way to specify the machine word of all ones
 exp2ir (AstUnaryOp _ _ _) = error "undefined unary operator"
+exp2ir (AstTuple _ astA astB) = do
+  a <- exp2ir astA
+  b <- exp2ir astB
+  return $ IrCall (IrName "__mktuple__") [a, b]
 
 op2ir :: String -> IrBinOp
 op2ir "+" = OpAdd
