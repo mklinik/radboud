@@ -19,7 +19,7 @@ data IrExpression
 data IrBinOp
   = OpAdd | OpSub | OpMul | OpDiv | OpMod
   | OpEq | OpNeq | OpLt | OpLte | OpGt | OpGte
-  | OpAnd | OpOr
+  | OpAnd | OpOr | OpXor
   deriving (Show)
 
 data IrTemp
@@ -213,6 +213,13 @@ exp2ir (AstBinOp _ op lhs rhs) = do
   return $ IrBinOp (op2ir op) l r
 exp2ir (AstIdentifier _ name) = envLookup name
 exp2ir (AstFunctionCallExpr f) = funCall2ir f
+exp2ir (AstUnaryOp _ "-" operand) = do
+  e <- exp2ir operand
+  return $ IrBinOp OpSub (IrConst 0) e
+exp2ir (AstUnaryOp _ "!" operand) = do
+  e <- exp2ir operand
+  return $ IrBinOp OpXor (IrConst (-1)) e -- TODO: need a platform-independent way to specify the machine word of all ones
+exp2ir (AstUnaryOp _ _ _) = error "undefined unary operator"
 
 op2ir :: String -> IrBinOp
 op2ir "+" = OpAdd

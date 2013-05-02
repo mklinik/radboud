@@ -71,3 +71,4 @@ genrerateBinOp OpGte c = c ++ ["ge"]
 
 genrerateBinOp OpAnd c = c ++ ["and"]
 genrerateBinOp OpOr  c = c ++ ["or"]
+genrerateBinOp OpXor c = c ++ ["xor"]

@@ -47,6 +47,17 @@ testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
 
 spec :: Spec
 spec = do
+  describe "unary negate" $ do
+    let unaryNegate x = "Bool unaryNegate(Bool x) { return !x; } Void main() { print(unaryNegate("++show x++")); }"
+    it "unary negate True"  $ run (unaryNegate True) `shouldBe` [show $ machineFalse ssmMachine]
+    it "unary negate False" $ run (unaryNegate False) `shouldBe` [show $ machineTrue ssmMachine]
+
+  describe "unary minus" $ do
+    let unaryMinus x = "Int unaryMinus(Int x) { return -x; } Void main() { print(unaryMinus("++show x++")); }"
+    it "unary minus 1" $ run (unaryMinus 1) `shouldBe` ["-1"]
+    it "unary minus -1" $ run (unaryMinus (-1)) `shouldBe` ["1"]
+    it "unary minus 0" $ run (unaryMinus (0)) `shouldBe` ["0"]
+
   describe "while loops" $ do
     it "iterative countdown" $ run (unlines
       [ "Void countdown(Int x) {"
