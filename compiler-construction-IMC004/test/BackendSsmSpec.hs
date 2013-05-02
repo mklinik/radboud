@@ -47,6 +47,25 @@ testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
 
 spec :: Spec
 spec = do
+  describe "higher order functions" $ do
+    it "store function in a variable" $ run "a id(a a) { return a; } Void main() { f f = id; print(f(42)); }" `shouldBe` ["42"]
+    it "pass function as argument" $ run (unlines
+      [ "c plus(a a, b b) { return a + b; }"
+      , "c apply2(f f, a a, b b) { return f(a, b); }"
+      , "Void main() { print(apply2(plus, 41, 1)); }"
+      ]) `shouldBe` ["42"]
+    it "function as return value" $ run (unlines
+      [ "c plus(a a, b b) { return a + b; }"
+      , "c minus(a a, b b) { return a - b; }"
+      , "c gimme(True c) { if(c) return plus; else return minus; }"
+      , "Void main() {"
+      , "  var f = gimme(True);"
+      , "  print(f(49, 51));"
+      , "  f = gimme(False);"
+      , "  print(f(49, 51));"
+      , "}"
+      ]) `shouldBe` ["100", "-2"]
+
   describe "global variables" $ do
     it "read a global variable" $ run "Int x = 5; Void main() { print(x); }" `shouldBe` ["5"]
     it "write a global variable" $ run "Int x = 5; Void main() { x = 3; print(x); }" `shouldBe` ["3"]

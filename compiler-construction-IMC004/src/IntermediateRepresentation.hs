@@ -14,7 +14,8 @@ data IrExpression
   | IrConst Int
   | IrTemp IrTemp
   | IrMem IrExpression
-  | IrCall String [IrExpression]
+  | IrCall IrExpression [IrExpression]
+  | IrName String
   deriving (Show)
 
 data IrBinOp
@@ -187,7 +188,8 @@ stmt2ir (AstBlock stmts) = stmts2ir stmts
 funCall2ir :: AstFunctionCall -> IR IrExpression
 funCall2ir (AstFunctionCall _ name actualArgs) = do
   args <- mapM exp2ir actualArgs
-  return $ IrCall name args
+  addr <- envLookup name
+  return $ IrCall addr args
 
 stmts2ir :: [AstStatement] -> IR IrStatement
 stmts2ir [] = error "empty statement list"
@@ -211,6 +213,7 @@ program2ir (AstProgram decls) =
 
 decls2ir :: [AstDeclaration] -> IR [IrStatement]
 decls2ir decls = do
+  mapM_ (\(AstFunDeclaration _ _ name _ _ _) -> envAdd name (IrName name)) funDecls
   vars <- mapM (varDecl2ir GlobalScope) varDecls
   initCode <- gets machineMakeGlobalInitCode >>= \f -> f vars
   funs <- mapM funDecl2ir funDecls

@@ -24,6 +24,7 @@ makeEpilogue = do
 
 makeGlobalInitCode :: [IrStatement] -> IR [IrStatement]
 makeGlobalInitCode varInits = do
+  mainAddr <- envLookup "main"
   s <- gets machineFrameSize
   return $
       [ IrAsm
@@ -32,7 +33,7 @@ makeGlobalInitCode varInits = do
           ]
       ]
     ++ varInits
-    ++ [IrSeq (IrExp $ IrCall "main" []) (IrAsm ["ajs " ++ show (-s) ++ " ; pop globals", "halt"])]
+    ++ [IrSeq (IrExp $ IrCall mainAddr []) (IrAsm ["ajs " ++ show (-s) ++ " ; pop globals", "halt"])]
 
 accessFunArg :: IR IrExpression
 accessFunArg = do
@@ -44,16 +45,18 @@ accessFunArg = do
 generateE :: IrExpression -> Asm -> Asm
 generateE (IrBinOp op lhs rhs) c = genrerateBinOp op $ generateE rhs $ generateE lhs c
 generateE (IrConst i) c = c ++ ["ldc " ++ show i]
-generateE (IrCall name args) c =
+generateE (IrCall addr args) c =
   c ++ ["ldc 0 ; make space for return value"]
     ++ concat (map (\a -> generateE a []) args)
-    ++ ["bsr " ++ name, "ajs -" ++ show (length args) ++ " ; pop function arguments"]
+    ++ generateE addr []
+    ++ ["jsr", "ajs -" ++ show (length args) ++ " ; pop function arguments"]
 generateE (IrTemp IrFramePointer) c = c ++ ["ldr MP"]
 generateE (IrTemp IrStackPointer) c = c ++ ["ldr SP"]
 generateE (IrTemp IrGlobalFramePointer) c = c ++ ["ldr 5 ; global frame pointer"]
 
 generateE (IrMem (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst n))) c = c ++ ["ldl " ++ show n]
 generateE (IrMem e) c = generateE e c ++ ["lda 0"]
+generateE (IrName name) c = c ++ ["ldc " ++ name]
 
 
 generateS :: IrStatement -> Asm -> Asm
