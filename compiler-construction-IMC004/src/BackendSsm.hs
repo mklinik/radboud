@@ -8,7 +8,8 @@ import Ast
 translateSsm :: AstProgram -> Asm
 translateSsm prog = generateSs $ evalState (program2ir prog) ssmMachine
 
-ssmMachine = mkMachine (-1) 0 4 makePrologue makeEpilogue accessFunArg
+ssmMachine :: Machine
+ssmMachine = mkMachine (-1) 0 4 makePrologue makeEpilogue accessFunArg makeGlobalInitCode
 
 makePrologue :: IR IrStatement
 makePrologue = do
@@ -20,6 +21,18 @@ makeEpilogue :: IR IrStatement
 makeEpilogue = do
   s <- gets machineFrameSize
   return $ IrAsm ["ajs " ++ show (-s) ++ " ; pop locals", "str MP", "ret"]
+
+makeGlobalInitCode :: [IrStatement] -> IR [IrStatement]
+makeGlobalInitCode varInits = do
+  s <- gets machineFrameSize
+  return $
+      [ IrAsm
+          [ "ldrr 5 SP ; store global frame pointer"
+          , "ajs " ++ show s ++ " ; make space for globals"
+          ]
+      ]
+    ++ varInits
+    ++ [IrSeq (IrExp $ IrCall "main" []) (IrAsm ["ajs " ++ show (-s) ++ " ; pop globals", "halt"])]
 
 accessFunArg :: IR IrExpression
 accessFunArg = do
@@ -37,6 +50,7 @@ generateE (IrCall name args) c =
     ++ ["bsr " ++ name, "ajs -" ++ show (length args) ++ " ; pop function arguments"]
 generateE (IrTemp IrFramePointer) c = c ++ ["ldr MP"]
 generateE (IrTemp IrStackPointer) c = c ++ ["ldr SP"]
+generateE (IrTemp IrGlobalFramePointer) c = c ++ ["ldr 5 ; global frame pointer"]
 
 generateE (IrMem (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst n))) c = c ++ ["ldl " ++ show n]
 generateE (IrMem e) c = generateE e c ++ ["lda 0"]
@@ -60,7 +74,7 @@ generateS (IrCNjump condition elseLabel stmt endLabel) c =
 
 
 generateSs :: [IrStatement] -> Asm
-generateSs stmts = generateS (IrExp $ IrCall "main" []) [] ++ ["halt"] ++ (concat $ map (\s -> generateS s []) stmts)
+generateSs stmts = (concat $ map (\s -> generateS s []) stmts)
 
 genrerateBinOp :: IrBinOp -> Asm -> Asm
 genrerateBinOp OpAdd c = c ++ ["add"]

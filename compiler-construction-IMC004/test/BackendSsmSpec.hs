@@ -47,6 +47,10 @@ testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
 
 spec :: Spec
 spec = do
+  describe "global variables" $ do
+    it "read a global variable" $ run "Int x = 5; Void main() { print(x); }" `shouldBe` ["5"]
+    it "write a global variable" $ run "Int x = 5; Void main() { x = 3; print(x); }" `shouldBe` ["3"]
+
   describe "local variables" $ do
     it "lots of local variables" $ run (unlines
       [ "Void main()"

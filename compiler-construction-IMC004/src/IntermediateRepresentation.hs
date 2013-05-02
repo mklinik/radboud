@@ -26,6 +26,7 @@ data IrBinOp
 data IrTemp
   = IrStackPointer
   | IrFramePointer
+  | IrGlobalFramePointer
   deriving (Show)
 
 data IrStatement
@@ -47,6 +48,7 @@ data Machine = Machine
   , machineFrameSize :: Int -- size of current frame; i.e. the number of local variables
   , machineMakePrologue :: IR IrStatement
   , machineMakeEpilogue :: IR IrStatement
+  , machineMakeGlobalInitCode :: [IrStatement] -> IR [IrStatement]
   , machineCurFunctionName :: String
   , machineCurFunctionArgCount :: Int
   , machineCurFunArgIndex :: Int
@@ -54,8 +56,8 @@ data Machine = Machine
   , machineLabelNumber :: Int
   }
 
-mkMachine :: Int -> Int -> Int -> (IR IrStatement) -> (IR IrStatement) -> (IR IrExpression) -> Machine
-mkMachine tru fals word mkPrologue mkEpilogue accessFunArg = Machine
+mkMachine :: Int -> Int -> Int -> (IR IrStatement) -> (IR IrStatement) -> (IR IrExpression) -> ([IrStatement] -> IR [IrStatement]) -> Machine
+mkMachine tru fals word mkPrologue mkEpilogue accessFunArg mkInitCode = Machine
   { machineTrue = tru
   , machineFalse = fals
   , machineWord = word
@@ -63,6 +65,7 @@ mkMachine tru fals word mkPrologue mkEpilogue accessFunArg = Machine
   , machineFrameSize = 0
   , machineMakePrologue = mkPrologue
   , machineMakeEpilogue = mkEpilogue
+  , machineMakeGlobalInitCode = mkInitCode
   , machineCurFunctionName = ""
   , machineCurFunctionArgCount = 0
   , machineCurFunArgIndex = 0
@@ -107,9 +110,19 @@ addLocalVariable name = do
   s <- curFrameSize
   envAdd name (IrMem $ (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst s)))
 
-varDecl2ir :: AstDeclaration -> IR IrStatement
-varDecl2ir (AstVarDeclaration _ _ name expr) = do
-  addLocalVariable name
+addGlobalVariable :: String -> IR ()
+addGlobalVariable name = do
+  bumpFrameSize
+  s <- curFrameSize
+  envAdd name (IrMem $ (IrBinOp OpAdd (IrTemp IrGlobalFramePointer) (IrConst s)))
+
+data Scope = LocalScope | GlobalScope
+
+varDecl2ir :: Scope -> AstDeclaration -> IR IrStatement
+varDecl2ir scope (AstVarDeclaration _ _ name expr) = do
+  case scope of
+    LocalScope -> addLocalVariable name
+    GlobalScope -> addGlobalVariable name
   e <- exp2ir expr
   dst <- envLookup name
   return $ IrMove dst e
@@ -126,7 +139,7 @@ funDecl2ir (AstFunDeclaration _ _ name formalArgs localVars body) = do
   modify $ \m -> m { machineCurFunctionArgCount = length formalArgs }
   modify $ \m -> m { machineFrameSize = 0 }
   mapM_ envAddFunArg formalArgs
-  varInits <- liftM sequenceIr $ mapM varDecl2ir localVars
+  varInits <- liftM sequenceIr $ mapM (varDecl2ir LocalScope) localVars
   prologue <- gets machineMakePrologue >>= id
   b <- stmts2ir body
   epilogue <- gets machineMakeEpilogue >>= id
@@ -197,9 +210,14 @@ program2ir (AstProgram decls) =
   decls2ir $ concat decls ++ builtins
 
 decls2ir :: [AstDeclaration] -> IR [IrStatement]
-decls2ir decls = mapM funDecl2ir funDecls
+decls2ir decls = do
+  vars <- mapM (varDecl2ir GlobalScope) varDecls
+  initCode <- gets machineMakeGlobalInitCode >>= \f -> f vars
+  funs <- mapM funDecl2ir funDecls
+  return $ initCode ++ funs
   where
     funDecls = filter isFunDecl decls
+    varDecls = filter (not . isFunDecl) decls
     isFunDecl (AstFunDeclaration _ _ _ _ _ _) = True
     isFunDecl _ = False
 
