@@ -32,23 +32,22 @@
 
 \begin{document}
 
-\title{A Typechecker for SPL, the Simple~Programming~Language}
+\title{A Compiler for SPL, the Simple~Programming~Language}
 \author{Markus Klinik (s4220315)}
 \maketitle
 
 \begin{abstract}
 
-This report describes design decisions and typing rules for the
-implementation of the type checker for the course NWI-IMC004 Compiler
-Construction.
+This report describes design decisions for the implementation of the compiler
+for the course NWI-IMC004 Compiler Construction.
 
 \end{abstract}
 
 \section{Implementation language}
 
-The SPL parser and type checker are written in Haskell, because a
-functional language is well-suited for the various programming tasks
-that arise when implementing a compiler.
+The SPL compiler is written in Haskell, because a functional language is
+well-suited for the various programming tasks that arise when implementing a
+compiler.
 
 \begin{itemize}
 
@@ -82,8 +81,8 @@ The second change to the grammar is one left-factorization in the rule
 for expressions, to get rid of backtracking when an expression in the
 input starts with many opening parenthesis.
 
-The third grammar change is due to scoping issues, and described in the next
-section.
+The third grammar change is due to scoping issues, and described in section
+\ref{sec:scopingRules}.
 
 \section{Scoping rules}
 
@@ -294,6 +293,8 @@ The scoping rules implied by the design
 decisions discussed so far are described in the following section.
 
 \subsection{Scoping rules}
+
+\label{sec:scopingRules}
 
 First, we change the production rule for SPL programs as follows:
 
