@@ -684,14 +684,14 @@ access to local variables and function parameters though, so for the time being
 we employ it, being well aware that it can be optimized away.
 
 
-\subsubsection{Access to local variables}
+\subsection{Access to local variables}
 
 Function parameters and local variables are always at a fixed distance from the
 frame pointer, so accessing them means reading and writing to memory relative to
 the frame pointer.  Function arguments are below the frame pointer, while local
 variables are above it.
 
-\subsubsection{Access to global variables}
+\subsection{Access to global variables}
 
 Global variables are similar to local variables, except that globals reside in
 the first stack frame.  Access to them must therefore be relative to the bottom
@@ -699,7 +699,8 @@ of the stack.  In SSM, the program text starts at memory address zero, so the
 top of the stack, which is somewhere after the program instructions, is not
 known at compile time.
 
-We solve this problem by storing the initial value of the stack pointer, as the
+Maintaining access links for only one level of scoping seems overkill, so we
+solve this problem by storing the initial value of the stack pointer, as the
 first action when the program starts, in one of the general purpose registers.
 This register never holds any other value during the run time of the program, it
 is solely used for accessing global variables.
