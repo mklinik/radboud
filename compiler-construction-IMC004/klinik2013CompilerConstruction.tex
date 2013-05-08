@@ -6,6 +6,7 @@
 \usepackage{amsthm}
 \usepackage[retainorgcmds]{IEEEtrantools}
 %\usepackage[square]{natbib}
+\usepackage[bookmarks,colorlinks=false]{hyperref}
 
 % needs debian package texlive-math-extra
 \usepackage{stmaryrd} % for \llbracket, \rrbracket (scott brackets)
@@ -564,10 +565,12 @@ definitions for the built in functions and operators.  Both binary and unary
 operators are treated as function calls, so their type is looked up in the
 environment.
 
+
 \section{SSP back end}
 
 This section describes the design and implementation of the code generation
 phase of the compiler.  The target language is the Simple Stack Machine (SSM).
+
 
 \subsection{Parameter passing semantics}
 
@@ -588,6 +591,98 @@ function returns, it copies its return value to that place.
 
 
 \subsection{Layout of stack frames}
+
+Figure \ref{fig_stackLayout} shows the stack immediately after a function has
+been called, but before the function body starts being evaluated.  Each item
+occupies one machine word, and the stack grows from bottom to top.
+
+\begin{figure}[h]
+\begin{center}
+\begin{tabular}{r|l|}
+  \cline{2-2}
+  & return value \\
+  \cline{2-2}
+  & parameter 1 \\
+  \cline{2-2}
+  & parameter 2 \\
+  \cline{2-2}
+  & \ldots \\
+  \cline{2-2}
+  & parameter n \\
+  \cline{2-2}
+  & return address \\
+  \cline{2-2}
+  FP $\arr$ & old frame pointer \\
+  \cline{2-2}
+  & local variable 1 \\
+  \cline{2-2}
+  & local variable 2 \\
+  \cline{2-2}
+  & \ldots \\
+  \cline{2-2}
+  SP $\arr$ & local variable m \\
+  \cline{2-2}
+\end{tabular}
+\end{center}
+\caption{Stack frame layout}
+\label{fig_stackLayout}
+\end{figure}
+
+The following steps constitute a function call.  Because we are using a stack
+machine, whenever an instruction needs to be given a non-constant parameter,
+this parameter must be on top of the stack.  Depending on the order of doing
+things when calling a function, some copying is required when returning.
+
+For example, the SSM instruction \emph{jsr}, which jumps to a subroutine, pushes
+the return address to the stack.  The jump must of course happen after the
+function parameters have been calculated by the caller, so the return address
+ends up above the function parameters.  After the function call however, when
+cleaning up, it would be more convenient to have the return address below the
+parameters, so that the callee can do all the cleaning up like restoring the
+frame pointer and popping all local variables and function arguments, and only
+at the very end use the return address, which would now be on top of the stack,
+to return to the caller.
+
+So either way, we end up with extra work for the caller or the callee.  The
+compiler therefore generates the following code.
+
+\begin{enumerate}
+  \item The caller
+    \begin{enumerate}
+    \item reserves one entry on the stack for the return value,
+    \item calculates the function arguments,
+    \item pushes the address of the function to call on the stack,
+    \item executes the \emph{jsr} instruction, which replaces the jump-to
+          address with the return address, and transfers control to the callee.
+  \end{enumerate}
+  \item The callee
+    \begin{enumerate}
+    \item saves the frame pointer,
+    \item updates the frame pointer to the current value of the stack pointer,
+    \item reserves enough space for all local variables,
+    \item evaluates the initial value for each local variable and executes an
+          assignment,
+    \item and finally evaluates the function body.  The function body consists
+    only of statements, which don't put values to the stack.  When the execution
+    of the function body has finished, the callee
+    \item pops all local variables,
+    \item restores the old frame pointer,
+    \item executes the \emph{ret} instruction, which pops the return address
+    from the stack and transfers control back to the caller.
+    \end{enumerate}
+  \item The caller finally pops all function arguments.
+\end{enumerate}
+
+After a function has been called, a single additional entry is left on top of
+the stack which holds the return value.
+
+Note that the size of the stack, especially the distance between the top of the
+stack and local variables and function parameters, is known at compile time.
+Furthermore, SPL doesn't have nested functions.  Therefore keeping track of the
+frame pointer is not necessary in principle.  Having a frame pointer simplifies
+access to local variables and function parameters though, so for the time being
+we employ it, being well aware that it can be optimized away.
+
 
 \subsubsection{Access to function parameters}
 \subsubsection{Access to local variables}
