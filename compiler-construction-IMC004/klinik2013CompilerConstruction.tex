@@ -564,6 +564,41 @@ definitions for the built in functions and operators.  Both binary and unary
 operators are treated as function calls, so their type is looked up in the
 environment.
 
+\section{SSP back end}
+
+This section describes the design and implementation of the code generation
+phase of the compiler.  The target language is the Simple Stack Machine (SSM).
+
+\subsection{Parameter passing semantics}
+
+Every value in SPL is occupies one machine word on the stack.  Integers and
+Booleans are stored directly on the stack, while tuples and lists are stored on
+the heap, and are accessed via pointers.  These pointers are stored on the
+stack.  Functions are kept on the stack as memory addresses.
+
+All parameters to functions are passed \emph{by value}, that is each parameter
+gets copied to the top of the stack before a function is called.  For integers
+and Booleans this results in a copy of the value itself, while for tuples, lists
+and functions this results in a copy of their pointer.
+
+Results of functions are returned by value.  Before a function is called, the
+caller reserves an entry on the stack to hold  the return value.  Before the
+function returns, it copies its return value to that entry.
+
+
+\subsection{Layout of stack frames}
+
+\subsubsection{Access to function parameters}
+\subsubsection{Access to local variables}
+\subsubsection{Access to global variables}
+
+\subsection{Higher-order functions}
+
+\subsection{Assignments}
+
+\subsection{Tuples and lists}
+
+
 \section{Further work}
 
 There are a few open points in the current implementation.
