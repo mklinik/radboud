@@ -1,0 +1,13 @@
+{
+
+f f(x x, y y) { return g(x - 1, y + 1); }
+g g(x x, y y) { if( x < 1 ) return y; else return f(x, y); }
+
+}
+
+Void main()
+{
+  print(f(5, 3));
+  print(f(5, 5));
+  print(f(10, 10));
+}
