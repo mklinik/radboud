@@ -1,0 +1,21 @@
+[Int] fibList(Int n)
+{
+  [Int] fibNm1 = []; // n minus 1
+  if( n < 1 )
+    return 1:[];
+  else if( n == 1 )
+    return 1 : fibList(n - 1);
+  else
+  {
+    fibNm1 = fibList(n - 1);
+    return (head(fibNm1) + head(tail(fibNm1))) : fibNm1;
+  }
+}
+
+Void main()
+{
+  [Int] fib20 = fibList(20);
+  print(head(fib20));
+  print(head(tail(fib20)));
+  print(head(tail(tail(fib20))));
+}
