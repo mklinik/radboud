@@ -15,7 +15,7 @@ makePrologue :: IR IrStatement
 makePrologue = do
   name <- gets machineCurFunctionName
   s <- gets machineFrameSize
-  return $ IrAsm [name ++ ": ldr MP", "ldrr MP SP", "ajs " ++ show s ++ " ; make space for locals "]
+  return $ IrAsm [name ++ ": ldr MP", "ldrr MP SP", "ajs " ++ show s ++ " ; make space for locals"]
 
 makeEpilogue :: IR IrStatement
 makeEpilogue = do
