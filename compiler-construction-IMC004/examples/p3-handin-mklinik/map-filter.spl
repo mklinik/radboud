@@ -1,0 +1,35 @@
+a map(b f, c list)
+{
+  if( isEmpty(list) )
+    return [];
+  else
+    return f(head(list)) : map(f, tail(list));
+}
+
+a filter(b f, c list)
+{
+  if( isEmpty(list) )
+    return [];
+  else if( f(head(list)) )
+    return head(list) : filter(f, tail(list));
+  else
+    return filter(f, tail(list));
+}
+
+Int plus3(Int x)
+{
+  return x + 3;
+}
+
+Bool greaterThan5(Int x)
+{
+  return x > 5;
+}
+
+Void main()
+{
+  [Int] l = 1:2:3:[];
+  print(head(l));
+  print(head(map(plus3, l)));
+  print(head(filter(greaterThan5, map(plus3, l))));
+}
