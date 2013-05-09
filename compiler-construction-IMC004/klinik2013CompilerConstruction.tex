@@ -17,7 +17,7 @@
 %\usepackage[square]{natbib}
 
 % adds a toc to the pdf file, and makes refs clickable
-\usepackage[bookmarks,colorlinks=false]{hyperref}
+\usepackage[bookmarks,colorlinks=true]{hyperref}
 
 % for \llbracket, \rrbracket (scott brackets)
 % Needs debian package texlive-math-extra
@@ -725,7 +725,12 @@ is solely used for accessing global variables.
 
 \subsection{Higher-order functions}
 
-\subsection{Assignments}
+SPL supports functions as arguments to and return values from functions.  We
+don't have nested functions, lambda expressions or partial function application.
+Therefore, functions are stored on the stack as their address in memory.  When
+calling a function, we use the \emph{jsr} instruction, which takes the address
+to jump to from the stack.  This way, we can store functions in local variables
+etc.
 
 \subsection{Tuples and lists}
 
