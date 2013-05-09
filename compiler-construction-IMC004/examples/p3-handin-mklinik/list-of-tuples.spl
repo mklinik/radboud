@@ -1,0 +1,45 @@
+[(a, b)] zip( ([a], [b]) t )
+{
+  [a] as = fst(t);
+  [b] bs = snd(t);
+  [(a, b)] abs = [];
+  while( !(isEmpty(as) || isEmpty(bs)) )
+  {
+    abs = (head(as), head(bs)) : abs;
+    as = tail(as);
+    bs = tail(bs);
+  }
+  return abs;
+}
+
+([a], [b]) unzip( [(a, b)] l )
+{
+  [a] as = [];
+  [b] bs = [];
+  while( !isEmpty(l) )
+  {
+    as = fst(head(l)) : as;
+    bs = snd(head(l)) : bs;
+    l = tail(l);
+  }
+  return (as, bs);
+}
+
+Int length([a] l)
+{
+  if( isEmpty(l) )
+    return 0;
+  else
+    return 1 + length(tail(l));
+}
+
+Void main()
+{
+  [Int] xs = 100:2:3:4:5:6:[];
+  [Bool] bs = True:False:True:[];
+  var xbs = zip((xs, bs));
+  print(length(xs));
+  print(length(bs));
+  print(length(xbs));
+  print(head(fst(unzip(xbs))));
+}

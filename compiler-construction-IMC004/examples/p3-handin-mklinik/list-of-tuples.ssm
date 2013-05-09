@@ -1,0 +1,377 @@
+    ldrr 5 SP ; store global frame pointer
+    ajs 0 ; make space for globals
+    ldc 0 ; make space for return value
+    ldc main
+    jsr
+    ajs -0 ; pop function arguments
+    ajs -1 ; discard unused value
+    ajs 0 ; pop globals
+    halt
+zip: ldr MP
+    ldrr MP SP
+    ajs 3 ; make space for locals
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc fst
+    jsr
+    ajs -1 ; pop function arguments
+    stl 1
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc snd
+    jsr
+    ajs -1 ; pop function arguments
+    stl 2
+    ldc 0
+    stl 3
+zip_l0:
+    ldc -1
+    ldc 0 ; make space for return value
+    ldl 1
+    ldc isEmpty
+    jsr
+    ajs -1 ; pop function arguments
+    ldc 0 ; make space for return value
+    ldl 2
+    ldc isEmpty
+    jsr
+    ajs -1 ; pop function arguments
+    or
+    xor
+    brf zip_l1
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl 1
+    ldc head
+    jsr
+    ajs -1 ; pop function arguments
+    ldc 0 ; make space for return value
+    ldl 2
+    ldc head
+    jsr
+    ajs -1 ; pop function arguments
+    ldc __mktuple__
+    jsr
+    ajs -2 ; pop function arguments
+    ldl 3
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    stl 3
+    ldc 0 ; make space for return value
+    ldl 1
+    ldc tail
+    jsr
+    ajs -1 ; pop function arguments
+    stl 1
+    ldc 0 ; make space for return value
+    ldl 2
+    ldc tail
+    jsr
+    ajs -1 ; pop function arguments
+    stl 2
+    bra zip_l0
+zip_l1:
+    ldl 3
+    stl -3
+    bra zip_return
+zip_return:
+    ajs -3 ; pop locals
+    str MP
+    ret
+unzip: ldr MP
+    ldrr MP SP
+    ajs 2 ; make space for locals
+    ldc 0
+    stl 1
+    ldc 0
+    stl 2
+unzip_l2:
+    ldc -1
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc isEmpty
+    jsr
+    ajs -1 ; pop function arguments
+    xor
+    brf unzip_l3
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc head
+    jsr
+    ajs -1 ; pop function arguments
+    ldc fst
+    jsr
+    ajs -1 ; pop function arguments
+    ldl 1
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    stl 1
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc head
+    jsr
+    ajs -1 ; pop function arguments
+    ldc snd
+    jsr
+    ajs -1 ; pop function arguments
+    ldl 2
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    stl 2
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc tail
+    jsr
+    ajs -1 ; pop function arguments
+    stl -2
+    bra unzip_l2
+unzip_l3:
+    ldc 0 ; make space for return value
+    ldl 1
+    ldl 2
+    ldc __mktuple__
+    jsr
+    ajs -2 ; pop function arguments
+    stl -3
+    bra unzip_return
+unzip_return:
+    ajs -2 ; pop locals
+    str MP
+    ret
+length: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc isEmpty
+    jsr
+    ajs -1 ; pop function arguments
+    brf length_l4
+    ldc 0
+    stl -3
+    bra length_return
+    bra length_l5
+length_l4:
+    ldc 1
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc tail
+    jsr
+    ajs -1 ; pop function arguments
+    ldc length
+    jsr
+    ajs -1 ; pop function arguments
+    add
+    stl -3
+    bra length_return
+length_l5:
+length_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+main: ldr MP
+    ldrr MP SP
+    ajs 3 ; make space for locals
+    ldc 0 ; make space for return value
+    ldc 100
+    ldc 0 ; make space for return value
+    ldc 2
+    ldc 0 ; make space for return value
+    ldc 3
+    ldc 0 ; make space for return value
+    ldc 4
+    ldc 0 ; make space for return value
+    ldc 5
+    ldc 0 ; make space for return value
+    ldc 6
+    ldc 0
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    stl 1
+    ldc 0 ; make space for return value
+    ldc -1
+    ldc 0 ; make space for return value
+    ldc 0
+    ldc 0 ; make space for return value
+    ldc -1
+    ldc 0
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    stl 2
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl 1
+    ldl 2
+    ldc __mktuple__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc zip
+    jsr
+    ajs -1 ; pop function arguments
+    stl 3
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl 1
+    ldc length
+    jsr
+    ajs -1 ; pop function arguments
+    ldc print
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl 2
+    ldc length
+    jsr
+    ajs -1 ; pop function arguments
+    ldc print
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl 3
+    ldc length
+    jsr
+    ajs -1 ; pop function arguments
+    ldc print
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl 3
+    ldc unzip
+    jsr
+    ajs -1 ; pop function arguments
+    ldc fst
+    jsr
+    ajs -1 ; pop function arguments
+    ldc head
+    jsr
+    ajs -1 ; pop function arguments
+    ldc print
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+main_return:
+    ajs -3 ; pop locals
+    str MP
+    ret
+print: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2
+    trap 0
+print_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+__mktuple__: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -3 ; load first argument
+    ldl -2 ; load second argument
+    stmh 2 ; store both on the heap, and obtain pointer to second value
+    stl -4 ; pop tuple pointer to return value
+__mktuple___return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+fst: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh -1 ; tuple pointer points to second value, but we want the first
+    stl -3 ; return value
+fst_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+snd: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh 0  ; tuple pointer points to second value
+    stl -3 ; return value
+snd_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+__mklist__: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -3 ; load first argument
+    ldl -2 ; load second argument
+    stmh 2 ; store both on the heap, and obtain pointer to second value
+    stl -4 ; pop tuple pointer to return value
+__mklist___return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+head: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh -1 ; tuple pointer points to second value, but we want the first
+    stl -3 ; return value
+head_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+tail: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh 0  ; tuple pointer points to second value
+    stl -3 ; return value
+tail_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+isEmpty: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2
+    ldc 0
+    eq ; the empty list is just the null pointer
+    stl -3
+isEmpty_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
