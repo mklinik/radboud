@@ -95,7 +95,7 @@ envLookup :: String -> IR IrExpression
 envLookup name = do
   env <- gets machineEnv
   case Map.lookup name env of
-    Nothing -> error ("unknown identifier " ++ name) -- should never happen
+    Nothing -> error ("IR: unknown identifier " ++ name) -- should never happen
     Just e  -> return e
 
 freshLabel :: IR String
@@ -117,13 +117,8 @@ addGlobalVariable name = do
   s <- curFrameSize
   envAdd name (IrMem $ (IrBinOp OpAdd (IrTemp IrGlobalFramePointer) (IrConst s)))
 
-data Scope = LocalScope | GlobalScope
-
-varDecl2ir :: Scope -> AstDeclaration -> IR IrStatement
-varDecl2ir scope (AstVarDeclaration _ _ name expr) = do
-  case scope of
-    LocalScope -> addLocalVariable name
-    GlobalScope -> addGlobalVariable name
+varDecl2ir :: AstDeclaration -> IR IrStatement
+varDecl2ir (AstVarDeclaration _ _ name expr) = do
   e <- exp2ir expr
   dst <- envLookup name
   return $ IrMove dst e
@@ -140,7 +135,8 @@ funDecl2ir (AstFunDeclaration _ _ name formalArgs localVars body) = do
   modify $ \m -> m { machineCurFunctionArgCount = length formalArgs }
   modify $ \m -> m { machineFrameSize = 0 }
   mapM_ envAddFunArg formalArgs
-  varInits <- liftM sequenceIr $ mapM (varDecl2ir LocalScope) localVars
+  mapM_ (\(AstVarDeclaration _ _ name _) -> addLocalVariable name) localVars
+  varInits <- liftM sequenceIr $ mapM varDecl2ir localVars
   prologue <- gets machineMakePrologue >>= id
   b <- stmts2ir body
   epilogue <- gets machineMakeEpilogue >>= id
@@ -269,7 +265,8 @@ program2ir (AstProgram decls) =
 decls2ir :: [AstDeclaration] -> IR [IrStatement]
 decls2ir decls = do
   mapM_ (\(AstFunDeclaration _ _ name _ _ _) -> envAdd name (IrName name)) funDecls
-  vars <- mapM (varDecl2ir GlobalScope) varDecls
+  mapM_ (\(AstVarDeclaration _ _ name _) -> addGlobalVariable name) varDecls
+  vars <- mapM varDecl2ir varDecls
   initCode <- gets machineMakeGlobalInitCode >>= \f -> f vars
   funs <- mapM funDecl2ir funDecls
   return $ initCode ++ funs
