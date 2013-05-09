@@ -1,22 +1,35 @@
 \documentclass[a4paper]{article}
 
+% Font stuff
+\usepackage{fouriernc}
 %\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+
+% Extra math symbols
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
+
 \usepackage[retainorgcmds]{IEEEtrantools}
 %\usepackage[square]{natbib}
+
+% adds a toc to the pdf file, and makes refs clickable
 \usepackage[bookmarks,colorlinks=false]{hyperref}
 
-% needs debian package texlive-math-extra
-\usepackage{stmaryrd} % for \llbracket, \rrbracket (scott brackets)
+% for \llbracket, \rrbracket (scott brackets)
+% Needs debian package texlive-math-extra
+\usepackage{stmaryrd}
 
+% proof trees
 \usepackage{bussproofs}
 \def\defaultHypSeparation{\hskip .1in}
 
+% tikz drawing library
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usetikzlibrary{matrix}
+
+% === BEGIN custom commands
 
 \newcommand{\arr}{\rightarrow}
 \newcommand{\todo}[1]{\bigskip \noindent \emph{todo: #1}}
@@ -30,6 +43,8 @@
 
 % something is of type something  x : A, we adjust the spacing
 \newcommand{\oftype}[2]{#1\!:\!#2}
+
+% === END custom commands
 
 \begin{document}
 
