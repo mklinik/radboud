@@ -603,7 +603,7 @@ necessary.
 \subsection{Parameter passing semantics}
 
 Every value in SPL occupies one machine word on the stack.  Integers and
-Booleans are stored directly on the stack, while tuples and lists are stored on
+Bools are stored directly on the stack, while tuples and lists are stored on
 the heap, and are accessed via pointers.  These pointers are stored on the
 stack.  Functions are referred to by their address in memory, which also
 occupies one machine word on the stack.
@@ -1226,9 +1226,10 @@ of the compiler is given in a .txt file with the same filename.
 \label{sec_examplesPhase3}
 
 This section contains descriptions for the example programs for phase 3 which
-accompany this document.  Each example is given in an .spl file.  The
-\emph{print} function prints its argument as integer, followed by a newline.
-The output of the program is given here, with newlines replaced by spaces.
+accompany this document.  Each example is given in an .spl file, together with
+an .ssm file which contains the generated code.  The \emph{print} function
+prints its argument as an integer, followed by a newline.  The output of the
+program is given here, with newlines replaced by spaces.
 
 \begin{description}
 
@@ -1282,17 +1283,20 @@ The output of the program is given here, with newlines replaced by spaces.
   \item[uninitialized-variable.spl] Magically pass a value from one function
   call to another by using the implementation detail that local variables occupy
   the same position on the stack. Output:
+
   \begin{verbatim}
   42 100
   \end{verbatim}
 
-  \item[list-of-tuples.spl] Zip turns a tuple of lists into a list of tuples,
-  while unzip does the opposite. Output:
+  \item[list-of-tuples.spl] The function \emph{zip} turns a tuple of lists into
+  a list of tuples, while \emph{unzip} does the opposite. Output:
+
   \begin{verbatim}
   4 3 3 100
   \end{verbatim}
 
   \item[mutual-recursion.spl] A complicated way to add two numbers. Output:
+
   \begin{verbatim}
   8 10 20
   \end{verbatim}
