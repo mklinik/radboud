@@ -1,0 +1,32 @@
+Int fibIter(Int x)
+{
+  Int acc1 = 1;
+  Int acc2 = 1;
+  Int tmp = 0;
+  while( x > 1 )
+  {
+    tmp = acc1;
+    acc1 = acc1 + acc2;
+    acc2 = tmp;
+    x = x - 1;
+  }
+  return acc1;
+}
+
+Int fibRec(Int x)
+{
+  if( x == 0 || x == 1 )
+    return 1;
+  else
+    return fibRec(x - 1) + fibRec(x - 2);
+}
+
+Void main()
+{
+  print(fibIter(0));
+  print(fibIter(10));
+  print(fibIter(20));
+  print(fibRec(0));
+  print(fibRec(10));
+  print(fibRec(20));
+}

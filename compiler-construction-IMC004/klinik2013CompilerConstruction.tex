@@ -1226,20 +1226,25 @@ of the compiler is given in a .txt file with the same filename.
 \label{sec_examplesPhase3}
 
 This section contains descriptions for the example programs for phase 3 which
-accompany this document.  Each example is given in an .spl file.  The output of
-the program when run is given here.
+accompany this document.  Each example is given in an .spl file.  The
+\emph{print} function prints its argument as integer, followed by a newline.
+The output of the program is given here, with newlines replaced by spaces.
 
 \begin{description}
 
   \item[access-variables.spl] Read- and write local and global variables and
   function arguments. Output:
+
   \begin{verbatim}
-  1
-  2
-  3
-  2
-  4
-  6
+  1 2 3 2 4 6
+  \end{verbatim}
+
+  \item[recursion-iteration.spl] Recursive and iterative variants of the
+  fibonacci function. Demonstrates recursive function calls and while loops.
+  Output:
+
+  \begin{verbatim}
+  1 89 10946 1 89 10946
   \end{verbatim}
 
 \end{description}
