@@ -1,0 +1,18 @@
+Int gcd(Int a, Int b)
+{
+  Int tmp = 0;
+  while(b != 0)
+  {
+    tmp = b;
+    b = a % tmp;
+    a = tmp;
+  }
+  return a;
+}
+
+Void main()
+{
+  print(gcd(13, 2));
+  print(gcd(147, 105));
+  print(gcd(105, 147));
+}

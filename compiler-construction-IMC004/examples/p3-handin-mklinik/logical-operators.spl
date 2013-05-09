@@ -1,0 +1,22 @@
+Bool implies(Bool A, Bool B)
+{
+  return (!A) || B;
+}
+
+Bool iff(Bool A, Bool B)
+{
+  return implies(A, B) && implies(B, A);
+}
+
+Void main()
+{
+  print(implies(False, False));
+  print(implies(False, True));
+  print(implies(True,  False));
+  print(implies(True,  True));
+
+  print(iff(False, False));
+  print(iff(False, True));
+  print(iff(True,  False));
+  print(iff(True,  True));
+}
