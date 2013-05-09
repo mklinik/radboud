@@ -588,6 +588,8 @@ environment.
 
 This section describes the design and implementation of the code generation
 phase of the compiler.  The target language is the Simple Stack Machine (SSM).
+Example programs demonstrating the features of the back end can be found in
+section \ref{TODO}
 
 
 \subsection{Parameter passing semantics}
@@ -605,18 +607,19 @@ and functions this results in a copy of their pointer.
 
 Results of functions are returned by value.  Before a function is called, the
 caller reserves an entry on the stack to hold  the return value.  Before the
-function returns, it copies its return value to that place.
+function returns, it copies its return value to that entry.
 
 
 \subsection{Layout of stack frames}
 
 Figure \ref{fig_stackLayout} shows the stack immediately after a function has
 been called, but before the function body starts being evaluated.  Each item
-occupies one machine word, and the stack grows from bottom to top.
+occupies one machine word, and the stack grows from top to bottom.
 
 \begin{figure}[h]
 \begin{center}
 \begin{tabular}{r|l|}
+  & \emph{previous frame} \\
   \cline{2-2}
   & return value \\
   \cline{2-2}
@@ -646,10 +649,13 @@ occupies one machine word, and the stack grows from bottom to top.
 \label{fig_stackLayout}
 \end{figure}
 
-The following steps constitute a function call.  Because we are using a stack
-machine, whenever an instruction needs to be given a non-constant parameter,
-this parameter must be on top of the stack.  Depending on the order of doing
-things when calling a function, some copying is required when returning.
+\subsection{Function calls}
+
+We now describe the steps that constitute a function call.  Because SSM is a
+stack machine, whenever an instruction needs to be given a non-constant
+parameter, this parameter must be on top of the stack.  Depending on the order
+of steps when calling a function, some copying is required when
+returning.
 
 For example, the SSM instruction \emph{jsr}, which jumps to a subroutine, pushes
 the return address to the stack.  The jump must of course happen after the
@@ -662,33 +668,52 @@ at the very end use the return address, which would now be on top of the stack,
 to return to the caller.
 
 So either way, we end up with extra work for the caller or the callee.  The
-compiler therefore generates the following code.
+compiler therefore generates the following code, which minimizes copying at the
+expense of splitting clean up between caller and callee.
 
 \begin{enumerate}
+
   \item The caller
     \begin{enumerate}
+
     \item reserves one entry on the stack for the return value,
+
     \item calculates the function arguments,
+
     \item pushes the address of the function to call on the stack,
+
     \item executes the \emph{jsr} instruction, which replaces the jump-to
           address with the return address, and transfers control to the callee.
+
   \end{enumerate}
   \item The callee
     \begin{enumerate}
+
     \item saves the frame pointer,
+
     \item updates the frame pointer to the current value of the stack pointer,
+
     \item reserves enough space for all local variables,
+
     \item evaluates the initial value for each local variable and executes an
           assignment,
-    \item and finally evaluates the function body.  The function body consists
-    only of statements, which don't put values to the stack.  When the execution
-    of the function body has finished, the callee
+
+    \item and finally evaluates the function body. Eventual return statements
+    copy the return value, if any, to the stack entry reserved of this purpose,
+    and jump to the callee clean up code.  When the execution of the function
+    body has finished, the callee
+
     \item pops all local variables,
+
     \item restores the old frame pointer,
+
     \item executes the \emph{ret} instruction, which pops the return address
     from the stack and transfers control back to the caller.
+
     \end{enumerate}
+
   \item The caller finally pops all function arguments.
+
 \end{enumerate}
 
 After a function has been called, a single additional entry is left on top of
@@ -717,7 +742,7 @@ of the stack.  In SSM, the program text starts at memory address zero, so the
 top of the stack, which is somewhere after the program instructions, is not
 known at compile time.
 
-Maintaining access links for only one level of scoping seems overkill, so we
+Maintaining access links for only one level of scoping is overkill, so we
 solve this problem by storing the initial value of the stack pointer, as the
 first action when the program starts, in one of the general purpose registers.
 This register never holds any other value during the run time of the program, it
@@ -725,14 +750,34 @@ is solely used for accessing global variables.
 
 \subsection{Higher-order functions}
 
-SPL supports functions as arguments to and return values from functions.  We
-don't have nested functions, lambda expressions or partial function application.
-Therefore, functions are stored on the stack as their address in memory.  When
-calling a function, we use the \emph{jsr} instruction, which takes the address
-to jump to from the stack.  This way, we can store functions in local variables
-etc.
+SPL supports functions as arguments to and return values from functions.  SPL
+doesn't have nested functions, lambda expressions or partial function
+application.  Therefore, as with function pointers in C, functions can be stored
+on the stack as their address in memory.  When calling a function, the
+\emph{jsr} instruction is used, which takes the address to jump to from the
+stack.  This way, functions can be stored in variables.
 
 \subsection{Tuples and lists}
+
+Tuples and lists are implemented as cons cells on the heap, and keeping
+pointers to them on the stack.  A cons cell consists of two adjacent machine
+words.
+
+For tuples of base types, each word holds the value of the component directly.
+If a tuple or a list is the component of a tuple, the address on the heap is
+stored in the tuple.
+
+The empty list is implemented as the null pointer, a non-empty list is a pointer
+to a cons cell on the heap.
+
+The constructor and destructor functions for tuples and lists are implemented
+identically.  The tuple and the list constructors are functions which take two
+arguments, put those arguments adjacently on the heap, and store a pointer to
+the second one on the stack.  The functions \emph{fst} / \emph{head} and
+\emph{snd} / \emph{tail} each take a pointer to a cons cell, dereference it, and
+return a copy of the first or second value, respectively, on the stack.
+
+There currently is no garbage collection.
 
 
 \section{Further work}
