@@ -1,0 +1,21 @@
+Void initialize(Int x)
+{
+  Int y = 0;
+  Int z = x;
+  return;
+}
+
+Void useUninitialized(Int dummy)
+{
+  Int y = z; // z is used uninitialized
+  Int z = 0;
+  print(y);
+}
+
+Void main()
+{
+  initialize(42);
+  useUninitialized(0);
+  initialize(100);
+  useUninitialized(0);
+}

@@ -1265,6 +1265,13 @@ The output of the program is given here, with newlines replaced by spaces.
   8 -2
   \end{verbatim}
 
+  \item[uninitialized-variable.spl] Magically pass a value from one function
+  call to another by using the implementation detail that local variables occupy
+  the same position on the stack. Output:
+  \begin{verbatim}
+  42 100
+  \end{verbatim}
+
 \end{description}
 
 

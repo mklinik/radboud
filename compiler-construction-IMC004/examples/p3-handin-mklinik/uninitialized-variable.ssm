@@ -1,0 +1,151 @@
+    ldrr 5 SP ; store global frame pointer
+    ajs 0 ; make space for globals
+    ldc 0 ; make space for return value
+    ldc main
+    jsr
+    ajs -0 ; pop function arguments
+    ajs -1 ; discard unused value
+    ajs 0 ; pop globals
+    halt
+initialize: ldr MP
+    ldrr MP SP
+    ajs 2 ; make space for locals
+    ldc 0
+    stl 1
+    ldl -2
+    stl 2
+    bra initialize_return
+initialize_return:
+    ajs -2 ; pop locals
+    str MP
+    ret
+useUninitialized: ldr MP
+    ldrr MP SP
+    ajs 2 ; make space for locals
+    ldl 2
+    stl 1
+    ldc 0
+    stl 2
+    ldc 0 ; make space for return value
+    ldl 1
+    ldc print
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+useUninitialized_return:
+    ajs -2 ; pop locals
+    str MP
+    ret
+main: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldc 0 ; make space for return value
+    ldc 42
+    ldc initialize
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldc 0
+    ldc useUninitialized
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldc 100
+    ldc initialize
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldc 0
+    ldc useUninitialized
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+main_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+print: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2
+    trap 0
+print_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+__mktuple__: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -3 ; load first argument
+    ldl -2 ; load second argument
+    stmh 2 ; store both on the heap, and obtain pointer to second value
+    stl -4 ; pop tuple pointer to return value
+__mktuple___return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+fst: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh -1 ; tuple pointer points to second value, but we want the first
+    stl -3 ; return value
+fst_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+snd: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh 0  ; tuple pointer points to second value
+    stl -3 ; return value
+snd_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+__mklist__: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -3 ; load first argument
+    ldl -2 ; load second argument
+    stmh 2 ; store both on the heap, and obtain pointer to second value
+    stl -4 ; pop tuple pointer to return value
+__mklist___return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+head: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh -1 ; tuple pointer points to second value, but we want the first
+    stl -3 ; return value
+head_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+tail: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh 0  ; tuple pointer points to second value
+    stl -3 ; return value
+tail_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+isEmpty: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2
+    ldc 0
+    eq ; the empty list is just the null pointer
+    stl -3
+isEmpty_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
