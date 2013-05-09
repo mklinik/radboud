@@ -589,8 +589,16 @@ environment.
 This section describes the design and implementation of the code generation
 phase of the compiler.  The target language is the Simple Stack Machine (SSM).
 Example programs demonstrating the features of the back end can be found in
-section \ref{TODO}
+section \ref{sec_examplesPhase3}.
 
+
+\subsection{Compilation scheme}
+
+The back end uses translation to intermediate representation followed by maximal
+munch instruction selection.  The pattern matching features of Haskell really
+shine in this latter part.  No optimizations are performed yet.  Parameter
+passing is done completely on the stack, so a register allocation phase isn't
+necessary.
 
 \subsection{Parameter passing semantics}
 
@@ -757,6 +765,11 @@ on the stack as their address in memory.  When calling a function, the
 \emph{jsr} instruction is used, which takes the address to jump to from the
 stack.  This way, functions can be stored in variables.
 
+\subsection{Polymorphism}
+
+Every value in SPL occupies exactly one machine word, so for polymorphic
+functions, the same machine code works for all types of arguments.
+
 \subsection{Tuples and lists}
 
 Tuples and lists are implemented as cons cells on the heap, and keeping
@@ -801,82 +814,14 @@ There are a few open points in the current implementation.
 
 \section{Examples}
 
-\subsection{Examples for p2}
+This section describes the example programs which accompany this document.
 
-This section contains descriptions for the example programs that accompany this
-document.  Each example is given in an .spl file, and the output of the compiler
-is given in a .txt file with the same filename.
+\subsection{Examples for phase 1}
 
-\begin{description}
-
-  \item[pass-fold-map.spl] Higher-order functions usually found in functional
-  programming: \emph{foldl}, \emph{foldr}, \emph{map} and \emph{filter}.
-
-  \item[pass-mutual-recursion.spl] Two mutually recursive functions. The
-  arguments are flipped in the recursive calls, constraining their types to $(a
-  \arr a \arr b)$.
-
-  \item[fail-mutual-recursion-lists.spl] Mutually recursive values are not
-  allowed.
-
-  \item[pass-polymorphism-mutual-recursion.spl] The polymorphic identity can be
-  instantiated differently in two mutually recursive functions.  This works
-  because $f$ and $g$ are marked to be unified together, but independently of
-  \emph{id}.  Putting the braces around all \emph{id}, $f$ and $g$ gives a type
-  error.  See fail-polymorphism-mutual-recursion.spl
-
-  \item[fail-polymorphism-mutual-recursion.spl] The polymorphic identity cannot
-  be instantiated differently in two mutually recursive functions.  That is
-  because the types of all three functions are unified simultaneously.
-
-  \item[pass-transitive-locals-backwards.spl] The return type of the function
-  constrains all local variables to be of type $\text{Int}$, which constrains
-  the function argument to be also of type $\text{Int}$.
-
-  \item[fail-unknown-identifier.spl] Demonstrates the error message given when
-  an undefined identifier occurs in a program.
-
-  \item[fail-not-enough-function-arguments.spl] Demonstrates the error message
-  given when a function is called with too few arguments.
-
-  \item[fail-no-polymorphism-in-variables-lvalues.spl] Assigning to a global
-  variable constrains its type, even if it is initialized with a polymorphic
-  value.  Therefore, it is forbidden to assign values of different types to a
-  global variable.
-
-  \item[fail-no-polymorphism-in-variables-rvalues.spl] Using a global variable
-  in an expression constrains its type, even if it could be polymorphic.  This
-  is the tradeoff we had to make for assignments to be sound.
-
-  \item[pass-assignment-to-function.spl] It is possible to bind functions to
-  local variables, assign to them, and call them.
-
-  \item[shouldfail-assignment-to-function.spl] It should be forbidden to assign
-  to identifiers which are bound to global functions.  To be done.
-
-  \item[pass-return-function.spl] A function can return another function.
-
-  \item[fail-return-function.spl] It is not possible to directly call the return
-  value of a function that returns another function.
-
-  \item[pass-assign-global-to-argument.spl] Function $f$ assigns its first
-  argument, $y$, to the global $x$.  This ties their types together, and as a
-  result the type of $y$ is not generalized.  The concrete type of $y$ is
-  determined by the first occurrence where $f$ is used.  Here, $f$ is of type:
-  $\forall a . ([\text{Int}] \arr a \arr a)$.
-
-  \item[pass-assign-argument-to-global.spl] The same as
-  pass-assign-global-to-argument, but this time it's the argument that is
-  assigned to.
-
-\end{description}
-
-\subsection{Examples from p1}
-
-This section contains the compilation results for the provided examples.  One
-of them had to be slightly modified, because it contained non-capitalized
-boolen constants \texttt{true} and \texttt{false} instead of \texttt{True} and
-\texttt{False}.
+This section contains the compilation results for the provided examples from the
+first assignment.  One of them had to be slightly modified, because it contained
+non-capitalized boolen constants \texttt{true} and \texttt{false} instead of
+\texttt{True} and \texttt{False}.
 
 When parsing or type checking fails, the compiler prints an error message
 indicating the cause of the error.  When both these phases succeed, the compiler
@@ -1203,6 +1148,79 @@ Int foobar()
   return -10;
 }
 \end{verbatim}
+
+\subsection{Examples for phase 2}
+
+This section contains descriptions for the example programs for phase 2 which
+accompany this document.  Each example is given in an .spl file, and the output
+of the compiler is given in a .txt file with the same filename.
+
+\begin{description}
+
+  \item[pass-fold-map.spl] Higher-order functions usually found in functional
+  programming: \emph{foldl}, \emph{foldr}, \emph{map} and \emph{filter}.
+
+  \item[pass-mutual-recursion.spl] Two mutually recursive functions. The
+  arguments are flipped in the recursive calls, constraining their types to $(a
+  \arr a \arr b)$.
+
+  \item[fail-mutual-recursion-lists.spl] Mutually recursive values are not
+  allowed.
+
+  \item[pass-polymorphism-mutual-recursion.spl] The polymorphic identity can be
+  instantiated differently in two mutually recursive functions.  This works
+  because $f$ and $g$ are marked to be unified together, but independently of
+  \emph{id}.  Putting the braces around all \emph{id}, $f$ and $g$ gives a type
+  error.  See fail-polymorphism-mutual-recursion.spl
+
+  \item[fail-polymorphism-mutual-recursion.spl] The polymorphic identity cannot
+  be instantiated differently in two mutually recursive functions.  That is
+  because the types of all three functions are unified simultaneously.
+
+  \item[pass-transitive-locals-backwards.spl] The return type of the function
+  constrains all local variables to be of type $\text{Int}$, which constrains
+  the function argument to be also of type $\text{Int}$.
+
+  \item[fail-unknown-identifier.spl] Demonstrates the error message given when
+  an undefined identifier occurs in a program.
+
+  \item[fail-not-enough-function-arguments.spl] Demonstrates the error message
+  given when a function is called with too few arguments.
+
+  \item[fail-no-polymorphism-in-variables-lvalues.spl] Assigning to a global
+  variable constrains its type, even if it is initialized with a polymorphic
+  value.  Therefore, it is forbidden to assign values of different types to a
+  global variable.
+
+  \item[fail-no-polymorphism-in-variables-rvalues.spl] Using a global variable
+  in an expression constrains its type, even if it could be polymorphic.  This
+  is the tradeoff we had to make for assignments to be sound.
+
+  \item[pass-assignment-to-function.spl] It is possible to bind functions to
+  local variables, assign to them, and call them.
+
+  \item[shouldfail-assignment-to-function.spl] It should be forbidden to assign
+  to identifiers which are bound to global functions.  To be done.
+
+  \item[pass-return-function.spl] A function can return another function.
+
+  \item[fail-return-function.spl] It is not possible to directly call the return
+  value of a function that returns another function.
+
+  \item[pass-assign-global-to-argument.spl] Function $f$ assigns its first
+  argument, $y$, to the global $x$.  This ties their types together, and as a
+  result the type of $y$ is not generalized.  The concrete type of $y$ is
+  determined by the first occurrence where $f$ is used.  Here, $f$ is of type:
+  $\forall a . ([\text{Int}] \arr a \arr a)$.
+
+  \item[pass-assign-argument-to-global.spl] The same as
+  pass-assign-global-to-argument, but this time it's the argument that is
+  assigned to.
+
+\end{description}
+
+\subsection{Examples for phase 3}
+\label{sec_examplesPhase3}
 
 \bibliographystyle{plain}
 \bibliography{computer_science}
