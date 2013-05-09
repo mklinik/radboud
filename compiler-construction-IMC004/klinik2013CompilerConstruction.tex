@@ -596,7 +596,7 @@ section \ref{sec_examplesPhase3}.
 
 The back end uses translation to intermediate representation followed by maximal
 munch instruction selection.  The pattern matching features of Haskell really
-shine in this latter part.  No optimizations are performed yet.  Parameter
+shine in the latter part.  No optimizations are performed yet.  Parameter
 passing is done completely on the stack, so a register allocation phase isn't
 necessary.
 
@@ -704,14 +704,14 @@ expense of dividing cleanup between caller and callee.
 
     \item updates the frame pointer to the current value of the stack pointer,
 
-    \item reserves enough space for all local variables,
+    \item reserves space for all local variables,
 
     \item evaluates the initial value for each local variable and executes an
           assignment,
 
     \item and finally evaluates the function body. Eventual return statements
-    copy the return value, if any, to the stack entry reserved of this purpose,
-    and jump to the callee clean up code.  When the execution of the function
+    copy the return value, if any, to the stack entry reserved for this purpose,
+    and then jump to the callee's clean up code.  When the execution of the function
     body has finished, the callee
 
     \item pops all local variables,
@@ -753,11 +753,11 @@ of the stack.  In SSM, the program text starts at memory address zero, so the
 top of the stack, which is somewhere after the program instructions, is not
 known at compile time.
 
-Maintaining access links for only one level of scoping is overkill, so we
-solve this problem by storing the initial value of the stack pointer, as the
-first action when the program starts, in one of the general purpose registers.
-This register never holds any other value during the run time of the program, it
-is solely used for accessing global variables.
+Maintaining access links for only one level of scoping is overkill, so we solve
+this problem by storing the initial value of the stack pointer in one of the
+general purpose registers, as the first action when the program starts.  This
+register never holds any other value during the run time of the program, it is
+solely used for accessing global variables.
 
 \subsection{Higher-order functions}
 
