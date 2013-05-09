@@ -615,7 +615,10 @@ and functions this results in a copy of their pointer.
 
 Results of functions are returned by value.  Before a function is called, the
 caller reserves an entry on the stack to hold  the return value.  Before the
-function returns, it copies its return value to that entry.
+function returns, it copies its return value to that entry.  This scheme was
+chosen in favor of using the return register, because subsequent
+computations need the return value on exactly that spot anyway, so the
+return value needs to be copied only once, instead of twice.
 
 
 \subsection{Layout of stack frames}
@@ -657,7 +660,7 @@ occupies one machine word, and the stack grows from top to bottom.
 \label{fig_stackLayout}
 \end{figure}
 
-\subsection{Function calls}
+\subsubsection{Function calls}
 
 We now describe the steps that constitute a function call.  Because SSM is a
 stack machine, whenever an instruction needs to be given a non-constant
@@ -677,7 +680,7 @@ to return to the caller.
 
 So either way, we end up with extra work for the caller or the callee.  The
 compiler therefore generates the following code, which minimizes copying at the
-expense of splitting clean up between caller and callee.
+expense of dividing cleanup between caller and callee.
 
 \begin{enumerate}
 
@@ -727,8 +730,8 @@ expense of splitting clean up between caller and callee.
 After a function has been called, a single additional entry is left on top of
 the stack which holds the return value.
 
-Note that the size of the stack, especially the distance between the top of the
-stack and local variables and function parameters, is known at compile time.
+Note that the size of the stack, especially the distance between the stack
+pointer and local variables and function parameters, is known at compile time.
 Furthermore, SPL doesn't have nested functions.  Therefore keeping track of the
 frame pointer is not necessary in principle.  Having a frame pointer simplifies
 access to local variables and function parameters though, so for the time being
