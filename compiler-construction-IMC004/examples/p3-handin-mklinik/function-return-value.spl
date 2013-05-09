@@ -1,0 +1,25 @@
+Int plus(Int x, Int y)
+{
+  return x + y;
+}
+
+Int minus(Int x, Int y)
+{
+  return x - y;
+}
+
+fun select(Bool c)
+{
+  if( c )
+    return plus;
+  else
+    return minus;
+}
+
+Void main()
+{
+  f f = select(True);
+  print(f(3, 5));
+  f = select(False);
+  print(f(3, 5));
+}
