@@ -1,0 +1,178 @@
+\documentclass[a4paper]{article}
+
+% Font stuff
+\usepackage{fouriernc}
+%\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+
+% Extra math symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% IEEE equation array
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+% bibliography
+%\usepackage[square]{natbib}
+
+% adds a toc to the pdf file, and makes refs clickable
+\usepackage[bookmarks,colorlinks=true]{hyperref}
+
+% for \llbracket, \rrbracket (scott brackets)
+% Needs debian package texlive-math-extra
+\usepackage{stmaryrd}
+
+% proof trees
+\usepackage{bussproofs}
+\def\defaultHypSeparation{\hskip .1in}
+
+% tikz drawing library
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{matrix}
+
+% === BEGIN custom commands
+
+\newcommand{\arr}{\rightarrow}
+\newcommand{\todo}[1]{\bigskip \noindent \emph{todo: #1}}
+%\newcommand{\todo}[1]{}
+\newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
+
+% church-style (explicit) abstraction. We adjust the spacing around the colon and dot
+\newcommand{\church}[4]{#1 #2\!:\!#3\,.\,#4}
+
+\newcommand{\curry}[3]{#1 #2\,.\,#3}
+
+% something is of type something  x : A, we adjust the spacing
+\newcommand{\oftype}[2]{#1\!:\!#2}
+
+% === END custom commands
+
+\begin{document}
+
+\title{Proposal for SPL Part 4}
+\author{Markus Klinik (s4220315)}
+\maketitle
+
+\begin{abstract}
+
+This document proposes an extension to the SPL compiler developed for the course
+NWI-IMC004 Compiler Construction.
+
+\end{abstract}
+
+\section{Records and structural subtyping}
+
+The goal of this endeavor is to implement a flexible form of subtyping for
+records, called \emph{structural subtyping}.  A \emph{record} is a data
+structure which groups several values into a single value.  The individual
+components, called \emph{fields}, are accessed via names, called \emph{labels}.
+A record type $\beta$ is a subtype of record type $\alpha$ iff $\beta$ has at
+least all the fields which $\alpha$ has, and possibly more.  The inverse
+relation is called \emph{supertype}. No explicit type declarations indicating
+subtype relationships are needed.
+
+Record types are subject to type inference and polymorphism.
+
+Functions taking records of type $\alpha$ as arguments can be given any value of
+type $\beta$, as long as $\beta$ is a subtype of $\alpha$.  The same goes for
+return values.  For example, a function which uses only the fields, say,
+\emph{x} and \emph{y} of type \emph{Int} of a record, can be given any record
+which has at least these two fields also of type \emph{Int}.
+
+The order of fields in a record should not matter, nor can it matter, for there
+are easily conceived examples of different subtypes where the
+compiler cannot order the fields in a consistent manner.  Consistent meaning
+that the same lookup code can be used for supertypes, as it is the case for
+systems with nominal subtyping, like Java.  Getting the code for field lookup
+right will be the main challenge for the code generation phase.
+
+\section{Subgoals}
+
+The first step would be to implement records without subtyping, that is the
+types of records always have to match exactly.  Records can be created without
+declaring their type beforehand.  The type of a record forming expression is
+completely determined by its structure.
+
+For this, the grammar has to be adapted in the following ways. We need to
+
+\begin{itemize}
+
+  \item extend the syntax of types to allow specifying records,
+
+  \item extend the syntax of expressions to allow creating records, and
+
+  \item extend the syntax of expressions to allow accessing fields of records.
+  
+\end{itemize}
+
+Once the
+first step is established, the type system can be extended to feature subtyping
+as a second step.  No modifications in the back end should be needed.  The type
+system should just admit more programs where records of different types are used
+in places where it is safe.
+
+\section{Examples}
+
+The following program fragment is a function which creates a new record with
+fields \emph{x} and \emph{y} with the values of the given record, offset by the
+given amount \emph{diff}.
+
+\begin{verbatim}
+{Int x, Int y} translate({Int x, Int y} val, Int diff)
+{
+  return { Int x = val.x + diff, Int y = val.y + diff }
+}
+\end{verbatim}
+
+Next is a polymorphic function which extracts the field named \emph{foo} from
+every record that has one, no matter what the type of \emph{foo} is.
+
+\begin{verbatim}
+a getFoo(b val) {
+  return val.foo;
+}
+\end{verbatim}
+
+The following example shows a function that extracts all fields \emph{x} from a
+list of records and collects them into a new list in reverse order.
+
+\begin{verbatim}
+[a] getXs([{Int x}] recs) {
+  [a] acc = [];
+  while( !isEmpty(recs) ) {
+    acc = head(recs).x : acc;
+    recs = tail(recs);
+  }
+  return acc;
+}
+\end{verbatim}
+
+\section{Limitations}
+
+The main points of interest here are subtyping and type inference of function
+arguments.  To not overstress the time frame of the course, we intend to cut
+down on any point not related to this.  Issues like the following come to mind.
+
+\begin{itemize}
+
+  \item Fields of records can be read, but not assigned to.
+
+  \item Labels are not first-class.  Accessing a field is a static syntactic
+  construct.  For example, the following will not be allowed.
+
+  \begin{verbatim}
+  c project(a x, b y) {
+    return x.y;
+  }
+  \end{verbatim}
+
+\end{itemize}
+
+\bibliographystyle{plain}
+\bibliography{computer_science}
+
+\end{document}
+
+% vim: textwidth=80
