@@ -1,0 +1,27 @@
+Int plus(Int x, Int y)
+{
+    return x + y;
+}
+
+Int minus(Int x, Int y)
+{
+    return x - y;
+}
+
+Int mult(Int x, Int y)
+{
+    return x * y;
+}
+
+Void main()
+{
+    var functions = plus:minus:mult:[];
+    var f = plus; // dummy
+    while( !isEmpty(functions) )
+    {
+        f = head(functions);
+        functions = tail(functions);
+        print(f(3, 8));
+    }
+    return;
+}
