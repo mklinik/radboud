@@ -53,8 +53,8 @@
 
 \begin{frame}{Features}
 
-  \begin{itemize}%[<+->]
-    \item Every object occupies one machine word
+  \begin{itemize}
+    \item Everything you'd expect (arithmetic, lists, functions, yadda)
     \item Polymorphic functions
     \item Poor man's higher-order functions
   \end{itemize}
@@ -73,6 +73,10 @@
 
 \begin{frame}[fragile]{Tuples and Lists}
 
+\texttt{(42, True)}
+
+\vspace{3em}
+
 \begin{tikzpicture}
 
   \matrix (stack) [matrix of nodes
@@ -90,6 +94,7 @@
     |[draw] (address) | 0xabcd \\
   };
 
+  % left and right lines of stack
   \draw (stack-3-1.north west) -- (stack-5-1.south west);
   \draw (stack-3-1.north east) -- (stack-5-1.south east);
 
@@ -109,8 +114,10 @@
     \\
   };
 
+  % bottom line of cell "42"
   \draw (42.south west) -- (42.south east);
 
+  % left and right lines of heap
   \draw (true.north west) -- (heap-6-1.south west);
   \draw (true.north east) -- (heap-6-1.south east);
 
@@ -120,5 +127,15 @@
 
 \end{frame}
 
+\begin{frame}[fragile]{The shortest crashing C program}
+
+\pause % don't show the first item from the beginning
+\begin{itemize}[<+->]
+  \item \texttt{main;}
+  \item \texttt{int main = 0;}
+  \item \texttt{Int main = 0;}
+\end{itemize}
+
+\end{frame}
 
 \end{document}
