@@ -107,6 +107,16 @@ spec = do
         (AstUnaryOp emptyMeta "!" (AstBoolean emptyMeta True))
         (AstBoolean emptyMeta False)
 
+    it "integer negation binds more tightly than +" $
+      parse pExpr "-x + y" `shouldBe` AstBinOp emptyMeta "+"
+        (AstUnaryOp emptyMeta "-" (AstIdentifier emptyMeta "x"))
+        (AstIdentifier emptyMeta "y")
+
+    it "integer negation binds more tightly than *" $
+      parse pExpr "-x * y" `shouldBe` AstBinOp emptyMeta "*"
+        (AstUnaryOp emptyMeta "-" (AstIdentifier emptyMeta "x"))
+        (AstIdentifier emptyMeta "y")
+
     describe "parenthesized expressions" $ do
       it "(1)" $
         parse pExpr "(1)" `shouldBe` AstInteger emptyMeta 1

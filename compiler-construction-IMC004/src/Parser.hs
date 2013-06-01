@@ -128,7 +128,7 @@ pFunctionCall = AstFunctionCall <$> pSourceLocation <*> pIdentifier <* pSymbol "
 pNegatedExpression :: AstMeta -> SplParser AstExpr
 pNegatedExpression loc =
        (AstInteger loc) . negate <$> pNatural
-  <<|> (AstUnaryOp loc "-") <$> pExpr
+  <<|> (AstUnaryOp loc "-") <$> pBaseExpr
 
 pActualParameters :: SplParser [AstExpr]
 pActualParameters = (:) <$> pExpr <*> opt (pSymbol "," *> pActualParameters) []
