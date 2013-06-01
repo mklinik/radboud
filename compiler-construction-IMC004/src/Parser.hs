@@ -95,7 +95,7 @@ binOps =
 pBaseExpr :: SplParser AstExpr
 pBaseExpr =
       mkBoolOrIdentifier <$> pSourceLocation <*> pIdentifier
-  <|> AstUnaryOp <$> pSourceLocation <*> pSymbol "!" <*> pExpr
+  <|> AstUnaryOp <$> pSourceLocation <*> pSymbol "!" <*> pBaseExpr
   <|> AstInteger <$> pSourceLocation <*> pNatural
   <|> AstFunctionCallExpr <$> pFunctionCall
   <|> AstEmptyList <$> pSourceLocation <* pSymbol "[" <* pSymbol "]"

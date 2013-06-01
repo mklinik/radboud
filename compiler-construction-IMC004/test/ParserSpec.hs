@@ -97,6 +97,16 @@ spec = do
     it "--1 as unary negation of a negative number" $
       parse pExpr "--1" `shouldBe` AstUnaryOp emptyMeta "-" (AstInteger emptyMeta (-1))
 
+    it "boolean negation binds more tightly than &&" $
+      parse pExpr "!True && False" `shouldBe` AstBinOp emptyMeta "&&"
+        (AstUnaryOp emptyMeta "!" (AstBoolean emptyMeta True))
+        (AstBoolean emptyMeta False)
+
+    it "boolean negation binds more tightly than ||" $
+      parse pExpr "!True || False" `shouldBe` AstBinOp emptyMeta "||"
+        (AstUnaryOp emptyMeta "!" (AstBoolean emptyMeta True))
+        (AstBoolean emptyMeta False)
+
     describe "parenthesized expressions" $ do
       it "(1)" $
         parse pExpr "(1)" `shouldBe` AstInteger emptyMeta 1
