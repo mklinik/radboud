@@ -229,6 +229,28 @@ spec = do
                                 , AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)
                                 ])
                           ]
+  describe "record projections" $ do
+    let p = parse pExpr
+    it "projection from a variable" $ p "x.y" `shouldBe` AstBinOp emptyMeta "." (AstIdentifier emptyMeta "x") (AstIdentifier emptyMeta "y")
+    it "projection from a record" $ p "{Int x = 10}.y" `shouldBe`
+      AstBinOp emptyMeta "."
+        (AstRecord emptyMeta [AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)])
+        (AstIdentifier emptyMeta "y")
+    it "nested projections, must be left associative" $ p "x.y.z" `shouldBe`
+      AstBinOp emptyMeta "."
+        (AstBinOp emptyMeta "." (AstIdentifier emptyMeta "x") (AstIdentifier emptyMeta "y"))
+        (AstIdentifier emptyMeta "z")
+    it "projection binds tighter than plus" $ p "x.y + 5" `shouldBe`
+      AstBinOp emptyMeta "+"
+        (AstBinOp emptyMeta "." (AstIdentifier emptyMeta "x") (AstIdentifier emptyMeta "y"))
+        (AstInteger emptyMeta 5)
+    it "projection binds tighter than cons" $ p "x.y:[]" `shouldBe`
+      AstBinOp emptyMeta ":"
+        (AstBinOp emptyMeta "." (AstIdentifier emptyMeta "x") (AstIdentifier emptyMeta "y"))
+        (AstEmptyList emptyMeta)
+    it "projection binds tighter than unary negation -- doesn't work yet" $ p "-(x.y)" `shouldBe`
+      AstUnaryOp emptyMeta "-"
+        (AstBinOp emptyMeta "." (AstIdentifier emptyMeta "x") (AstIdentifier emptyMeta "y"))
 
 specTypeParser :: (String -> AstType) -> Spec
 specTypeParser p = do

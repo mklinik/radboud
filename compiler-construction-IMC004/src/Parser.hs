@@ -94,6 +94,7 @@ binOps =
   , [ "<" , ">" , "<=" , ">=" ]
   , [ "+" , "-" ]
   , [ "*" , "/", "%" ]
+  , [ "." ]
   ]
 
 pBaseExpr :: SplParser AstExpr
