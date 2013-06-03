@@ -55,6 +55,8 @@ data Machine = Machine
   , machineCurFunArgIndex :: Int
   , machineAccessFunArg :: IR IrExpression
   , machineLabelNumber :: Int
+  , machineRecordLabelNumber :: Int
+  , machineRecordFields :: Map String Int
   }
 
 mkMachine :: Int -> Int -> Int -> (IR IrStatement) -> (IR IrStatement) -> (IR IrExpression) -> ([IrStatement] -> IR [IrStatement]) -> Machine
@@ -72,6 +74,8 @@ mkMachine tru fals word mkPrologue mkEpilogue accessFunArg mkInitCode = Machine
   , machineCurFunArgIndex = 0
   , machineAccessFunArg = accessFunArg
   , machineLabelNumber = 0
+  , machineRecordLabelNumber = 1 -- 0 is reserved for end-of-record sentinel
+  , machineRecordFields = Map.empty
   }
 
 type IR a = State Machine a
@@ -82,6 +86,20 @@ curFrameSize = gets machineFrameSize
 -- increase Frame Size by one machine word
 bumpFrameSize :: IR ()
 bumpFrameSize = modify $ \m -> m { machineFrameSize = 1 + machineFrameSize m }
+
+-- lookup label name, and if not found, create fresh one
+recordLabel :: String -> IR Int
+recordLabel label = do
+  fields <- gets machineRecordFields
+  freshLabel <- gets machineRecordLabelNumber
+  case Map.lookup label fields of
+    Just n -> return n
+    Nothing -> do
+      modify $ \m ->
+        m { machineRecordLabelNumber = machineRecordLabelNumber m + 1
+          , machineRecordFields = Map.insert label freshLabel (machineRecordFields m)
+          }
+      return freshLabel
 
 envAddFunArg :: AstFunctionArgument -> IR ()
 envAddFunArg (AstFunctionArgument _ _ name) = do
