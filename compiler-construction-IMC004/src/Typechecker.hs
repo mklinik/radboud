@@ -10,6 +10,7 @@ import Control.Monad.Trans.Class (lift)
 import Control.Monad (foldM)
 import Data.Char (ord, chr)
 import Data.List ((\\), nub)
+import Data.Maybe (fromJust)
 -- import Debug.Trace
 
 import Ast
@@ -97,6 +98,7 @@ typeVars (SplTupleType x y) = typeVars x ++ typeVars y
 typeVars (SplListType x) = typeVars x
 typeVars (SplFunctionType argTypes returnType) = foldl (\accum argType -> typeVars argType ++ accum) (typeVars returnType) argTypes
 typeVars (SplForall vars t) = typeVars t \\ vars
+typeVars (SplRecordType fields) = concatMap typeVars (Map.elems fields)
 
 class Substitute a where
   substitute :: Unifier -> a -> a
@@ -110,6 +112,8 @@ instance Substitute SplType where
   -- The quantification process makes sure that we substitute only free type variables in quantified types.
   -- This is because type variables which are free in the environment are not quantified.
   substitute u (SplForall vars t) = SplForall vars (substitute u t)
+  substitute u (SplRecordType fields) = SplRecordType (substitute u fields)
+
 
 -- Takes care of substitution in tuples, lists, Maybe, etc.
 instance (Functor b, Substitute a) => Substitute (b a) where
@@ -146,6 +150,12 @@ unify p t1@(SplFunctionType args1 ret1) t2@(SplFunctionType args2 ret2) =
     else left $ TypeError t1 t2 $ sourceLocation p
 -- unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
 -- unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
+unify p s@(SplRecordType a) t@(SplRecordType b) =
+  if (Map.keysSet a /= Map.keysSet b)
+    then left $ TypeError s t $ sourceLocation p
+    else case runTypecheck $ unifyAll p [(fromJust $ Map.lookup key a, fromJust $ Map.lookup key b) | key <- Map.keys a] of
+      Left _ -> left $ TypeError s t $ sourceLocation p
+      Right u -> right u
 unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
 unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
 unify p t1 t2 = left $ TypeError t1 t2 $ sourceLocation p
@@ -185,6 +195,7 @@ astFreshTypeVariables astType = do
     astTypeVariables_ (PolymorphicType _ v) s = Set.insert v s
     astTypeVariables_ (FunctionType argTypes returnType) s =
       astTypeVariables_ returnType $ foldl (flip astTypeVariables_) s argTypes
+    astTypeVariables_ (RecordType _ fields) s = foldr astTypeVariables_ s [typ | (AstRecordFieldType _ typ _) <- fields]
 
 
 -- Turns an AstType into an SplType such that all type variables are replaced
@@ -216,6 +227,9 @@ astType2splType t = do
     returnType_ <- astType2splType_ returnType tvars
     argTypes_ <- mapM (\typ -> astType2splType_ typ tvars) argTypes
     right $ SplFunctionType argTypes_ returnType_
+  astType2splType_ (RecordType _ fields) tvars = do
+    newFields <- sequence [ astType2splType_ astTyp tvars >>= \splTyp -> return (name, splTyp) | (AstRecordFieldType _ astTyp name) <- fields ]
+    right $ SplRecordType $ Map.fromList newFields
 
 
 data Quantify = Quantify String SplType (Bool, AstMeta)
@@ -387,20 +401,27 @@ instance InferType AstExpr where
     u3 <- unify meta (substitute (u2 . u1) s) (substitute (u2 . u1) $ SplTupleType a b)
     return (u3 . u2 . u1, env, ast)
 
+  inferType env ast@(AstRecord meta fields) s = do
+    freshFieldTypes <- mapM (\(AstRecordField _ _ expr) -> fresh >>= \a -> return (expr, a)) fields :: Typecheck [(AstExpr, SplType)]
+    u <- inferExpressions env freshFieldTypes
+    let recordType = SplRecordType $ Map.fromList [(label, a) | ((AstRecordField _ label _), (_, a)) <- zip fields freshFieldTypes]
+    u2 <- unify meta (substitute u s) (substitute u recordType)
+    return (u2 . u, env, ast)
+
+inferExpressions :: Environment -> [(AstExpr, SplType)] -> Typecheck Unifier
+inferExpressions _ [] = return emptyUnifier
+inferExpressions e ((expr,typ):xs) = do
+  (u,_,_) <- inferType e expr typ
+  u2 <- inferExpressions (substitute u e) (substitute u xs)
+  return (u2 . u)
+
 instance InferType AstFunctionCall where
   inferType env ast@(AstFunctionCall meta name actualArgs) s = do
     freshArgTypes <- mapM (\arg -> fresh >>= return . (,) arg) actualArgs :: Typecheck [(AstExpr, SplType)]
     functionType <- envLookup meta name env
     u <- unify meta functionType (SplFunctionType (map snd freshArgTypes) s)
-    u2 <- blaat (substitute u env) (substitute u freshArgTypes)
+    u2 <- inferExpressions (substitute u env) (substitute u freshArgTypes)
     return (u2 . u, env, ast)
-    where
-      blaat :: Environment -> [(AstExpr, SplType)] -> Typecheck Unifier
-      blaat _ [] = return emptyUnifier
-      blaat e ((expr,typ):xs) = do
-        (u,_,_) <- inferType e expr typ
-        u2 <- blaat (substitute u e) (substitute u xs)
-        return (u2 . u)
 
 
 defaultEnvironment :: Typecheck Environment

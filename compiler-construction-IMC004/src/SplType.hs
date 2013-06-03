@@ -1,6 +1,8 @@
 module SplType where
 
 import Data.List (intersperse)
+import Data.Map (Map)
+import qualified Data.Map as Map
 
 data SplBaseType
  = BaseTypeInt
@@ -15,6 +17,7 @@ data SplType
  | SplListType SplType
  | SplFunctionType [SplType] SplType
  | SplForall [String] SplType
+ | SplRecordType (Map String SplType)
  deriving (Eq)
 
 -- for convenience
@@ -35,3 +38,5 @@ prettyprintType (SplTupleType x y) = "(" ++ prettyprintType x ++ ", " ++ prettyp
 prettyprintType (SplListType x) = "[" ++ prettyprintType x ++ "]"
 prettyprintType (SplFunctionType argTypes returnType) = "(" ++ concat (intersperse " " (map prettyprintType argTypes)) ++ " -> " ++ prettyprintType returnType ++ ")"
 prettyprintType (SplForall vars t) = "forall " ++ (concat $ intersperse " " vars) ++ ", " ++ prettyprintType t
+prettyprintType (SplRecordType fields) =
+  "{" ++ (concat $ intersperse ", " $ map (\(label, typ) -> prettyprintType typ ++ " " ++ label) (Map.assocs fields)) ++ "}"
