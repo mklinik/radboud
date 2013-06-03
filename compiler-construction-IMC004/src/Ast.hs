@@ -34,6 +34,11 @@ data AstType
   | ListType AstMeta AstType
   | PolymorphicType AstMeta String
   | FunctionType [AstType] AstType -- there is no parser for this yet, but it is useful in the typechecker
+  | RecordType AstMeta [AstRecordFieldType]
+  deriving (Show, Eq)
+
+data AstRecordFieldType
+  = AstRecordFieldType AstMeta AstType String
   deriving (Show, Eq)
 
 data AstExpr

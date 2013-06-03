@@ -209,3 +209,24 @@ specTypeParser p = do
   it "tuple type" $ p "(Int, Bool)" `shouldBe` TupleType emptyMeta (BaseType emptyMeta "Int") (BaseType emptyMeta "Bool")
   it "list type" $ p "[Int]" `shouldBe` ListType emptyMeta (BaseType emptyMeta "Int")
   it "polymorphic list type" $ p "[a]" `shouldBe` ListType emptyMeta (PolymorphicType emptyMeta "a")
+  it "empty record" $ p "{}" `shouldBe` RecordType emptyMeta []
+  it "record with one Int field 'x'" $ p "{Int x}" `shouldBe` RecordType emptyMeta [AstRecordFieldType emptyMeta (BaseType emptyMeta "Int") "x"]
+  it "record with two fields" $ p "{Bool y, Int x}" `shouldBe`
+    RecordType emptyMeta
+      [ AstRecordFieldType emptyMeta (BaseType emptyMeta "Bool") "y"
+      , AstRecordFieldType emptyMeta (BaseType emptyMeta "Int") "x"
+      ]
+  it "nested record type" $ p "{Bool y, Int x, {Bool y, Int x} z}" `shouldBe`
+    RecordType emptyMeta
+      [ AstRecordFieldType emptyMeta (BaseType emptyMeta "Bool") "y"
+      , AstRecordFieldType emptyMeta (BaseType emptyMeta "Int") "x"
+      , AstRecordFieldType emptyMeta (RecordType emptyMeta
+          [ AstRecordFieldType emptyMeta (BaseType emptyMeta "Bool") "y"
+          , AstRecordFieldType emptyMeta (BaseType emptyMeta "Int") "x"
+          ])
+        "z"
+      ]
+  it "record type with polymorphic field" $ p "{a x}" `shouldBe`
+    RecordType emptyMeta
+      [ AstRecordFieldType emptyMeta (PolymorphicType emptyMeta "a") "x"
+      ]
