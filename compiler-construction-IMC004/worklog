@@ -2,3 +2,4 @@ Parser        10 h
 Interpreter   8 h
 Typechecker   77 h
 SSM Backend   35 h
+Records       8 h
