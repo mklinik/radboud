@@ -50,6 +50,11 @@ data AstExpr
   | AstBinOp AstMeta String AstExpr AstExpr
   | AstUnaryOp AstMeta String AstExpr
   | AstFunctionCallExpr AstFunctionCall
+  | AstRecord AstMeta [AstRecordField]
+  deriving (Show, Eq)
+
+data AstRecordField
+  = AstRecordField AstMeta AstType String AstExpr
   deriving (Show, Eq)
 
 data AstStatement

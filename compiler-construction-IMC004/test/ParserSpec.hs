@@ -12,6 +12,11 @@ import Utils
 main :: IO ()
 main = hspec spec
 
+intType, boolType, voidType :: AstType
+intType = BaseType emptyMeta "Int"
+boolType = BaseType emptyMeta "Bool"
+voidType = BaseType emptyMeta "Void"
+
 spec :: Spec
 spec = do
   describe "pExpr" $ do
@@ -200,6 +205,30 @@ spec = do
     it "statement block with return " $ p "{return;}" `shouldBe` AstBlock [AstReturn emptyMeta Nothing]
     it "return with parenthesized expression is not a function call" $
       p "return (10);" `shouldBe` AstReturn emptyMeta (Just (AstInteger emptyMeta 10))
+
+  describe "record expressions" $ do
+    let p = parse pExpr
+    it "empty record expression" $ p "{}" `shouldBe` AstRecord emptyMeta []
+    it "record with one field" $ p "{Int x = 10}" `shouldBe`
+      AstRecord emptyMeta [AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)]
+    it "record with two fields" $ p "{Bool y = False, Int x = 10}" `shouldBe`
+      AstRecord emptyMeta [ AstRecordField emptyMeta boolType "y" (AstBoolean emptyMeta False)
+                          , AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)
+                          ]
+    it "nested record" $ p "{Bool y = False, Int x = 10, {Bool y, Int x} z = {Bool y = False, Int x = 10}}" `shouldBe`
+      AstRecord emptyMeta [ AstRecordField emptyMeta boolType "y" (AstBoolean emptyMeta False)
+                          , AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)
+                          , AstRecordField emptyMeta
+                              (RecordType emptyMeta
+                                [ AstRecordFieldType emptyMeta (BaseType emptyMeta "Bool") "y"
+                                , AstRecordFieldType emptyMeta (BaseType emptyMeta "Int") "x"
+                                ])
+                              "z"
+                              (AstRecord emptyMeta
+                                [ AstRecordField emptyMeta boolType "y" (AstBoolean emptyMeta False)
+                                , AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)
+                                ])
+                          ]
 
 specTypeParser :: (String -> AstType) -> Spec
 specTypeParser p = do

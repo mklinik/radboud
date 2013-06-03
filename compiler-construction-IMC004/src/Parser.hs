@@ -49,7 +49,7 @@ pType baseTypes =
       mkBaseTypeOrIdentifier baseTypes <$> pSourceLocation <*> pIdentifier
   <|> TupleType <$> pSourceLocation <* pSymbol "(" <*> pType baseTypes <* pSymbol "," <*> pType baseTypes <* pSymbol ")"
   <|> ListType <$> pSourceLocation <* pSymbol "[" <*> pType baseTypes <* pSymbol "]"
-  <|> RecordType <$> pSourceLocation <* pSymbol "{" <*> pListSep (pSymbol ",") (pRecordFieldType) <* pSymbol "}"
+  <|> RecordType <$> pSourceLocation <* pSymbol "{" <*> pListSep (pSymbol ",") pRecordFieldType <* pSymbol "}"
 
 pRecordFieldType :: SplParser AstRecordFieldType
 pRecordFieldType = AstRecordFieldType <$> pSourceLocation <*> pType defaultBaseTypes <*> pIdentifier
@@ -116,7 +116,11 @@ pBaseExpr =
         _ <- pSymbol "-"
         pNegatedExpression loc
       )
+  <|> AstRecord <$> pSourceLocation <* pSymbol "{" <*> pListSep (pSymbol ",") pRecordField <* pSymbol "}"
   <?> "Expression"
+
+pRecordField :: SplParser AstRecordField
+pRecordField = AstRecordField <$> pSourceLocation <*> pType defaultBaseTypes <*> pIdentifier <* pSymbol "=" <*> pExpr
 
 pParenthesizedExpression :: AstMeta -> AstExpr -> SplParser AstExpr
 pParenthesizedExpression loc e =
