@@ -89,7 +89,7 @@ instance Prettyprint AstExpr where
   pp level (AstRecord _ fields) = \s -> "{" ++ pp level fields "}" ++ s
 
 instance Prettyprint AstRecordField where
-  pp level (AstRecordField _ ty ident expr) = \s -> (pp level ty " ") ++ ident ++ " = " ++ pp level expr s
+  pp level (AstRecordField _ ident expr) = \s -> ident ++ " = " ++ pp level expr s
 
 instance Prettyprint AstFunctionCall where
   pp level (AstFunctionCall _ ident args) = \s -> ident ++ "(" ++ foldr ($) ")" (intersperse (", "++) (map (pp level) args)) ++ s

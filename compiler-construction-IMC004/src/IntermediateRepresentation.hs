@@ -365,7 +365,7 @@ exp2ir (AstRecord _ fields) = do
   fields_ <- mapM field2ir fields
   return $ IrRecord fields_
   where
-    field2ir (AstRecordField _ _ label expr) = do
+    field2ir (AstRecordField _ label expr) = do
       labelNr <- recordLabel label
       exprIr <- exp2ir expr
       return (labelNr, exprIr)

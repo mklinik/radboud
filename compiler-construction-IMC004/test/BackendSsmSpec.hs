@@ -50,7 +50,7 @@ spec = do
   describe "records" $ do
     it "lookup the single field of a single record" $ run (unlines
       [ "Void main() {"
-      , "  var x = {Int x = 42};"
+      , "  var x = {x = 42};"
       , "  print(x.x);"
       , "}"
       ]) `shouldBe` ["42"]

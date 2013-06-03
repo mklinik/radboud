@@ -209,32 +209,27 @@ spec = do
   describe "record expressions" $ do
     let p = parse pExpr
     it "empty record expression" $ p "{}" `shouldBe` AstRecord emptyMeta []
-    it "record with one field" $ p "{Int x = 10}" `shouldBe`
-      AstRecord emptyMeta [AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)]
-    it "record with two fields" $ p "{Bool y = False, Int x = 10}" `shouldBe`
-      AstRecord emptyMeta [ AstRecordField emptyMeta boolType "y" (AstBoolean emptyMeta False)
-                          , AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)
+    it "record with one field" $ p "{x = 10}" `shouldBe`
+      AstRecord emptyMeta [AstRecordField emptyMeta "x" (AstInteger emptyMeta 10)]
+    it "record with two fields" $ p "{y = False, x = 10}" `shouldBe`
+      AstRecord emptyMeta [ AstRecordField emptyMeta "y" (AstBoolean emptyMeta False)
+                          , AstRecordField emptyMeta "x" (AstInteger emptyMeta 10)
                           ]
-    it "nested record" $ p "{Bool y = False, Int x = 10, {Bool y, Int x} z = {Bool y = False, Int x = 10}}" `shouldBe`
-      AstRecord emptyMeta [ AstRecordField emptyMeta boolType "y" (AstBoolean emptyMeta False)
-                          , AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)
-                          , AstRecordField emptyMeta
-                              (RecordType emptyMeta
-                                [ AstRecordFieldType emptyMeta boolType "y"
-                                , AstRecordFieldType emptyMeta intType "x"
-                                ])
-                              "z"
+    it "nested record" $ p "{y = False, x = 10, z = {y = False, x = 10}}" `shouldBe`
+      AstRecord emptyMeta [ AstRecordField emptyMeta "y" (AstBoolean emptyMeta False)
+                          , AstRecordField emptyMeta "x" (AstInteger emptyMeta 10)
+                          , AstRecordField emptyMeta "z"
                               (AstRecord emptyMeta
-                                [ AstRecordField emptyMeta boolType "y" (AstBoolean emptyMeta False)
-                                , AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)
+                                [ AstRecordField emptyMeta "y" (AstBoolean emptyMeta False)
+                                , AstRecordField emptyMeta "x" (AstInteger emptyMeta 10)
                                 ])
                           ]
   describe "record projections" $ do
     let p = parse pExpr
     it "projection from a variable" $ p "x.y" `shouldBe` AstBinOp emptyMeta "." (AstIdentifier emptyMeta "x") (AstIdentifier emptyMeta "y")
-    it "projection from a record" $ p "{Int x = 10}.y" `shouldBe`
+    it "projection from a record" $ p "{x = 10}.y" `shouldBe`
       AstBinOp emptyMeta "."
-        (AstRecord emptyMeta [AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)])
+        (AstRecord emptyMeta [AstRecordField emptyMeta "x" (AstInteger emptyMeta 10)])
         (AstIdentifier emptyMeta "y")
     it "nested projections, must be left associative" $ p "x.y.z" `shouldBe`
       AstBinOp emptyMeta "."

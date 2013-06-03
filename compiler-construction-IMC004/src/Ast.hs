@@ -54,7 +54,7 @@ data AstExpr
   deriving (Show, Eq)
 
 data AstRecordField
-  = AstRecordField AstMeta AstType String AstExpr
+  = AstRecordField AstMeta String AstExpr
   deriving (Show, Eq)
 
 data AstStatement

@@ -121,7 +121,7 @@ pBaseExpr =
   <?> "Expression"
 
 pRecordField :: SplParser AstRecordField
-pRecordField = AstRecordField <$> pSourceLocation <*> pType defaultBaseTypes <*> pIdentifier <* pSymbol "=" <*> pExpr
+pRecordField = AstRecordField <$> pSourceLocation <*> pIdentifier <* pSymbol "=" <*> pExpr
 
 pParenthesizedExpression :: AstMeta -> AstExpr -> SplParser AstExpr
 pParenthesizedExpression loc e =
