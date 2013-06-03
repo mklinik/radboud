@@ -47,6 +47,14 @@ testCompareOp (opStr, op) = modifyQuickCheckMaxSuccess (const 10) $ property $
 
 spec :: Spec
 spec = do
+  describe "records" $ do
+    it "lookup the single field of a single record" $ run (unlines
+      [ "Void main() {"
+      , "  var x = {Int x = 42};"
+      , "  print(x.x);"
+      , "}"
+      ]) `shouldBe` ["42"]
+
   describe "map" $ do
     it "map (+2) on [1, 2, 3] gives [3, 4, 5]" $ run (unlines
       [ "Void printList(l l) { if(isEmpty(l)) return; else print(head(l)); printList(tail(l)); }"
