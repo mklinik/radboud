@@ -17,6 +17,9 @@ indent level a = pp (level + 2) a
 class Prettyprint a where
   pp :: Int -> a -> (String -> String)
 
+instance Prettyprint a => Prettyprint [a] where
+  pp level as = \s -> foldr ($) s $ intersperse (", "++) $ map (pp level) as
+
 instance Prettyprint AstProgram where
   pp _ (AstProgram []) = id
   pp level (AstProgram (d:decls)) = \s -> ds ++ pp level (AstProgram decls) s
@@ -60,6 +63,10 @@ instance Prettyprint AstType where
   pp _ (PolymorphicType _ t) = (t ++)
   pp level (TupleType _ a b) = \s -> "(" ++ pp level a ", " ++ pp level b ")" ++ s
   pp level (ListType _ t) = \s -> "[" ++ pp level t "]" ++ s
+  pp level (RecordType _ fields) = \s -> "{" ++ pp level fields "}" ++ s
+
+instance Prettyprint AstRecordFieldType where
+  pp level (AstRecordFieldType _ ty ident) = \s -> (pp level ty " ") ++ ident ++ s
 
 ppMaybeTypArg :: Int -> AstFunctionArgument -> (String -> String)
 ppMaybeTypArg level (AstFunctionArgument meta typ _) =
@@ -79,6 +86,10 @@ instance Prettyprint AstExpr where
   pp level (AstBinOp _ op l r) = \s -> "(" ++ pp level l (" " ++ op ++ " ") ++ pp level r ")" ++ s
   pp level (AstUnaryOp _ op e) = \s -> op ++ pp level e s
   pp level (AstFunctionCallExpr fun) = pp level fun
+  pp level (AstRecord _ fields) = \s -> "{" ++ pp level fields "}" ++ s
+
+instance Prettyprint AstRecordField where
+  pp level (AstRecordField _ ty ident expr) = \s -> (pp level ty " ") ++ ident ++ " = " ++ pp level expr s
 
 instance Prettyprint AstFunctionCall where
   pp level (AstFunctionCall _ ident args) = \s -> ident ++ "(" ++ foldr ($) ")" (intersperse (", "++) (map (pp level) args)) ++ s
