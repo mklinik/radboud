@@ -154,7 +154,7 @@ funDecl2ir (AstFunDeclaration _ _ name formalArgs localVars body) = do
   modify $ \m -> m { machineCurFunctionArgCount = length formalArgs }
   modify $ \m -> m { machineFrameSize = 0 }
   mapM_ envAddFunArg formalArgs
-  mapM_ (\(AstVarDeclaration _ _ name _) -> addLocalVariable name) localVars
+  mapM_ (\(AstVarDeclaration _ _ varName _) -> addLocalVariable varName) localVars
   varInits <- liftM sequenceIr $ mapM varDecl2ir localVars
   prologue <- gets machineMakePrologue >>= id
   b <- stmts2ir body
