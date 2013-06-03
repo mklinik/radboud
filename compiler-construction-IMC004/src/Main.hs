@@ -109,7 +109,7 @@ typecheck ast =
   in
     case result of
     Left err -> Left $ show err
-    Right (env, ast2) -> Right $ prettyprint ast2
+    Right (_, ast2) -> Right $ prettyprint ast2
 
 cleanUp :: Options -> IO ()
 cleanUp opts = do
