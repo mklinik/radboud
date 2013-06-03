@@ -95,6 +95,16 @@ run opts = do
           mapM_ (prettyprintAsm (outFile opts)) asm
           return ExitSuccess
 
+    ModeCompileNoTypecheck -> do
+      input <- hGetContents (inFile opts)
+      case compileSsmNoTypecheck (inputFilename opts) input of
+        Left err -> do
+          hPutStrLn stderr $ show err
+          return $ ExitFailure 1
+        Right asm -> do
+          mapM_ (prettyprintAsm (outFile opts)) asm
+          return ExitSuccess
+
   cleanUp opts
   return returnCode
 
@@ -128,6 +138,7 @@ data Mode
   | ModeTypecheck
   | ModeInteractive
   | ModeCompile
+  | ModeCompileNoTypecheck
   deriving (Show)
 
 data Options = Options
@@ -159,6 +170,7 @@ options =
   , Option []  ["typecheck"]  (NoArg  (\  opts -> opts { mode = ModeTypecheck }))          "parse, then typecheck"
   , Option []  ["interactive"](NoArg  (\  opts -> opts { mode = ModeInteractive }))        "read-eval-print loop"
   , Option ['c']  ["compile"] (NoArg  (\  opts -> opts { mode = ModeCompile }))            "generate assembly code for the Simple Stack Machine"
+  , Option []  ["compile-unsafe"] (NoArg  (\  opts -> opts { mode = ModeCompileNoTypecheck })) "generate assembly code for the Simple Stack Machine, but don't perform typechecking"
   ]
 
 get :: [String] -> IO Options
