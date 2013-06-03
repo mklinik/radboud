@@ -46,8 +46,8 @@ ppMaybeTyp level (AstFunDeclaration meta typ name args _ _) = \s ->
     ppOneArg lev (AstFunctionArgument _ _ argName, argType) = \s -> pp lev argType " " ++ argName ++ s
 
 instance Prettyprint (Maybe SplType) where
-  pp level Nothing = id
-  pp level (Just t) = \s -> prettyprintType t ++ s
+  pp _ Nothing = id
+  pp _ (Just t) = \s -> prettyprintType t ++ s
 
 instance Prettyprint AstDeclaration where
   pp level ast@(AstVarDeclaration _ _ ident expr) = \s -> replicate level ' ' ++ ppMaybeTyp level ast " " ++ ident ++ " = " ++ pp level expr ";\n" ++ s
