@@ -57,6 +57,16 @@ generateE (IrTemp IrGlobalFramePointer) c = c ++ ["ldr 5 ; global frame pointer"
 generateE (IrMem (IrBinOp OpAdd (IrTemp IrFramePointer) (IrConst n))) c = c ++ ["ldl " ++ show n]
 generateE (IrMem e) c = generateE e c ++ ["lda 0"]
 generateE (IrName name) c = c ++ ["ldc " ++ name]
+generateE (IrRecord fields) c =
+  c ++ ["ldc 0 ; sentinel"]
+    ++ (concatMap generateField fields)
+    -- the size of the record in memory:
+    --   every field conists of two words
+    --   one word for the sentinel
+    ++ ["stmh " ++ show ((length fields * 2) + 1) ++ " ; put record to heap"]
+
+generateField :: (Int, IrExpression) -> Asm
+generateField (label, expr) = generateE expr [] ++ ["ldc " ++ show label]
 
 
 generateS :: IrStatement -> Asm -> Asm

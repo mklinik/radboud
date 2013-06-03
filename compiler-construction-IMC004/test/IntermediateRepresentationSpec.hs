@@ -17,6 +17,8 @@ import BackendSsm
 main :: IO ()
 main = hspec spec
 
+irOf s = evalState (exp2ir (parse pExpr s)) ssmMachine
+
 spec :: Spec
 spec = do
   describe "record label management" $ do
@@ -24,3 +26,17 @@ spec = do
     it "new labels get new numbers" $ evalState (recordLabel "x" >> recordLabel "y") ssmMachine `shouldBe` 2
     it "looking up a label returns the originally assigned number" $
       evalState (recordLabel "x" >> recordLabel "y" >> recordLabel "x") ssmMachine `shouldBe` 1
+
+  describe "exp2ir for records" $ do
+    it "translates a simple record" $ irOf "{Int x = 10, Bool y = True}" `shouldBe`
+      IrRecord [ (1, IrConst 10)
+               , (2, IrConst (machineTrue ssmMachine))
+               ]
+    it "translates the empty record" $ irOf "{}" `shouldBe` IrRecord []
+    it "translates a nested record" $ irOf "{a z = { b x = 10, c y = True }, e y = 30, d x = False}" `shouldBe`
+      IrRecord [ (1, (IrRecord -- z
+                        [ (2, IrConst 10) -- x
+                        , (3, IrConst (machineTrue ssmMachine))])) -- y
+               , (3, IrConst 30) -- y
+               , (2, IrConst (machineFalse ssmMachine))-- x
+               ]

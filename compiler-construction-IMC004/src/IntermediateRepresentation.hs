@@ -16,19 +16,20 @@ data IrExpression
   | IrMem IrExpression
   | IrCall IrExpression [IrExpression]
   | IrName String
-  deriving (Show)
+  | IrRecord [(Int, IrExpression)]
+  deriving (Show, Eq)
 
 data IrBinOp
   = OpAdd | OpSub | OpMul | OpDiv | OpMod
   | OpEq | OpNeq | OpLt | OpLte | OpGt | OpGte
   | OpAnd | OpOr | OpXor
-  deriving (Show)
+  deriving (Show, Eq)
 
 data IrTemp
   = IrStackPointer
   | IrFramePointer
   | IrGlobalFramePointer
-  deriving (Show)
+  deriving (Show, Eq)
 
 data IrStatement
   = IrMove IrExpression IrExpression
@@ -39,7 +40,7 @@ data IrStatement
   | IrExp IrExpression
   | IrCNjump IrExpression String IrStatement String -- if (not condition) goto elseLabel body endLabel
   | IrSkip
-  deriving (Show)
+  deriving (Show, Eq)
 
 data Machine = Machine
   { machineTrue  :: Int -- encoding of the truth value True
@@ -321,6 +322,15 @@ exp2ir (AstTuple _ astA astB) = do
   b <- exp2ir astB
   return $ IrCall (IrName "__mktuple__") [a, b]
 exp2ir (AstEmptyList _) = return $ IrConst 0 -- the empty list is just the null pointer
+exp2ir (AstRecord _ fields) = do
+  fields_ <- mapM field2ir fields
+  return $ IrRecord fields_
+  where
+    field2ir (AstRecordField _ _ label expr) = do
+      labelNr <- recordLabel label
+      exprIr <- exp2ir expr
+      return (labelNr, exprIr)
+
 
 op2ir :: String -> IrBinOp
 op2ir "+" = OpAdd
