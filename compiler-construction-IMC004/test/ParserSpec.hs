@@ -162,7 +162,7 @@ spec = do
           "foo"
           [ AstFunctionArgument emptyMeta intType "x"
           , AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "y"
-          , AstFunctionArgument emptyMeta (BaseType emptyMeta "Bool") "z"
+          , AstFunctionArgument emptyMeta boolType "z"
           ]
           []
           [AstReturn emptyMeta (Just (AstIdentifier emptyMeta "a"))]
@@ -220,7 +220,7 @@ spec = do
                           , AstRecordField emptyMeta intType "x" (AstInteger emptyMeta 10)
                           , AstRecordField emptyMeta
                               (RecordType emptyMeta
-                                [ AstRecordFieldType emptyMeta (BaseType emptyMeta "Bool") "y"
+                                [ AstRecordFieldType emptyMeta boolType "y"
                                 , AstRecordFieldType emptyMeta intType "x"
                                 ])
                               "z"
@@ -234,23 +234,23 @@ specTypeParser :: (String -> AstType) -> Spec
 specTypeParser p = do
   it "polymorphic type" $ p "x" `shouldBe` PolymorphicType emptyMeta "x"
   it "base type Int" $ p "Int" `shouldBe` intType
-  it "base type Bool" $ p "Bool" `shouldBe` BaseType emptyMeta "Bool"
-  it "tuple type" $ p "(Int, Bool)" `shouldBe` TupleType emptyMeta intType (BaseType emptyMeta "Bool")
+  it "base type Bool" $ p "Bool" `shouldBe` boolType
+  it "tuple type" $ p "(Int, Bool)" `shouldBe` TupleType emptyMeta intType boolType
   it "list type" $ p "[Int]" `shouldBe` ListType emptyMeta intType
   it "polymorphic list type" $ p "[a]" `shouldBe` ListType emptyMeta (PolymorphicType emptyMeta "a")
   it "empty record" $ p "{}" `shouldBe` RecordType emptyMeta []
   it "record with one Int field 'x'" $ p "{Int x}" `shouldBe` RecordType emptyMeta [AstRecordFieldType emptyMeta intType "x"]
   it "record with two fields" $ p "{Bool y, Int x}" `shouldBe`
     RecordType emptyMeta
-      [ AstRecordFieldType emptyMeta (BaseType emptyMeta "Bool") "y"
+      [ AstRecordFieldType emptyMeta boolType "y"
       , AstRecordFieldType emptyMeta intType "x"
       ]
   it "nested record type" $ p "{Bool y, Int x, {Bool y, Int x} z}" `shouldBe`
     RecordType emptyMeta
-      [ AstRecordFieldType emptyMeta (BaseType emptyMeta "Bool") "y"
+      [ AstRecordFieldType emptyMeta boolType "y"
       , AstRecordFieldType emptyMeta intType "x"
       , AstRecordFieldType emptyMeta (RecordType emptyMeta
-          [ AstRecordFieldType emptyMeta (BaseType emptyMeta "Bool") "y"
+          [ AstRecordFieldType emptyMeta boolType "y"
           , AstRecordFieldType emptyMeta intType "x"
           ])
         "z"
