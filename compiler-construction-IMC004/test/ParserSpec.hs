@@ -144,12 +144,12 @@ spec = do
   describe "pFunDeclaration" $ do
     it "function without formal parameters" $
       parse pFunDeclaration "Void foo() { return; }" `shouldBe`
-        AstFunDeclaration emptyMeta (BaseType emptyMeta "Void") "foo" [] [] [AstReturn emptyMeta Nothing]
+        AstFunDeclaration emptyMeta voidType "foo" [] [] [AstReturn emptyMeta Nothing]
     it "function with one formal parameters" $
       parse pFunDeclaration "Void foo(Int x) { return; }" `shouldBe`
         AstFunDeclaration
           emptyMeta
-          (BaseType emptyMeta "Void")
+          voidType
           "foo"
           [AstFunctionArgument emptyMeta intType "x"]
           []
@@ -158,7 +158,7 @@ spec = do
       parse pFunDeclaration "Void foo(Int x, a y, Bool z) { return a; }" `shouldBe`
         AstFunDeclaration
           emptyMeta
-          (BaseType emptyMeta "Void")
+          voidType
           "foo"
           [ AstFunctionArgument emptyMeta intType "x"
           , AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "y"
@@ -170,7 +170,7 @@ spec = do
       parse pFunDeclaration "Void bar() { foo = 100; return; }" `shouldBe`
         AstFunDeclaration
           emptyMeta
-          (BaseType emptyMeta "Void")
+          voidType
           "bar"
           []
           []
@@ -182,7 +182,7 @@ spec = do
 
   describe "pReturnType" $ do
     specTypeParser $ parse pReturnType
-    it "Void" $ parse pReturnType "Void" `shouldBe` BaseType emptyMeta "Void"
+    it "Void" $ parse pReturnType "Void" `shouldBe` voidType
 
   describe "pVarDeclaration" $ do
     let p = parse pVarDeclaration
