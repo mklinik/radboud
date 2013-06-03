@@ -3,7 +3,7 @@ module IntermediateRepresentation where
 import Control.Monad.Trans.State
 import qualified Data.Map as Map
 import Data.Map (Map)
-import Control.Monad (liftM)
+import Control.Monad (liftM, when)
 
 import Ast
 
@@ -92,15 +92,16 @@ bumpFrameSize = modify $ \m -> m { machineFrameSize = 1 + machineFrameSize m }
 recordLabel :: String -> IR Int
 recordLabel label = do
   fields <- gets machineRecordFields
-  freshLabel <- gets machineRecordLabelNumber
+  nextRecordLabel <- gets machineRecordLabelNumber
+  when (nextRecordLabel == maxBound) $ error "IR: maximal number of different record labels exceeded"
   case Map.lookup label fields of
     Just n -> return n
     Nothing -> do
       modify $ \m ->
         m { machineRecordLabelNumber = machineRecordLabelNumber m + 1
-          , machineRecordFields = Map.insert label freshLabel (machineRecordFields m)
+          , machineRecordFields = Map.insert label nextRecordLabel (machineRecordFields m)
           }
-      return freshLabel
+      return nextRecordLabel
 
 envAddFunArg :: AstFunctionArgument -> IR ()
 envAddFunArg (AstFunctionArgument _ _ name) = do
@@ -215,6 +216,7 @@ stmts2ir (s:ss) = do
   return $ IrSeq s_ ss_
 
 -- the types of the arguments and the return type don't matter.  The number of arguments is crucial though.
+-- TODO: move to backend specific part
 builtins :: [AstDeclaration]
 builtins =
   [ AstFunDeclaration emptyMeta (BaseType emptyMeta "Void") "print"
@@ -235,6 +237,39 @@ builtins =
         , "ldc 0"
         , "eq ; the empty list is just the null pointer"
         , "stl -3"
+        ]
+      ]
+  , AstFunDeclaration emptyMeta (BaseType emptyMeta "Void") "__lookupRecord__"
+      [ AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "a") "record"
+      , AstFunctionArgument emptyMeta (PolymorphicType emptyMeta "b") "fieldName"
+      ]
+      [] -- no locals
+      [ AstAsm
+        [ "__lookupRecord__loop:"
+
+        , "ldl -3 ; safety check: is current field name the sentinel 0?"
+        , "ldh 0"
+        , "ldc 0"
+        , "eq"
+        , "brf __lookupRecord__ok_continue"
+        , "halt ; we have reached the end of the record. for well typed programs, this should never happen"
+
+        , "__lookupRecord__ok_continue:"
+        , "ldl -3 ; record pointer, first argument"
+        , "ldh 0  ; load field name of current field"
+        , "ldl -2 ; requested field name, is second argument"
+        , "eq"
+        , "brf __lookupRecord__try_next_field"
+        , "ldl -3 ; else we're successful. return current value"
+        , "ldh 1"
+        , "stl -4 ; store to return value"
+        , "bra __lookupRecord___return"
+        , "__lookupRecord__try_next_field:"
+        , "ldl -3"
+        , "ldc 2"
+        , "sub"
+        , "stl -3 ; decrement pointer to record by two"
+        , "bra __lookupRecord__loop"
         ]
       ]
   ]
@@ -304,6 +339,10 @@ exp2ir (AstBinOp _ ":" lhs rhs) = do
   hd <- exp2ir lhs
   tl <- exp2ir rhs
   return $ IrCall (IrName "__mklist__") [hd, tl]
+exp2ir (AstBinOp _ "." lhs (AstIdentifier _ label)) = do
+  record <- exp2ir lhs
+  labelNr <- recordLabel label
+  return $ IrCall (IrName "__lookupRecord__") [record, IrConst labelNr]
 exp2ir (AstBinOp _ op lhs rhs) = do
   l <- exp2ir lhs
   r <- exp2ir rhs
