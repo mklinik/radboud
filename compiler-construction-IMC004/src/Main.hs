@@ -15,6 +15,7 @@ import qualified Typechecker as TC
 import Repl
 import System.Exit
 import Compile
+import CompileError
 
 main :: IO ()
 main = do
@@ -113,12 +114,12 @@ prettyprintAsm file line = do
   unless (':' `elem` line) (hPutStr file "    ") -- indent all but labelled lines
   hPutStrLn file line
 
-typecheck :: AstProgram -> Either String String
+typecheck :: AstProgram -> Either CompileError String
 typecheck ast =
   let result = TC.runTypecheck $ TC.typecheck ast
   in
     case result of
-    Left err -> Left $ show err
+    Left err -> Left err
     Right (_, ast2) -> Right $ prettyprint ast2
 
 cleanUp :: Options -> IO ()
