@@ -8,8 +8,9 @@ data CompileError
   = TypeError SplType SplType LineColPos
   | UnknownIdentifier String AstMeta
   | ParseError String
-  | PolymorphicVariable String AstMeta
+  | PolymorphicVariable String AstMeta -- TODO unused
   | InternalError String
+  | ErrorWithLocation String AstMeta -- all other errors
 
 -- default show LineColPos is not nice
 lcpToString :: LineColPos -> String

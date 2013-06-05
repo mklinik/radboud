@@ -40,6 +40,7 @@ instance Show CompileError where
   show (PolymorphicVariable name meta) = "Variables cannot be polymorphic. Please specify a concrete type for `"
     ++ name ++ "' "
     ++ (position $ sourceLocation meta)
+  show (ErrorWithLocation message meta) = message ++ (position $ sourceLocation meta)
 
 fresh :: Typecheck SplType
 fresh = do
@@ -387,6 +388,19 @@ instance InferType AstExpr where
   inferType env ast@(AstEmptyList meta) s = do
     (u, _, _) <- inferType env (AstIdentifier meta "[]") s
     return (u, env, ast)
+
+  inferType env ast@(AstBinOp meta "." lhs (AstIdentifier _ ident)) s = do
+    t <- fresh
+    (u, _, _) <- inferType env lhs t
+    let t2 = substitute u t
+    u2 <- case t2 of
+      SplRecordType fields -> case Map.lookup ident fields of
+        Nothing -> left $ ErrorWithLocation ("`" ++ ident ++ "' is not a field of " ++ prettyprintType t2 ++ " ") meta
+        (Just fieldType) -> unify meta s fieldType
+      _ -> unify meta (SplRecordType $ Map.fromList [(ident,s)]) t2
+    return (u2 . u, env, ast)
+  inferType _ (AstBinOp meta "." _ _) _ = left $ ErrorWithLocation "Right hand side of record projection must be an identifier " meta
+
   inferType env ast@(AstBinOp meta name lhs rhs) s = do
     (u, _, _) <- inferType env (AstFunctionCall meta name [lhs, rhs]) s
     return (u, env, ast)
