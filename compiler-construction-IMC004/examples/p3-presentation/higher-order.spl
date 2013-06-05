@@ -1,27 +1,19 @@
 Int plus(Int x, Int y)
 {
-    return x + y;
+  return x + y;
 }
 
-Int minus(Int x, Int y)
+a foldl(b f, c z, d list)
 {
-    return x - y;
-}
-
-Int mult(Int x, Int y)
-{
-    return x * y;
+  if( isEmpty(list) )
+    return z;
+  else
+    return foldl(f, f(z, head(list)), tail(list));
 }
 
 Void main()
 {
-    var functions = plus:minus:mult:[];
-    var f = plus; // dummy
-    while( !isEmpty(functions) )
-    {
-        f = head(functions);
-        functions = tail(functions);
-        print(f(3, 8));
-    }
-    return;
+    print(foldl(plus, 0, 1:2:3:[]));
 }
+
+// vim:ft=c
