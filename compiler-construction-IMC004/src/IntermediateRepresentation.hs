@@ -261,7 +261,7 @@ builtins =
         , "eq"
         , "brf __lookupRecord__try_next_field"
         , "ldl -3 ; else we're successful. return current value"
-        , "ldh 1"
+        , "ldh -1"
         , "stl -4 ; store to return value"
         , "bra __lookupRecord___return"
         , "__lookupRecord__try_next_field:"
