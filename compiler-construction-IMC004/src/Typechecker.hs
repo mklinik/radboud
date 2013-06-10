@@ -35,6 +35,10 @@ instance Show CompileError where
     "Couldn't match expected type `" ++ (show $ makeNiceAutoTypeVariables expected)
     ++ "' with actual type `" ++ (show $ makeNiceAutoTypeVariables got) ++ "' "
     ++ position p
+  show (RowError expected got p) =
+    "Couldn't match expected row `" ++ (show expected)
+    ++ "' with actual row `" ++ (show got) ++ "' "
+    ++ position p
   show (UnknownIdentifier ident meta) =
     "Unknown identifier `" ++ ident ++ "' " ++ (position $ sourceLocation meta)
   show (ParseError message) = message
