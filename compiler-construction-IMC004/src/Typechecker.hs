@@ -99,7 +99,23 @@ typeVars (SplTupleType x y) = typeVars x ++ typeVars y
 typeVars (SplListType x) = typeVars x
 typeVars (SplFunctionType argTypes returnType) = foldl (\accum argType -> typeVars argType ++ accum) (typeVars returnType) argTypes
 typeVars (SplForall vars t) = typeVars t \\ vars
-typeVars (SplRecordType fields) = concatMap typeVars (Map.elems fields)
+typeVars (SplRecordType (SplFixedRow fields)) = concatMap typeVars (Map.elems fields)
+typeVars (SplRecordType (SplVariableRow _ fields)) = concatMap typeVars (Map.elems fields)
+
+class RowVars a where
+  rowVars :: a -> [String]
+
+instance RowVars SplType where
+  rowVars (SplTupleType x y) = rowVars x ++ rowVars y
+  rowVars (SplListType x) = rowVars x
+  rowVars (SplFunctionType argTypes returnType) = foldl (\accum argType -> rowVars argType ++ accum) (rowVars returnType) argTypes
+  rowVars (SplForall _ t) = rowVars t
+  rowVars (SplRecordType row) = rowVars row
+  rowVars _ = []
+
+instance RowVars Row where
+  rowVars (SplFixedRow row) = concatMap rowVars (Map.elems row)
+  rowVars (SplVariableRow var row) = var : concatMap rowVars (Map.elems row)
 
 class Substitute a where
   substitute :: Unifier -> a -> a
@@ -113,7 +129,8 @@ instance Substitute SplType where
   -- The quantification process makes sure that we substitute only free type variables in quantified types.
   -- This is because type variables which are free in the environment are not quantified.
   substitute u (SplForall vars t) = SplForall vars (substitute u t)
-  substitute u (SplRecordType fields) = SplRecordType (substitute u fields)
+  substitute u (SplRecordType (SplFixedRow fields)) = SplRecordType $ SplFixedRow (substitute u fields)
+  substitute u (SplRecordType (SplVariableRow var fields)) = SplRecordType $ SplVariableRow var (substitute u fields)
 
 
 -- Takes care of substitution in tuples, lists, Maybe, etc.
@@ -130,36 +147,48 @@ instance Substitute AstDeclaration where
   substitute u (AstVarDeclaration meta typ name expr) = AstVarDeclaration (substitute u meta) typ name expr
   substitute u (AstFunDeclaration meta typ name args locals body) = AstFunDeclaration (substitute u meta) typ name args locals body
 
-unify :: AstMeta -> SplType -> SplType -> Typecheck Unifier
-unify _ (SplBaseType BaseTypeInt) (SplBaseType BaseTypeInt) = return id
-unify _ (SplBaseType BaseTypeBool) (SplBaseType BaseTypeBool) = return id
-unify _ (SplBaseType BaseTypeVoid) (SplBaseType BaseTypeVoid) = return id
-unify _ (SplTypeVariable v1) (SplTypeVariable v2) | v1 == v2 = return id
-unify p s@(SplListType t1) t@(SplListType t2) =
-  case runTypecheck (unify p t1 t2) of
-    Left _ -> left $ TypeError s t $ sourceLocation p
-    Right u -> right u
-unify p s@(SplTupleType a1 b1) t@(SplTupleType a2 b2) =
-  case runTypecheck (unifyAll p [(a1, a2), (b1, b2)]) of
-    Left _ -> left $ TypeError s t $ sourceLocation p
-    Right u -> right u
-unify p t1@(SplFunctionType args1 ret1) t2@(SplFunctionType args2 ret2) =
-  if length args1 == length args2
-    then case runTypecheck (unifyAll p $ zip (ret1:args1) (ret2:args2)) of
-      Left _ -> left $ TypeError t1 t2 $ sourceLocation p
-      Right u -> right u
-    else left $ TypeError t1 t2 $ sourceLocation p
--- unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
--- unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
-unify p s@(SplRecordType a) t@(SplRecordType b) =
-  if (Map.keysSet a /= Map.keysSet b)
-    then left $ TypeError s t $ sourceLocation p
-    else case runTypecheck $ unifyAll p [(fromJust $ Map.lookup key a, fromJust $ Map.lookup key b) | key <- Map.keys a] of
+class Unify a where
+  unify :: AstMeta -> a -> a -> Typecheck Unifier
+
+instance Unify SplType where
+  unify _ (SplBaseType BaseTypeInt) (SplBaseType BaseTypeInt) = return id
+  unify _ (SplBaseType BaseTypeBool) (SplBaseType BaseTypeBool) = return id
+  unify _ (SplBaseType BaseTypeVoid) (SplBaseType BaseTypeVoid) = return id
+  unify _ (SplTypeVariable v1) (SplTypeVariable v2) | v1 == v2 = return id
+  unify p s@(SplListType t1) t@(SplListType t2) =
+    case runTypecheck (unify p t1 t2) of
       Left _ -> left $ TypeError s t $ sourceLocation p
       Right u -> right u
-unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
-unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
-unify p t1 t2 = left $ TypeError t1 t2 $ sourceLocation p
+  unify p s@(SplTupleType a1 b1) t@(SplTupleType a2 b2) =
+    case runTypecheck (unifyAll p [(a1, a2), (b1, b2)]) of
+      Left _ -> left $ TypeError s t $ sourceLocation p
+      Right u -> right u
+  unify p t1@(SplFunctionType args1 ret1) t2@(SplFunctionType args2 ret2) =
+    if length args1 == length args2
+      then case runTypecheck (unifyAll p $ zip (ret1:args1) (ret2:args2)) of
+        Left _ -> left $ TypeError t1 t2 $ sourceLocation p
+        Right u -> right u
+      else left $ TypeError t1 t2 $ sourceLocation p
+  -- unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
+  -- unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
+  unify p (SplRecordType rowA) (SplRecordType rowB) = unify p rowA rowB -- clause (3) in Wand 1987
+  unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
+  unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
+  unify p t1 t2 = left $ TypeError t1 t2 $ sourceLocation p
+
+instance Unify Row where
+  unify _ _ _ = undefined
+  -- unify p (SplVariableRow v r) t | Map.null r && not (elem v (rowVars t)) = return $ substitute $ mkSubstitution v t
+  -- unify p t (SplVariableRow v r) | Map.null r && not (elem v (rowVars t)) = return $ substitute $ mkSubstitution v t
+  -- unify p (SplFixedRow rowA) (SplFixedRow rowB) = undefined
+  -- unify p (SplVariableRow varA rowA) (SplVariableRow varB rowB) = undefined
+
+-- unify p s@(SplRecordType a) t@(SplRecordType b) =
+  -- if (Map.keysSet a /= Map.keysSet b)
+    -- then left $ TypeError s t $ sourceLocation p
+    -- else case runTypecheck $ unifyAll p [(fromJust $ Map.lookup key a, fromJust $ Map.lookup key b) | key <- Map.keys a] of
+      -- Left _ -> left $ TypeError s t $ sourceLocation p
+      -- Right u -> right u
 
 mkSubstitution :: String -> SplType -> SplType -> SplType
 mkSubstitution v1 t (SplTypeVariable v2) | v1 == v2 = t
@@ -230,7 +259,7 @@ astType2splType t = do
     right $ SplFunctionType argTypes_ returnType_
   astType2splType_ (RecordType _ fields) tvars = do
     newFields <- sequence [ astType2splType_ astTyp tvars >>= \splTyp -> return (name, splTyp) | (AstRecordFieldType _ astTyp name) <- fields ]
-    right $ SplRecordType $ Map.fromList newFields
+    right $ SplRecordType $ SplFixedRow $ Map.fromList newFields
 
 
 data Quantify = Quantify String SplType (Bool, AstMeta)
@@ -389,17 +418,17 @@ instance InferType AstExpr where
     (u, _, _) <- inferType env (AstIdentifier meta "[]") s
     return (u, env, ast)
 
-  inferType env ast@(AstBinOp meta "." lhs (AstIdentifier _ ident)) s = do
-    t <- fresh
-    (u, _, _) <- inferType env lhs t
-    let t2 = substitute u t
-    u2 <- case t2 of
-      SplRecordType fields -> case Map.lookup ident fields of
-        Nothing -> left $ ErrorWithLocation ("`" ++ ident ++ "' is not a field of " ++ prettyprintType t2 ++ " ") meta
-        (Just fieldType) -> unify meta s fieldType
-      _ -> unify meta (SplRecordType $ Map.fromList [(ident,s)]) t2
-    return (u2 . u, env, ast)
-  inferType _ (AstBinOp meta "." _ _) _ = left $ ErrorWithLocation "Right hand side of record projection must be an identifier " meta
+  -- inferType env ast@(AstBinOp meta "." lhs (AstIdentifier _ ident)) s = do
+    -- t <- fresh
+    -- (u, _, _) <- inferType env lhs t
+    -- let t2 = substitute u t
+    -- u2 <- case t2 of
+      -- SplRecordType fields -> case Map.lookup ident fields of
+        -- Nothing -> left $ ErrorWithLocation ("`" ++ ident ++ "' is not a field of " ++ prettyprintType t2 ++ " ") meta
+        -- (Just fieldType) -> unify meta s fieldType
+      -- _ -> unify meta (SplRecordType $ Map.fromList [(ident,s)]) t2
+    -- return (u2 . u, env, ast)
+  -- inferType _ (AstBinOp meta "." _ _) _ = left $ ErrorWithLocation "Right hand side of record projection must be an identifier " meta
 
   inferType env ast@(AstBinOp meta name lhs rhs) s = do
     (u, _, _) <- inferType env (AstFunctionCall meta name [lhs, rhs]) s
@@ -415,12 +444,12 @@ instance InferType AstExpr where
     u3 <- unify meta (substitute (u2 . u1) s) (substitute (u2 . u1) $ SplTupleType a b)
     return (u3 . u2 . u1, env, ast)
 
-  inferType env ast@(AstRecord meta fields) s = do
-    freshFieldTypes <- mapM (\(AstRecordField _ _ expr) -> fresh >>= \a -> return (expr, a)) fields :: Typecheck [(AstExpr, SplType)]
-    u <- inferExpressions env freshFieldTypes
-    let recordType = SplRecordType $ Map.fromList [(label, a) | ((AstRecordField _ label _), (_, a)) <- zip fields freshFieldTypes]
-    u2 <- unify meta (substitute u s) (substitute u recordType)
-    return (u2 . u, env, ast)
+  -- inferType env ast@(AstRecord meta fields) s = do
+    -- freshFieldTypes <- mapM (\(AstRecordField _ _ expr) -> fresh >>= \a -> return (expr, a)) fields :: Typecheck [(AstExpr, SplType)]
+    -- u <- inferExpressions env freshFieldTypes
+    -- let recordType = SplRecordType $ Map.fromList [(label, a) | ((AstRecordField _ label _), (_, a)) <- zip fields freshFieldTypes]
+    -- u2 <- unify meta (substitute u s) (substitute u recordType)
+    -- return (u2 . u, env, ast)
 
 inferExpressions :: Environment -> [(AstExpr, SplType)] -> Typecheck Unifier
 inferExpressions _ [] = return emptyUnifier

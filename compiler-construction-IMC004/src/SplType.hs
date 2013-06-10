@@ -17,7 +17,12 @@ data SplType
  | SplListType SplType
  | SplFunctionType [SplType] SplType
  | SplForall [String] SplType
- | SplRecordType (Map String SplType)
+ | SplRecordType Row
+ deriving (Eq)
+
+data Row
+ = SplFixedRow (Map String SplType)
+ | SplVariableRow String (Map String SplType)
  deriving (Eq)
 
 -- for convenience
@@ -38,5 +43,13 @@ prettyprintType (SplTupleType x y) = "(" ++ prettyprintType x ++ ", " ++ prettyp
 prettyprintType (SplListType x) = "[" ++ prettyprintType x ++ "]"
 prettyprintType (SplFunctionType argTypes returnType) = "(" ++ concat (intersperse " " (map prettyprintType argTypes)) ++ " -> " ++ prettyprintType returnType ++ ")"
 prettyprintType (SplForall vars t) = "forall " ++ (concat $ intersperse " " vars) ++ ", " ++ prettyprintType t
-prettyprintType (SplRecordType fields) =
-  "{" ++ (concat $ intersperse ", " $ map (\(label, typ) -> prettyprintType typ ++ " " ++ label) (Map.assocs fields)) ++ "}"
+prettyprintType (SplRecordType row) =
+  "{" ++ prettyprintRow row ++ "}"
+
+prettyprintRow :: Row -> String
+prettyprintRow (SplFixedRow fields) = prettyprintFields fields
+prettyprintRow (SplVariableRow var fields) = var ++ " | " ++ prettyprintFields fields
+
+prettyprintFields :: (Map String SplType) -> String
+prettyprintFields fields =
+  (concat $ intersperse ", " $ map (\(label, typ) -> prettyprintType typ ++ " " ++ label) (Map.assocs fields))
