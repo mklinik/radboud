@@ -209,8 +209,8 @@ instance Unify SplType where
 -- Objects. In Proc. 2nd IEEE Symposium on Logic in Computer Science, pages
 -- 37--44, 1987.
 instance Unify Row where
-  unify p (SplVariableRow v r) t | Map.null r && not (elem v (rowVars t)) = return $ mkRowSubstitution v t -- clause (6) in [Wand87]
-  unify p t (SplVariableRow v r) | Map.null r && not (elem v (rowVars t)) = return $ mkRowSubstitution v t -- clause (6)
+  unify _ (SplVariableRow v r) t | Map.null r && not (elem v (rowVars t)) = return $ mkRowSubstitution v t -- clause (6) in [Wand87]
+  unify _ t (SplVariableRow v r) | Map.null r && not (elem v (rowVars t)) = return $ mkRowSubstitution v t -- clause (6)
   unify p s@(SplFixedRow rowA) t@(SplFixedRow rowB) = -- clause (7)
     if (Map.keysSet rowA /= Map.keysSet rowB)
       then left $ RowError s t $ sourceLocation p
