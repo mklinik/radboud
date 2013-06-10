@@ -23,7 +23,7 @@ data SplType
 data Row
  = SplFixedRow (Map String SplType)
  | SplVariableRow String (Map String SplType)
- deriving (Eq)
+ deriving (Eq, Show)
 
 -- for convenience
 splTypeVoid, splTypeInt, splTypeBool :: SplType

@@ -6,6 +6,7 @@ import Test.Hspec
 import Test.QuickCheck
 import Control.Monad.Trans.Either
 import Control.Monad.Trans.State.Lazy
+import qualified Data.Map as Map
 
 import Parser
 import Utils
@@ -61,6 +62,12 @@ spec = do
     it "nested substitution, the other direction" $ do
       let u =  mkSubstitution "<1>" (SplTypeVariable "<2>") `after` mkSubstitution "<2>" splTypeBool
       substitute u (SplTypeVariable "<1>") `shouldBe` splTypeBool
+    it "rightmost row entries win" $ do
+      let fieldsRight = Map.fromList [("x", splTypeInt)]
+      let fieldsLeft = Map.fromList [("x", splTypeBool), ("y", splTypeBool)]
+      let expected = Map.fromList [("x", splTypeInt), ("y", splTypeBool)]
+      substitute (mkRowSubstitution "<1>" (SplFixedRow fieldsLeft)) (SplVariableRow "<1>" fieldsRight) `shouldBe` SplFixedRow expected
+
 
   describe "astType2splType" $ do
     it "is the identity function on monomorphic types" $ do

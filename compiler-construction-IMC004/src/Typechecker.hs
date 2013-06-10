@@ -58,7 +58,7 @@ data Substitution
 -- The expression
 --     s `after` t
 -- means: first try the substitutions of t, if none found then try s
--- Because we're storing substitutions in a list, and want to traverse the list
+-- Because we are storing substitutions in a list, and want to traverse the list
 -- from head to tail, we need the latest substitutions to the left.
 after :: Unifier -> Unifier -> Unifier
 after s t = t ++ s
@@ -147,9 +147,18 @@ instance Substitute SplType where
   -- The quantification process makes sure that we substitute only free type variables in quantified types.
   -- This is because type variables which are free in the environment are not quantified.
   substitute u (SplForall vars t) = SplForall vars (substitute u t)
-  substitute u (SplRecordType (SplFixedRow fields)) = SplRecordType $ SplFixedRow (substitute u fields)
-  substitute u (SplRecordType (SplVariableRow var fields)) = SplRecordType $ SplVariableRow var (substitute u fields)
+  substitute u (SplRecordType row) = SplRecordType $ substitute u row
 
+instance Substitute Row where
+  substitute u (SplFixedRow fields) = SplFixedRow (substitute u fields)
+  substitute u r@(SplVariableRow v fields) = doSubstitute u
+    where
+      doSubstitute [] = r
+      -- the guard in unify (var not elem ...) makes sure this terminates
+      doSubstitute (RowSubstitution (w, s) : _) | w == v = substitute u (merge s fields) -- `fields` take precedence over s. See Wand87
+      doSubstitute (_:rest) = doSubstitute rest
+      merge (SplFixedRow fieldsA) fieldsB = SplFixedRow (fieldsB `Map.union` fieldsA) -- fieldsB take precedence over fieldsA
+      merge (SplVariableRow var fieldsA) fieldsB = SplVariableRow var (fieldsB `Map.union` fieldsA)
 
 -- Takes care of substitution in tuples, lists, Maybe, etc.
 instance (Functor b, Substitute a) => Substitute (b a) where
@@ -189,17 +198,21 @@ instance Unify SplType where
       else left $ TypeError t1 t2 $ sourceLocation p
   -- unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
   -- unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
-  unify p (SplRecordType rowA) (SplRecordType rowB) = unify p rowA rowB -- clause (3) in Wand 1987
+  unify p (SplRecordType rowA) (SplRecordType rowB) = unify p rowA rowB -- clause (3) in [Wand87]
   unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ mkSubstitution v t
   unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ mkSubstitution v t
   unify p t1 t2 = left $ TypeError t1 t2 $ sourceLocation p
 
+-- References: [Wand87] Mitchell Wand. Complete Type Inference for Simple
+-- Objects. In Proc. 2nd IEEE Symposium on Logic in Computer Science, pages
+-- 37--44, 1987.
 instance Unify Row where
-  unify _ _ _ = undefined
-  -- unify p (SplVariableRow v r) t | Map.null r && not (elem v (rowVars t)) = return $ substitute $ mkSubstitution v t
-  -- unify p t (SplVariableRow v r) | Map.null r && not (elem v (rowVars t)) = return $ substitute $ mkSubstitution v t
-  -- unify p (SplFixedRow rowA) (SplFixedRow rowB) = undefined
-  -- unify p (SplVariableRow varA rowA) (SplVariableRow varB rowB) = undefined
+  unify p (SplVariableRow v r) t | Map.null r && not (elem v (rowVars t)) = return $ mkRowSubstitution v t -- clause (6) in [Wand87]
+  unify p t (SplVariableRow v r) | Map.null r && not (elem v (rowVars t)) = return $ mkRowSubstitution v t -- clause (6)
+  unify p (SplFixedRow rowA) (SplFixedRow rowB) = undefined -- clause (7)
+  unify p (SplVariableRow v rowA) (SplFixedRow rowB) = undefined -- clause (8)
+  unify p (SplFixedRow rowB) (SplVariableRow v rowA) = undefined -- clause (8)
+  unify p (SplVariableRow varA rowA) (SplVariableRow varB rowB) = undefined -- clause (9)
 
 -- unify p s@(SplRecordType a) t@(SplRecordType b) =
   -- if (Map.keysSet a /= Map.keysSet b)
@@ -210,6 +223,9 @@ instance Unify Row where
 
 mkSubstitution :: String -> SplType -> Unifier
 mkSubstitution v t = [TypeSubstitution (v, t)]
+
+mkRowSubstitution :: String -> Row -> Unifier
+mkRowSubstitution v t = [RowSubstitution (v, t)]
 
 unifyAll :: AstMeta -> Constraints -> Typecheck Unifier
 unifyAll meta cs = foldM unifyBlaat emptyUnifier cs
