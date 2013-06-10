@@ -157,9 +157,10 @@ instance Substitute SplType where
 
 instance Substitute Row where
   substitute u (SplFixedRow fields) = SplFixedRow (substitute u fields)
-  substitute u r@(SplVariableRow v fields) = doSubstitute u
+  substitute u (SplVariableRow v fields) = doSubstitute u
     where
-      doSubstitute [] = r
+      -- when all row variables are substituted, we have to apply the substitution to the fields
+      doSubstitute [] = SplVariableRow v (substitute u fields)
       -- the guard in unify (var not elem ...) makes sure this terminates
       doSubstitute (RowSubstitution (w, s) : _) | w == v = substitute u (merge s fields) -- `fields` take precedence over s. See Wand87
       doSubstitute (_:rest) = doSubstitute rest

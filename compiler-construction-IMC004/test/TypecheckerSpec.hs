@@ -73,6 +73,16 @@ spec = do
       substitute sub typ `shouldBe` (SplFixedRow $ Map.fromList [("x", SplRecordType $ SplFixedRow $ Map.fromList
         [("y", splTypeInt)
         ,("z", splTypeBool)])])
+    it "substitutes types in rows, fixed row" $ do
+      let typ = SplRecordType $ SplFixedRow $ Map.fromList [("x", SplTypeVariable "<1>")]
+      let sub = mkSubstitution "<1>" splTypeInt
+      let expected = SplRecordType $ SplFixedRow $ Map.fromList [("x", splTypeInt)]
+      substitute sub typ `shouldBe` expected
+    it "substitutes types in rows, variable row" $ do
+      let typ = SplRecordType $ SplVariableRow "<2>" $ Map.fromList [("x", SplTypeVariable "<1>")]
+      let sub = mkSubstitution "<1>" splTypeInt
+      let expected = SplRecordType $ SplVariableRow "<2>" $ Map.fromList [("x", splTypeInt)]
+      substitute sub typ `shouldBe` expected
 
 
   describe "astType2splType" $ do
