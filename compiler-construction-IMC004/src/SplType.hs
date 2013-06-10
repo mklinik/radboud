@@ -25,7 +25,7 @@ type RowFields = (Map String SplType)
 data Row
  = SplFixedRow RowFields
  | SplVariableRow String RowFields
- deriving (Eq, Show)
+ deriving (Eq)
 
 -- for convenience
 splTypeVoid, splTypeInt, splTypeBool :: SplType
@@ -50,8 +50,11 @@ prettyprintType (SplRecordType row) =
 
 prettyprintRow :: Row -> String
 prettyprintRow (SplFixedRow fields) = prettyprintFields fields
-prettyprintRow (SplVariableRow var fields) = var ++ " | " ++ prettyprintFields fields
+prettyprintRow (SplVariableRow _ fields) = prettyprintFields fields
 
 prettyprintFields :: (Map String SplType) -> String
 prettyprintFields fields =
   (concat $ intersperse ", " $ map (\(label, typ) -> prettyprintType typ ++ " " ++ label) (Map.assocs fields))
+
+instance Show Row where
+  show r = "{" ++ prettyprintRow r ++ "}"
