@@ -225,8 +225,8 @@ instance Unify Row where
     where
       typecheckFields = runTypecheck $ unifyAll p $
         map TypeConstraint [(fromJust $ Map.lookup key rowA, fromJust $ Map.lookup key rowB) | key <- Map.keys rowA]
-  unify p (SplVariableRow v rowA) (SplFixedRow rowB) = isSubrowOf p v rowB rowA -- clause (8)
-  unify p (SplFixedRow rowB) (SplVariableRow v rowA) = isSubrowOf p v rowB rowA -- clause (8)
+  unify p (SplVariableRow v rowB) (SplFixedRow rowA) = isSubrowOf p v rowB rowA -- clause (8)
+  unify p (SplFixedRow rowA) (SplVariableRow v rowB) = isSubrowOf p v rowB rowA -- clause (8)
   unify p s@(SplVariableRow varA rowA) t@(SplVariableRow varB rowB) = do -- clause (9)
     (SplTypeVariable r0) <- fresh -- we only want the unique variable name
     let newA = SplVariableRow r0 (Map.filterWithKey (\k _ -> k `Set.member` restA) rowA) -- only the fields unique to A
