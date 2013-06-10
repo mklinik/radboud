@@ -513,7 +513,8 @@ instance InferType AstExpr where
   inferType env ast@(AstRecord meta fields) s = do
     freshFieldTypes <- mapM (\(AstRecordField _ _ expr) -> fresh >>= \a -> return (expr, a)) fields :: Typecheck [(AstExpr, SplType)]
     u <- inferExpressions env freshFieldTypes
-    let recordType = SplRecordType $ SplFixedRow $ Map.fromList [(label, a) | ((AstRecordField _ label _), (_, a)) <- zip fields freshFieldTypes]
+    (SplTypeVariable r) <- fresh
+    let recordType = SplRecordType $ SplVariableRow r $ Map.fromList [(label, a) | ((AstRecordField _ label _), (_, a)) <- zip fields freshFieldTypes]
     u2 <- unify meta (substitute u s) (substitute u recordType)
     return (u2 `after` u, env, ast)
 
