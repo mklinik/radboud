@@ -222,7 +222,23 @@ instance Unify Row where
         map TypeConstraint [(fromJust $ Map.lookup key rowA, fromJust $ Map.lookup key rowB) | key <- Map.keys rowA]
   unify p (SplVariableRow v rowA) (SplFixedRow rowB) = isSubrowOf p v rowB rowA -- clause (8)
   unify p (SplFixedRow rowB) (SplVariableRow v rowA) = isSubrowOf p v rowB rowA -- clause (8)
-  unify p (SplVariableRow varA rowA) (SplVariableRow varB rowB) = undefined -- clause (9)
+  unify p s@(SplVariableRow varA rowA) t@(SplVariableRow varB rowB) = do -- clause (9)
+    (SplTypeVariable r0) <- fresh -- we only want the unique variable name
+    let newA = SplVariableRow r0 (Map.filterWithKey (\k _ -> k `Set.member` restA) rowA) -- only the fields unique to A
+    let newB = SplVariableRow r0 (Map.filterWithKey (\k _ -> k `Set.member` restB) rowB) -- only the fields unique to B
+    if varA `elem` rowVars newA
+      then left $ RowError s t $ sourceLocation p
+      else if varB `elem` rowVars newB
+        then left $ RowError s t $ sourceLocation p
+        else do
+          u <- unifyAll p $ map TypeConstraint [(fromJust $ Map.lookup key rowA, fromJust $ Map.lookup key rowB) | key <- Set.toList bothAB]
+          return $ u `after` mkRowSubstitution varA newA `after` mkRowSubstitution varB newB
+    where
+      labelsA = Map.keysSet rowA
+      labelsB = Map.keysSet rowB
+      bothAB = Set.intersection labelsA labelsB
+      restA = Set.difference labelsA bothAB
+      restB = Set.difference labelsB bothAB
 
 isSubrowOf :: AstMeta -> String -> RowFields -> RowFields -> Typecheck Unifier
 isSubrowOf p var rowB rowA =
