@@ -489,17 +489,12 @@ instance InferType AstExpr where
     (u, _, _) <- inferType env (AstIdentifier meta "[]") s
     return (u, env, ast)
 
-  -- inferType env ast@(AstBinOp meta "." lhs (AstIdentifier _ ident)) s = do
-    -- t <- fresh
-    -- (u, _, _) <- inferType env lhs t
-    -- let t2 = substitute u t
-    -- u2 <- case t2 of
-      -- SplRecordType fields -> case Map.lookup ident fields of
-        -- Nothing -> left $ ErrorWithLocation ("`" ++ ident ++ "' is not a field of " ++ prettyprintType t2 ++ " ") meta
-        -- (Just fieldType) -> unify meta s fieldType
-      -- _ -> unify meta (SplRecordType $ Map.fromList [(ident,s)]) t2
-    -- return (u2 . u, env, ast)
-  -- inferType _ (AstBinOp meta "." _ _) _ = left $ ErrorWithLocation "Right hand side of record projection must be an identifier " meta
+  inferType env ast@(AstBinOp _ "." lhs (AstIdentifier _ ident)) s = do
+    (SplTypeVariable r) <- fresh -- only interested in the unique string
+    let recordType = SplRecordType $ SplVariableRow r $ Map.fromList [(ident, s)]
+    (u, _, _) <- inferType env lhs recordType
+    return (u, env, ast)
+  inferType _ (AstBinOp meta "." _ _) _ = left $ ErrorWithLocation "Right hand side of record projection must be an identifier " meta
 
   inferType env ast@(AstBinOp meta name lhs rhs) s = do
     (u, _, _) <- inferType env (AstFunctionCall meta name [lhs, rhs]) s
@@ -515,12 +510,12 @@ instance InferType AstExpr where
     u3 <- unify meta (substitute (u2 `after` u1) s) (substitute (u2 `after` u1) $ SplTupleType a b)
     return (u3 `after` u2 `after` u1, env, ast)
 
-  -- inferType env ast@(AstRecord meta fields) s = do
-    -- freshFieldTypes <- mapM (\(AstRecordField _ _ expr) -> fresh >>= \a -> return (expr, a)) fields :: Typecheck [(AstExpr, SplType)]
-    -- u <- inferExpressions env freshFieldTypes
-    -- let recordType = SplRecordType $ Map.fromList [(label, a) | ((AstRecordField _ label _), (_, a)) <- zip fields freshFieldTypes]
-    -- u2 <- unify meta (substitute u s) (substitute u recordType)
-    -- return (u2 . u, env, ast)
+  inferType env ast@(AstRecord meta fields) s = do
+    freshFieldTypes <- mapM (\(AstRecordField _ _ expr) -> fresh >>= \a -> return (expr, a)) fields :: Typecheck [(AstExpr, SplType)]
+    u <- inferExpressions env freshFieldTypes
+    let recordType = SplRecordType $ SplFixedRow $ Map.fromList [(label, a) | ((AstRecordField _ label _), (_, a)) <- zip fields freshFieldTypes]
+    u2 <- unify meta (substitute u s) (substitute u recordType)
+    return (u2 `after` u, env, ast)
 
 inferExpressions :: Environment -> [(AstExpr, SplType)] -> Typecheck Unifier
 inferExpressions _ [] = return emptyUnifier
