@@ -67,6 +67,12 @@ spec = do
       let fieldsLeft = Map.fromList [("x", splTypeBool), ("y", splTypeBool)]
       let expected = Map.fromList [("x", splTypeInt), ("y", splTypeBool)]
       substitute (mkRowSubstitution "<1>" (SplFixedRow fieldsLeft)) (SplVariableRow "<1>" fieldsRight) `shouldBe` SplFixedRow expected
+    it "nested row substitution" $ do
+      let typ = SplFixedRow $ Map.fromList [("x", SplRecordType $ SplVariableRow "<1>" $ Map.fromList [("y", splTypeInt)])]
+      let sub = mkRowSubstitution "<1>" $ SplFixedRow $ Map.fromList [("z", splTypeBool)]
+      substitute sub typ `shouldBe` (SplFixedRow $ Map.fromList [("x", SplRecordType $ SplFixedRow $ Map.fromList
+        [("y", splTypeInt)
+        ,("z", splTypeBool)])])
 
 
   describe "astType2splType" $ do
