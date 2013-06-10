@@ -6,6 +6,7 @@ import SplType
 
 data CompileError
   = TypeError SplType SplType LineColPos
+  | RowError Row Row LineColPos
   | UnknownIdentifier String AstMeta
   | ParseError String
   | PolymorphicVariable String AstMeta -- TODO unused

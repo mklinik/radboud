@@ -20,9 +20,11 @@ data SplType
  | SplRecordType Row
  deriving (Eq)
 
+type RowFields = (Map String SplType)
+
 data Row
- = SplFixedRow (Map String SplType)
- | SplVariableRow String (Map String SplType)
+ = SplFixedRow RowFields
+ | SplVariableRow String RowFields
  deriving (Eq, Show)
 
 -- for convenience

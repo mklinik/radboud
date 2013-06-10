@@ -21,7 +21,9 @@ data TypecheckState = TypecheckState
   { nextAutoVar :: Integer
   }
 type Typecheck a = EitherT CompileError (State TypecheckState) a
-type Constraint = (SplType, SplType)
+data Constraint
+  = TypeConstraint (SplType, SplType)
+  | RowConstraint (Row, Row)
 type Constraints = [Constraint]
 type Environment = [(String, SplType)]
 
@@ -187,12 +189,12 @@ instance Unify SplType where
       Left _ -> left $ TypeError s t $ sourceLocation p
       Right u -> right u
   unify p s@(SplTupleType a1 b1) t@(SplTupleType a2 b2) =
-    case runTypecheck (unifyAll p [(a1, a2), (b1, b2)]) of
+    case runTypecheck (unifyAll p $ map TypeConstraint [(a1, a2), (b1, b2)]) of
       Left _ -> left $ TypeError s t $ sourceLocation p
       Right u -> right u
   unify p t1@(SplFunctionType args1 ret1) t2@(SplFunctionType args2 ret2) =
     if length args1 == length args2
-      then case runTypecheck (unifyAll p $ zip (ret1:args1) (ret2:args2)) of
+      then case runTypecheck (unifyAll p $ map TypeConstraint $ zip (ret1:args1) (ret2:args2)) of
         Left _ -> left $ TypeError t1 t2 $ sourceLocation p
         Right u -> right u
       else left $ TypeError t1 t2 $ sourceLocation p
@@ -209,17 +211,29 @@ instance Unify SplType where
 instance Unify Row where
   unify p (SplVariableRow v r) t | Map.null r && not (elem v (rowVars t)) = return $ mkRowSubstitution v t -- clause (6) in [Wand87]
   unify p t (SplVariableRow v r) | Map.null r && not (elem v (rowVars t)) = return $ mkRowSubstitution v t -- clause (6)
-  unify p (SplFixedRow rowA) (SplFixedRow rowB) = undefined -- clause (7)
-  unify p (SplVariableRow v rowA) (SplFixedRow rowB) = undefined -- clause (8)
-  unify p (SplFixedRow rowB) (SplVariableRow v rowA) = undefined -- clause (8)
+  unify p s@(SplFixedRow rowA) t@(SplFixedRow rowB) = -- clause (7)
+    if (Map.keysSet rowA /= Map.keysSet rowB)
+      then left $ RowError s t $ sourceLocation p
+      else case typecheckFields of
+        Left _ -> left $ RowError s t $ sourceLocation p
+        Right u -> right u
+    where
+      typecheckFields = runTypecheck $ unifyAll p $
+        map TypeConstraint [(fromJust $ Map.lookup key rowA, fromJust $ Map.lookup key rowB) | key <- Map.keys rowA]
+  unify p (SplVariableRow v rowA) (SplFixedRow rowB) = isSubrowOf p v rowB rowA -- clause (8)
+  unify p (SplFixedRow rowB) (SplVariableRow v rowA) = isSubrowOf p v rowB rowA -- clause (8)
   unify p (SplVariableRow varA rowA) (SplVariableRow varB rowB) = undefined -- clause (9)
 
--- unify p s@(SplRecordType a) t@(SplRecordType b) =
-  -- if (Map.keysSet a /= Map.keysSet b)
-    -- then left $ TypeError s t $ sourceLocation p
-    -- else case runTypecheck $ unifyAll p [(fromJust $ Map.lookup key a, fromJust $ Map.lookup key b) | key <- Map.keys a] of
-      -- Left _ -> left $ TypeError s t $ sourceLocation p
-      -- Right u -> right u
+isSubrowOf :: AstMeta -> String -> RowFields -> RowFields -> Typecheck Unifier
+isSubrowOf p var rowB rowA =
+  if labelsB `Set.isSubsetOf` labelsA
+    then unifyAll p $ (RowConstraint (SplVariableRow var Map.empty, SplFixedRow remainingFields)):
+      [TypeConstraint (fromJust $ Map.lookup key rowA, fromJust $ Map.lookup key rowB) | key <- Map.keys rowB]
+    else left $ RowError (SplFixedRow rowB) (SplFixedRow rowA) $ sourceLocation p -- not so nice
+  where
+    labelsA = Map.keysSet rowA
+    labelsB = Map.keysSet rowB
+    remainingFields = Map.difference rowA rowB
 
 mkSubstitution :: String -> SplType -> Unifier
 mkSubstitution v t = [TypeSubstitution (v, t)]
@@ -231,7 +245,10 @@ unifyAll :: AstMeta -> Constraints -> Typecheck Unifier
 unifyAll meta cs = foldM unifyBlaat emptyUnifier cs
   where
   unifyBlaat :: Unifier -> Constraint -> Typecheck Unifier
-  unifyBlaat u (a, b) = do
+  unifyBlaat u (TypeConstraint (a, b)) = doUnify u (a, b)
+  unifyBlaat u (RowConstraint (a, b)) = doUnify u (a, b)
+  doUnify :: (Unify a, Substitute a) => Unifier -> (a, a) -> Typecheck Unifier
+  doUnify u (a, b) = do
     u2 <- unify meta (substitute u a) (substitute u b)
     return (u2 `after` u)
 
