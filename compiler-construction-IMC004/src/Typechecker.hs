@@ -49,10 +49,24 @@ fresh = do
   lift $ put $ env { nextAutoVar = i+1 }
   return $ SplTypeVariable ("<" ++ show i ++ ">")
 
-type Unifier = SplType -> SplType
+type Unifier = [Substitution]
+data Substitution
+  = TypeSubstitution (String, SplType)
+  | RowSubstitution (String, Row)
+
+-- Composes two unifiers into a new unifier. Like function composition.
+-- The expression
+--     s `after` t
+-- means: first try the substitutions of t, if none found then try s
+-- Because we're storing substitutions in a list, and want to traverse the list
+-- from head to tail, we need the latest substitutions to the left.
+after :: Unifier -> Unifier -> Unifier
+after s t = t ++ s
+
+infixr 9 `after`
 
 emptyUnifier :: Unifier
-emptyUnifier = id
+emptyUnifier = []
 
 emptyTypecheckState :: TypecheckState
 emptyTypecheckState = TypecheckState
@@ -65,7 +79,7 @@ envLookup meta ident env = do
   case typ of
     (SplForall vars t1) -> do
       freshVars <- mapM (\var -> fresh >>= return . (,) var) vars
-      let u2 = foldl (\u (v, a) -> u . mkSubstitution v a) id freshVars
+      let u2 = foldl (\u (v, a) -> u `after` mkSubstitution v a) emptyUnifier freshVars
       right $ substitute u2 t1
     _ -> right typ
 
@@ -83,7 +97,7 @@ makeFreshTypeVariables t = do
     foobar :: Unifier -> String -> Typecheck Unifier
     foobar u var = do
       a <- fresh
-      return (u . mkSubstitution var a)
+      return (u `after` mkSubstitution var a)
 
 envAdd :: String -> SplType -> Environment -> Environment
 envAdd ident typ env = (ident,typ):env
@@ -121,7 +135,11 @@ class Substitute a where
   substitute :: Unifier -> a -> a
 
 instance Substitute SplType where
-  substitute u t@(SplTypeVariable _) = u t
+  substitute u t@(SplTypeVariable v) = doSubstitute u
+    where
+      doSubstitute [] = t
+      doSubstitute (TypeSubstitution (w,s):_) | w == v = substitute u s -- the guard in unify (var not elem ...) makes sure this terminates
+      doSubstitute (_:rest) = doSubstitute rest
   substitute _ t@(SplBaseType _) = t
   substitute u (SplTupleType x y) = SplTupleType (substitute u x) (substitute u y)
   substitute u (SplListType x) = SplListType (substitute u x)
@@ -151,10 +169,10 @@ class Unify a where
   unify :: AstMeta -> a -> a -> Typecheck Unifier
 
 instance Unify SplType where
-  unify _ (SplBaseType BaseTypeInt) (SplBaseType BaseTypeInt) = return id
-  unify _ (SplBaseType BaseTypeBool) (SplBaseType BaseTypeBool) = return id
-  unify _ (SplBaseType BaseTypeVoid) (SplBaseType BaseTypeVoid) = return id
-  unify _ (SplTypeVariable v1) (SplTypeVariable v2) | v1 == v2 = return id
+  unify _ (SplBaseType BaseTypeInt) (SplBaseType BaseTypeInt) = return emptyUnifier
+  unify _ (SplBaseType BaseTypeBool) (SplBaseType BaseTypeBool) = return emptyUnifier
+  unify _ (SplBaseType BaseTypeVoid) (SplBaseType BaseTypeVoid) = return emptyUnifier
+  unify _ (SplTypeVariable v1) (SplTypeVariable v2) | v1 == v2 = return emptyUnifier
   unify p s@(SplListType t1) t@(SplListType t2) =
     case runTypecheck (unify p t1 t2) of
       Left _ -> left $ TypeError s t $ sourceLocation p
@@ -172,8 +190,8 @@ instance Unify SplType where
   -- unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
   -- unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
   unify p (SplRecordType rowA) (SplRecordType rowB) = unify p rowA rowB -- clause (3) in Wand 1987
-  unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
-  unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ substitute $ mkSubstitution v t
+  unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ mkSubstitution v t
+  unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ mkSubstitution v t
   unify p t1 t2 = left $ TypeError t1 t2 $ sourceLocation p
 
 instance Unify Row where
@@ -190,9 +208,8 @@ instance Unify Row where
       -- Left _ -> left $ TypeError s t $ sourceLocation p
       -- Right u -> right u
 
-mkSubstitution :: String -> SplType -> SplType -> SplType
-mkSubstitution v1 t (SplTypeVariable v2) | v1 == v2 = t
-mkSubstitution _ _ t = t
+mkSubstitution :: String -> SplType -> Unifier
+mkSubstitution v t = [TypeSubstitution (v, t)]
 
 unifyAll :: AstMeta -> Constraints -> Typecheck Unifier
 unifyAll meta cs = foldM unifyBlaat emptyUnifier cs
@@ -200,7 +217,7 @@ unifyAll meta cs = foldM unifyBlaat emptyUnifier cs
   unifyBlaat :: Unifier -> Constraint -> Typecheck Unifier
   unifyBlaat u (a, b) = do
     u2 <- unify meta (substitute u a) (substitute u b)
-    return (u2 . u)
+    return (u2 `after` u)
 
 -- Makes fresh type variables for each type variable occuring in the given AstType.
 -- The same type variables in the AstType get the same fresh type variables.
@@ -300,7 +317,7 @@ instance InferType a => InferType [a] where
   inferType env (x:xs) s = do
     (u,env2,y) <- inferType env x s
     (u2,env3,ys) <- inferType (substitute u env2) xs (substitute u s)
-    return (u2 . u, env3, y:ys)
+    return (u2 `after` u, env3, y:ys)
 
 mapSnd :: (a -> b) -> (c, a) -> (c, b)
 mapSnd f (c, a) = (c, f a)
@@ -312,9 +329,9 @@ inferDecls env decls = do
     let env_ = foldl (flip $ uncurry envAdd) env $ map (\(Quantify n t _) -> (n, t)) freshVars -- put fresh types in environment
     (un, decls2) <- blaat env_ emptyUnifier $ zip decls (map (\(Quantify _ t _) -> t) freshVars) -- infer declarations
     (u2, _, quantifiedVars) <- inferType (substitute un env) (substitute un freshVars) splTypeVoid -- apply quantify to all types
-    let env3 = foldl (flip $ uncurry envAdd) (substitute (u2 . un) env) $ map (\(Quantify n t _) -> (n, t)) quantifiedVars -- put inferred types to environment
+    let env3 = foldl (flip $ uncurry envAdd) (substitute (u2 `after` un) env) $ map (\(Quantify n t _) -> (n, t)) quantifiedVars -- put inferred types to environment
     decls3 <- assignType env3 decls2
-    return (u2 . un, substitute (u2 . un) env3, decls3)
+    return (u2 `after` un, substitute (u2 `after` un) env3, decls3)
 
     where
       declName (AstVarDeclaration _ _ name _) = name
@@ -329,8 +346,8 @@ inferDecls env decls = do
       blaat _ u [] = return (u,[])
       blaat e u ((d,a):rest) = do
         (u1,_,d2) <- inferType (substitute u e) d (substitute u a)
-        (u2,rest2) <- blaat e (u1 . u) rest
-        return (u2 . u1 . u, d2:rest2)
+        (u2,rest2) <- blaat e (u1 `after` u) rest
+        return (u2 `after` u1 `after` u, d2:rest2)
 
       doQuantify (AstVarDeclaration meta _ _ _) = (False, meta) -- dont quantify variable declarations
       doQuantify (AstFunDeclaration meta _ _ _ _ _) = (True, meta)
@@ -340,7 +357,7 @@ instance InferType AstProgram where
   inferType env (AstProgram (decls:declss)) s = do
     (u1, env2, decls2) <- inferDecls env decls
     (u2, env3, (AstProgram progg)) <- inferType env2 (AstProgram declss) s
-    return (u2 . u1, env3, AstProgram $ substitute (u2 . u1) (decls2:progg))
+    return (u2 `after` u1, env3, AstProgram $ substitute (u2 `after` u1) (decls2:progg))
 
 
 instance InferType AstDeclaration where
@@ -355,9 +372,9 @@ instance InferType AstDeclaration where
     let splFunctionType = SplFunctionType (map snd splArgs) splReturnType
     (u, env3, localDecls2) <- inferDecls env2 localDecls
     (u2,_,_) <- inferType env3 (AstBlock body) (substitute u splReturnType)
-    u3 <- unify meta (substitute (u2 . u) s) (substitute (u2 . u) splFunctionType)
-    localDecls3 <- assignType (substitute (u3.u2.u) env3) localDecls2
-    return (u3 . u2 . u, env, AstFunDeclaration meta returnType name formalArgs localDecls3 body)
+    u3 <- unify meta (substitute (u2 `after` u) s) (substitute (u2 `after` u) splFunctionType)
+    localDecls3 <- assignType (substitute (u3`after`u2`after`u) env3) localDecls2
+    return (u3 `after` u2 `after` u, env, AstFunDeclaration meta returnType name formalArgs localDecls3 body)
 
 
 instance InferType AstStatement where
@@ -371,19 +388,19 @@ instance InferType AstStatement where
   inferType env ast@(AstIfThenElse _ astCondition thenStmt elseStmt) s = do
     (u1,_,_) <- inferType env astCondition splTypeBool
     (u2,_,_) <- inferType (substitute u1 env) thenStmt (substitute u1 s)
-    (u3,_,_) <- inferType (substitute (u2 . u1) env) elseStmt (substitute (u2 . u1) s)
-    return (u3 . u2 . u1, env, ast)
+    (u3,_,_) <- inferType (substitute (u2 `after` u1) env) elseStmt (substitute (u2 `after` u1) s)
+    return (u3 `after` u2 `after` u1, env, ast)
 
   inferType env ast@(AstBlock []) _ = return (emptyUnifier, env, ast)
   inferType env ast@(AstBlock (stmt:stmts)) s = do
     (u,_,_) <- inferType env stmt s
     (u2,_,_) <- inferType (substitute u env) (AstBlock stmts) (substitute u s)
-    return (u2 . u, env, ast)
+    return (u2 `after` u, env, ast)
 
   inferType env ast@(AstWhile _ condition body) s = do
     (u,_,_) <- inferType env condition splTypeBool
     (u2,_,_) <- inferType (substitute u env) body (substitute u s)
-    return (u2 . u, env, ast)
+    return (u2 `after` u, env, ast)
 
   inferType env (AstAssignment meta name expr) _ = do
     nameType <- envLookup meta name env
@@ -441,8 +458,8 @@ instance InferType AstExpr where
     b <- fresh
     (u1,_,_) <- inferType env aExpr a
     (u2,_,_) <- inferType (substitute u1 env) bExpr b
-    u3 <- unify meta (substitute (u2 . u1) s) (substitute (u2 . u1) $ SplTupleType a b)
-    return (u3 . u2 . u1, env, ast)
+    u3 <- unify meta (substitute (u2 `after` u1) s) (substitute (u2 `after` u1) $ SplTupleType a b)
+    return (u3 `after` u2 `after` u1, env, ast)
 
   -- inferType env ast@(AstRecord meta fields) s = do
     -- freshFieldTypes <- mapM (\(AstRecordField _ _ expr) -> fresh >>= \a -> return (expr, a)) fields :: Typecheck [(AstExpr, SplType)]
@@ -456,7 +473,7 @@ inferExpressions _ [] = return emptyUnifier
 inferExpressions e ((expr,typ):xs) = do
   (u,_,_) <- inferType e expr typ
   u2 <- inferExpressions (substitute u e) (substitute u xs)
-  return (u2 . u)
+  return (u2 `after` u)
 
 instance InferType AstFunctionCall where
   inferType env ast@(AstFunctionCall meta name actualArgs) s = do
@@ -464,7 +481,7 @@ instance InferType AstFunctionCall where
     functionType <- envLookup meta name env
     u <- unify meta functionType (SplFunctionType (map snd freshArgTypes) s)
     u2 <- inferExpressions (substitute u env) (substitute u freshArgTypes)
-    return (u2 . u, env, ast)
+    return (u2 `after` u, env, ast)
 
 
 defaultEnvironment :: Typecheck Environment
@@ -524,4 +541,4 @@ makeNiceAutoTypeVariables t =
     substitute u t_
   where
     foobar :: (Int, Unifier) -> String -> (Int, Unifier)
-    foobar (i, u) var = (i+1, u . mkSubstitution var (SplTypeVariable ((chr $ ord 'a' + i):[])))
+    foobar (i, u) var = (i+1, u `after` mkSubstitution var (SplTypeVariable ((chr $ ord 'a' + i):[])))

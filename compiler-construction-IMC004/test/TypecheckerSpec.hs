@@ -50,6 +50,18 @@ spec = do
   describe "typeVars" $ do
     it "gives the empty list for a base type" $ null $ typeVars (SplBaseType BaseTypeInt)
 
+  describe "substitute" $ do
+    it "substitutes a base type for a type variable" $
+      substitute (mkSubstitution "<1>" splTypeBool) (SplTypeVariable "<1>") `shouldBe` splTypeBool
+    it "overwrites a substitution" $
+      substitute (mkSubstitution "<1>" splTypeBool `after` mkSubstitution "<1>" splTypeInt) (SplTypeVariable "<1>") `shouldBe` splTypeInt
+    it "nested substitution" $ do
+      let u = mkSubstitution "<2>" splTypeBool `after` mkSubstitution "<1>" (SplTypeVariable "<2>")
+      substitute u (SplTypeVariable "<1>") `shouldBe` splTypeBool
+    it "nested substitution, the other direction" $ do
+      let u =  mkSubstitution "<1>" (SplTypeVariable "<2>") `after` mkSubstitution "<2>" splTypeBool
+      substitute u (SplTypeVariable "<1>") `shouldBe` splTypeBool
+
   describe "astType2splType" $ do
     it "is the identity function on monomorphic types" $ do
       parseConvertShow "Bool" `shouldBe` "Bool"
