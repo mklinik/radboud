@@ -85,9 +85,16 @@ envLookup meta ident env = do
   case typ of
     (SplForall vars t1) -> do
       freshVars <- mapM (\var -> fresh >>= return . (,) var) vars
-      let u2 = foldl (\u (v, a) -> u `after` mkSubstitution v a) emptyUnifier freshVars
+      let u2 = foldl mkSubstitutions emptyUnifier freshVars
       right $ substitute u2 t1
     _ -> right typ
+  where
+    -- Make one type and one row substitution for each free variable.  We don't
+    -- know which are type- and which are row variables.  Therefore, this
+    -- creates too much substitutions, which doesn't matter because type and
+    -- row variables are distinct.
+    mkSubstitutions =
+      (\u (v, a@(SplTypeVariable var)) -> u `after` mkSubstitution v a `after` mkRowSubstitution v (SplVariableRow var Map.empty))
 
 envLookupBare :: AstMeta -> String -> Environment -> Typecheck SplType
 envLookupBare meta ident [] = left $ UnknownIdentifier ident meta
@@ -111,6 +118,10 @@ envAdd ident typ env = (ident,typ):env
 envFreeTypeVars :: Environment -> [String]
 envFreeTypeVars [] = []
 envFreeTypeVars ((_, t):env) = typeVars t ++ envFreeTypeVars env
+
+envFreeRowVars :: Environment -> [String]
+envFreeRowVars [] = []
+envFreeRowVars ((_, t):env) = rowVars t ++ envFreeRowVars env
 
 typeVars :: SplType -> [String]
 typeVars (SplBaseType _) = []
@@ -342,7 +353,7 @@ instance Substitute Quantify where
 
 instance InferType Quantify where
   inferType env q@(Quantify name typ (doQuantify, meta)) _ = do
-    let freeVars = typeVars typ \\ envFreeTypeVars env
+    let freeVars = (typeVars typ \\ envFreeTypeVars env) ++ (rowVars typ \\ envFreeRowVars env)
     if doQuantify then
       if null freeVars
         then right $ (emptyUnifier, env, q)
