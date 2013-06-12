@@ -382,3 +382,9 @@ spec = do
               , "var blah = getX({ y = 10 });"
               ]
         typeOf "blah" program `shouldBe` "Couldn't match expected type `{a x}' with actual type `{Int y}' at position 2:17"
+      it "global variables are not row-polymorphic, i.e. the type collects all fields used" $ do
+        typeOf "x" (unlines
+          [ "var x = [];"
+          , "Int foo = head(x).x;"
+          , "Int bar = head(x).y;"
+          ]) `shouldBe` "[{Int x, Int y}]"
