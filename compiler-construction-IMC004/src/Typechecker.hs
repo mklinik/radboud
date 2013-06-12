@@ -36,8 +36,9 @@ instance Show CompileError where
     ++ "' with actual type `" ++ (show $ makeNiceAutoTypeVariables got) ++ "' "
     ++ position p
   show (RowError expected got p) =
-    "Couldn't match expected type `" ++ (show expected)
-    ++ "' with actual type `" ++ (show got) ++ "' "
+    -- kind of hack-ish, because rows are not records, but we want makeNiceAutoTypeVariables
+    "Couldn't match expected type `" ++ (show $ makeNiceAutoTypeVariables $ SplRecordType expected)
+    ++ "' with actual type `" ++ (show $ makeNiceAutoTypeVariables $ SplRecordType got) ++ "' "
     ++ position p
   show (UnknownIdentifier ident meta) =
     "Unknown identifier `" ++ ident ++ "' " ++ (position $ sourceLocation meta)

@@ -7,6 +7,7 @@ import Test.QuickCheck
 import Control.Monad.Trans.Either
 import Control.Monad.Trans.State.Lazy
 import qualified Data.Map as Map
+import qualified Data.Set as Set
 
 import Parser
 import Utils
@@ -50,6 +51,14 @@ spec :: Spec
 spec = do
   describe "typeVars" $ do
     it "gives the empty list for a base type" $ null $ typeVars (SplBaseType BaseTypeInt)
+    it "recurses into record types, fixed row" $
+      Set.fromList (typeVars $ SplRecordType $ SplFixedRow $ Map.fromList
+          [("x", SplTypeVariable "<1>")
+          ,("y", SplTypeVariable "<2>")]) `shouldBe` Set.fromList ["<1>", "<2>"]
+    it "recurses into record types, variable row" $
+      Set.fromList (typeVars $ SplRecordType $ SplVariableRow "<3>" $ Map.fromList
+          [("x", SplTypeVariable "<1>")
+          ,("y", SplTypeVariable "<2>")]) `shouldBe` Set.fromList ["<1>", "<2>"]
 
   describe "substitute" $ do
     it "substitutes a base type for a type variable" $
@@ -372,4 +381,4 @@ spec = do
               [ getX
               , "var blah = getX({ y = 10 });"
               ]
-        typeOf "blah" program `shouldBe` "Cannot match expected type `{a x}' with actual type `{Int y}' at position 2:17"
+        typeOf "blah" program `shouldBe` "Couldn't match expected type `{a x}' with actual type `{Int y}' at position 2:17"
