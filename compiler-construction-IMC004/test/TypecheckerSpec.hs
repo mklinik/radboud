@@ -341,3 +341,35 @@ spec = do
           ,"    return f(head(list)) : map(f, tail(list));"
           ,"}"
           ]) `shouldBe` "((a -> b) [a] -> [b])"
+
+    let getX = "a getX(b b) { return b.x; }"
+    let getY = "a getY(b b) { return b.y; }"
+
+    describe "records" $ do
+      it "infers that the argument must be a record with one field x" $
+        typeOf "getX" "a getX(b b) { return b.x; }" `shouldBe` "({a x} -> a)"
+      it "infers that the argument must be a record with two fields x and y" $
+        typeOf "getXY" "a getXY(b b) { return (b.x, b.y); }" `shouldBe` "({a x, b y} -> (a, b))"
+      it "infers that the argument must be a record with two fields x and y of type Int" $
+        typeOf "addXY" "a addXY(b b) { return (b.x + b.y); }" `shouldBe` "({Int x, Int y} -> Int)"
+      it "infers that getX only needs x, getY only needs y, but getXY needs both" $ do
+        let program = unlines
+              [ getX
+              , getY
+              , "a getXY(b b) { return (getX(b), getY(b)); }"
+              ]
+        typeOf "getX" program `shouldBe` "({a x} -> a)"
+        typeOf "getY" program `shouldBe` "({a y} -> a)"
+        typeOf "getXY" program `shouldBe` "({a x, b y} -> (a, b))"
+      it "record with a single field x can be passed to getX" $ do
+        let program = unlines
+              [ getX
+              , "var blah = getX({ x = 10 });"
+              ]
+        typeOf "blah" program `shouldBe` "Int"
+      it "record with a single field y cannot be passed to getX" $ do
+        let program = unlines
+              [ getX
+              , "var blah = getX({ y = 10 });"
+              ]
+        typeOf "blah" program `shouldBe` "Cannot match expected type `{a x}' with actual type `{Int y}' at position 2:17"
