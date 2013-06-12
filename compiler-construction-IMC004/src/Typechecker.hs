@@ -103,16 +103,6 @@ envLookupBare meta ident ((name,typ):env)
   | ident == name = right typ
   | otherwise     = envLookupBare meta ident env
 
-makeFreshTypeVariables :: SplType -> Typecheck Unifier
-makeFreshTypeVariables t = do
-  let tvars = Set.toList $ Set.fromList $ typeVars t
-  foldM foobar emptyUnifier tvars
-  where
-    foobar :: Unifier -> String -> Typecheck Unifier
-    foobar u var = do
-      a <- fresh
-      return (u `after` mkSubstitution var a)
-
 envAdd :: String -> SplType -> Environment -> Environment
 envAdd ident typ env = (ident,typ):env
 
