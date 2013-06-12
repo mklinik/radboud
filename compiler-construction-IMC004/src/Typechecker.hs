@@ -191,19 +191,11 @@ instance Unify SplType where
   unify _ (SplBaseType BaseTypeBool) (SplBaseType BaseTypeBool) = return emptyUnifier
   unify _ (SplBaseType BaseTypeVoid) (SplBaseType BaseTypeVoid) = return emptyUnifier
   unify _ (SplTypeVariable v1) (SplTypeVariable v2) | v1 == v2 = return emptyUnifier
-  unify p s@(SplListType t1) t@(SplListType t2) =
-    case runTypecheck (unify p t1 t2) of
-      Left _ -> left $ TypeError s t $ sourceLocation p
-      Right u -> right u
-  unify p s@(SplTupleType a1 b1) t@(SplTupleType a2 b2) =
-    case runTypecheck (unifyAll p $ map TypeConstraint [(a1, a2), (b1, b2)]) of
-      Left _ -> left $ TypeError s t $ sourceLocation p
-      Right u -> right u
+  unify p (SplListType t1) (SplListType t2) = (unify p t1 t2)
+  unify p (SplTupleType a1 b1) (SplTupleType a2 b2) = (unifyAll p $ map TypeConstraint [(a1, a2), (b1, b2)])
   unify p t1@(SplFunctionType args1 ret1) t2@(SplFunctionType args2 ret2) =
     if length args1 == length args2
-      then case runTypecheck (unifyAll p $ map TypeConstraint $ zip (ret1:args1) (ret2:args2)) of
-        Left _ -> left $ TypeError t1 t2 $ sourceLocation p
-        Right u -> right u
+      then (unifyAll p $ map TypeConstraint $ zip (ret1:args1) (ret2:args2))
       else left $ TypeError t1 t2 $ sourceLocation p
   -- unify _ (SplTypeVariable v) t | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
   -- unify _ t (SplTypeVariable v) | not (elem v (typeVars t)) = return $ trace (v ++ " |-> " ++ prettyprintType t) $ substitute $ mkSubstitution v t
@@ -221,11 +213,9 @@ instance Unify Row where
   unify p s@(SplFixedRow rowA) t@(SplFixedRow rowB) = -- clause (7)
     if (Map.keysSet rowA /= Map.keysSet rowB)
       then left $ RowError s t $ sourceLocation p
-      else case typecheckFields of
-        Left _ -> left $ RowError s t $ sourceLocation p
-        Right u -> right u
+      else typecheckFields
     where
-      typecheckFields = runTypecheck $ unifyAll p $
+      typecheckFields = unifyAll p $
         map TypeConstraint [(fromJust $ Map.lookup key rowA, fromJust $ Map.lookup key rowB) | key <- Map.keys rowA]
   unify p (SplVariableRow v rowB) (SplFixedRow rowA) = isSubrowOf p v rowB rowA -- clause (8)
   unify p (SplFixedRow rowA) (SplVariableRow v rowB) = isSubrowOf p v rowB rowA -- clause (8)

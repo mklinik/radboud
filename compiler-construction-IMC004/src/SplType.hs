@@ -50,7 +50,8 @@ prettyprintType (SplRecordType row) =
 
 prettyprintRow :: Row -> String
 prettyprintRow (SplFixedRow fields) = prettyprintFields fields
-prettyprintRow (SplVariableRow _ fields) = prettyprintFields fields
+prettyprintRow (SplVariableRow var fields) = prettyprintFields fields
+-- prettyprintRow (SplVariableRow var fields) = var ++ "|" ++ prettyprintFields fields
 
 prettyprintFields :: (Map String SplType) -> String
 prettyprintFields fields =

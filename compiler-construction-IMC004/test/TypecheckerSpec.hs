@@ -155,7 +155,7 @@ spec = do
 
     it "canot use different instantiations of a global list when using the value" $ do
       typeOf "f" "[a] x = []; a f() { return (1:x, True:x); }" `shouldBe`
-        "Couldn't match expected type `[Bool]' with actual type `[Int]' at position 1:39"
+        "Couldn't match expected type `Bool' with actual type `Int' at position 1:39"
 
     it "cannot use different instantiations of a global list when assigning the value" $ do
       typeOf "f" "[Int] x = []; Void f() { x = 1:[]; x = True:[]; return; }" `shouldBe`
@@ -207,7 +207,7 @@ spec = do
 
     it "fails extracting an Int from a tuple of Bools" $ do
       typeOf "x" "Int x = fst((True, True));" `shouldBe`
-        "Couldn't match expected type `(Int, a)' with actual type `(Bool, Bool)' at position 1:13"
+        "Couldn't match expected type `Int' with actual type `Bool' at position 1:13"
 
     describe "local variables" $ do
 
@@ -221,19 +221,19 @@ spec = do
 
       it "cannot use different instantiations of local variables in function body" $ do
         typeOf "f" "a f() { var x = []; return (1:x, True:x); }" `shouldBe`
-          "Couldn't match expected type `[Bool]' with actual type `[Int]' at position 1:39"
+          "Couldn't match expected type `Bool' with actual type `Int' at position 1:39"
 
       it "cannot use different instantiations of local variables in other initializers" $ do
         typeOf "f" "a f() { var x = []; var y = 1:x; var z = True:x; return (y, z); }" `shouldBe`
-          "Couldn't match expected type `[Bool]' with actual type `[Int]' at position 1:47"
+          "Couldn't match expected type `Bool' with actual type `Int' at position 1:47"
 
       it "cannot use different instantiations of local variables in other initializers, reverse order" $ do
         typeOf "f" "a f() { var y = 1:x; var z = True:x; var x = []; return (y, z); }" `shouldBe`
-          "Couldn't match expected type `[Bool]' with actual type `[Int]' at position 1:35"
+          "Couldn't match expected type `Bool' with actual type `Int' at position 1:35"
 
       it "cannot use different instantiations of local variables in other initializers, reverse order" $ do
         typeOf "f" "a f() { var y = 1:x; var z = True:x; var x = []; x = 1:[]; return (y, z); }" `shouldBe`
-          "Couldn't match expected type `[Bool]' with actual type `[Int]' at position 1:35"
+          "Couldn't match expected type `Bool' with actual type `Int' at position 1:35"
 
       it "cannot assign different instantiations to local variables" $ do
         typeOf "f" "a f() { var x = []; x = 1:[]; x = True:[]; return; }" `shouldBe`
@@ -394,3 +394,5 @@ spec = do
           , "Int foo = head(x).x;"
           , "Int bar = head(x).y;"
           ]) `shouldBe` "[{Int x, Int y}]"
+      it "is not possible to specify a less general type as function return value" $ do
+        typeOf "forgetY" "{Int x} forgetY({Int x, Int y} v) { return v; }" `shouldBe` "({Int x, Int y} -> {Int x, Int y})"
