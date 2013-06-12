@@ -333,7 +333,8 @@ astType2splType t = do
     right $ SplFunctionType argTypes_ returnType_
   astType2splType_ (RecordType _ fields) tvars = do
     newFields <- sequence [ astType2splType_ astTyp tvars >>= \splTyp -> return (name, splTyp) | (AstRecordFieldType _ astTyp name) <- fields ]
-    right $ SplRecordType $ SplFixedRow $ Map.fromList newFields
+    (SplTypeVariable var) <- fresh
+    right $ SplRecordType $ SplVariableRow var $ Map.fromList newFields
 
 
 data Quantify = Quantify String SplType (Bool, AstMeta)

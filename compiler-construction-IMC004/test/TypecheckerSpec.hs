@@ -382,6 +382,12 @@ spec = do
               , "var blah = getX({ y = 10 });"
               ]
         typeOf "blah" program `shouldBe` "Couldn't match expected type `{a x}' with actual type `{Int y}' at position 2:17"
+      it "record with two fields x,y can be passed to getX" $ do
+        let program = unlines
+              [ getX
+              , "var blah = getX({ x = 10, y = 10 });"
+              ]
+        typeOf "blah" program `shouldBe` "Int"
       it "global variables are not row-polymorphic, i.e. the type collects all fields used" $ do
         typeOf "x" (unlines
           [ "var x = [];"
