@@ -131,7 +131,7 @@ instance RowVars SplType where
   rowVars (SplTupleType x y) = rowVars x ++ rowVars y
   rowVars (SplListType x) = rowVars x
   rowVars (SplFunctionType argTypes returnType) = foldl (\accum argType -> rowVars argType ++ accum) (rowVars returnType) argTypes
-  rowVars (SplForall _ t) = rowVars t -- TODO: need to remove bound row vars
+  rowVars (SplForall _ t) = rowVars t -- TODO: need to remove bound row vars, but why? Make up testcase!
   rowVars (SplRecordType row) = rowVars row
   rowVars _ = []
 
