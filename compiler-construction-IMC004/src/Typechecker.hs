@@ -229,8 +229,9 @@ instance Unify Row where
   unify p (SplFixedRow rowA) (SplVariableRow v rowB) = isSubrowOf p v rowB rowA -- clause (8)
   unify p s@(SplVariableRow varA rowA) t@(SplVariableRow varB rowB) = do -- clause (9)
     (SplTypeVariable r0) <- fresh -- we only want the unique variable name
-    let newA = SplVariableRow r0 (Map.filterWithKey (\k _ -> k `Set.member` restA) rowA) -- only the fields unique to A
-    let newB = SplVariableRow r0 (Map.filterWithKey (\k _ -> k `Set.member` restB) rowB) -- only the fields unique to B
+    -- note that as and bs are swapped
+    let newB = SplVariableRow r0 (Map.filterWithKey (\k _ -> k `Set.member` restA) rowA) -- only the fields unique to A
+    let newA = SplVariableRow r0 (Map.filterWithKey (\k _ -> k `Set.member` restB) rowB) -- only the fields unique to B
     if varA `elem` rowVars newA
       then left $ RowError s t $ sourceLocation p
       else if varB `elem` rowVars newB
