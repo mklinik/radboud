@@ -453,3 +453,19 @@ spec = do
       it "printList doesn't accept a list whose elements have supertype, i.e. less fields" $
         typeOf "main" (program "{x=10}:[]") `shouldBe`
           "Couldn't match expected type `{a x, b y}' with actual type `{Int x}' at position 8:13"
+
+    describe "variables are invariant" $ do
+      let program record = unlines
+            [ "Void main() {"
+            , "  var foo = {x=10,y=True};"
+            , "  foo = " ++ record ++ ";"
+            , "}"
+            ]
+      it "is possible to assign a value of the exact type to a variable holding a record" $ do
+        typeOf "main" (program "{x=20,y=False}") `shouldBe` "( -> Void)"
+      it "isn't possible to assign a value which has less fields, i.e. a supertype" $ do
+        typeOf "main" (program "{x=20}") `shouldBe`
+          "Couldn't match expected type `{Int x, Bool y}' with actual type `{Int x}' at position 3:9"
+      it "isn't possible to assign a value which has more fields, i.e. a subtype" $ do
+        typeOf "main" (program "{x=20,y=False,z=3}") `shouldBe`
+          "Couldn't match expected type `{Int x, Bool y}' with actual type `{Int x, Bool y, Int z}' at position 3:9"
