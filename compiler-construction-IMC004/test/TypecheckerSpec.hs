@@ -435,3 +435,21 @@ spec = do
         it "doesn't accept a function whose argument- and return type are wrong" $ do
           typeOf "test" (unlines $ h ++ xyzToX ++ ["a test = H(XYZtoX);"]) `shouldBe`
             "Couldn't match expected type `{Int x, Int y}' with actual type `{Int x}' at position 5:12"
+
+    describe "lists are covariant" $ do
+      let program list = unlines
+            [ "Void printList([{a x, b y}] list) {"
+            , "  while( !isEmpty(list) ) {"
+            , "    print((head(list) . x));"
+            , "    print((head(list) . y));"
+            , "    list = tail(list); } }"
+            , "Void main() {"
+            , "  var list = " ++ list ++ ";"
+            , "  printList(list);"
+            , "}"
+            ]
+      it "printList accepts a list whose elements have more fields, i.e. list elements have subtype" $
+        typeOf "main" (program "{x=10,y=True,z=5}:[]") `shouldBe` "( -> Void)"
+      it "printList doesn't accept a list whose elements have supertype, i.e. less fields" $
+        typeOf "main" (program "{x=10}:[]") `shouldBe`
+          "Couldn't match expected type `{a x, b y}' with actual type `{Int x}' at position 8:13"
