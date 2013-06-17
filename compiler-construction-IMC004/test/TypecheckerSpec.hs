@@ -396,3 +396,42 @@ spec = do
           ]) `shouldBe` "[{Int x, Int y}]"
       it "is not possible to specify a less general type as function return value" $ do
         typeOf "forgetY" "{Int x} forgetY({Int x, Int y} v) { return v; }" `shouldBe` "({Int x, Int y} -> {Int x, Int y})"
+
+    describe "co- and contravariance for higher-order-functions" $ do
+      -- H is a higher-order-function expecting a function argument of type
+      --     {Int x, Int y} -> {Int x, Int y}
+      -- We pass different functions to this type and check if H accepts them.
+      let h =
+            [ "(Int, Int) H(f f){"
+            , "    var rec = {x=10, y=10};"
+            , "    return (f(rec).x, f(rec).y); }"
+            ]
+          idXY = [ "{Int x, Int y} idXY({Int x, Int y} b) { return {x = b.x, y = b.y}; }" ]
+          xyToX = [ "{Int x} XYtoX({Int x, Int y} b) { return {x = b.x}; }" ]
+          xyToXYZ = [ "{Int x, Int y, Int z} XYtoXYZ({Int x, Int y} b) { return {x = b.x, y = b.y, z = b.y}; }" ]
+          xToXY = [ "{Int x, Int y} XtoXY({Int x} b) { return {x = b.x, y = b.y}; }" ]
+          xyzToXY = [ "{Int x, Int y} XYZtoXY({Int x, Int y, Int z} b) { return {x = b.x, y = b.y + b.z}; }" ]
+          xToXYZ = [ "{Int x, Int y, Int z} XtoXYZ({Int x} b) { return {x = b.x, y = b.x, z = b.x}; }" ]
+          xyzToX = [ "{Int x} XYZtoX({Int x, Int y, Int z} b) { return {x = b.x + b.y + b.z}; }" ]
+      it "accepts the identity" $ typeOf "test" (unlines $ h ++ idXY ++ ["a test = H(idXY);"]) `shouldBe` "(Int, Int)"
+
+      describe "covariance in the return type" $ do
+        it "doesn't accept a function whose return type is a supertype" $
+          typeOf "test" (unlines $ h ++ xyToX ++ ["a test = H(XYtoX);"]) `shouldBe`
+            "Couldn't match expected type `{Int x, Int y}' with actual type `{Int x}' at position 5:12"
+        it "accepts a function whose return type is a subtype" $
+          typeOf "test" (unlines $ h ++ xyToXYZ ++ ["a test = H(XYtoXYZ);"]) `shouldBe` "(Int, Int)"
+
+      describe "contravariance in the argument type" $ do
+        it "accepts a function whose argument type is a supertype" $
+          typeOf "test" (unlines $ h ++ xToXY ++ ["a test = H(XtoXY);"]) `shouldBe` "(Int, Int)"
+        it "doesn't accept a function whose argument type is a subtype" $
+          typeOf "test" (unlines $ h ++ xyzToXY ++ ["a test = H(XYZtoXY);"]) `shouldBe`
+            "Couldn't match expected type `{Int x, Int y, Int z}' with actual type `{Int x, Int y}' at position 5:12"
+
+      describe "co- and contravariance at the same time" $ do
+        it "accepts a co- and contravariant function" $ do
+          typeOf "test" (unlines $ h ++ xToXYZ ++ ["a test = H(XtoXYZ);"]) `shouldBe` "(Int, Int)"
+        it "doesn't accept a function whose argument- and return type are wrong" $ do
+          typeOf "test" (unlines $ h ++ xyzToX ++ ["a test = H(XYZtoX);"]) `shouldBe`
+            "Couldn't match expected type `{Int x, Int y}' with actual type `{Int x}' at position 5:12"
