@@ -300,10 +300,13 @@ Example
 
 \begin{frame}{Example}
 
+\texttt{f( \{ x=10, y=True \} )}
+\vspace{1em}
+
 Given the constraint
 
 \begin{IEEEeqnarray*}{rCl}
-\rho[\oftype{x}{\text{Int}}, \oftype{y}{\text{Bool}}] & = & \sigma[\oftype{x}{\text{Int}}]
+\sigma[\oftype{x}{\text{Int}}] & = & \rho[\oftype{x}{\text{Int}}, \oftype{y}{\text{Bool}}]
 \end{IEEEeqnarray*}
 
 we know that:
@@ -314,8 +317,8 @@ we know that:
 
 so:
 \begin{IEEEeqnarray*}{rCl}
-  \tau[\oftype{x}{\text{Int}}, \oftype{y}{\text{Bool}}] & = &
-    \tau[\oftype{y}{\text{Bool}}][\oftype{x}{\text{Int}}]
+  \tau[\oftype{y}{\text{Bool}}][\oftype{x}{\text{Int}}] & = &
+    \tau[\oftype{x}{\text{Int}}, \oftype{y}{\text{Bool}}]
 \end{IEEEeqnarray*}
 
 
