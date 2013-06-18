@@ -51,7 +51,7 @@
   \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{We've all been there}
+\begin{frame}[fragile]{We've All Been There}
 
 \begin{verbatim}
 def printXY(a):
@@ -66,7 +66,7 @@ printXY(X())
 
 \end{frame}
 
-\begin{frame}[fragile]{That's what they want}
+\begin{frame}[fragile]{That's What They Want}
 
 \begin{verbatim}
 class XY:
@@ -83,6 +83,68 @@ printXY(XYZ())
 \end{verbatim}
 
 \end{frame}
+
+
+\begin{frame}{What Is a Record?}
+
+\begin{itemize}
+  \item What do we want to do with a record?
+  \item Introduction and elimination!
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Introduction And Elimination}
+
+\onslide<+->
+
+Introduction
+
+\begin{verbatim}
+var rec = { x=10, y=True }
+printXY( { x=10, z=[] } )
+\end{verbatim}
+
+\onslide<+->
+
+Elimination
+
+\begin{verbatim}
+rec.x
+\end{verbatim}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{But What \emph{is} a Record?}
+
+\onslide<+->
+
+\begin{itemize}
+  \item How is it stored in memory?
+  \item How does the code for record projection look like?
+\end{itemize}
+
+\onslide<+->
+
+The code
+
+\begin{verbatim}
+a getX(b b) { return b.x; }
+\end{verbatim}
+
+must work for:
+
+\begin{verbatim}
+getX({x=10})
+getX({y=True,x=False})
+\end{verbatim}
+
+and any other combination of fields.
+
+\end{frame}
+
 
 \begin{frame}[fragile]{Tuples and Lists}
 
