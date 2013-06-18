@@ -155,13 +155,13 @@ and any other combination of fields.
 
 \begin{tikzpicture}
 
-  \matrix (stack) [matrix of nodes
+  \matrix [matrix of nodes
     , nodes={ minimum height = 1.7em
             , minimum width = 2em
             , outer sep = 0pt
             , anchor = north
-            , column sep=-\pgflinewidth
             }
+    , column sep=-\pgflinewidth % collapse borders
     , nodes in empty cells]
   {
     |(record)[draw]|record value & &
@@ -176,14 +176,33 @@ and any other combination of fields.
 
 \end{frame}
 
-\begin{frame}[fragile]{The shortest crashing C program}
+\begin{frame}[fragile]{Well, More Like Association Arrays}
 
-\pause % don't show the first item from the beginning
-\begin{itemize}[<+->]
-  \item \texttt{main;}
-  \item \texttt{int main = 0;}
-  \item \texttt{Int main = 0;}
-\end{itemize}
+\begin{tikzpicture}
+
+  \matrix (record) [matrix of nodes
+    , nodes={ minimum height = 1.7em
+            , minimum width = 6em
+            , outer sep = 0pt
+            , anchor = north
+            , draw
+            }
+    , column sep=-\pgflinewidth % collapse borders
+    , row sep=-\pgflinewidth % collapse borders
+    , nodes in empty cells]
+  {
+    NIL   \\
+    True  \\
+    "y"   \\
+    10    \\
+    |(x)| "x" \\
+  };
+
+  \node (value) [left = of x,draw] {record value};
+
+  \draw [-stealth'] (value.east) to [out=0,in=180] (x.west);
+
+\end{tikzpicture}
 
 \end{frame}
 
