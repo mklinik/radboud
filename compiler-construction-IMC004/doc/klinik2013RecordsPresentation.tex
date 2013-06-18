@@ -206,4 +206,57 @@ and any other combination of fields.
 
 \end{frame}
 
+
+\begin{frame}{Type Checking For Records}
+\begin{itemize}
+  \item Type inference
+  \item Subtyping
+  \item Mitchell Wand, 1987, Complete Type Inference for Simple Objects
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Subtyping}
+\begin{itemize}
+  \item $\alpha$ is a subtype of $\beta$
+  \item $\alpha <: \beta$
+  \item $\alpha$ can be used when $\beta$ is expected
+  \item $\alpha$ has \emph{more} fields than $\beta$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Subtyping and Lists}
+\begin{itemize}%[<+->]
+  \item If $\alpha <: \beta$ then $[\alpha] <: [\beta]$
+  \item Lists are \emph{covariant}
+  \item Lists are uniform
+  \item Tuples and return types of functions are also covariant
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Subtyping and Higher-Order Functions}
+
+\onslide<+->
+\begin{itemize}
+  \item Function argument types are \emph{contravariant}
+  \item If $\beta <: \alpha$ then $\alpha \arr \tau <: \beta \arr \tau$
+\end{itemize}
+
+\onslide<+->
+
+Example
+
+\begin{verbatim}
+Int H( ({Int x, Int y} -> Int) f )
+{
+  return f( { x=10, y=20 } );
+}
+\end{verbatim}
+
+\begin{itemize}
+  \item $\text{foo} : (\{\text{Int}\ x\} \arr \text{Int})$
+  \item $\text{bar} : (\{\text{Int}\ x, \text{Int}\ y, \text{Int}\ z\} \arr \text{Int})$
+\end{itemize}
+
+\end{frame}
+
 \end{document}
