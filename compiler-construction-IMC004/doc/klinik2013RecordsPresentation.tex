@@ -24,6 +24,7 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
 \usetikzlibrary{matrix}
+\usetikzlibrary{arrows}
 
 \title
 {Structural Subtyping for Records}
@@ -131,7 +132,7 @@ rec.x
 The code
 
 \begin{verbatim}
-a getX(b b) { return b.x; }
+a getX({a x} b) { return b.x; }
 \end{verbatim}
 
 must work for:
@@ -146,57 +147,30 @@ and any other combination of fields.
 \end{frame}
 
 
-\begin{frame}[fragile]{Tuples and Lists}
+\begin{frame}[fragile]{Records Are Association Lists}
 
-\texttt{(42, True)}
+\texttt{\{ x=10, y=True \}}
 
 \vspace{3em}
 
 \begin{tikzpicture}
 
   \matrix (stack) [matrix of nodes
-    , nodes={ minimum height = 1.5em
-            , minimum width = 6em
+    , nodes={ minimum height = 1.7em
+            , minimum width = 2em
             , outer sep = 0pt
+            , anchor = north
+            , column sep=-\pgflinewidth
             }
     , nodes in empty cells]
   {
-    stack \\
-    \\
-    \\
-    \\
-    \ldots \\
-    |[draw] (address) | 0xabcd \\
+    |(record)[draw]|record value & &
+      |(x)[draw]|"x" & |(ten) [draw]|10   & |(xnext)[draw]| & &
+      |(y)[draw]|"y" & |(true)[draw]|True & |(ynext)[draw]|NIL \\
   };
 
-  % left and right lines of stack
-  \draw (stack-3-1.north west) -- (stack-5-1.south west);
-  \draw (stack-3-1.north east) -- (stack-5-1.south east);
-
-
-  \matrix at (4,0) (heap) [matrix of nodes
-    , nodes={ minimum height = 1.5em
-            , minimum width = 6em
-            , outer sep = 0pt
-            }
-    , nodes in empty cells]
-  {
-    heap \\
-    \\
-    |[draw] (true)| True \\
-    |(42)| 42 \\
-    \ldots \\
-    \\
-  };
-
-  % bottom line of cell "42"
-  \draw (42.south west) -- (42.south east);
-
-  % left and right lines of heap
-  \draw (true.north west) -- (heap-6-1.south west);
-  \draw (true.north east) -- (heap-6-1.south east);
-
-  \draw [>=stealth,->] (address.east) to [out=0,in=180] (true.west);
+  \draw [-stealth'] (record.east) to (x.west);
+  \draw [*-stealth'] (xnext.center) to (y.west);
 
 \end{tikzpicture}
 
