@@ -169,8 +169,8 @@ and any other combination of fields.
       |(y)[draw]|"y" & |(true)[draw]|True & |(ynext)[draw]|NIL \\
   };
 
-  \draw [-stealth'] (record.east) to (x.west);
-  \draw [*-stealth'] (xnext.center) to (y.west);
+  \draw [-stealth', thick] (record.east) to (x.west);
+  \draw [*-stealth', thick] (xnext.center) to (y.west);
 
 \end{tikzpicture}
 
@@ -200,7 +200,7 @@ and any other combination of fields.
 
   \node (value) [left = of x,draw] {record value};
 
-  \draw [-stealth'] (value.east) to [out=0,in=180] (x.west);
+  \draw [-stealth',thick] (value.east) to [out=0,in=180] (x.west);
 
 \end{tikzpicture}
 
