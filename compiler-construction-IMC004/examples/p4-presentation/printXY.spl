@@ -1,0 +1,15 @@
+b printXY(a rec)
+{
+  print(rec.x);
+  print(rec.y);
+  return;
+}
+
+Void main()
+{
+  printXY( { x=10, y=True } );
+  printXY( { x=10, y=True, z=[] } );
+  //printXY( { x=10 } );
+}
+
+// vim:ft=java
