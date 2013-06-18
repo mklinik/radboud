@@ -45,6 +45,7 @@
 \newcommand{\Arr}{\Rightarrow}
 \newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
 \newcommand{\semanticsFd}[1]{\semantics{#1}_{F\delta}}
+\newcommand{\oftype}[2]{#1\!:\!#2}
 
 \begin{document}
 
@@ -258,5 +259,71 @@ Int H( ({Int x, Int y} -> Int) f )
 \end{itemize}
 
 \end{frame}
+
+
+\begin{frame}{Type Inference For Records}
+
+Milner's Idea:
+
+\begin{enumerate}
+  \item Take all type variables from a derivation
+  \item Make a set of \emph{constraints}
+  \item Run Robinson's unification algorithm on the constraints
+\end{enumerate}
+
+Wand's Idea:
+
+\begin{enumerate}
+  \item Make a system of \emph{rows} with variables
+  \item Step 2 and 3 as above
+\end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}{What Is a Row?}
+
+\begin{itemize}
+  \item A row is either empty,
+  \item Or a set of name/type pairs extending some other row
+  \item Rows give rise to record types
+\end{itemize}
+
+Example
+
+\begin{equation*}
+  \rho[\oftype{x}{\text{Int}}, \oftype{y}{\text{Bool}}]
+\end{equation*}
+
+\end{frame}
+
+
+\begin{frame}{Example}
+
+Given the constraint
+
+\begin{IEEEeqnarray*}{rCl}
+\rho[\oftype{x}{\text{Int}}, \oftype{y}{\text{Bool}}] & = & \sigma[\oftype{x}{\text{Int}}]
+\end{IEEEeqnarray*}
+
+we know that:
+\begin{IEEEeqnarray*}{rCl}
+  \sigma & = & \tau[\oftype{y}{\text{Bool}}] \\
+  \rho & = & \tau
+\end{IEEEeqnarray*}
+
+so:
+\begin{IEEEeqnarray*}{rCl}
+  \tau[\oftype{x}{\text{Int}}, \oftype{y}{\text{Bool}}] & = &
+    \tau[\oftype{y}{\text{Bool}}][\oftype{x}{\text{Int}}]
+\end{IEEEeqnarray*}
+
+
+\end{frame}
+
+
+\begin{frame}{Demo}
+\end{frame}
+
 
 \end{document}
