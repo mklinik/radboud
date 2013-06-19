@@ -1,0 +1,20 @@
+a H(f f) {
+    return f({ x=10, y=True });
+}
+
+a foo(b b) {
+    print(b.x);
+}
+
+a bar(b b) {
+    print(b.x);
+    print(b.y);
+    print(b.z);
+}
+
+Void main() {
+    H(foo);
+    H(bar);
+}
+
+// vim:ft=java
