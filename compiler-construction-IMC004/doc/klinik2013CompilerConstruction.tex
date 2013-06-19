@@ -999,9 +999,14 @@ properties, but they aid in writing test cases.
 
 \subsection{Type checking of records}
 
-Wand's row-polymorphism.
+The basic idea behind Hindley-Milner-Damas type inference is to collect all
+fresh type variables that arise in a type derivation, make constraints which
+they have to satisfy and then run Robinson's unification algorithm on these
+constraints.  This gives a substitution if all constraints are satisfiable, or
+an error otherwise.  Resulting types may have type variables left, in which case
+these types are polymorphic.
 
-Milners let-polymorphism.
+Wand \cite{Wand87b} proposes a similar idea for type checking record types.
 
 \section{Further work}
 
