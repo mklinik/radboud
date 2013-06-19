@@ -842,7 +842,28 @@ line, record projection is used to extract the field \emph{x} from the record.
   print(rec.x);
 \end{verbatim}
 
-\subsection{Grammar for records}
+\subsection{Syntax of records}
+
+Records are added to the syntax of SPL by extending the productions of
+expressions and types.  Three dots indicate other productions, not given here.
+Record projection binds more tightly than any other binary operator.
+
+\begin{IEEEeqnarray*}{rCl}
+\text{Expr} & ::= & \ \ldots \ \ |\ \ `\{`\ [\ \text{Fields}\ ]\ `\}`
+  \ \ |\ \ \text{Expr}\ `.`\ \text{Expr}\\
+\text{Fields} & ::= & \text{Field}\ [\ `,`\ \text{Fields}\ ]\\
+\text{Field} & ::= & \text{Identifier}\ `\!=\!`\ \text{Expr}\\
+\text{Type} & ::= & \ \ldots \ \ |\ \ `\{`\ [\ \text{FieldTypes}\ ]\ `\}` \\
+\text{FieldTypes} & ::= & \text{FieldType}\ [\ `,`\ \text{FieldTypes}\ ] \\
+\text{FieldType} & ::= & \text{Type}\ \text{Identifier} \\
+\end{IEEEeqnarray*}
+
+As a side note, the syntax for record types makes the grammar ambiguous, because
+curly braces are used to denote the scope for mutually recursive functions and
+record types, both of which may be empty, so the string \texttt{\{\}} ocurring
+on top level may be parsed either way.  This could easily be fixed by not
+allowing empty scopes. We didn't bother though, because it's neither critical
+nor the current focus of interest.
 
 \subsection{Implementation of records}
 
