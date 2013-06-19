@@ -31,6 +31,7 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usetikzlibrary{matrix}
+\usetikzlibrary{arrows}
 
 % === BEGIN custom commands
 
@@ -866,6 +867,57 @@ allowing empty scopes. We didn't bother though, because it's neither critical
 nor the current focus of interest.
 
 \subsection{Implementation of records}
+
+Records are implemented as contiguous blocks of memory on the heap, consisting
+of alternatingly field names and their values.  Records are terminated by a null
+word.  Figure \ref{fig_recordLayout} illustrates how the record \texttt{\{ x=10,
+y=True \}} is layed out in memory.  As with lists and tuples, pointers to
+records are kept on the stack, passed to functions, etc.
+
+\begin{figure}[h]
+\begin{center}
+\begin{tikzpicture}
+
+  \matrix (record) [matrix of nodes
+    , nodes={ minimum height = 1.7em
+            , minimum width = 6em
+            , outer sep = 0pt
+            , anchor = north
+            , draw
+            }
+    , column sep=-\pgflinewidth % collapse borders
+    , row sep=-\pgflinewidth % collapse borders
+    , nodes in empty cells]
+  {
+    NIL   \\
+    True  \\
+    "y"   \\
+    10    \\
+    |(x)| "x" \\
+  };
+
+  \node (value) [left = of x,draw] {record value};
+
+  \draw [-stealth',thick] (value.east) to [out=0,in=180] (x.west);
+
+\end{tikzpicture}
+\end{center}
+\caption{Layout of a record value in memory.}
+\label{fig_recordLayout}
+\end{figure}
+
+The code generator converts field names to 32-bit integers by numbering them,
+starting by 1, in the order in which they are encountered during code
+generation.  If a program uses more than $2^{32}-2$ different field labels,
+compilation aborts with an error.  The number 0 is reserved for the sentinel
+that marks the end of a record.  From now on, the term \emph{label}, when
+used in the context of record implementation, refers to this number.
+
+Record projection is implemented as a function of two arguments: the
+pointer to a record and the label whose value to look up.  The lookup function
+searches the record for a field whose label matches the given label, and returns
+the associated value.  If lookup reaches the sentinel, the whole program
+terminates, the idea being that the type checker prevents this from happening.
 
 \subsection{Subtyping of records}
 
