@@ -925,12 +925,10 @@ We still include this safety belt as good engineering practice.
 \subsection{Subtyping of records}
 
 The type checker we want to write for SPL with records should exhibit the
-subtyping behaviour informally discribed in section \ref{sec_records}.  In this
-section, we look at these properties in a more formal way.  The notion of
-subtyping does not only refer to record types, but it transfers to the other
-type constructors too, that is: lists, tuples and functions.
+properties for subtyping informally discribed in section \ref{sec_records}.  In
+this section, we look at these properties in a more formal way.
 
-The subtype relation should be reflexive and transitive.
+First of all, the subtype relation should be reflexive and transitive.
 
 \begin{prooftree}
 \AxiomC{}
@@ -996,6 +994,8 @@ in the premise, as opposed to the premises in the rules for lists and tuples.
 We say that function argument types are \emph{contravariant} with respect to
 subtyping, while lists, tuples and function return types are \emph{covariant}.
 
+We don't give a formal proof that our type checking algorithm exhibits these
+properties, but they aid in writing test cases.
 
 \subsection{Type checking of records}
 
