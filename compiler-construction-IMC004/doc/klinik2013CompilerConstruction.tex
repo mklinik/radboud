@@ -918,6 +918,7 @@ pointer to a record and the label whose value to look up.  The lookup function
 searches the record for a field whose label matches the given label, and returns
 the associated value.  If lookup reaches the sentinel, the whole program
 terminates, the idea being that the type checker prevents this from happening.
+We still include this safety belt as good engineering practice.
 
 \subsection{Subtyping of records}
 
