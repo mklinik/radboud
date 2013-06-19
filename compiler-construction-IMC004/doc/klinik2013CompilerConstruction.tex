@@ -819,7 +819,30 @@ pass incompatible record values.
 
 \subsection{What are records?}
 
-\subsection{Parsing of records}
+As a feature of our programming language, we want to do two things with records,
+as we want with any other datatype: Introduction and elimination.
+
+Records are introduced by specifying a record value with all fields and
+associated values as an expression.  In our system, once a record is introduced,
+it cannot be extended with more fields.
+
+Records are eliminated by an operation called \emph{projection}, denoted by a
+single dot between an expression of record type and a label.
+
+As usual, all phases of the compiler concerning records are defined by case
+distinction on the syntactical forms of introduction and elimination.
+
+The following program fragment demonstrates introduction and elimination of a
+record value.  In the first line, a record with two fields, labelled \emph{x}
+and \emph{y}, is created and bound to the identifier \emph{rec}.  In the second
+line, record projection is used to extract the field \emph{x} from the record.
+
+\begin{verbatim}
+  var rec = { x=10, y=20 };
+  print(rec.x);
+\end{verbatim}
+
+\subsection{Grammar for records}
 
 \subsection{Implementation of records}
 
