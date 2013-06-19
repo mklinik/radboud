@@ -1000,13 +1000,77 @@ properties, but they aid in writing test cases.
 \subsection{Type checking of records}
 
 The basic idea behind Hindley-Milner-Damas type inference is to collect all
-fresh type variables that arise in a type derivation, make constraints which
+fresh type variables that arise in a type derivation, form constraints which
 they have to satisfy and then run Robinson's unification algorithm on these
 constraints.  This gives a substitution if all constraints are satisfiable, or
-an error otherwise.  Resulting types may have type variables left, in which case
+an error otherwise.  Resulting types may have type variables left, which means
 these types are polymorphic.
 
-Wand \cite{Wand87b} proposes a similar idea for type checking record types.
+Wand \cite{Wand87b} proposes a similar algorithm for type checking record types.
+He builds a system of so-called \emph{rows} which may contain variables.  Then
+constraints are formed involving these row variables, and unification is applied
+to the constraints to obtain row substitutions.  The variables that are left in
+rows after unification give rise to polymorphic rows, thus making it possible to
+unify two records that don't match exactly, when one is a subtype of the
+other.  Wand doesn't work with record types directly, because his row system
+also allows type checking for variant types.
+
+We employ Wand's algorithm for the type checking phase. Record types give rise
+to rows and vice versa, so Wands algorithm, when having to typecheck expressions
+involving records, translates their types to the corresponding rows, applies
+unification, and translates back.
+
+The typing rules for records and record projections look as follows.
+
+\begin{prooftree}
+\AxiomC{$\Gamma \vec{\vdash} \oftype{\vec{e}}{\vec{\alpha}} | *_1$}
+\AxiomC{$*_2 = \mathcal{U}(\sigma^{*_1}, (\Pi\emptyset[\vec{l} \leftarrow \vec{\alpha}])^{*_1})$}
+\LeftLabel{(Record-Introduction)}
+\RightLabel{$\vec{\alpha}$ fresh}
+\BinaryInfC{$\Gamma \vdash \oftype{\{\vec{l}=\vec{e}\}}{\sigma} | *_2 \circ *_1$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\Gamma \vdash \oftype{e}{\Pi\rho[l \leftarrow \sigma]}\ | *$}
+\LeftLabel{(Record-Projection)}
+\RightLabel{$\rho$ fresh}
+\UnaryInfC{$\Gamma \vdash \oftype{e.l}{\sigma} | *$}
+\end{prooftree}
+
+The first rule states that if the expressions $e_1 \ldots e_n$ have types
+$\alpha_1 \ldots \alpha_n$, then the record introduction expression $\{l_1 =
+e_1, \ldots, l_n = e_n\}$ has non-polymorphic record type
+$\{\oftype{l_1}{\alpha_1} \ldots \oftype{l_n}{\alpha_n}\}$, with substitutions
+applied where appropriate.  Nonpolymorphism is enforced by giving the empty set
+when forming the product type in the right premise.
+
+The second rule states that if the expression $e$ can be inferred to have a
+record type with at least the field $\oftype{l}{\sigma}$, then the record
+projection expression $e.l$ has type $\sigma$.  The at-least condition is taken
+care of by giving a fresh row variable $\rho$ when forming the product type in
+the premise, thus allowing all other fields besides $\oftype{l}{\sigma}$ to be
+absorbed by $\rho$.
+
+Please note how the translation actions from \cite{Wand87b}, chapter 4, are
+merged into the typing rules here.  Furthermore, our unification algorithm
+$\mathcal{U}$ is extended with clauses (3) and (6) to (9) from \cite{Wand87b},
+chapter 3, to deal with rows.
+
+\subsection{Wand's row- and Milner's let-polymorphism}
+
+Recall how the type checking algorithm deals with polymorphic types:  After the
+type of a global function has been successfully inferred, but before it is put
+in the environment, all its free type variables are quantified.  When the
+function is later used in an expression, its type is looked up from the
+environment, all bound variables are replaced by fresh type variables, the
+quantifier is removed, and the resulting type is used for unification.  This
+way, we make sure that polymorphic functions can be used with different
+instantiations of their free variables, and subsequent unification doesn't
+affect already typechecked functions and makes them less general.
+
+The same procedure has to be performed on record types whose rows have free row
+variables, for the same reason.  This is described in \cite{Wand87b}, chapter 5,
+and the implementation in our system is rather straight forward.
 
 \section{Further work}
 
