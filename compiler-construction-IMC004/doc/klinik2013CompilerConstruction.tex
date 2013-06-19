@@ -796,6 +796,38 @@ return a copy of the first or second value, respectively, on the stack.
 There currently is no garbage collection.
 
 
+\section{Records}
+
+A record is a product type which groups several values into a single value.  The
+components, called \emph{fields}, are addressed by names called \emph{labels}.
+A record of type $\alpha$, which has at least all fields of another record type
+$\beta$, possibly more, can be used in any context where $\beta$ is expected.
+Whenever two types, not restricted to records, have this relation, we say that
+$\alpha$ is a subtype of $\beta$.  In contemporary mainstream programming
+languages like Java and C++, this subtype relation has to be made explicit by
+the programmer by declaring one class a subclass of another.  Contrast this with
+how dynamically checked languages like Python work, where arbitrary objects can
+be used in any context, as long as they bring all the fields that are accessed
+in this context.  Otherwise, a runtime error occurs.  No explicit relation
+between the classes of objects is required.
+
+In this part of the compiler project, we want to explore a system that acts as
+a middle ground between the two approaches, the idea being that it
+is possible for the static analysis phase to track which fields of a record are
+accessed in a given context.  The compiler can then reject programs which try to
+pass incompatible record values.
+
+\subsection{What are records?}
+
+\subsection{Parsing of records}
+
+\subsection{Implementation of records}
+
+\subsection{Subtyping of records}
+
+\subsection{Type checking of records}
+
+
 \section{Further work}
 
 There are a few open points in the current implementation.
