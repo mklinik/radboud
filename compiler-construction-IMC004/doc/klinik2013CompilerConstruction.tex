@@ -799,6 +799,8 @@ There currently is no garbage collection.
 
 \section{Records}
 
+\label{sec_records}
+
 A record is a product type which groups several values into a single value.  The
 components, called \emph{fields}, are addressed by names called \emph{labels}.
 A record of type $\alpha$, which has at least all fields of another record type
@@ -922,8 +924,84 @@ We still include this safety belt as good engineering practice.
 
 \subsection{Subtyping of records}
 
+The type checker we want to write for SPL with records should exhibit the
+subtyping behaviour informally discribed in section \ref{sec_records}.  In this
+section, we look at these properties in a more formal way.  The notion of
+subtyping does not only refer to record types, but it transfers to the other
+type constructors too, that is: lists, tuples and functions.
+
+The subtype relation should be reflexive and transitive.
+
+\begin{prooftree}
+\AxiomC{}
+\LeftLabel{(Reflexivity)}
+\UnaryInfC{$\alpha <: \alpha$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\alpha <: \beta$}
+\AxiomC{$\beta <: \gamma$}
+\LeftLabel{(Transitivity)}
+\BinaryInfC{$\alpha <: \gamma$}
+\end{prooftree}
+
+Our type checking algorithm should also satisfy the following rule, which
+relates subtyping to the normal typing relation.  It says that if $\alpha$ is a
+subtype of $\beta$, then a term $M$ of type $\alpha$ can also act as if it were
+of type $\beta$.
+
+\begin{prooftree}
+\AxiomC{$\alpha <: \beta$}
+\AxiomC{$\Gamma \vdash \oftype{M}{\alpha}$}
+\BinaryInfC{$\Gamma \vdash \oftype{M}{\beta}$}
+\end{prooftree}
+
+The next rule states the condition to be met in order to regard a record type
+subtype of another one.  In the premises of this rule, we see a record type as a
+partial function from labels to types.
+
+\begin{prooftree}
+\AxiomC{$\text{dom}(\beta) \subseteq \text{dom}(\alpha)$}
+\AxiomC{$\forall l \in \text{dom}(\beta) . \alpha(l) <: \beta(l)$}
+\RightLabel{$\alpha$, $\beta$ are record types}
+\LeftLabel{(Records)}
+\BinaryInfC{$\alpha <: \beta$}
+\end{prooftree}
+
+Subtyping carries over to lists, tuples and functions.  The following rules
+state this.
+
+\begin{prooftree}
+\AxiomC{$\alpha <: \beta$}
+\LeftLabel{(Lists)}
+\UnaryInfC{$[\alpha] <: [\beta]$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\alpha_1 <: \beta_1$}
+\AxiomC{$\alpha_2 <: \beta_2$}
+\LeftLabel{(Tuples)}
+\BinaryInfC{$(\alpha_1, \alpha_2) <: (\beta_1, \beta_2)$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\vec{\beta} <: \vec{\alpha}$}
+\AxiomC{$\sigma <: \tau$}
+\LeftLabel{(Functions)}
+\BinaryInfC{$\vec{\alpha} \arr \sigma <: \vec{\beta} \arr \tau$}
+\end{prooftree}
+
+Note that in the rule for functions, the order of the argument types is reversed
+in the premise, as opposed to the premises in the rules for lists and tuples.
+We say that function argument types are \emph{contravariant} with respect to
+subtyping, while lists, tuples and function return types are \emph{covariant}.
+
+
 \subsection{Type checking of records}
 
+Wand's row-polymorphism.
+
+Milners let-polymorphism.
 
 \section{Further work}
 
