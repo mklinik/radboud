@@ -804,12 +804,12 @@ A record of type $\alpha$, which has at least all fields of another record type
 $\beta$, possibly more, can be used in any context where $\beta$ is expected.
 Whenever two types, not restricted to records, have this relation, we say that
 $\alpha$ is a subtype of $\beta$.  In contemporary mainstream programming
-languages like Java and C++, this subtype relation has to be made explicit by
-the programmer by declaring one class a subclass of another.  Contrast this with
-how dynamically checked languages like Python work, where arbitrary objects can
-be used in any context, as long as they bring all the fields that are accessed
-in this context.  Otherwise, a runtime error occurs.  No explicit relation
-between the classes of objects is required.
+languages like Java and C++, the programmer has to make this subtype relation
+explicit by declaring one class a subclass of another.  Contrast this with how
+dynamically checked languages like Python work, where arbitrary objects can be
+used in any context, as long as they bring all the fields that are accessed in
+this context.  Otherwise, a runtime error occurs.  No explicit relation between
+the classes of objects is required.
 
 In this part of the compiler project, we want to explore a system that acts as
 a middle ground between the two approaches, the idea being that it
@@ -826,7 +826,7 @@ Records are introduced by specifying a record value with all fields and
 associated values as an expression.  In our system, once a record is introduced,
 it cannot be extended with more fields.
 
-Records are eliminated by an operation called \emph{projection}, denoted by a
+Records are eliminated with an operation called \emph{projection}, denoted by a
 single dot between an expression of record type and a label.
 
 As usual, all phases of the compiler concerning records are defined by case
