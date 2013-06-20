@@ -1609,8 +1609,15 @@ contains the output of the code generation phase.
   \item[covariance-function-return-value.spl] Function return values are
   covariant.
 
+  \item[fail-covariance-list.spl] Cannot pass a list with supertype elements to
+  a function.
+
   \item[contravariance-function-parameter.spl] Function parameters are
   contravariant.
+
+  \item[fail-assignment-invariant.spl] All local and global variables implicitly
+  are of reference type, so they have to be invariant.  Neither sub- nor
+  supertypes can be assigned to variables.
 
 \end{description}
 

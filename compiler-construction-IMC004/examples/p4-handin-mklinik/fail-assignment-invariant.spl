@@ -1,0 +1,16 @@
+// All local and global variables implicitly are of reference type, so they
+// have to be invariant.  Neither sub- nor supertypes can be assigned to
+// variables.
+
+var globalRecord = { x=10, y=20 };
+
+Void main()
+{
+  var localRecord = { x=True, y=False };
+
+  globalRecord = { x=5 };
+  globalRecord = { x=5, y=3, z=7 };
+
+  localRecord = { x=True };
+  localRecord = { x=True, y=False, z=True };
+}

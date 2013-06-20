@@ -1,0 +1,18 @@
+// Cannot pass a list with supertype elements to a function
+
+a listFunction([{Int x, Int y}] b)
+{
+  var sum = 0;
+  while(!isEmpty(b))
+  {
+    sum = sum + head(b).x + head(b).y;
+    b = tail(b);
+  }
+  return sum;
+}
+
+Void main()
+{
+  var listX = {x=5}:{x=6}:{x=7}:[];
+  print(listFunction(listX));
+}
