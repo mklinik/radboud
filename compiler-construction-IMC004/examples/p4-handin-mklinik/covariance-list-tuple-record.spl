@@ -1,0 +1,61 @@
+// Lists, Tuples and Records are covariant, which means functions accept data
+// structures of these kinds where elements have more fields than required.
+
+a listFunction([{Int x}] b)
+{
+  var sum = 0;
+  while(!isEmpty(b))
+  {
+    sum = sum + head(b).x;
+    b = tail(b);
+  }
+  return sum;
+}
+
+Void testLists()
+{
+  var listX = {x=5}:{x=6}:{x=7}:[];
+  var listXY = {x=5,y=True}:{x=6,y=True}:{x=7,y=False}:[];
+  print(listFunction(listX));
+  print(listFunction(listXY));
+}
+
+a tupleFunction(({Int x},{Bool y}) b)
+{
+  if( snd(b).y )
+  {
+    print(fst(b).x);
+  }
+  else
+  {
+    print(0);
+  }
+}
+
+Void testTuples()
+{
+  var tupleX_Y = ( {x=10} , {y=True} );
+  var tupleXY_XY = ( {x=42,y=2} , {x=True,y=True} );
+  tupleFunction(tupleX_Y);
+  tupleFunction(tupleXY_XY);
+}
+
+a recordFunction({{Int x} b} b)
+{
+  print(b.b.x);
+}
+
+Void testRecords()
+{
+  var recordX = { b = { x=1 } };
+  var recordXY = { b = { x=1, y=2 } };
+  recordFunction(recordX);
+  recordFunction(recordXY);
+}
+
+Void main()
+{
+  testLists();
+  testTuples();
+  testRecords();
+}

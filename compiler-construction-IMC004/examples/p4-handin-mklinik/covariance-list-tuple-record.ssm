@@ -1,0 +1,421 @@
+    ldrr 5 SP ; store global frame pointer
+    ajs 0 ; make space for globals
+    ldc 0 ; make space for return value
+    ldc main
+    jsr
+    ajs -0 ; pop function arguments
+    ajs -1 ; discard unused value
+    ajs 0 ; pop globals
+    halt
+listFunction: ldr MP
+    ldrr MP SP
+    ajs 1 ; make space for locals
+    ldc 0
+    stl 1
+listFunction_l0:
+    ldc -1
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc isEmpty
+    jsr
+    ajs -1 ; pop function arguments
+    xor
+    brf listFunction_l1
+    ldl 1
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc head
+    jsr
+    ajs -1 ; pop function arguments
+    ldc 1
+    ldc __lookupRecord__
+    jsr
+    ajs -2 ; pop function arguments
+    add
+    stl 1
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc tail
+    jsr
+    ajs -1 ; pop function arguments
+    stl -2
+    bra listFunction_l0
+listFunction_l1:
+    ldl 1
+    stl -3
+    bra listFunction_return
+listFunction_return:
+    ajs -1 ; pop locals
+    str MP
+    ret
+testLists: ldr MP
+    ldrr MP SP
+    ajs 2 ; make space for locals
+    ldc 0 ; make space for return value
+    ldc 0 ; sentinel
+    ldc 5
+    ldc 1
+    stmh 3 ; put record to heap
+    ldc 0 ; make space for return value
+    ldc 0 ; sentinel
+    ldc 6
+    ldc 1
+    stmh 3 ; put record to heap
+    ldc 0 ; make space for return value
+    ldc 0 ; sentinel
+    ldc 7
+    ldc 1
+    stmh 3 ; put record to heap
+    ldc 0
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    stl 1
+    ldc 0 ; make space for return value
+    ldc 0 ; sentinel
+    ldc 5
+    ldc 1
+    ldc -1
+    ldc 2
+    stmh 5 ; put record to heap
+    ldc 0 ; make space for return value
+    ldc 0 ; sentinel
+    ldc 6
+    ldc 1
+    ldc -1
+    ldc 2
+    stmh 5 ; put record to heap
+    ldc 0 ; make space for return value
+    ldc 0 ; sentinel
+    ldc 7
+    ldc 1
+    ldc 0
+    ldc 2
+    stmh 5 ; put record to heap
+    ldc 0
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc __mklist__
+    jsr
+    ajs -2 ; pop function arguments
+    stl 2
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl 1
+    ldc listFunction
+    jsr
+    ajs -1 ; pop function arguments
+    ldc print
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl 2
+    ldc listFunction
+    jsr
+    ajs -1 ; pop function arguments
+    ldc print
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+testLists_return:
+    ajs -2 ; pop locals
+    str MP
+    ret
+tupleFunction: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc snd
+    jsr
+    ajs -1 ; pop function arguments
+    ldc 2
+    ldc __lookupRecord__
+    jsr
+    ajs -2 ; pop function arguments
+    brf tupleFunction_l2
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc fst
+    jsr
+    ajs -1 ; pop function arguments
+    ldc 1
+    ldc __lookupRecord__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc print
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+    bra tupleFunction_l3
+tupleFunction_l2:
+    ldc 0 ; make space for return value
+    ldc 0
+    ldc print
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+tupleFunction_l3:
+tupleFunction_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+testTuples: ldr MP
+    ldrr MP SP
+    ajs 2 ; make space for locals
+    ldc 0 ; make space for return value
+    ldc 0 ; sentinel
+    ldc 10
+    ldc 1
+    stmh 3 ; put record to heap
+    ldc 0 ; sentinel
+    ldc -1
+    ldc 2
+    stmh 3 ; put record to heap
+    ldc __mktuple__
+    jsr
+    ajs -2 ; pop function arguments
+    stl 1
+    ldc 0 ; make space for return value
+    ldc 0 ; sentinel
+    ldc 42
+    ldc 1
+    ldc 2
+    ldc 2
+    stmh 5 ; put record to heap
+    ldc 0 ; sentinel
+    ldc -1
+    ldc 1
+    ldc -1
+    ldc 2
+    stmh 5 ; put record to heap
+    ldc __mktuple__
+    jsr
+    ajs -2 ; pop function arguments
+    stl 2
+    ldc 0 ; make space for return value
+    ldl 1
+    ldc tupleFunction
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldl 2
+    ldc tupleFunction
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+testTuples_return:
+    ajs -2 ; pop locals
+    str MP
+    ret
+recordFunction: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldc 0 ; make space for return value
+    ldl -2
+    ldc 3
+    ldc __lookupRecord__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc 1
+    ldc __lookupRecord__
+    jsr
+    ajs -2 ; pop function arguments
+    ldc print
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+recordFunction_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+testRecords: ldr MP
+    ldrr MP SP
+    ajs 2 ; make space for locals
+    ldc 0 ; sentinel
+    ldc 0 ; sentinel
+    ldc 1
+    ldc 1
+    stmh 3 ; put record to heap
+    ldc 3
+    stmh 3 ; put record to heap
+    stl 1
+    ldc 0 ; sentinel
+    ldc 0 ; sentinel
+    ldc 1
+    ldc 1
+    ldc 2
+    ldc 2
+    stmh 5 ; put record to heap
+    ldc 3
+    stmh 3 ; put record to heap
+    stl 2
+    ldc 0 ; make space for return value
+    ldl 1
+    ldc recordFunction
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldl 2
+    ldc recordFunction
+    jsr
+    ajs -1 ; pop function arguments
+    ajs -1 ; discard unused value
+testRecords_return:
+    ajs -2 ; pop locals
+    str MP
+    ret
+main: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldc 0 ; make space for return value
+    ldc testLists
+    jsr
+    ajs -0 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldc testTuples
+    jsr
+    ajs -0 ; pop function arguments
+    ajs -1 ; discard unused value
+    ldc 0 ; make space for return value
+    ldc testRecords
+    jsr
+    ajs -0 ; pop function arguments
+    ajs -1 ; discard unused value
+main_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+print: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2
+    trap 0
+print_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+__mktuple__: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -3 ; load first argument
+    ldl -2 ; load second argument
+    stmh 2 ; store both on the heap, and obtain pointer to second value
+    stl -4 ; pop tuple pointer to return value
+__mktuple___return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+fst: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh -1 ; tuple pointer points to second value, but we want the first
+    stl -3 ; return value
+fst_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+snd: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh 0  ; tuple pointer points to second value
+    stl -3 ; return value
+snd_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+__mklist__: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -3 ; load first argument
+    ldl -2 ; load second argument
+    stmh 2 ; store both on the heap, and obtain pointer to second value
+    stl -4 ; pop tuple pointer to return value
+__mklist___return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+head: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh -1 ; tuple pointer points to second value, but we want the first
+    stl -3 ; return value
+head_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+tail: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2 ; load first argument
+    ldh 0  ; tuple pointer points to second value
+    stl -3 ; return value
+tail_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+isEmpty: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+    ldl -2
+    ldc 0
+    eq ; the empty list is just the null pointer
+    stl -3
+isEmpty_return:
+    ajs 0 ; pop locals
+    str MP
+    ret
+__lookupRecord__: ldr MP
+    ldrr MP SP
+    ajs 0 ; make space for locals
+__lookupRecord__loop:
+ldl -3 ; safety check: is current field name the sentinel 0?
+    ldh 0
+    ldc 0
+    eq
+    brf __lookupRecord__ok_continue
+    halt ; we have reached the end of the record. for well typed programs, this should never happen
+__lookupRecord__ok_continue:
+    ldl -3 ; record pointer, first argument
+    ldh 0  ; load field name of current field
+    ldl -2 ; requested field name, is second argument
+    eq
+    brf __lookupRecord__try_next_field
+    ldl -3 ; else we're successful. return current value
+    ldh -1
+    stl -4 ; store to return value
+    bra __lookupRecord___return
+__lookupRecord__try_next_field:
+    ldl -3
+    ldc 2
+    sub
+    stl -3 ; decrement pointer to record by two
+    bra __lookupRecord__loop
+__lookupRecord___return:
+    ajs 0 ; pop locals
+    str MP
+    ret

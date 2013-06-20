@@ -1,0 +1,81 @@
+
+// listFunction : forall <19>, ([{Int x}] -> Int)
+Int listFunction([{Int x}] b)
+{
+  // sum : Int
+  Int sum = 0;
+  while( !isEmpty(b) )
+  {
+    sum = (sum + (head(b) . x));
+    b = tail(b);
+  }
+  return sum;
+}
+
+
+// testLists : ( -> Void)
+Void testLists()
+{
+  // listX : [{Int x}]
+  [{Int x}] listX = ({x = 5} : ({x = 6} : ({x = 7} : [])));
+  // listXY : [{Int x, Bool y}]
+  [{Int x, Bool y}] listXY = ({x = 5, y = True} : ({x = 6, y = True} : ({x = 7, y = False} : [])));
+  print(listFunction(listX));
+  print(listFunction(listXY));
+}
+
+
+// tupleFunction : forall <66> <83> <84>, (({Int x}, {Bool y}) -> <66>)
+a tupleFunction(({Int x}, {Bool y}) b)
+{
+  if( (snd(b) . y) )
+  {
+    print((fst(b) . x));
+  }
+  else
+  {
+    print(0);
+  }
+}
+
+
+// testTuples : ( -> Void)
+Void testTuples()
+{
+  // tupleX_Y : ({Int x}, {Bool y})
+  ({Int x}, {Bool y}) tupleX_Y = ({x = 10}, {y = True});
+  // tupleXY_XY : ({Int x, Int y}, {Bool x, Bool y})
+  ({Int x, Int y}, {Bool x, Bool y}) tupleXY_XY = ({x = 42, y = 2}, {x = True, y = True});
+  tupleFunction(tupleX_Y);
+  tupleFunction(tupleXY_XY);
+}
+
+
+// recordFunction : forall <112> <120> <121>, ({{Int x} b} -> <112>)
+a recordFunction({{Int x} b} b)
+{
+  print(((b . b) . x));
+}
+
+
+// testRecords : ( -> Void)
+Void testRecords()
+{
+  // recordX : {{Int x} b}
+  {{Int x} b} recordX = {b = {x = 1}};
+  // recordXY : {{Int x, Int y} b}
+  {{Int x, Int y} b} recordXY = {b = {x = 1, y = 2}};
+  recordFunction(recordX);
+  recordFunction(recordXY);
+}
+
+
+// main : ( -> Void)
+Void main()
+{
+  testLists();
+  testTuples();
+  testRecords();
+}
+
+
