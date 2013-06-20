@@ -300,14 +300,14 @@ introduced to the environment.  Otherwise, it would be possible to use the
 all-quantification of $f$ to assign values of different types to the global $x$.
 Fortunately, this is easy.  By adopting the value restriction, the type of $x$
 is not all-quantified, which means its type has a free variable.  The global $x$
-gets type, say, $[z]$, where $z$ is fresh.  The trick is now to generalize
-free variables of functions only if they are not free in the environment.  In
-the example above, the type of $y$ is constrained to the type of $x$, which has
-a free type variable, so the type of $f$ would be $\forall a . ([z] \arr a \arr
-a)$, where z is the same fresh type variable used for the type of $x$.  This
-way, the type of the first argument of $f$ and the type of $x$ are constrained
-together, which will give a type error in one of the two calls of $f$ in
-\emph{main}.
+gets type, say, $[\alpha]$, where $\alpha$ is fresh.  The trick is now to
+generalize free variables of functions only if they are not free in the
+environment.  In the example above, the type of $y$ is constrained to the type
+of $x$, which has a free type variable, so the type of $f$ would be $\forall
+\beta . ([\alpha] \arr \beta \arr \beta)$, where $\alpha$ is the same fresh type
+variable used for the type of $x$.  This way, the type of the first argument of
+$f$ and the type of $x$ are constrained together, which will give a type error
+in one of the two calls of $f$ in \emph{main}.
 
 The scoping rules implied by the design
 decisions discussed so far are described in the following section.
@@ -363,8 +363,9 @@ a g(b x, c y) { id(True); return f(x, y); }
 }
 \end{verbatim}
 
-The function \emph{id}, gets type $\forall a .  (a \arr a)$, and $f$ and $g$
-both get type $\forall a b . (a \arr a \arr b)$.
+The function \emph{id}, gets type $\forall \alpha .  (\alpha \arr \alpha)$, and
+$f$ and $g$ both get type $\forall \alpha \beta . (\alpha \arr \alpha \arr
+\beta)$.
 
 
 \section{Typing rules}
@@ -555,9 +556,10 @@ The function \emph{derive}, used in the rule (function declaration) and by the
 function \emph{intro}, generates fresh types, similar to \emph{fresh}, but
 \emph{derive} uses the type annotation present in the abstract syntax tree to
 generate a fresh type of that shape.  The same variables in the type annotation
-become the same fresh type variables.  For example, if $(a \arr b \arr a)$ is a
-type annotation, then \emph{derive}$(a \arr b \arr a)$ returns $(c \arr d \arr
-c)$, with $c$ and $d$ fresh.
+become the same fresh type variables.  For example, if $(\alpha \arr \beta \arr
+\alpha)$ is a type annotation, then \emph{derive}$(\alpha \arr \beta \arr
+\alpha)$ returns $(\gamma \arr \delta \arr \gamma)$, with $\gamma$ and $\delta$
+fresh.
 
 The function \emph{intro}, used in rules (function declaration) and (program),
 is the clause of the type inference function that we have seen in the lecture on
