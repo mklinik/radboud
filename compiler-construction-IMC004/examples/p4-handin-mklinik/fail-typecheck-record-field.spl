@@ -1,0 +1,11 @@
+// A field of a record has the wrong type.
+
+a f(b b)
+{
+  return b.x + b.y;
+}
+
+Void main()
+{
+  f({x=10, y=True});
+}
