@@ -1,0 +1,31 @@
+
+// H : forall <7> <11> <5> <14>, (( -> {<7> x, <11> y}) -> <5>)
+b H(( -> {c x, a y}) f)
+{
+  print((f() . x));
+  print((f() . y));
+}
+
+
+// funXY : ( -> {Int x, Bool y})
+{Int x, Bool y} funXY()
+{
+  return {x = 5, y = True};
+}
+
+
+// funXYZ : ( -> {Int x, Bool y, [Int] z})
+{Int x, Bool y, [Int] z} funXYZ()
+{
+  return {x = 3, y = False, z = []};
+}
+
+
+// main : ( -> Void)
+Void main()
+{
+  H(funXY);
+  H(funXYZ);
+}
+
+

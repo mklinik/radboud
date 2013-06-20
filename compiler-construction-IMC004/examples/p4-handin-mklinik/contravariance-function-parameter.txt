@@ -1,0 +1,33 @@
+
+// H : forall <5>, (({Int x, Bool y} -> <5>) -> <5>)
+a H(({Int x, Bool y} -> a) f)
+{
+  return f({x = 10, y = False});
+}
+
+
+// foo : forall <17>, ({Int x, Bool y} -> Int)
+Int foo({Int x, Bool y} b)
+{
+  if( (b . y) )
+    return (b . x);
+  else
+    return 20;
+}
+
+
+// bar : forall <24>, ({Int x} -> Int)
+Int bar({Int x} b)
+{
+  return (b . x);
+}
+
+
+// main : ( -> Void)
+Void main()
+{
+  print(H(foo));
+  print(H(bar));
+}
+
+

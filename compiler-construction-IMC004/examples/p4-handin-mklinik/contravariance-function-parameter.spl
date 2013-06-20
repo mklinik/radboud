@@ -1,0 +1,25 @@
+// Function parameters are contravariant
+
+a H(f f)
+{
+  return f({x=10,y=False});
+}
+
+a foo({Int x, Bool y} b)
+{
+  if(b.y)
+    return b.x;
+  else
+    return 20;
+}
+
+a bar({Int x} b)
+{
+  return b.x;
+}
+
+Void main()
+{
+  print(H(foo));
+  print(H(bar));
+}

@@ -1,0 +1,23 @@
+// Function return values are covariant
+
+a H(f f)
+{
+  print(f().x);
+  print(f().y);
+}
+
+{Int x, Bool y} funXY()
+{
+  return {x=5, y=True};
+}
+
+{Int x, Bool y, [Int] z} funXYZ()
+{
+  return {x=3, y=False, z=[]};
+}
+
+Void main()
+{
+  H(funXY);
+  H(funXYZ);
+}
