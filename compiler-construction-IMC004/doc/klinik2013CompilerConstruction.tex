@@ -825,12 +825,13 @@ this document, which demonstrate how the type checker deals with records.
 
 \subsection{What are records?}
 
-As a feature of our programming language, we want to do two things with records,
-as we want with any other datatype: Introduction and elimination.
+From the viewpoint of a programmer, we want to do two things with records, as we
+want with any other datatype: Introduction and elimination.
 
 Records are introduced by specifying a record value with all fields and
 associated values as an expression.  In our system, once a record is introduced,
-it cannot be extended with more fields.
+it cannot be extended with more fields.  Assignments to record fields are not
+possible.
 
 Records are eliminated with an operation called \emph{projection}, denoted by a
 single dot between an expression of record type and a label.
@@ -851,8 +852,9 @@ line, record projection is used to extract the field \emph{x} from the record.
 \subsection{Syntax of records}
 
 Records are added to the syntax of SPL by extending the productions of
-expressions and types.  Three dots indicate other productions, not given here.
-Record projection binds more tightly than any other binary operator.
+expressions and types.  Three dots indicate productions of other features,
+not given here.  Record projection binds more tightly than any other binary
+operator.
 
 \begin{IEEEeqnarray*}{rCl}
 \text{Expr} & ::= & \ \ldots \ \ |\ \ `\{`\ [\ \text{Fields}\ ]\ `\}`
@@ -1010,7 +1012,7 @@ an error otherwise.  Resulting types may have type variables left, which means
 these types are polymorphic.
 
 Wand \cite{Wand87b} proposes a similar algorithm for type checking record types.
-He builds a system of so-called \emph{rows} which may contain variables.  Then
+He builds a system of so-called \emph{rows} which may contain variables.  Then,
 constraints are formed involving these row variables, and unification is applied
 to the constraints to obtain row substitutions.  The variables that are left in
 rows after unification give rise to polymorphic rows, thus making it possible to
@@ -1023,7 +1025,8 @@ to rows and vice versa, so Wands algorithm, when having to typecheck expressions
 involving records, translates their types to the corresponding rows, applies
 unification, and translates back.
 
-The typing rules for records and record projections look as follows.
+The typing rules for records and record projections look as follows.  Notation
+for record types and rows is adopted from Wand's paper.
 
 \begin{prooftree}
 \AxiomC{$\Gamma \vec{\vdash} \oftype{\vec{e}}{\vec{\alpha}} | *_1$}
@@ -1057,13 +1060,14 @@ absorbed by $\rho$.
 Please note how the translation actions from \cite{Wand87b}, chapter 4, are
 merged into the typing rules here.  Furthermore, our unification algorithm
 $\mathcal{U}$ is extended with clauses (3) and (6) to (9) from \cite{Wand87b},
-chapter 3, to deal with rows.
+chapter 3, to deal with rows. This is a straight-forward extension, and not
+given here.
 
 \subsection{Wand's row- and Milner's let-polymorphism}
 
-Recall how the type checking algorithm deals with polymorphic types:  After the
-type of a global function has been successfully inferred, but before it is put
-in the environment, all its free type variables are quantified.  When the
+Recall how Milner's type checking algorithm deals with polymorphic types:  After
+the type of a global function has been successfully inferred, but before it is
+put in the environment, all its free type variables are quantified.  When the
 function is later used in an expression, its type is looked up from the
 environment, all bound variables are replaced by fresh type variables, the
 quantifier is removed, and the resulting type is used for unification.  This
@@ -1596,8 +1600,8 @@ contains the output of the code generation phase.
 
   \item[fail-typecheck-record-field.spl] A field of a record has the wrong type.
 
-  \item[pass-subtype-to-function.spl] It is okay to pass a record that has more
-  fields to a function.
+  \item[pass-subtype-to-function.spl] It is okay to pass a record which has more
+  than the required fields to a function.
 
   \item[fail-supertype-to-function.spl] It is not okay to pass a record with
   less fields than required to a function.
