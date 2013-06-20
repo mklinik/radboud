@@ -1,0 +1,11 @@
+// It is not okay to pass a record with less fields than required to a function.
+
+Int addXY(a a)
+{
+  return a.x + a.y;
+}
+
+Void main()
+{
+  addXY( { x=10 } );
+}

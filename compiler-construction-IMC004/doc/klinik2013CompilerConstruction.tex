@@ -1585,7 +1585,24 @@ program is given here, with newlines replaced by spaces.
 \subsection{Examples for phase 4}
 \label{sec_examplesPhase4}
 
-TODO
+This section documents the example programs for phase 4 which accompany this
+document.  Each example is given in an .spl file, together with a .txt file
+which contains the output from the type checking phase, and an .ssm file which
+contains the output of the code generation phase.
+
+\begin{description}
+
+  \item[record-intro-elim.spl] Demonstrates record creation and projection.
+
+  \item[pass-subtype-to-function.spl] It is okay to pass a record that has more
+  fields to a function.
+
+  \item[fail-supertype-to-function.spl] It is not okay to pass a record with
+  less fields than required to a function.
+
+  \item[fail-recursive-record.spl] Recursive records are forbidden.
+
+\end{description}
 
 
 \bibliographystyle{plain}

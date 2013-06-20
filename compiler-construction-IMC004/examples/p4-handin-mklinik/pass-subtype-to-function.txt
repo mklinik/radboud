@@ -1,0 +1,20 @@
+
+// addXY : forall <8>, ({Int x, Int y} -> Int)
+Int addXY({Int x, Int y} a)
+{
+  return ((a . x) + (a . y));
+}
+
+
+// main : ( -> Void)
+Void main()
+{
+  // recXY : {Int x, Int y}
+  {Int x, Int y} recXY = {x = 10, y = 20};
+  // recXYZ : {Int x, Int y, [Bool] z}
+  {Int x, Int y, [Bool] z} recXYZ = {x = 5, y = 3, z = (True : (False : []))};
+  print(addXY(recXY));
+  print(addXY(recXYZ));
+}
+
+

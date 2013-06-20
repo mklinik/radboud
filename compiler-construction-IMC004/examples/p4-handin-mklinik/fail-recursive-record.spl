@@ -1,0 +1,6 @@
+// Recursive records are forbidden
+
+a f(b b)
+{
+  return { x=f(b) };
+}

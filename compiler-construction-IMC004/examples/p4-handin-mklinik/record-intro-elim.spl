@@ -1,0 +1,13 @@
+// demonstrates record creation and projection
+
+var globalRecord = { a=10, b=True, c=True:False:[] };
+
+Void main()
+{
+  var localRecord = { x=5, y=3 };
+  var nestedRecord = { rec = { x=5 } };
+
+  print(globalRecord.a);
+  print(localRecord.y);
+  print(nestedRecord.rec.x);
+}

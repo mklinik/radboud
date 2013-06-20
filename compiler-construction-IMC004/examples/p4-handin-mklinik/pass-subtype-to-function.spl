@@ -1,0 +1,15 @@
+// It is okay to pass a record that has more fields to a function
+
+Int addXY(a a)
+{
+  return a.x + a.y;
+}
+
+Void main()
+{
+  var recXY = { x=10, y=20 };
+  var recXYZ = { x=5, y=3, z=True:False:[] };
+
+  print(addXY(recXY));
+  print(addXY(recXYZ));
+}
