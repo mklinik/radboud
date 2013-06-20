@@ -874,9 +874,9 @@ nor the current focus of interest.
 \subsection{Implementation of records}
 
 Records are implemented as contiguous blocks of memory on the heap, consisting
-of alternatingly field names and their values.  Records are terminated by a null
-word.  Figure \ref{fig_recordLayout} illustrates how the record \texttt{\{ x=10,
-y=True \}} is layed out in memory.  As with lists and tuples, pointers to
+of field names and their values, alternatingly.  Records are terminated by a
+null word.  Figure \ref{fig_recordLayout} illustrates how the record \texttt{\{
+x=10, y=True \}} is layed out in memory.  As with lists and tuples, pointers to
 records are kept on the stack, passed to functions, etc.
 
 \begin{figure}[h]
