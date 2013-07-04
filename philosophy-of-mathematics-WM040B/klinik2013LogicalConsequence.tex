@@ -168,7 +168,7 @@ $\Gamma \models \varphi$ iff every model of $\Gamma$ is also a model of
 $\varphi$.
 
 The deductive notion is always relative to a deductive system.  The semantic
-notion as always relative to a set theory.  The latter relation is always
+notion as always relative to a set theory.  The latter connection is always
 implicit and therefore often forgotten.
 
 These two notions are connected by soundness and completeness.
@@ -178,17 +178,17 @@ $\vdash\ \Arr\ \models$ is called ``soundness'' and is usually easy to prove.
 $\models\ \Arr\ \vdash$ is called ``completeness'' and is usually hard to prove,
 requires deep mathematical insight into the systems involved.
 
-Our main concern here: what does the semantic notion of logical consequence have
+Our main concern here: What does the semantic notion of logical consequence have
 to do correct reasoning?
 
 \subsection{Logical consequence}
 
 We begin with a survey of some of the proposals for pretheoretic, i.e. intuitive
-notion of logical consequence.
+notions of logical consequence.
 
 \subsection{Modality}
 
-Aristoteles: Syllogisms.  ``things follow from assumptions out of necessity
+Aristoteles: Syllogisms.  ``Things follow from assumptions out of necessity
 because these things are so''.  Two side issues: for Aristoteles, the conclusion
 must be different from the assumptions, and all assumptions must hold.  Today,
 we no longer think that is important.  The main point here: necessity.  We state
@@ -207,24 +207,24 @@ necessarily.
 Consider the following two examples:  ``Bill is heavier than Joe'' is a
 consequence of ``Joe is lighter than Bill''. And ``Caius has an immortal soul''
 is a consequence of ``Caius is human''.  Both of them are vaild consequences
-according to (M) and (PW), but do we want them to be valid consequences?
+according to (M) and (PW), but we don't want them to be valid consequences!
 \emph{We silently assume indubitable connections between heavier / lighter and
 being human / having a soul.  These are outside facts.}  Silent assumptions are
 always a bad thing, so let's try to take them into account in the next section.
 
 \subsection{Semantics}
 
-Another notion of logical consequence:
+Another intuitive notion of logical consequence:
 
 (S) $\varphi$ is a logical consequence of $\Gamma$ if the truth of the members
 of $\Gamma$ guarantees the truth of $\varphi$ in virtue of the meanings of the
 terms in those sentences.
 
 \emph{There are two differnces between (M) and (S): first, the meaning of terms
-is now mentioned explicitly.  In a sense, it becomes part of the assumptions
-now.  Second, Shapiro prases it differently. Instead of ``\ldots it is not
-possible \ldots'', he now says ``\ldots guarantees \ldots''.  Is that of any
-relevance? I don't think so but am not sure.}
+is now mentioned explicitly.  In a sense, it becomes part of the assumptions.
+Second, Shapiro prases it differently. Instead of ``\ldots it is not possible
+\ldots'', he now says ``\ldots guarantees \ldots''.  Is that of any relevance? I
+don't think so but am not sure.}
 
 (S) is a refinement of (M).  The meaning of the term ``being human'' does not
 include that humans have immortal souls.  We have therefore broken the outside
@@ -233,7 +233,7 @@ is no longer a valid consequence, while the Joe/Bill example still is.
 
 \emph{The only thing we did to go from (M) to (S) is to drag silent assumptions
 into the spotlight.  How does this break the link between being human and having
-soul? If there is no link under (S), then there wasn't any to begin with in
+a soul? If there is no link under (S), then there wasn't any to begin with in
 (M).}
 
 \emph{The point seems to be: In (M), arbitrary outside knowledge is allowed. In
@@ -249,7 +249,7 @@ our prime example of this view, depend on the specific meaning of ``all',
 ``are'' and ``is''.
 
 To identify the logical form of a sentence, we need to make the distinction
-between logical and non-logical terms.  Where to draw that line?  Three
+between logical and non-logical terms.  Where to draw the line?  Three
 possibilities:
 \begin{enumerate}
 
@@ -302,12 +302,12 @@ that we have such steps, we can easily argue that a deductive system is correct:
 just examine every inference rule.
 
 For adequacy, this is harder: using our intuition about legitimate steps we can
-give counterexamples to show a system not adequate.  But we cannot easily argue
-for adequacy.
+give counterexamples to show a system \emph{not} adequate.  But we cannot easily
+argue for adequacy.
 
-Now comes a rather lengthy argument, given in some sort of informal rigour,
-that deductive systems for first-order languages are correct.  Several concepts
-are worked out under way, of which the main points are as follows.
+Now comes a rather lengthy argument, given in some sort of informal rigour, that
+deductive systems for first-order languages are correct.  Several concepts are
+worked out on the way, of which the main points are as follows.
 
 How does the model-theoretic notion of logical consequence, as defined by
 Tarski, written $\models$, fit into the picture so far?
@@ -362,10 +362,10 @@ Maybe the discussion is really about the one true meaning of the natural
 language word ``or''?  Let's leave this to the empirical studies of the
 psychologists.
 
-Conclusion:  There are different legitimate intuitive notions of logical
-consequence, each corresponding to one of the formal notions $\models$ and
-$\vdash$.  These are precise enough that we can mathematically study their
-interrelations.  \emph{Structure preservation over subject matter.}
+Conclusion:  There are different, equally legitimate intuitive notions of
+logical consequence, each corresponding to one of the formal notions $\models$
+and $\vdash$.  The formal notions are precise enough that we can mathematically
+study their interrelations.  \emph{Structure preservation over subject matter.}
 
 
 \bibliographystyle{plain}
