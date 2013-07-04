@@ -1,0 +1,66 @@
+\documentclass[a4paper]{article}
+
+% Font stuff
+\usepackage{fouriernc}
+%\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+
+% Extra math symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% IEEE equation array
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+% bibliography
+%\usepackage[square]{natbib}
+
+% adds a toc to the pdf file, and makes refs clickable
+\usepackage[bookmarks,colorlinks=true]{hyperref}
+
+% for \llbracket, \rrbracket (scott brackets)
+% Needs debian package texlive-math-extra
+\usepackage{stmaryrd}
+
+% === BEGIN custom commands
+
+\newcommand{\arr}{\rightarrow}
+\newcommand{\todo}[1]{\bigskip \noindent \emph{todo: #1}}
+%\newcommand{\todo}[1]{}
+\newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
+
+% church-style (explicit) abstraction. We adjust the spacing around the colon and dot
+\newcommand{\church}[4]{#1 #2\!:\!#3\,.\,#4}
+
+\newcommand{\curry}[3]{#1 #2\,.\,#3}
+
+% something is of type something  x : A, we adjust the spacing
+\newcommand{\oftype}[2]{#1\!:\!#2}
+
+% === END custom commands
+
+\begin{document}
+
+\title{On Logical Consequence}
+\author{Markus Klinik (s4220315)}
+\maketitle
+
+\begin{abstract}
+
+This document is a bullet-point summary of two papers on logical consequence:
+Tarski's ``On The Concept of Following Logically'' and Shapiro's ``Logical
+Consequence, Proof Theory and Model Theory''.
+
+\end{abstract}
+
+\section{Tarksi's Paper}
+
+\section{Shapiro's Paper}
+
+\bibliographystyle{plain}
+\bibliography{logic}
+
+\end{document}
+
+% vim: textwidth=80
