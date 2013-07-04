@@ -103,6 +103,51 @@ Therefore, we need a different conceptual apparatus than deductive systems.
 Nota bene: the $\omega$-incomplete system is still important, because it works
 well for what it does.
 
+\subsection{The semantic approach}
+
+\emph{In the following, $\Gamma$ is always a set of sentences, and $\varphi$ a
+sentence.}
+
+First try, by Carnap: $\varphi$ is a consequence of $\Gamma$ iff $\Gamma$
+together with $\neg\varphi$ leads to a contradiction.  This approach however is
+too narrow, because it requires the concepts of contradiction and negation in
+the language.
+
+Let us first think about which intuitive properties the notion of consequence
+should have.  Mainly two things:
+\begin{enumerate}
+  \item Assume $\varphi$ follows from $\Gamma$ intuitively.  It cannot be the
+  case that every sentence in $\Gamma$ is true but $\varphi$ is false.
+
+  \item Following cannot depend on our knowledge of the external world.  In
+  particular, it cannot depend on the objects we are speaking of.
+\end{enumerate}
+These conditions are necessary but not sufficient:  The language would be
+required to have a constant symbol for every object.  \emph{I don't understand
+why that is.}
+
+Introduce the notion of model:  Let $\Gamma$ be a theory. Replace all constant
+symbols with variables, call this $\Gamma'$.  A \emph{model} of $\Gamma$ is a
+sequence of objects satisfying every sentential function in $\Gamma'$.
+
+Now we can formulate the famous definition: A sentence $\varphi$ follows
+logically from a theory $\Gamma$ iff every model of $\Gamma$ is also a model of
+$\varphi$.
+
+Some Notes: This definition fulfils the condition from above.  The definition is
+independent of the language under consideration.  If the language has negation,
+and defining contradictory as having no model, this definition is equivalent to
+the one by Carnap.
+
+\subsection{An open question}
+
+The definition relies on the distinction between logical and non-logical
+symbols.  But where to draw the line?  At least implication and quantifier must
+be logical for this to work, but it would make sense to regard all symbols as
+logical.  In this case, Tarski's consequence would be equivalent to material
+consequence.  \emph{How so? What does he mean by \emph{all symbols}? Certainly
+not relations and functions?}
+
 \section{Shapiro}
 
 \bibliographystyle{plain}
