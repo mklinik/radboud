@@ -5,6 +5,8 @@
 %\usepackage{mathptmx}
 \usepackage[T1]{fontenc}
 
+\usepackage[utf8]{inputenc}
+
 % Extra math symbols
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -46,17 +48,62 @@
 \author{Markus Klinik (s4220315)}
 \maketitle
 
-\begin{abstract}
+This document is a brief summary of two papers on logical consequence: Tarski's
+``On The Concept of Following Logically'' and Shapiro's ``Logical Consequence,
+Proof Theory and Model Theory''.
 
-This document is a bullet-point summary of two papers on logical consequence:
-Tarski's ``On The Concept of Following Logically'' and Shapiro's ``Logical
-Consequence, Proof Theory and Model Theory''.
+The summary of the original texts is given in normal font.  My questions and
+comments are set in italics.
 
-\end{abstract}
+\section{Tarksi}
 
-\section{Tarksi's Paper}
+Making precise the notion of \emph{following logically} was made in the past in
+an arbitrary manner.
 
-\section{Shapiro's Paper}
+\subsection{The syntactical approach}
+
+Deductive system:
+
+\begin{itemize}
+    \item Start from axioms
+    \item Apply inference rules
+    \item Accept conclusion as proven
+\end{itemize}
+
+\emph{Which formal system is he referring to?  Hilbert?}
+
+Logicians suppose that these few rules of inference completely capture the
+notion of following.  Their point is justified by sucessfully proving lots of
+old theorems.
+
+\subsection{Criticism of the syntactic approach}
+
+Counterexample: In the deductive system, it is not the
+case that from the infinite set of axioms $\{ n\text{ has property }P\ |\ n \in
+\mathbb{N} \}$ the sentence ``Every number has property $P$'' follows.  But this
+is indubitable the case from the viewpoint of everyday intuition.  Systems
+exhibiting this shortcoming are called $\omega$-incomplete.
+
+We can try to fix the situation by adding the principle described above as a
+rule in the system.  Only now, this rule has infinitely many premises, which
+would make our proof trees infinitary.  How can one prove infinitely many
+premises?
+
+We need some kind of meta-argument: all these sentences are provable.  Note the
+difference between ``is provable'' and ``has been proven''.  Now, ``is provable
+in the system'' is a sentence in metatheory.  Thus, our deductive system must be
+rich enough to talk about itself.  This is easy.  Any system where arithmetic is
+possible can talk about itself.  At first sight, enriching our system with
+meta-arguments seems to sufficiently capture what was missing.
+
+Enter Gödel: If the system is rich enough, we can always construct sentences
+that follow in the everyday sense, but cannot be proven in the system.
+
+Therefore, we need a different conceptual apparatus than deductive systems.
+Nota bene: the $\omega$-incomplete system is still important, because it works
+well for what it does.
+
+\section{Shapiro}
 
 \bibliographystyle{plain}
 \bibliography{logic}
