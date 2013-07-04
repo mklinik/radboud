@@ -292,6 +292,81 @@ of inference.
 
 \subsection{Proof theory and model theory again}
 
+Define the intuitive notions of correctness and adequacy: A deductive system is
+\emph{correct} if each rule of inference corresponds to a legitimate move in
+reasoning.  A deductive system is \emph{adequate} if every chain of reasoning
+can be expressed in the system.
+
+It is left to the reader what legitimate steps of reasoning are.  But assuming
+that we have such steps, we can easily argue that a deductive system is correct:
+just examine every inference rule.
+
+For adequacy, this is harder: using our intuition about legitimate steps we can
+give counterexamples to show a system not adequate.  But we cannot easily argue
+for adequacy.
+
+Now comes a rather lengthy argument, given in some sort of informal rigour,
+that deductive systems for first-order languages are correct.  Several concepts
+are worked out under way, of which the main points are as follows.
+
+How does the model-theoretic notion of logical consequence, as defined by
+Tarski, written $\models$, fit into the picture so far?
+\begin{itemize}
+  \item It is different from (S), because (S) still allows restricted outside
+  knowledge about non-logical terms, while $\models$ must work for all
+  interpretations of them.
+
+  \item $\models$ has the interpretation of the logical constants baked in: it
+  is the same in every model.
+
+  \item But still $\models$ is different from (FS) because $\models$ has some
+  modality left: the size of interpretations.  \emph{What does he mean by that?
+  Löwenheim-Skolem?}
+
+\end{itemize}
+
+$\models$ has aspects of (M): size of interpretations, (PW): interpretations
+correspond to possible worlds, and (FS): formulas are isomorphic by means of
+their logical form.  We therefore give another informal definition that captures
+these aspects.
+
+A sentence $\varphi$ is a logical consequence of $\Gamma$ in a \emph{blended
+sense} if it is not possible for every member of $\Gamma$ to be true and
+$\varphi$ to be false, and this impossibility holds in virtue of the meaning of
+the logical terms.
+
+To summarize what we have seen so far:  $\models$ and $\vdash$ correspond to
+different intuitive notions of logical consequence.  The blended sense, and
+(Ded).  These two are both legitimate and independent of each other.
+
+Now for the correlation between $\models$ and $\vdash$. First note that not
+every deductive system represents a notion of logical consequence.  Why is it
+then, that we believe that our deductive systems for first-order language are
+legitimate?
+
+Tarski says: Model theory comes before proof theory, therefore a deductive
+system is legitimate if it is sound with respect to $\models$.
+
+Advocates of the definition (Ded) say: Proof theory comes before model theory
+and a deductive system is legitimate if introduction and elimination rules are
+in harmony.  Being in harmony means that if an inference doesn't involve some
+symbol $s$, then this inference must be deducible in the system without using
+the rules for $s$ at all.
+
+These two groups fight over where the one true meaning of ``$\vee$'' comes from.
+But this symbol does not have one true meaning.  \emph{This discussion is as
+meaningless as the fight over the one true meaning of ``$+$''. What is the one
+true group?} Nonsense!
+
+Maybe the discussion is really about the one true meaning of the natural
+language word ``or''?  Let's leave this to the empirical studies of the
+psychologists.
+
+Conclusion:  There are different legitimate intuitive notions of logical
+consequence, each corresponding to one of the formal notions $\models$ and
+$\vdash$.  These are precise enough that we can mathematically study their
+interrelations.  \emph{Structure preservation over subject matter.}
+
 
 \bibliographystyle{plain}
 \bibliography{logic}
