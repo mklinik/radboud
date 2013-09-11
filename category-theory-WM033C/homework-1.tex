@@ -16,11 +16,12 @@
 \usetikzlibrary{matrix}
 
 \newcommand{\arr}{\rightarrow}
-\newcommand{\todo}[1]{\bigskip \noindent \emph{todo: #1}}
+%\newcommand{\todo}[1]{\bigskip \noindent \emph{todo: #1}}
 %\newcommand{\todo}[1]{}
-\newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
+%\newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
 
 \newcommand{\type}{\!:\!}
+%\newcommand{\qed}[1]{$\square (#1)}
 
 \begin{document}
 
@@ -38,7 +39,7 @@
     & = & g \circ (f \circ g') \\
     & = & (g \circ f) \circ g' \\
     & = & 1_X \circ g' \\
-    & = & g'
+    & = & g' % '
   \end{IEEEeqnarray*}
 
 
@@ -93,15 +94,15 @@
     \item $f$ is a bijective function $\implies f$ is an isomorphism in Set.
   \end{enumerate}
 
-  Proof: \begin{enumerate}[(i)]
-    \item Let $f \type X \arr Y$ be an isomorphism. This gives us an $f^{-1}
+  Proof of (i):
+    Let $f \type X \arr Y$ be an isomorphism. This gives us an $f^{-1}
     \type Y \arr X$ such that $f \circ f^{-1} = 1_Y$ and $f^{-1} \circ f = 1_X$.
     Want: f is bijective i.e.~injective and surjective.
 
-    Injectivity: To prove: $\forall a,b. f(a) = f(b) \implies a = b$. Let $a,b \in
-    X$ such that $f(a) = f(b)$. Want: $a = b$. Consider $a,b$ as arrows $1 \arr
-    X$.  Then $f(a) = f \circ a$ and $f(b) = f \circ b$. Have: $f \circ a = f
-    \circ b$.  But then
+    Proof of injectivity: To prove: $\forall a,b. f(a) = f(b) \implies a = b$.
+    Let $a,b \in X$ such that $f(a) = f(b)$. Want: $a = b$. Consider $a,b$ as
+    arrows $1 \arr X$.  Then $f(a) = f \circ a$ and $f(b) = f \circ b$. Have: $f
+    \circ a = f \circ b$.  But then
     \begin{IEEEeqnarray*}{rCl}
     a & = & 1_X \circ a \\
       & = & (f^{-1} \circ f) \circ a \\
@@ -110,19 +111,40 @@
       & = & (f^{-1} \circ f) \circ b \\
       & = & 1_X \circ b \\
       & = & b
-    \end{IEEEeqnarray*}
+    \end{IEEEeqnarray*} \qed{(injectivity)}
 
-    Surjectivity: To prove: $\forall y \in Y. \exists x \in X. f \circ x = y$.
-    Let $y \in Y$. Want: some $x \in X$ such that $f \circ x = y$.  But we know
-    that $y = 1_Y \circ y = (f \circ f^{-1}) \circ y$. Take $x = f^{-1} \circ
-    y$.  Such an $x$ exists because $f^{-1}$ is a function. Then we have:
+    Proof of surjectivity: To prove: $\forall y \in Y. \exists x \in X. f \circ
+    x = y$.  Let $y \in Y$. Want: some $x \in X$ such that $f \circ x = y$.  But
+    we know that $y = 1_Y \circ y = (f \circ f^{-1}) \circ y$. Take $x = f^{-1}
+    \circ y$.  Such an $x$ exists because $f^{-1}$ is a function. Then we have:
     \begin{IEEEeqnarray*}{rCl}
     f \circ x & = & f \circ (f^{-1} \circ y) \\
       & = & (f \circ f^{-1}) \circ y \\
       & = & 1_Y \circ y \\
       & = & y
     \end{IEEEeqnarray*}
-  \end{enumerate}
+    \qed{(surjectivity)} \\
+    \qed{(i)}
+
+  Proof of (ii): Let $f$ be an injective function. Want: $f$ is an isomorphism
+  in Set, i.e.~$\exists f^{-1}. f \circ f^{-1} = 1_Y$ and $f^{-1} \circ f =
+  1_X$.  Take $f^{-1}(y)$ to be the unique $x \in X$ such that $f(x) = y$. Such
+  an x exists and is unique because f is surjective and injective.  Now, let $x
+  \in X$. Want: $f^{-1} \circ f = 1_X$. Consider:
+  \begin{IEEEeqnarray*}{rCl}
+  (f^{-1} \circ f)(x) & = & f^{-1}(f(x)) \\
+    & = & \text{the unique $x \in X$ such that }f(x) = f(x) \\
+    & = & x
+  \end{IEEEeqnarray*}
+
+  Let $y \in Y$. Want: $f \circ f^{-1} = 1_Y$. Consider:
+  \begin{IEEEeqnarray*}{rCl}
+  (f \circ f^{-1})(y) & = & f(f^{-1}(y)) \\
+    & = & f( \text{the unique $x \in X$ such that } f(x) = y ) \\
+    & = & y
+  \end{IEEEeqnarray*}
+  \qed{(ii)}\\
+  \qed{2(a)}
 
 \end{enumerate}
 
