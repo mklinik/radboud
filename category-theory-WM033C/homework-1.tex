@@ -1,0 +1,131 @@
+\documentclass[a4paper]{article}
+%\usepackage{mathptmx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[retainorgcmds]{IEEEtrantools}
+%\usepackage[square]{natbib}
+
+% needs debian package texlive-math-extra
+\usepackage{stmaryrd} % for \llbracket, \rrbracket (scott brackets)
+
+\usepackage{enumerate} % for enumerations with letters (a), (b), etc.
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{matrix}
+
+\newcommand{\arr}{\rightarrow}
+\newcommand{\todo}[1]{\bigskip \noindent \emph{todo: #1}}
+%\newcommand{\todo}[1]{}
+\newcommand{\semantics}[1]{\llbracket #1 \rrbracket}
+
+\newcommand{\type}{\!:\!}
+
+\begin{document}
+
+\title{Category Theory Homework 1}
+\author{Markus Klinik}
+
+\section{~}
+
+\begin{enumerate}[(a)]
+  \item Let $f \type X \arr Y$ and $g, g' \type Y \arr X$ both be inverses of
+  $f$. Want: $g = g'$. Have: $g \circ f = 1_X$ and $f \circ g' = 1_Y$.
+
+  \begin{IEEEeqnarray*}{rCl}
+  g & = & g \circ 1_Y \\
+    & = & g \circ (f \circ g') \\
+    & = & (g \circ f) \circ g' \\
+    & = & 1_X \circ g' \\
+    & = & g'
+  \end{IEEEeqnarray*}
+
+
+  \item Show that $1_X \type X \arr X$ is an isomorphism. To prove:
+  $\exists f \type X \arr X$ s.t. $1_X \circ f = 1_X = f \circ id_X$.  Take $f =
+  1_X$. $1_X \circ 1_X = 1_X$.
+
+
+  \item Show that if $f \type X \arr Y, g \type Y \arr Z$ are isos, $g \circ f$
+  is an iso.
+
+  Have: \begin{itemize}
+    \item $f^{-1} \type Y \arr X$ such that $f^{-1} \circ f = 1_X$ and $f \circ
+    f^{-1} = 1_Y$.
+    \item $g^{-1} \type Z \arr Y$ such that $g^{-1} \circ g = 1_Y$ and $g \circ
+    g^{-1} = 1_Z$.
+    \end{itemize}
+
+  Want: $h \type Z \arr X$ such that $h \circ (g \circ f) = 1_X$ and $(g \circ
+  f) \circ h = 1_Z$. Take $h = (f^{-1} \circ g^{-1})$.
+
+  \begin{IEEEeqnarray*}{rCl}
+  h \circ (g \circ f) & = & (f^{-1} \circ g^{-1}) \circ (g \circ f) \\
+    & = & f^{-1} \circ (g^{-1} \circ g) \circ f \\
+    & = & f^{-1} \circ 1_Y \circ f \\
+    & = & f^{-1} \circ f \\
+    & = & 1_X
+  \end{IEEEeqnarray*}
+  \begin{IEEEeqnarray*}{rCl}
+  (g \circ f) \circ h & = & (g \circ f) \circ (f^{-1} \circ g^{-1}) \\
+    & = & g \circ (f \circ f^{-1}) \circ g^{-1} \\
+    & = & g \circ 1_Y \circ g^{-1} \\
+    & = & g \circ g^{-1} \\
+    & = & 1_Z
+  \end{IEEEeqnarray*}
+
+
+  \item Aut(X) is the set of isomorphism $X \arr X$. It has the structure of a
+  commutative group, where addition is composition, 0 is $1_X$ and inverses are
+  the inverse of isos.
+
+\end{enumerate}
+
+\section{(Awodey 1.9.3)}
+
+\begin{enumerate}[(a)]
+
+  \item Show that in Set the isomorphisms are exactly the bijective functions.
+  To prove:
+  \begin{enumerate}[(i)]
+    \item $f$ is an isomorphism in Set $\implies f$ is a bijective function.
+    \item $f$ is a bijective function $\implies f$ is an isomorphism in Set.
+  \end{enumerate}
+
+  Proof: \begin{enumerate}[(i)]
+    \item Let $f \type X \arr Y$ be an isomorphism. This gives us an $f^{-1}
+    \type Y \arr X$ such that $f \circ f^{-1} = 1_Y$ and $f^{-1} \circ f = 1_X$.
+    Want: f is bijective i.e.~injective and surjective.
+
+    Injectivity: To prove: $\forall a,b. f(a) = f(b) \implies a = b$. Let $a,b \in
+    X$ such that $f(a) = f(b)$. Want: $a = b$. Consider $a,b$ as arrows $1 \arr
+    X$.  Then $f(a) = f \circ a$ and $f(b) = f \circ b$. Have: $f \circ a = f
+    \circ b$.  But then
+    \begin{IEEEeqnarray*}{rCl}
+    a & = & 1_X \circ a \\
+      & = & (f^{-1} \circ f) \circ a \\
+      & = & f^{-1} \circ (f \circ a) \\
+      & = & f^{-1} \circ (f \circ b) \\
+      & = & (f^{-1} \circ f) \circ b \\
+      & = & 1_X \circ b \\
+      & = & b
+    \end{IEEEeqnarray*}
+
+    Surjectivity: To prove: $\forall y \in Y. \exists x \in X. f \circ x = y$.
+    Let $y \in Y$. Want: some $x \in X$ such that $f \circ x = y$.  But we know
+    that $y = 1_Y \circ y = (f \circ f^{-1}) \circ y$. Take $x = f^{-1} \circ
+    y$.  Such an $x$ exists because $f^{-1}$ is a function. Then we have:
+    \begin{IEEEeqnarray*}{rCl}
+    f \circ x & = & f \circ (f^{-1} \circ y) \\
+      & = & (f \circ f^{-1}) \circ y \\
+      & = & 1_Y \circ y \\
+      & = & y
+    \end{IEEEeqnarray*}
+  \end{enumerate}
+
+\end{enumerate}
+
+\end{document}
+
+% vim: textwidth=80
