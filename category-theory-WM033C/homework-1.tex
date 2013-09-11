@@ -41,11 +41,13 @@
     & = & 1_X \circ g' \\
     & = & g' % '
   \end{IEEEeqnarray*}
+  \qed{(a)}
 
 
   \item Show that $1_X \type X \arr X$ is an isomorphism. To prove:
   $\exists f \type X \arr X$ s.t. $1_X \circ f = 1_X = f \circ id_X$.  Take $f =
   1_X$. $1_X \circ 1_X = 1_X$.
+  \qed{(b)}
 
 
   \item Show that if $f \type X \arr Y, g \type Y \arr Z$ are isos, $g \circ f$
@@ -75,11 +77,13 @@
     & = & g \circ g^{-1} \\
     & = & 1_Z
   \end{IEEEeqnarray*}
+  \qed{(c)}
 
 
-  \item Aut(X) is the set of isomorphism $X \arr X$. It has the structure of a
-  commutative group, where addition is composition, 0 is $1_X$ and inverses are
-  the inverse of isos.
+  \item Aut(X) is the set of isomorphisms $X \arr X$. It has the structure of a
+  group, where addition is composition, 0 is $1_X$ and inverses are the inverses
+  of isos.
+  \qed{(d)}
 
 \end{enumerate}
 
@@ -145,6 +149,85 @@
   \end{IEEEeqnarray*}
   \qed{(ii)}\\
   \qed{2(a)}
+
+
+  \item To prove: $f \type X \arr Y$ is an iso in \textbf{Mon} iff $f$ is a
+  bijective monoid homomorphism.
+
+  Proof of $\Rightarrow$:  Let $f$ be an iso in \textbf{Mon}.  Then $f$ is a
+  monoid homomorphism by definition, and it is a bijective function by the same
+  argument as in 2(a).  \qed{$\Rightarrow$}
+
+  Proof of $\Leftarrow$: Let $f$ be a bijective monoid homomorphism. Want: $f$
+  is an iso in \textbf{Mon}, i.e. $\exists f^{-1}$ such that \begin{enumerate}[(i)]
+  \item $f \circ f^{-1} = 1_Y$
+  \item $f^{-1} \circ f = 1_X$
+  \item $f^{-1}$ is a monoid homomorphism.
+  \end{enumerate}
+
+  As $f$ is a bijective function, we can define $f^{-1}$ just as in 2(a):
+  $f^{-1}(y) = $ the unique x such that $f(x) = y$.  The proofs of (i) and (ii)
+  are then the same as in 2(a).  It remains to show that this $f^{-1}$ is indeed
+  a monoid homomorphism.  To prove: it preserves 0 and +.
+
+  Proof of 0: Consider:
+  \begin{IEEEeqnarray*}{rCl}
+  f^{-1}(0_Y) & = & f^{-1}(f(0_X)) \\
+    & = & (f^{-1} \circ f)(0_X) \\
+    & = & id_X(0_X) \\
+    & = & 0_X
+  \end{IEEEeqnarray*}
+  \qed({0})
+
+  Proof of +: Let $x,y \in Y$. Consider:
+  \begin{IEEEeqnarray*}{rCl}
+  f^{-1}(x) + f^{-1}(y) & = & 1_X(f^{-1}(x) + f^{-1}(y)) \\
+    & = & (f^{-1} \circ f)(f^{-1}(x) + f^{-1}(y)) \\
+    & = & f^{-1}(f(f^{-1}(x) + f^{-1}(y))) \\
+    & = & f^{-1}(f(f^{-1}(x)) + f(f^{-1}(y))) \\
+    & = & f^{-1}((f \circ f^{-1}(x) + (f \circ f^{-1})(y)) \\
+    & = & f^{-1}(1_Y(x) + 1_Y(y)) \\
+    & = & f^{-1}(x + y)
+  \end{IEEEeqnarray*}
+  \qed{(+)}\\
+  \qed{$\Leftarrow$}\\
+  \qed{2(b)}
+
+
+  \item To show that in \textbf{Poset} the isomorphisms and bijective
+  homomorphisms don't coincide, we give a counterexample of two posets and a
+  bijective function between them where one direction is monotone but the other
+  isn't.
+
+  Consider the following posets $X = (\{x, y\}, \{x \leq x, y \leq y\})$ and $Y
+  = (\{a, b\}, \{a \leq b, a \leq a, b \leq b\})$, and the function $f \type X
+  \arr Y$, $x \mapsto a$, $y \mapsto b$.  Now $f$ is trivially a monotone
+  function, because the premise of $x \leq y \implies f(x) \leq f(y)$ is never
+  fulfilled, except for the diagonal. It is also bijective.  The inverse of $f$
+  fails to be monotone, because $a \leq b$ but not $x \leq y$.  \qed{(c)}\\
+  \qed{(2)}
+
+\end{enumerate}
+
+
+\section{ }
+\begin{enumerate}[(a)]
+
+  \item To prove: a monoid homomorphism $\mathbb{N} \arr \mathbb{Z}$ is
+  determined by what it does with 1. Let $f, g \type \mathbb{N} \arr \mathbb{Z}$
+  be monoid homomorphisms such that $f(1) = g(1)$.  To prove: $f = g$.  Want:
+  $\forall n \in \mathbb{N}. f(n) = g(n)$.  Let $n \in \mathbb{N}$.  Consider:
+  \begin{IEEEeqnarray*}{rCl}
+  f(n) & = & f(1 + \ldots + 1) \\
+    & = & f(1) + \ldots + f(1) \\
+    & = & g(1) + \ldots + g(1) \\
+    & = & g(1 + \ldots + 1) \\
+    & = & g(n)
+  \end{IEEEeqnarray*}
+  \qed{(a)}
+
+
+  \item TODO
 
 \end{enumerate}
 
