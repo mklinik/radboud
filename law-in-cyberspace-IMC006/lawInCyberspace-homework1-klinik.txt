@@ -1,0 +1,98 @@
+Background information on emails.  An email is just a plain text file,
+consisting of a list of meta-information, the so called "header", together with
+the actual message content, the "body".  The header consists of name-value
+pairs called fields.  There are fields like "Date", which indicate when the
+email was written.  The two most important fields are "To" and "From", which
+specify the recipient and sender of a mail, respectively.  Most fields are set
+by the mail program of the sender, some are added on transmission along the
+way.  Nothing prevents some computer program from generating a correctly
+formatted email with forged information in the header.  It is indeed common
+practice, if you have several email addresses, to use the same server for
+sending emails, but with different identities.  Radboud's CNCZ page explains
+how to do that.
+
+Now consider the following situation. There are two companies, Niftystuff and
+GreatCoffee, both in the coffee trading business, with connections to
+Argentina and Brazil.  They compete for an important contract with the dutch
+finance authority to supply it for the next two years with coffee.  A steady
+supply of coffee is important to ensure due processing of tax declarations, so
+we're talking big amounts of high quality coffee here.  The taxpayer's money is
+at stake!
+
+Jan, the Boss of Niftystuff, is just about to sign a contract with Pieter, head
+of the tax authority, in the next few days.  Niftystuff's coffee isn't as good
+as the one from GreatCoffee, but Niftystuff's offer is a lot cheaper.  One day
+before the contract is being signed, Kees, the Boss of GreatCoffee, sends an
+email to Pieter claiming that due to recent political developments in Brazil,
+which coincidentally is true and all over the news, Niftystuff's offer is now a
+lot more expensive.  Kees' son in law, who studies at Radboud, explained to
+Kees some weeks before how to configure the company's mail client to fake the
+"From" header of email messages (Yes, you can do that with Outlook), so Kees
+makes the email look like it is coming from Jan.  He knows how Jan's mails
+usually look like, because they have had correspondence before.  The new, fake,
+offer is still cheaper than the one from GreatCoffee, but taking into account
+GreatCoffee's higher quality, Pieter, who has never heard of cryptography,
+digital signatures and the like, unsuspectingly decides to sign the contract
+with Kees.
+
+This is without doubt a legal problem, because Kees only got the contract
+through lying.  It is also a problem in cyberspace because it was carried out
+by means of electronic correspondence.
+
+There are two legal domains into which this case fits: private law and criminal
+law.  Private law because it concerns making a contract so it has to be
+investigated whether the contract came to be by valid means.  The case also
+fits in criminal law, because impersonating someone else to gain an unfair
+advantage is criminalized.
+
+The legal sources which apply here are the Burgerlijk Wetboek and the Wetboek
+van Strafrecht.
+
+Let's first look at the part that concerns the contract.  Article 6:228 BWB
+"Fundamental mistake" says:
+
+  "1. An agreement which has been entered into under the influence of a mistake
+  with regard to the facts or legal rights and which would not have been
+  concluded by the mistaken party if he would have had a correct view of the
+  situation, is voidable:"
+
+  "a. if the mistake is caused by information given by the opposite party,
+  unless this party could assume that the agreement would be concluded even
+  without this information"
+
+The conditions for paragraph 1.a are fulfilled, because firstly, Pieter signed
+the contract under the mistaken belief that Jan's offer was too expensive.
+Secondly, Pieter would not have signed the contract if he have had the correct
+information about Jan's offer. And thirdly, the other party, in this case Kees,
+gave false information to Pieter, and Kees was very well aware that Pieter
+would not have signed the contract otherwise.
+
+The legal implication therefore is that the contract is voidable.  According to
+Article 3:50 "Extrajudicial nullification", this gives Pieter the right to
+nullify the contract, in which case it is as if the contract never existed.
+Pieter would be free from the obligation to pay for the coffee, and Kees would
+not be obliged to deliver coffee.
+
+Independent from the civil aspect of the case, there also is a criminal aspect.
+Sr 362 says:
+
+  "Hij die, met het oogmerk om zich of een ander wederrechtelijk te
+  bevoordelen, hetzij door het aannemen van een valse naam of van een valse
+  hoedanigheid, hetzij door listige kunstgrepen, hetzij door een samenweefsel
+  van verdichtsels, iemand beweegt tot de afgifte van enig goed, tot het
+  verlenen van een dienst, tot het ter beschikking stellen van gegevens, tot
+  het aangaan van een schuld of tot het teniet doen van een inschuld, wordt,
+  als schuldig aan oplichting, gestraft met gevangenisstraf van ten hoogste
+  vier jaren of geldboete van de vijfde categorie."
+
+The conditions for this clause are fulfilled, because Kees has assumed a false
+identity in order to persuade Pieter to take up a debt.  The debt here is the
+obligation to pay for the coffee, Pieter is the debtor in this respect.  Kees
+therefore has committed fraud, and is subject to the punishment of inprisonment
+up to four years or a fine of the fifth category, which according to Sr 23
+paragraph 4 is EUR 19.500,-.
+
+According to dutch law, only public prosecution can initiate criminal
+investigations, but both Pieter and Jan could ask for criminal investigation.
+In regard to Article 3:50 cilil law on the other hand, Jan can derive no legal
+rights to influence the state of the contract.
