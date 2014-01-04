@@ -1,8 +1,0 @@
-Bas,555
-Jeroen,123805
-John,12395789
-Peter,89000
-Pieter,123805
-Rinus,1234
-Steffen,58879
-Thomas,13555

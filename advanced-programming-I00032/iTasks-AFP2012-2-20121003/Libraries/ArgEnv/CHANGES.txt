@@ -1,8 +1,0 @@
-1.0.3
-    - removed Clean 1.1 compatibility comments
-    - change inline directives in abc code blocks to Clean 2.0 syntax
-1.0.2
-    - Added import of the object file
-    - Changed README (require Clean 1.3.2, simplified usage instructions)
-1.0.1
-    - Initial release
