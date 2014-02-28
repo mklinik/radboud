@@ -27,7 +27,8 @@ HRESULT input(char *buf, size_t len) {
 
 char *do_read() {
 	char *buf = my_alloc(STR_SIZE);
-	printf("Allocated a string at %x", buf);
+    // FIXED: to print pointers, use %p in a format string instead of %x
+	printf("Allocated a string at %p", buf);
     // FIXED: use FAILED macro to correctly evaluate HRESULT value
 	if (FAILED(input(buf, STR_SIZE))) {
 		printf("error!");
