@@ -25,7 +25,7 @@ HRESULT input(_Out_cap_(len) char *buf, _In_ size_t len) {
 	return (gets_s(buf, len) != NULL)?SEVERITY_SUCCESS:SEVERITY_ERROR;
 }
 
-char *do_read() {
+_Ret_opt_cap_c_(STR_SIZE) char *do_read() {
 	char *buf = my_alloc(STR_SIZE);
     // FIXED: to print pointers, use %p in a format string instead of %x
 	printf("Allocated a string at %p", buf);
@@ -42,8 +42,8 @@ char *do_read() {
 	return buf;
 }
 
-void copy_data(char *buf1,
-               char *buf2) {
+void copy_data(_In_opt_count_c_(STR_SIZE) char *buf1,
+               _Out_cap_c_(STR_SIZE) char *buf2) {
 	memcpy(buf2,buf1,STR_SIZE);
 	buf2[STR_SIZE-1] = NULL; // null terminate, just in case
 }
@@ -69,7 +69,8 @@ _Check_return_ int test_ready() {
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	char *buf1 = do_read();
-	char *buf2 = my_alloc(BUF_SIZE);
+    // FIXED:  do_read allocates STR_SIZE, so buf2 must also be STR_SIZE
+	char *buf2 = my_alloc(STR_SIZE);
 	if (buf2 == NULL)
 		exit(-1);
 	zeroing();
