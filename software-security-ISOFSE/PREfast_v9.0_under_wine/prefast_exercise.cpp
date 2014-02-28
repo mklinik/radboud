@@ -8,7 +8,7 @@
 
 void zeroing();
 
-char *my_alloc(size_t size) {
+_Ret_opt_cap_(size) char *my_alloc(_In_ size_t size) {
 	char *ch  = (char *)malloc(size);
     // FIXED: check that ch is not NULL and that nulling the first and last char is permissible.
     if( ch && size > 0 )
@@ -21,7 +21,7 @@ char *my_alloc(size_t size) {
 }
 
 // FIXED: add len parameter and use gets_s instead of gets
-HRESULT input(char *buf, size_t len) {
+HRESULT input(_Out_cap_(len) char *buf, _In_ size_t len) {
 	return (gets_s(buf, len) != NULL)?SEVERITY_SUCCESS:SEVERITY_ERROR;
 }
 
@@ -30,12 +30,14 @@ char *do_read() {
     // FIXED: to print pointers, use %p in a format string instead of %x
 	printf("Allocated a string at %p", buf);
     // FIXED: use FAILED macro to correctly evaluate HRESULT value
-	if (FAILED(input(buf, STR_SIZE))) {
+    // FIXED: check that buff is not null before passing it to input
+	if (buf && FAILED(input(buf, STR_SIZE))) {
 		printf("error!");
 		exit(-1);
 	}
     // FIXED: comparison is == not =
-	if (*buf == NULL)
+    // FIXED: check that buf is not NULL before dereferencing it
+	if (buf == NULL || *buf == NULL)
 		printf("empty string");
 	return buf;
 }
