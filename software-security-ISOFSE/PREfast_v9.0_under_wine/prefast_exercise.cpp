@@ -71,16 +71,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	if (buf2 == NULL)
 		exit(-1);
 	zeroing();
-	test_ready();
-	execute(buf1);
+    // FIXED: we have to use the return value of test_ready.
+	if( test_ready() )
+    {
+        execute(buf1);
 
-    char* buf3 = do_read();
-	copy_data(buf3, buf2);
-	execute(buf2);
+        char* buf3 = do_read();
+        copy_data(buf3, buf2);
+        execute(buf2);
 
-    char *buf4 = do_read();
-    execute(buf4);
-
+        char *buf4 = do_read();
+        execute(buf4);
+    }
 }
 
 // *****************************************************************
