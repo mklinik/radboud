@@ -10,8 +10,13 @@ void zeroing();
 
 char *my_alloc(size_t size) {
 	char *ch  = (char *)malloc(size);
-	*ch = NULL;
-	ch[size] = NULL;  // null terminate here too, to be safe
+    // FIXED: check that ch is not NULL and that nulling the first and last char is permissible.
+    if( ch && size > 0 )
+    {
+        *ch = NULL;
+        // FIXED: the last char is size-1 not size.
+        ch[size-1] = NULL;  // null terminate here too, to be safe
+    }
 	return ch;
 }
 
