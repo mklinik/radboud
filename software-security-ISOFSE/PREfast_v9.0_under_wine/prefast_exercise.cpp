@@ -28,7 +28,8 @@ HRESULT input(char *buf, size_t len) {
 char *do_read() {
 	char *buf = my_alloc(STR_SIZE);
 	printf("Allocated a string at %x", buf);
-	if (!input(buf, STR_SIZE)) {
+    // FIXED: use FAILED macro to correctly evaluate HRESULT value
+	if (FAILED(input(buf, STR_SIZE))) {
 		printf("error!");
 		exit(-1);
 	}
