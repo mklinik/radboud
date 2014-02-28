@@ -90,10 +90,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 // *****************************************************************
 
-void zero(int *buf, int len)
+void zero(_Out_cap_(len) int *buf, _In_ int len)
 {
     int i;
-    for(i = 0; i <= len; i++)
+    // FIXED: use < instead of <= to prevent buffer overflow
+    for(i = 0; i < len; i++)
         buf[i] = 0;
 }
 
