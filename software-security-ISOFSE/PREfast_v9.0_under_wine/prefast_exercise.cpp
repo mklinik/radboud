@@ -79,13 +79,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     // FIXED: we have to use the return value of test_ready.
 	if( test_ready() )
     {
+        validate(buf1);
         execute(buf1);
 
+        // TODO: copy_data should propagate taintedness; see comment for copy_data
         char* buf3 = do_read();
         copy_data(buf3, buf2);
         execute(buf2);
 
         char *buf4 = do_read();
+        validate(buf4);
         execute(buf4);
     }
 }
