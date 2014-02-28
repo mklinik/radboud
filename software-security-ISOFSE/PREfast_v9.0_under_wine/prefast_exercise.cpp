@@ -33,7 +33,8 @@ char *do_read() {
 		printf("error!");
 		exit(-1);
 	}
-	if (*buf = NULL)
+    // FIXED: comparison is == not =
+	if (*buf == NULL)
 		printf("empty string");
 	return buf;
 }
