@@ -21,11 +21,11 @@ _Ret_opt_cap_(size) char *my_alloc(_In_ size_t size) {
 }
 
 // FIXED: add len parameter and use gets_s instead of gets
-HRESULT input(_Out_cap_(len) char *buf, _In_ size_t len) {
+HRESULT input([SA_Post(Tainted=SA_Yes)] _Out_cap_(len) char *buf, _In_ size_t len) {
 	return (gets_s(buf, len) != NULL)?SEVERITY_SUCCESS:SEVERITY_ERROR;
 }
 
-_Ret_opt_cap_c_(STR_SIZE) char *do_read() {
+[returnvalue:SA_Post(Tainted=SA_Yes)] _Ret_opt_cap_c_(STR_SIZE) char *do_read() {
 	char *buf = my_alloc(STR_SIZE);
     // FIXED: to print pointers, use %p in a format string instead of %x
 	printf("Allocated a string at %p", buf);
@@ -42,13 +42,15 @@ _Ret_opt_cap_c_(STR_SIZE) char *do_read() {
 	return buf;
 }
 
+// TODO: is there a way to specify that taintedness propagates from buf1 to buf2?
+// If buf1 is tainted so is buf2, but if buf1 is validated so is buf2.
 void copy_data(_In_opt_count_c_(STR_SIZE) char *buf1,
                _Out_cap_c_(STR_SIZE) char *buf2) {
 	memcpy(buf2,buf1,STR_SIZE);
 	buf2[STR_SIZE-1] = NULL; // null terminate, just in case
 }
 
-int execute(char *buf) {
+int execute([SA_Pre(Tainted=SA_No)] char *buf) {
 	return system(buf); // pass buf as command to be executed by the OS
 }
 
