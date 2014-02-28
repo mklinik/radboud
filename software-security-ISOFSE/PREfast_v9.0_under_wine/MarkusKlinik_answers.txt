@@ -1,0 +1,37 @@
+// Markus Klinik 4220315
+
+1. One disadvantage is runtime overhead. It costs CPU cycles to perform those
+checks. In certain tight loops this might be unacceptable.
+
+Another disadvantage is that the code actually has to be executed for the
+checks to be performed. This requires good test coverage to be effective.
+
+An advantage is that runtime checks are more precise. Compiletime checks always
+need to be conservative, because of the halting problem.
+
+
+2. a) The compiler has to generate bound checks for buffer accesses in C like
+buf[index]. Dynamic buffer lengths are available at runtime anyway, while
+constants would have to be made available at runtime. For pointer arithmetic
+however, this might not work as it is sometimes impossible to keep track of the
+buffer inside which a pointer is supposed to point.
+
+b) Assuming that the variable len actually holds the length of the buffer,
+there will be no false positives. In the example zeroboth2 however, where
+buffer sizes are swapped, there would be both false positives and false
+negatives.
+
+
+3. In C, there is no inherent connection between a buffer argument and its
+length argument. This connection has to be made explicit by the programmer.
+Furthermore, not every pointer points to a buffer, and null-terminated C
+strings sometimes don't require an accompanying length argument. The tool would
+have to assume which argument of a function is the length that belongs to a
+pointer, which in the two cases just mentioned would lead to incorrect checks.
+
+
+4. PREfast correctly pointed out one error in the last three functions, while
+at one obvious error remained undetected. PREfast can only detect the presence
+of errors, not their absence. While it would certainly be nice to guarantee the
+latter, this still makes PREfast a valuable part in the software developer's
+toolbox.
