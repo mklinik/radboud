@@ -15,14 +15,15 @@ char *my_alloc(size_t size) {
 	return ch;
 }
 
-HRESULT input(char *buf) {
-	return (gets(buf) != NULL)?SEVERITY_SUCCESS:SEVERITY_ERROR;
+// FIXED: add len parameter and use gets_s instead of gets
+HRESULT input(char *buf, size_t len) {
+	return (gets_s(buf, len) != NULL)?SEVERITY_SUCCESS:SEVERITY_ERROR;
 }
 
 char *do_read() {
 	char *buf = my_alloc(STR_SIZE);
 	printf("Allocated a string at %x", buf);
-	if (!input(buf)) {
+	if (!input(buf, STR_SIZE)) {
 		printf("error!");
 		exit(-1);
 	}
