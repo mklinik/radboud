@@ -98,8 +98,8 @@ void zero(_Out_cap_(len) int *buf, _In_ int len)
         buf[i] = 0;
 }
 
-void zeroboth(int *buf, int len,
-              int *buf3, int len3)
+void zeroboth(_Out_cap_(len) int *buf, _In_ int len,
+              _Out_cap_(len3) int *buf3, _In_ int len3)
 {
     int *buf2 = buf;
     int len2 = len;
@@ -107,8 +107,8 @@ void zeroboth(int *buf, int len,
     zero(buf3, len3);
 }
 
-void zeroboth2(int *buf, int len,
-	       int *buf3, int len3)
+void zeroboth2(_Out_cap_(len) int *buf, _In_ int len,
+               _Out_cap_(len3) int *buf3, _In_ int len3)
 {
 	zeroboth(buf, len3, buf3, len);
 }
