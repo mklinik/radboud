@@ -10,7 +10,7 @@
 
 void zeroing();
 
-_Ret_opt_cap_(size) char *my_alloc(_In_ size_t size) {
+_Ret_opt_cap_(size) char *my_alloc(size_t size) {
 	char *ch  = (char *)malloc(size);
     // FIXED: check that ch is not NULL and that nulling the first and last char is permissible.
     if( ch && size > 0 )
@@ -23,7 +23,7 @@ _Ret_opt_cap_(size) char *my_alloc(_In_ size_t size) {
 }
 
 // FIXED: add len parameter and use gets_s instead of gets
-HRESULT input([SA_Post(Tainted=SA_Yes)] _Out_cap_(len) char *buf, _In_ size_t len) {
+HRESULT input([SA_Post(Tainted=SA_Yes)] _Out_cap_(len) char *buf, size_t len) {
 	return (gets_s(buf, len) != NULL)?SEVERITY_SUCCESS:SEVERITY_ERROR;
 }
 
@@ -97,7 +97,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 // *****************************************************************
 
-void zero(_Out_cap_(len) int *buf, _In_ int len)
+void zero(_Out_cap_(len) int *buf, int len)
 {
     int i;
     // FIXED: use < instead of <= to prevent buffer overflow
@@ -105,8 +105,8 @@ void zero(_Out_cap_(len) int *buf, _In_ int len)
         buf[i] = 0;
 }
 
-void zeroboth(_Out_cap_(len) int *buf, _In_ int len,
-              _Out_cap_(len3) int *buf3, _In_ int len3)
+void zeroboth(_Out_cap_(len) int *buf, int len,
+              _Out_cap_(len3) int *buf3, int len3)
 {
     int *buf2 = buf;
     int len2 = len;
@@ -114,8 +114,8 @@ void zeroboth(_Out_cap_(len) int *buf, _In_ int len,
     zero(buf3, len3);
 }
 
-void zeroboth2(_Out_cap_(len) int *buf, _In_ int len,
-               _Out_cap_(len3) int *buf3, _In_ int len3)
+void zeroboth2(_Out_cap_(len) int *buf, int len,
+               _Out_cap_(len3) int *buf3, int len3)
 {
 	zeroboth(buf, len3, buf3, len);
 }
