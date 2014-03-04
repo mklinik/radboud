@@ -46,8 +46,10 @@ HRESULT input([SA_Post(Tainted=SA_Yes)] _Out_cap_(len) char *buf, size_t len) {
 
 // TODO: is there a way to specify that taintedness propagates from buf1 to buf2?
 // If buf1 is tainted so is buf2, but if buf1 is validated so is buf2.
-void copy_data(_In_opt_count_c_(STR_SIZE) char *buf1,
-               _Out_cap_c_(STR_SIZE) char *buf2) {
+// For now, to be super-sure, we only allow validated input to copy_data, which then produces
+// validated output.
+void copy_data([SA_Pre(Tainted=SA_No)] _In_opt_count_c_(STR_SIZE) char *buf1,
+               [SA_Post(Tainted=SA_No)] _Out_cap_c_(STR_SIZE) char *buf2) {
 	memcpy(buf2,buf1,STR_SIZE);
 	buf2[STR_SIZE-1] = NULL; // null terminate, just in case
 }
@@ -81,15 +83,27 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     // FIXED: we have to use the return value of test_ready.
 	if( test_ready() )
     {
+        // FIXED: validate buf1
         validate(buf1);
         execute(buf1);
 
         // TODO: copy_data should propagate taintedness; see comment for copy_data
+        // For now, we have to validate buf3 before passing it to copy_data, which causes buf2 to be
+        // validated as well.
+        //
+        // Ideally it should be possible to either validate
+        //  - buf3 before copy_data or
+        //  - buf2 after copy_data
+        // and PREfast should accept both ways. No matter how I use taintedness annotations, one of
+        // them results in a warning.
         char* buf3 = do_read();
+        // FIXED: validate buf3
+        validate(buf3);
         copy_data(buf3, buf2);
         execute(buf2);
 
         char *buf4 = do_read();
+        // FIXED: validate buf4
         validate(buf4);
         execute(buf4);
     }
