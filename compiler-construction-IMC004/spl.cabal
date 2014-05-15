@@ -10,7 +10,7 @@ executable spl
     -Wall
 
   build-depends:
-      base-compat >= 0.2
+      base
     , uu-parsinglib
     , ListLike
     , transformers
