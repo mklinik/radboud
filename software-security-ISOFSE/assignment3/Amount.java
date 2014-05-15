@@ -52,31 +52,47 @@
 
 public class Amount{
 
+ //@ invariant cents > -100;
+ //@ invariant cents < 100;
  private int cents;
 
+ //@ invariant euros > 0 ==> cents >= 0;
+ //@ invariant euros < 0 ==> cents <= 0;
+ //note: if euros == 0 then cents can be positive or negative
  private int euros;
 
+
+ //@ requires cents > -100;
+ //@ requires cents < 100;
+ //@ requires euros > 0 ==> cents >= 0;
+ //@ requires euros < 0 ==> cents <= 0;
  public Amount(int euros, int cents){
    this.euros = euros;
    this.cents = cents;
  }
 
+ //@ ensures \result != null;
  public Amount negate(){
-   return new Amount(-cents,-euros);
+   // flipped euros and cents
+   return new Amount(-euros,-cents);
  }
 
+ //@ requires a != null;
  public Amount subtract(Amount a){
    return this.add(a.negate());
  }
 
+ //@ requires a != null;
  public Amount add(Amount a){
    int new_euros = euros + a.euros;
    int new_cents = cents + a.cents;
-   if (new_cents < -100) {
+   // changed < to <=
+   if (new_cents <= -100) {
       new_cents = new_cents + 100;
       new_euros = new_euros - 1;
    }
-   if (new_cents > 100) {
+   // changed > to >=
+   if (new_cents >= 100) {
       new_cents = new_cents - 100;
       new_euros = new_euros - 1;
    }
@@ -84,7 +100,8 @@ public class Amount{
        new_cents = new_cents + 100;
        new_euros = new_euros - 1;
    }
-   if (new_cents >= 0 && new_euros <= 0) {
+   // changed >= to > and <= to <
+   if (new_cents > 0 && new_euros < 0) {
        new_cents = new_cents - 100;
        new_euros = new_euros + 1;
    }
