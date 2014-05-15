@@ -1,18 +1,18 @@
 
 /* ESC/Java2 exercise
 
-   Objects of this class represent euro amounts. For example, an Amount 
+   Objects of this class represent euro amounts. For example, an Amount
    object with
      euros == 1
      cents == 55
-   represents 1.55 euro. 
+   represents 1.55 euro.
 
-   Specify the class with JML and check it ESC/Java2.  
+   Specify the class with JML and check it ESC/Java2.
 
-   NB there may be errors in the code that you have to fix to stop 
-   ESC/Java2 from complaining, as these complaints of ESC/Java2 
+   NB there may be errors in the code that you have to fix to stop
+   ESC/Java2 from complaining, as these complaints of ESC/Java2
    point to real bugs in the code. But keep changes to the code to
-   a minimum of what is strictly needed. 
+   a minimum of what is strictly needed.
    Mark any changes you have made in the code with a comment,
    eg to indicate that you replaced <= by <.
 
@@ -22,7 +22,7 @@
    1) We do not want to represent 1.55 euro as an object with
          euro  == 0
          cents == 155
-      (Note that the "equals" method will not be correct if we allow 
+      (Note that the "equals" method will not be correct if we allow
        this.)
       Specify an invariant that rules this out.
 
@@ -30,9 +30,9 @@
          euros =  2
          cents =  -45
       Specify one (or more) invariant(s) that rule this out. But note that
-      we DO want to allow negative amounts, otherwise the method negate 
+      we DO want to allow negative amounts, otherwise the method negate
       can't be allowed.
-      It may be useful to use the JML notation ==> (for implication) in 
+      It may be useful to use the JML notation ==> (for implication) in
       your invariants.
 
    The only JML keywords needed for this are
@@ -45,7 +45,7 @@
 
    While developing your specs, it may be useful to use the keywords
       assert
-   to add additional assertions in source code, to find out what 
+   to add additional assertions in source code, to find out what
    ESC/Java2 can - or cannot - prove at a given program point.
 
 */
@@ -55,14 +55,14 @@ public class Amount{
  private int cents;
 
  private int euros;
- 
+
  public Amount(int euros, int cents){
    this.euros = euros;
    this.cents = cents;
  }
 
  public Amount negate(){
-   return new Amount(-cents,-euros); 
+   return new Amount(-cents,-euros);
  }
 
  public Amount subtract(Amount a){
@@ -71,21 +71,21 @@ public class Amount{
 
  public Amount add(Amount a){
    int new_euros = euros + a.euros;
-   int new_cents = cents + a.cents; 
-   if (new_cents < -100) {  
+   int new_cents = cents + a.cents;
+   if (new_cents < -100) {
       new_cents = new_cents + 100;
       new_euros = new_euros - 1;
-   } 
-   if (new_cents > 100) {  
+   }
+   if (new_cents > 100) {
       new_cents = new_cents - 100;
       new_euros = new_euros - 1;
-   } 
-   if (new_cents < 0 && new_euros > 0) { 
-       new_cents = new_cents + 100; 
+   }
+   if (new_cents < 0 && new_euros > 0) {
+       new_cents = new_cents + 100;
        new_euros = new_euros - 1;
-   } 
+   }
    if (new_cents >= 0 && new_euros <= 0) {
-       new_cents = new_cents - 100; 
+       new_cents = new_cents - 100;
        new_euros = new_euros + 1;
    }
    return new Amount(new_euros,new_cents);
