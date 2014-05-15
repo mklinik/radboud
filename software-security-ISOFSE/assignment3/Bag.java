@@ -32,9 +32,13 @@
 
 class Bag {
 
+  //@ non_null
   int[] contents;
+  //@ invariant n <= contents.length;
+  //@ invariant n >= 0;
   int n;
 
+  //@ requires input != null;
   Bag(int[] input) {
     n = input.length;
     contents = new int[n];
@@ -47,7 +51,8 @@ class Bag {
   }
 
   void removeOnce(int elt) {
-    for (int i = 0; i <= n; i++) {  
+    // replaced <= by <
+    for (int i = 0; i < n; i++) {  
       if (contents[i] == elt ) {
          n--;
          contents[i] = contents[n];
@@ -57,7 +62,8 @@ class Bag {
   }
 
   void removeAll(int elt) {
-    for (int i = 0; i <= n; i++) {   
+    // replaced <= by <
+    for (int i = 0; i < n; i++) {   
       if (contents[i] == elt ) {
          n--;
          contents[i] = contents[n];
@@ -67,7 +73,8 @@ class Bag {
 
   int getCount(int elt) {
     int count = 0;
-    for (int i = 0; i <= n; i++) 
+    // replaced <= by <
+    for (int i = 0; i < n; i++) 
       if (contents[i] == elt) count++; 
     return count;
   }
@@ -80,7 +87,9 @@ class Bag {
 
   void add(int elt) {
     if (n == contents.length) {
-       int[] new_contents = new int[2*n]; 
+        // if n == 0 then this doesn't increase in size
+        // changed 2*n to 2*n+1
+       int[] new_contents = new int[2*n+1]; 
        arraycopy(contents, 0, new_contents, 0, n);
        contents = new_contents;
     }
@@ -88,22 +97,37 @@ class Bag {
     n++;
   }
 
+  //@ requires b != null;
   void add(Bag b) {
     int[] new_contents = new int[n + b.n];
     arraycopy(contents, 0, new_contents, 0, n);
-    arraycopy(b.contents, 0, new_contents, n+1, b.n);
+    // elements of this bag will occupy indexes 0 to n-1
+    // elements of b will occupy indexes n to n+b.n
+    // changed destOff parameter from n+1 to n
+    arraycopy(b.contents, 0, new_contents, n, b.n);
     contents = new_contents; 
   }
 
+  //@ requires a != null;
   void add(int[] a) {
     this.add(new Bag(a));
   }
 
+  //@ requires b != null;
   Bag(Bag b) {
+    // explicitly call standard constructor to establish object invariants
+    this();
     this.add(b);    
   }
 
 
+  //@ requires src != null;
+  //@ requires dest != null;
+  //@ requires srcOff >= 0;
+  //@ requires destOff >= 0;
+  //@ requires length >= 0;
+  //@ requires dest.length >= destOff + length;
+  //@ requires src.length >= srcOff + length;
   private static void arraycopy(int[] src,
                                 int   srcOff,
                                 int[] dest,
