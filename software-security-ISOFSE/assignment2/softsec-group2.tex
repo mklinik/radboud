@@ -45,6 +45,11 @@ Judith~van~Stegeren\\
 \begin{frame}{Verdict}
 \fontsize{8}{12.0}\selectfont
 
+% a few sentences about ownCloud:
+%  - what's it? Storage/Calendar/Wiki/etc...
+%  - features called "apps" can be enabled/disabled
+% tell about the p and print_unescaped functions
+
 Pass
 \begin{itemize}
 \item V6.1 Untrusted data that are output to HTML are escaped
@@ -67,6 +72,11 @@ Not Sure
 
 \begin{frame}[fragile]{PHP Data Flow Analysis in Fortify is Broken}
 
+% - we noted that there aren't any XSS warnings in Fortify
+% - trying to provoke one explicitly didn't work
+% - that's because fortify chokes on PHP namespaces
+% - it probably puts everybody's PASS requirements to NOT SURE
+
 \begin{verbatim}
 namespace kermit;
 class Foo
@@ -84,15 +94,41 @@ class Foo
 \end{frame}
 
 
-\begin{frame}{Interesting requirement 2}
+\begin{frame}[fragile]{ownCloud's LDAP Defeats Dataflow Analysis}
+\fontsize{10}{12.0}\selectfont
 
+% - LDAP support: weird way to call library functions
+% - build function names by concatenating strings
+% - use call_user_func_array which takes a string and calls the function of that name
+% - this defeats data flow analysis
+% - we tried to write custom rules: arguments to invokeLDAPMethod must be LDAP-escaped
+% - but the namespace problem intervened
+% - this requirement is therefore unpassed
+
+\begin{verbatim}
+private function invokeLDAPMethod() {
+...
+$func = 'ldap_' . array_shift($arguments);
+if(function_exists($func))
+  $result = call_user_func_array($func, $arguments);
+...
+}
+\end{verbatim}
 \end{frame}
 
 
 \begin{frame}{Reflection}
+
+% - compact phrasing of the standard leads to ambiguities
+% - it says what to check but not how
+% - security experts know what to do with it
+% - apart from the things we learned in the course, we still saw ourselves as developers
+
+% - ASVS still is useful as a consensus, to clarify the vague notion of security verification
+
 \begin{itemize}
-\item Security audits require experience that developers usually don't have.
-\item ASVS is concise and requires additional explanation.
+\item ASVS is compact: intended for security experts.
+\item Developers require additional explanation.
 \item "My app is secure." "How secure?" "ASVS Level 2."
 \end{itemize}
 \end{frame}
