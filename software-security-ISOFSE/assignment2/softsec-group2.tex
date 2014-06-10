@@ -1,0 +1,100 @@
+\documentclass{beamer}
+
+\beamertemplatenavigationsymbolsempty
+
+\mode<presentation>
+{
+  \usetheme{default}
+}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+\title
+{Assignment 2: Code Review of ownCloud}
+
+\author
+{
+Koen~van~Ingen\\
+Markus~Klinik\\
+Joost~Rijneveld\\
+Judith~van~Stegeren\\
+}
+
+\institute[Radboud University Nijmegen]
+{
+  Radboud University Nijmegen
+}
+
+\date
+{Software Security 2014}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+\begin{frame}{Verdict}
+\fontsize{8}{12.0}\selectfont
+
+Pass
+\begin{itemize}
+\item V6.1 Untrusted data that are output to HTML are escaped
+\item V6.2 Output escaping is implemented on the server side
+\item V6.4 Untrusted data used to construct SQL queries are escaped
+\item V6.5 Untrusted data that are output to XML are escaped
+\item V6.8 Everything else is escaped properly
+\end{itemize}
+
+\medskip
+Not Sure
+\begin{itemize}
+\item V6.3 All characters not known to be safe for the intended interpreter are escaped
+\item V6.6 Untrusted data used to construct LDAP queries are escaped
+\item V6.7 Untrusted data used to construct OS commands are escaped
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{PHP Data Flow Analysis in Fortify is Broken}
+
+\begin{verbatim}
+namespace kermit;
+class Foo
+{
+  public function unsafe($x) {
+    print($x);
+  }
+
+  public function f() {
+    $this->unsafe($_REQUEST['someParameter']);
+  }
+}
+\end{verbatim}
+
+\end{frame}
+
+
+\begin{frame}{Interesting requirement 2}
+
+\end{frame}
+
+
+\begin{frame}{Reflection}
+\begin{itemize}
+\item Security audits require experience that developers usually don't have.
+\item ASVS is concise and requires additional explanation.
+\item "My app is secure." "How secure?" "ASVS Level 2."
+\end{itemize}
+\end{frame}
+
+\end{document}
